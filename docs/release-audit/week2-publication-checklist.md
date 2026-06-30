@@ -12,7 +12,7 @@
       no-CDS policy, measurement methodology, and limitations.
 - [x] Added PetClinic no-CDS reproduction scaffold.
 - [x] Added safety scanner.
-- [x] Documented intended GitHub Actions build workflow.
+- [x] Added GitHub Actions build workflow.
 - [x] Safety scan passed.
 - [x] Default plugin/runtime Maven build passed.
 - [x] Chose Apache License 2.0.

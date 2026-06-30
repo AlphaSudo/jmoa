@@ -1,8 +1,12 @@
-# GitHub Actions Workflow Pending
+# GitHub Actions Workflow
 
-The initial public source push does not include `.github/workflows/build.yml` because the current GitHub OAuth token can create and push the repository but does not have the `workflow` scope required to add or update GitHub Actions workflow files.
+The public source repository now includes `.github/workflows/build.yml`.
 
-The intended CI gate is:
+The CI gate is intentionally narrow:
+
+- run the publication safety scanner,
+- build and test the public Maven modules,
+- avoid Podman/container memory measurements in default CI.
 
 ```yaml
 name: build
@@ -27,10 +31,9 @@ jobs:
         run: mvn -q -pl jmoa-runtime-lib,jmoa-maven-plugin clean test
 ```
 
-The equivalent local validation is available through:
+The equivalent local validation remains:
 
 ```powershell
 ./scripts/build-all.ps1
 ./scripts/check-publication-safety.ps1
 ```
-
