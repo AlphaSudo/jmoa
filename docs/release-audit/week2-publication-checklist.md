@@ -12,15 +12,15 @@
       no-CDS policy, measurement methodology, and limitations.
 - [x] Added PetClinic no-CDS reproduction scaffold.
 - [x] Added safety scanner.
-- [x] Added GitHub Actions build workflow.
+- [x] Documented intended GitHub Actions build workflow.
 - [x] Safety scan passed.
 - [x] Default plugin/runtime Maven build passed.
+- [x] Chose Apache License 2.0.
+- [x] Published source repo immediately.
 
 ## User Decisions Still Required
 
-- [ ] Choose license, recommended Apache-2.0 if open-source adoption is desired.
 - [ ] Review source inventory and private exclusion list.
-- [ ] Decide whether to make the source repo public immediately.
 - [ ] Decide whether to rename packages from `com.yourorg.jmoa` later.
 
 ## Not Included In v0.1

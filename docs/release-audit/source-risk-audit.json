@@ -1,5 +1,5 @@
 {
-  "status": "low-to-moderate-risk-until-license-and-human-review",
+  "status": "low-to-moderate-risk-until-human-review",
   "verification": {
     "publicationSafetyScan": "PASS",
     "defaultMavenBuild": "PASS",
@@ -13,8 +13,8 @@
     "removed private patient-service debug helper from public plugin copy",
     "replaced test-only fake Windows path with temp-path construction"
   ],
+  "license": "Apache-2.0",
   "blockersBeforePublicAnnouncement": [
-    "choose license",
     "review source inventory"
   ]
 }

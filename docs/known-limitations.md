@@ -5,7 +5,6 @@ This public source release is v0.1 readiness work, not a polished package.
 Known limitations:
 
 - the group id still uses `com.yourorg.jmoa`,
-- the legal license is pending,
 - the PetClinic reproduction scripts are a scaffold and should be tested from a
   fresh clone before public announcement,
 - deployment materializer and runtime-origin verifier are documented product

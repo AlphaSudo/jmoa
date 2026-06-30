@@ -7,8 +7,7 @@
    artifacts.
 3. The public copy removes known private patient-service-specific debug code.
 4. The older agent/profiler root source is held back for manual review.
-5. The repository uses `LICENSE-PENDING.md`; a real license decision is still
-   required before broad open-source adoption.
+5. The repository is now licensed under Apache License 2.0.
 
 ## Verification
 
@@ -21,5 +20,4 @@
 
 Low-to-moderate until:
 
-- user approves license,
 - user reviews source inventory.

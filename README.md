@@ -97,5 +97,4 @@ generated artifacts, and private service markers.
 
 ## License
 
-See [LICENSE-PENDING.md](LICENSE-PENDING.md). No open-source license has been
-selected yet.
+JMOA is released under the [Apache License 2.0](LICENSE).
