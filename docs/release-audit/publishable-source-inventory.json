@@ -1,0 +1,35 @@
+{
+  "status": "draft",
+  "publicSafe": [
+    "jmoa-maven-plugin/src/main/java",
+    "jmoa-maven-plugin/src/test/java",
+    "jmoa-runtime-lib/src/main/java",
+    "jmoa-runtime-lib/src/test/java",
+    "tools/mode-c-launcher",
+    "docs",
+    "examples/spring-petclinic-customers-nocds"
+  ],
+  "publicSafeAfterSanitization": [
+    "jmoa-maven-plugin/src/main/java/com/yourorg/jmoa/plugin/LambdaDeduplicationMojo.java",
+    "jmoa-maven-plugin/src/test/java/com/yourorg/jmoa/plugin/weave/LambdaWeavingCoordinatorTest.java"
+  ],
+  "privateDoNotPublish": [
+    "HMS source",
+    "patient-service source",
+    "doctor-service source",
+    "private Docker compose files",
+    "local phase evidence"
+  ],
+  "generatedDoNotPublish": [
+    "target",
+    "out",
+    "class files",
+    "jars",
+    "measurement outputs"
+  ],
+  "unknownReviewManually": [
+    "root agent/profiler source",
+    "old planning docs",
+    "phase folders"
+  ]
+}

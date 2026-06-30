@@ -1,0 +1,13 @@
+package com.yourorg.jmoa.plugin.filter;
+
+public enum ExclusionReason {
+    CAPTURING,
+    SERIALIZABLE,
+    HOT_SITE,
+    FRAMEWORK_EXCLUDED,
+    FRAMEWORK_SAFETY_DENIED,
+    FRAMEWORK_TIER_DIAGNOSTIC_DISABLED,
+    NOT_OBSERVED,
+    ACCESS_UNKNOWN,
+    ACCESS_DENIED
+}

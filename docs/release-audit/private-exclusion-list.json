@@ -1,0 +1,14 @@
+{
+  "exclude": [
+    "private HMS source",
+    "patient-service source",
+    "doctor-service source",
+    "raw logs",
+    "JFR files",
+    "HProf files",
+    "CDS archives",
+    "private Docker compose files",
+    "database dumps",
+    "local machine paths"
+  ]
+}

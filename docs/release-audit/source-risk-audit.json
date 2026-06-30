@@ -1,0 +1,20 @@
+{
+  "status": "low-to-moderate-risk-until-license-and-human-review",
+  "verification": {
+    "publicationSafetyScan": "PASS",
+    "defaultMavenBuild": "PASS",
+    "defaultMavenBuildModules": [
+      "jmoa-runtime-lib",
+      "jmoa-maven-plugin"
+    ],
+    "verifiedWith": "Temurin JDK 26 and Maven 3.9.9"
+  },
+  "knownSanitizations": [
+    "removed private patient-service debug helper from public plugin copy",
+    "replaced test-only fake Windows path with temp-path construction"
+  ],
+  "blockersBeforePublicAnnouncement": [
+    "choose license",
+    "review source inventory"
+  ]
+}

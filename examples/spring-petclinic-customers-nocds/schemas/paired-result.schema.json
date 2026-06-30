@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "JMOA Paired Measurement Result",
+  "type": "object",
+  "required": ["candidate", "launchMode", "runtimePolicy", "pairs", "summary"],
+  "properties": {
+    "candidate": { "type": "string" },
+    "launchMode": { "type": "string" },
+    "runtimePolicy": { "type": "string" },
+    "pairs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pair", "baseline", "optimized", "delta"],
+        "properties": {
+          "pair": { "type": "integer" },
+          "baseline": { "$ref": "#/$defs/run" },
+          "optimized": { "$ref": "#/$defs/run" },
+          "delta": { "$ref": "#/$defs/delta" }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": ["medianPssMb", "medianPrivateDirtyMb", "medianMemoryCurrentMb", "pairedWins"],
+      "properties": {
+        "medianPssMb": { "type": "number" },
+        "medianPrivateDirtyMb": { "type": "number" },
+        "medianMemoryCurrentMb": { "type": "number" },
+        "pairedWins": { "type": "integer" }
+      }
+    }
+  },
+  "$defs": {
+    "run": {
+      "type": "object",
+      "properties": {
+        "pssMb": { "type": "number" },
+        "privateDirtyMb": { "type": "number" },
+        "memoryCurrentMb": { "type": "number" },
+        "heapPssMb": { "type": "number" },
+        "loadedClasses": { "type": "integer" },
+        "workloadErrors": { "type": "integer" }
+      }
+    },
+    "delta": {
+      "type": "object",
+      "properties": {
+        "pssMb": { "type": "number" },
+        "privateDirtyMb": { "type": "number" },
+        "memoryCurrentMb": { "type": "number" },
+        "heapPssMb": { "type": "number" },
+        "loadedClasses": { "type": "integer" }
+      }
+    }
+  }
+}
