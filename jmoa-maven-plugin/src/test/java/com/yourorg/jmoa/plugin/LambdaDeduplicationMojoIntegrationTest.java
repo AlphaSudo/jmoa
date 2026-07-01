@@ -200,6 +200,75 @@ class LambdaDeduplicationMojoIntegrationTest {
     }
 
     @Test
+    void optimizeGoalWritesBytecodeSizeReportsWhenSizeProfilerEnabled() throws Exception {
+        Path projectDir = Files.createTempDirectory("jmoa-it-size-profile");
+        Path sourceDir = projectDir.resolve(Path.of("src", "main", "java", "example"));
+        Path targetDir = projectDir.resolve("target");
+        Path classesDir = targetDir.resolve("classes");
+        Path runtimeClassesDir = targetDir.resolve("runtime-classes");
+        Files.createDirectories(sourceDir);
+        Files.createDirectories(classesDir);
+        Files.createDirectories(runtimeClassesDir);
+
+        compileRuntimeLibrary(runtimeClassesDir);
+
+        Path sourceFile = sourceDir.resolve("App__BeanDefinitions.java");
+        Files.writeString(sourceFile, springAotBeanDefinitionsSource());
+        compileProject(sourceFile, classesDir);
+
+        OptimizeMojo mojo = new OptimizeMojo();
+        MavenProject project = buildProject(projectDir, classesDir, runtimeClassesDir);
+        setField(mojo, "project", project);
+        setField(mojo, "excludes", List.of());
+        setField(mojo, "reportOnly", true);
+        setField(mojo, "widenSynthetics", true);
+        setField(mojo, "skip", false);
+        setField(mojo, "verbose", false);
+        setField(mojo, "hotThreshold", 10_000L);
+        setField(mojo, "frameworkExclusions", List.of());
+        setField(mojo, "generateTier1Runtime", false);
+        setField(mojo, "failOnMissingRuntimeLibrary", false);
+        setField(mojo, "failFastRewrite", false);
+        setField(mojo, "mode", JmoaExecutionMode.MODE_A);
+        setField(mojo, "additionalClassDirectories", List.of());
+        setField(mojo, "debugProfileMatches", false);
+        setField(mojo, "sizeEnabled", true);
+        setField(mojo, "sizeReportOnly", true);
+        setField(mojo, "sizeOptimize", false);
+        setField(mojo, "sizeFailOnNear64k", false);
+        setField(mojo, "sizeWarnMethodBytes", 32768);
+        setField(mojo, "sizeDangerMethodBytes", 49152);
+        setField(mojo, "sizeFailMethodBytes", 65535);
+        setField(mojo, "sizeStripDebugAttributes", false);
+        setField(mojo, "sizeStripLocalVariableTables", false);
+        setField(mojo, "sizeStripLineNumberTables", false);
+        setField(mojo, "sizeStripSourceFile", false);
+        setField(mojo, "sizeOptimizeBootstrapMethods", false);
+        setField(mojo, "sizeOptimizeConstantPool", false);
+        setField(mojo, "sizeScanClasspathJars", false);
+
+        mojo.execute();
+
+        Path profileFile = targetDir.resolve("classfile-size-profile.json");
+        Path methodFile = targetDir.resolve("method-code-size-report.json");
+        Path constantPoolFile = targetDir.resolve("constant-pool-bloat-report.json");
+        Path attributeFile = targetDir.resolve("attribute-size-report.json");
+        Path roiFile = targetDir.resolve("bytecode-roi-v2-report.json");
+        assertTrue(Files.isRegularFile(profileFile), "expected classfile size profile");
+        assertTrue(Files.isRegularFile(methodFile), "expected method code size report");
+        assertTrue(Files.isRegularFile(constantPoolFile), "expected constant-pool bloat report");
+        assertTrue(Files.isRegularFile(attributeFile), "expected attribute size report");
+        assertTrue(Files.isRegularFile(roiFile), "expected bytecode ROI report");
+
+        JsonNode profile = MAPPER.readTree(profileFile.toFile());
+        assertEquals("v2-b1-classfile-size-profile", profile.path("metadataVersion").asText());
+        assertEquals(1, profile.path("totalClassesScanned").asInt());
+        assertEquals("SPRING_AOT_BEAN_DEFINITIONS", profile.path("classes").get(0).path("generatedFamily").asText());
+
+        deleteRecursively(projectDir);
+    }
+
+    @Test
     void optimizeGoalLeavesHotAndExcludedSitesUntouched() throws Exception {
         Path projectDir = Files.createTempDirectory("jmoa-it-safety");
         Path sourceRoot = projectDir.resolve(Path.of("src", "main", "java"));

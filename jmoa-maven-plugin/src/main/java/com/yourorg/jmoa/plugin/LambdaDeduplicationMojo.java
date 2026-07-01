@@ -41,6 +41,11 @@ import com.yourorg.jmoa.plugin.runtime.Tier1RuntimePlanner;
 import com.yourorg.jmoa.plugin.runtime.Tier2AdapterArtifact;
 import com.yourorg.jmoa.plugin.runtime.Tier2AdapterNamingStrategy;
 import com.yourorg.jmoa.plugin.runtime.Tier2PackageAdapterGenerator;
+import com.yourorg.jmoa.plugin.size.BytecodeSizeConfig;
+import com.yourorg.jmoa.plugin.size.BytecodeSizeReportWriter;
+import com.yourorg.jmoa.plugin.size.ClassfileSizeProfile;
+import com.yourorg.jmoa.plugin.size.ClassfileSizeScanner;
+import com.yourorg.jmoa.plugin.size.MethodSizeRecord;
 import com.yourorg.jmoa.plugin.report.ObservedAdmissionReportContext;
 import com.yourorg.jmoa.plugin.scanner.ClassFileWalker;
 import com.yourorg.jmoa.plugin.scanner.LambdaScanner;
@@ -248,6 +253,51 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
     @Parameter(property = "jmoa.synthetic.classHistogram")
     private File syntheticClassHistogram;
 
+    @Parameter(property = "jmoa.size.enabled", defaultValue = "false")
+    private boolean sizeEnabled;
+
+    @Parameter(property = "jmoa.size.reportOnly", defaultValue = "true")
+    private boolean sizeReportOnly;
+
+    @Parameter(property = "jmoa.size.optimize", defaultValue = "false")
+    private boolean sizeOptimize;
+
+    @Parameter(property = "jmoa.size.failOnNear64k", defaultValue = "false")
+    private boolean sizeFailOnNear64k;
+
+    @Parameter(property = "jmoa.size.warnMethodBytes", defaultValue = "32768")
+    private int sizeWarnMethodBytes;
+
+    @Parameter(property = "jmoa.size.dangerMethodBytes", defaultValue = "49152")
+    private int sizeDangerMethodBytes;
+
+    @Parameter(property = "jmoa.size.failMethodBytes", defaultValue = "65535")
+    private int sizeFailMethodBytes;
+
+    @Parameter(property = "jmoa.size.stripDebugAttributes", defaultValue = "false")
+    private boolean sizeStripDebugAttributes;
+
+    @Parameter(property = "jmoa.size.stripLocalVariableTables", defaultValue = "false")
+    private boolean sizeStripLocalVariableTables;
+
+    @Parameter(property = "jmoa.size.stripLineNumberTables", defaultValue = "false")
+    private boolean sizeStripLineNumberTables;
+
+    @Parameter(property = "jmoa.size.stripSourceFile", defaultValue = "false")
+    private boolean sizeStripSourceFile;
+
+    @Parameter(property = "jmoa.size.optimizeBootstrapMethods", defaultValue = "false")
+    private boolean sizeOptimizeBootstrapMethods;
+
+    @Parameter(property = "jmoa.size.optimizeConstantPool", defaultValue = "false")
+    private boolean sizeOptimizeConstantPool;
+
+    @Parameter(property = "jmoa.size.scanClasspathJars", defaultValue = "false")
+    private boolean sizeScanClasspathJars;
+
+    @Parameter(property = "jmoa.size.jarPaths")
+    private String sizeJarPaths;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -310,6 +360,7 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             List<File> classFiles = collectClassFiles(classRoots);
             getLog().info("Found " + classFiles.size() + " class files to scan.");
             maybeWriteGeneratedClassInventory(classesDir, classRoots, classpathElements);
+            maybeWriteBytecodeSizeReports(classesDir, classRoots, classpathElements);
 
             com.yourorg.jmoa.plugin.scanner.ScanResult scanResult = LambdaScanner.scanClassFiles(classFiles);
             List<LambdaSite> sites = scanResult.sites();
@@ -1176,6 +1227,72 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             + ", classHistogram=" + hasClassHistogram
             + ", generatedRuntimeLoaded=" + attribution.totalGeneratedRuntimeLoadedClasses() + ").");
         return attribution;
+    }
+
+    private void maybeWriteBytecodeSizeReports(
+        File classesDir,
+        List<ClassRootDescriptor> classRoots,
+        List<String> classpathElements
+    ) throws IOException {
+        if (!sizeEnabled) {
+            return;
+        }
+        ensureBytecodeSizeReportOnly();
+        List<ClassRootDescriptor> sizeRoots = syntheticInventoryRoots(classesDir, classRoots);
+        List<File> sizeJars = bytecodeSizeJars(classpathElements);
+        BytecodeSizeConfig config = new BytecodeSizeConfig(
+            sizeWarnMethodBytes,
+            sizeDangerMethodBytes,
+            sizeFailMethodBytes,
+            sizeFailOnNear64k
+        );
+        ClassfileSizeProfile profile = new ClassfileSizeScanner(config).scan(sizeRoots, sizeJars);
+        new BytecodeSizeReportWriter().write(new File(project.getBuild().getDirectory()), profile);
+        if (sizeFailOnNear64k) {
+            List<MethodSizeRecord> dangerMethods = profile.methods().stream()
+                .filter(method -> method.codeLength() >= sizeDangerMethodBytes)
+                .toList();
+            if (!dangerMethods.isEmpty()) {
+                throw new IOException("V2-B near-64KB method guard found " + dangerMethods.size()
+                    + " method(s) at or above " + sizeDangerMethodBytes + " bytes.");
+            }
+        }
+        getLog().info("V2-B bytecode size reports written under: " + project.getBuild().getDirectory());
+        getLog().info("V2-B bytecode size summary: scanned=" + profile.totalClassesScanned()
+            + ", totalClassfileBytes=" + profile.totalClassfileBytes()
+            + ", largestMethodCodeLength=" + profile.largestMethodCodeLength()
+            + ", reportOnly=" + sizeReportOnly + ".");
+    }
+
+    private void ensureBytecodeSizeReportOnly() throws IOException {
+        if (!sizeReportOnly
+            || sizeOptimize
+            || sizeStripDebugAttributes
+            || sizeStripLocalVariableTables
+            || sizeStripLineNumberTables
+            || sizeStripSourceFile
+            || sizeOptimizeBootstrapMethods
+            || sizeOptimizeConstantPool) {
+            throw new IOException(
+                "JMOA V2-B bytecode-size optimizer is report-only in this release. "
+                    + "Use -Djmoa.size.reportOnly=true and leave all jmoa.size.optimize/strip flags disabled."
+            );
+        }
+    }
+
+    private List<File> bytecodeSizeJars(List<String> classpathElements) throws IOException {
+        Map<String, File> jars = new LinkedHashMap<>();
+        addSyntheticJarPaths(jars, sizeJarPaths);
+        if (sizeScanClasspathJars && classpathElements != null) {
+            for (String element : classpathElements) {
+                addSyntheticJar(jars, new File(element));
+            }
+        }
+        addJarsUnderDirectory(jars, optimizedLibsDir);
+        addJarsUnderDirectory(jars, new File(project.getBuild().getDirectory(), "dependencies"));
+        addJarsUnderDirectory(jars, new File(project.getBuild().getDirectory(), "snapshot-dependencies"));
+        addSyntheticJar(jars, new File(project.getBuild().getDirectory(), project.getBuild().getFinalName() + ".jar"));
+        return new ArrayList<>(jars.values());
     }
 
     private List<ClassRootDescriptor> syntheticInventoryRoots(File classesDir, List<ClassRootDescriptor> classRoots) throws IOException {

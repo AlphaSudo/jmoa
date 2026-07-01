@@ -1,0 +1,7 @@
+{
+  "phase": "V2-B0",
+  "status": "implemented",
+  "enabledByDefault": false,
+  "reportOnlyByDefault": true,
+  "mutationEnabled": false
+}

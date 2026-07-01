@@ -1,0 +1,11 @@
+{
+  "phase": "V2-B1",
+  "status": "implemented",
+  "outputs": [
+    "classfile-size-profile.json",
+    "classfile-size-profile.md",
+    "classfile-size-profile.csv",
+    "classfile-size-family-breakdown.json"
+  ],
+  "mutationEnabled": false
+}

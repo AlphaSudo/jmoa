@@ -23,7 +23,8 @@ JMOA is a source release for the tooling behind the published portfolio:
 - `examples/spring-petclinic-customers-nocds`: public PetClinic reproduction
   workflow scaffold
 - `docs`: architecture, runtime-origin verification, materialization,
-  generated-class inventory, and measurement methodology
+  generated-class inventory, bytecode-size profiling, and measurement
+  methodology
 
 ## What This Is Not
 
@@ -107,6 +108,29 @@ See:
 - [Synthetic Class Safety Model](docs/synthetic-class-safety-model.md)
 - [Spring AOT Generated-Class Optimization](docs/spring-aot-generated-class-optimization.md)
 - [Proxy Optimization Non-Goals](docs/proxy-optimization-non-goals.md)
+
+## V2-B Bytecode Size Profiler
+
+V2-B adds report-only classfile and method-size profiling. It reports large
+classes, large methods, near-64KB method risk, constant-pool footprint,
+attribute footprint, and bytecode-size ROI features.
+
+Generated-class labels from V2-A are included where available. Bytecode-size
+mutation and debug stripping remain disabled.
+
+```powershell
+mvn process-classes `
+  -Djmoa.size.enabled=true `
+  -Djmoa.size.reportOnly=true
+```
+
+See:
+
+- [Bytecode Size Profiler](docs/bytecode-size-profiler.md)
+- [Method 64KB Risk](docs/method-64kb-risk.md)
+- [Classfile Footprint ROI](docs/classfile-footprint-roi.md)
+- [Debug Attribute Stripping](docs/debug-attribute-stripping.md)
+- [Large Generated Methods](docs/large-generated-methods.md)
 
 ## Safety
 
