@@ -84,10 +84,15 @@ The example is intentionally explicit about the claim boundary:
 - exploded Boot / `JarLauncher`
 - dynamic runtime-origin verification
 
-## V2-A Generated Class Inventory
+## V2-A Generated Class Optimizer
 
-V2-A starts the generated/synthetic/proxy/AOT class expansion in inventory-only
-mode. It does not optimize generated classes yet.
+V2-A starts the generated/synthetic/proxy/AOT class expansion behind an explicit
+feature flag. The current implementation inventories generated class shapes,
+can attribute runtime generated-class cost from class-load logs and class
+histograms, writes a safety taxonomy, selects the first prototype family, and
+feeds generated-class features into a V2 ROI report.
+
+Generated-class bytecode mutation remains disabled.
 
 ```powershell
 mvn process-classes `
@@ -100,6 +105,8 @@ See:
 
 - [Generated Class Optimizer](docs/generated-class-optimizer.md)
 - [Synthetic Class Safety Model](docs/synthetic-class-safety-model.md)
+- [Spring AOT Generated-Class Optimization](docs/spring-aot-generated-class-optimization.md)
+- [Proxy Optimization Non-Goals](docs/proxy-optimization-non-goals.md)
 
 ## Safety
 

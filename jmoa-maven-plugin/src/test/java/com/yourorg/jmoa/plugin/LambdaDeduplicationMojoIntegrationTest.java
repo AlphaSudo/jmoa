@@ -169,9 +169,15 @@ class LambdaDeduplicationMojoIntegrationTest {
         Path inventoryFile = targetDir.resolve("generated-class-inventory.json");
         Path markdownFile = targetDir.resolve("generated-class-inventory.md");
         Path breakdownFile = targetDir.resolve("generated-class-family-breakdown.json");
+        Path taxonomyFile = targetDir.resolve("generated-class-safety-taxonomy.json");
+        Path prototypeFile = targetDir.resolve("synthetic-optimizer-prototype-report.json");
+        Path roiV2File = targetDir.resolve("jmoa-roi-v2-report.json");
         assertTrue(Files.isRegularFile(inventoryFile), "expected generated-class JSON inventory");
         assertTrue(Files.isRegularFile(markdownFile), "expected generated-class Markdown inventory");
         assertTrue(Files.isRegularFile(breakdownFile), "expected generated-class family breakdown");
+        assertTrue(Files.isRegularFile(taxonomyFile), "expected generated-class safety taxonomy");
+        assertTrue(Files.isRegularFile(prototypeFile), "expected synthetic prototype report");
+        assertTrue(Files.isRegularFile(roiV2File), "expected generated-class ROI v2 report");
 
         JsonNode inventory = MAPPER.readTree(inventoryFile.toFile());
         assertEquals("v2-a1-inventory", inventory.path("metadataVersion").asText());
@@ -181,6 +187,14 @@ class LambdaDeduplicationMojoIntegrationTest {
         assertEquals("example.App__BeanDefinitions", record.path("className").asText());
         assertEquals("SPRING_AOT_BEAN_DEFINITIONS", record.path("family").asText());
         assertEquals("UNKNOWN", record.path("riskLevel").asText());
+
+        JsonNode taxonomy = MAPPER.readTree(taxonomyFile.toFile());
+        assertEquals("v2-a3-safety-taxonomy", taxonomy.path("metadataVersion").asText());
+        assertEquals("SAFE_TO_REPACK_ONLY", taxonomy.path("eligibility").get(0).path("safetyCategory").asText());
+
+        JsonNode prototype = MAPPER.readTree(prototypeFile.toFile());
+        assertEquals("REPORT_ONLY", prototype.path("mode").asText());
+        assertEquals(false, prototype.path("bytecodeMutationEnabled").asBoolean());
 
         deleteRecursively(projectDir);
     }

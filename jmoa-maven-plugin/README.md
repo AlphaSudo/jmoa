@@ -24,7 +24,7 @@ produced at build time and then verified in the target deployment shape.
 - `jmoa:check-coverage`
 - `jmoa:measure-impact`
 
-## V2-A Inventory Flags
+## V2-A Generated-Class Flags
 
 Generated-class inventory is disabled by default.
 
@@ -35,11 +35,13 @@ jmoa.synthetic.optimizeFamily=none
 jmoa.synthetic.failOnUnsafe=true
 ```
 
-When enabled, the plugin writes `generated-class-inventory.json`,
-`generated-class-inventory.md`, `generated-class-family-breakdown.json`, and
-`generated-class-inventory-summary.csv` under `target/`. V2-A1 is read-only:
-optimization requests fail fast until the safety model and prototype optimizer
-are implemented.
+When enabled, the plugin writes inventory, safety taxonomy, prototype selection,
+and ROI V2 feature reports under `target/`. Runtime attribution reports are also
+written when `jmoa.synthetic.classLoadLog` or `jmoa.synthetic.classHistogram`
+points to existing evidence files.
+
+Generated-class bytecode mutation remains disabled. Optimization requests still
+fail fast unless the mode is inventory/report-only.
 
 See the repository-level docs for deployment materialization and measurement
 boundaries.

@@ -87,6 +87,55 @@ public final class GeneratedClassClassifier {
         return new GeneratedClassClassification(GeneratedClassFamily.PLAIN, List.of(), false);
     }
 
+    public GeneratedClassClassification classifyRuntimeClassName(String className) {
+        String normalized = normalizeRuntimeName(className);
+        List<String> indicators = new ArrayList<>();
+        if (containsAny(normalized,
+            "$$SpringCGLIB",
+            "$$EnhancerBySpringCGLIB",
+            "$$FastClass",
+            "CGLIB$"
+        )) {
+            indicators.add("spring-cglib-runtime-name-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.SPRING_CGLIB, indicators, true);
+        }
+        if (containsAny(normalized,
+            "__BeanDefinitions",
+            "__ApplicationContextInitializer__BeanDefinitions",
+            "__Autowiring"
+        )) {
+            indicators.add("spring-aot-bean-definitions-runtime-name-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.SPRING_AOT_BEAN_DEFINITIONS, indicators, true);
+        }
+        if (containsAny(normalized, "__BeanFactoryRegistrations", "__ApplicationContextInitializer", "__AotProcessor")) {
+            indicators.add("spring-aot-registration-runtime-name-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.SPRING_AOT_REGISTRATION, indicators, true);
+        }
+        if (isSpringDataGenerated(normalized.replace('.', '/'), normalized)) {
+            indicators.add("spring-data-generated-runtime-name-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.SPRING_DATA_GENERATED, indicators, true);
+        }
+        if (normalized.startsWith("jdk.proxy")
+            || normalized.startsWith("com.sun.proxy.$Proxy")
+            || simpleName(normalized.replace('.', '/')).startsWith("$Proxy")) {
+            indicators.add("jdk-dynamic-proxy-runtime-name-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.JDK_PROXY, indicators, true);
+        }
+        if (containsAny(normalized, "ByteBuddy", "$ByteBuddy", "EnhancerByByteBuddy")) {
+            indicators.add("bytebuddy-runtime-name-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.BYTEBUDDY, indicators, true);
+        }
+        if (containsAny(normalized, "HibernateProxy", "$HibernateProxy")) {
+            indicators.add("hibernate-proxy-runtime-name-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.HIBERNATE_PROXY, indicators, true);
+        }
+        if (containsAny(normalized, "$$Lambda")) {
+            indicators.add("lambda-hidden-runtime-name-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.LAMBDA_METAFATORY_SITE, indicators, true);
+        }
+        return new GeneratedClassClassification(GeneratedClassFamily.PLAIN, indicators, false);
+    }
+
     private static boolean membersContain(ClassNode classNode, String token) {
         if (classNode.fields != null) {
             for (Object field : classNode.fields) {
@@ -176,5 +225,20 @@ public final class GeneratedClassClassifier {
             }
         }
         return false;
+    }
+
+    static String normalizeRuntimeName(String className) {
+        if (className == null || className.isBlank()) {
+            return "";
+        }
+        String normalized = className.trim();
+        int moduleIndex = normalized.indexOf(" (");
+        if (moduleIndex > 0) {
+            normalized = normalized.substring(0, moduleIndex);
+        }
+        if (normalized.startsWith("[L") && normalized.endsWith(";")) {
+            normalized = normalized.substring(2, normalized.length() - 1) + "[]";
+        }
+        return normalized.replace('/', '.');
     }
 }

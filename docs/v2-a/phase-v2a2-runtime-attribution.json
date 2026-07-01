@@ -1,0 +1,15 @@
+{
+  "phase": "V2-A2",
+  "status": "implemented-report-layer",
+  "outputs": [
+    "generated-class-runtime-attribution.json",
+    "generated-class-runtime-attribution.md",
+    "generated-class-origin-map.json",
+    "generated-class-survival-report.md"
+  ],
+  "inputs": [
+    "jmoa.synthetic.classLoadLog",
+    "jmoa.synthetic.classHistogram"
+  ],
+  "mutationEnabled": false
+}

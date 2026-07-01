@@ -1,0 +1,24 @@
+{
+  "phase": "V2-A6",
+  "status": "implementation-smoke-completed",
+  "mutationEnabled": false,
+  "services": [
+    {
+      "name": "Spring PetClinic customers-service",
+      "deploymentShape": "EXPLODED_BOOT_APP",
+      "rootsScanned": 3,
+      "jarsScanned": 162,
+      "classesScanned": 54326,
+      "generatedLikeRecords": 12152,
+      "runtimeGeneratedLoadedAttributed": 8
+    },
+    {
+      "name": "doctor-service",
+      "deploymentShape": "SPRING_BOOT_FAT_JAR",
+      "classesScanned": 59424,
+      "generatedLikeRecords": 14469,
+      "familiesReported": 9
+    }
+  ],
+  "claimBoundary": "scanner-attribution-smoke-only"
+}

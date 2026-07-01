@@ -1,0 +1,12 @@
+{
+  "phase": "V2-A3",
+  "status": "implemented",
+  "defaultSafety": "UNKNOWN",
+  "unsafeFamilies": [
+    "SPRING_CGLIB",
+    "JDK_PROXY",
+    "BYTEBUDDY",
+    "HIBERNATE_PROXY"
+  ],
+  "mutationEnabled": false
+}

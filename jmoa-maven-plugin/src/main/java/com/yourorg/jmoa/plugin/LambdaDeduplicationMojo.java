@@ -16,6 +16,14 @@ import com.yourorg.jmoa.plugin.generated.GeneratedClassInventory;
 import com.yourorg.jmoa.plugin.generated.GeneratedClassInventoryReportWriter;
 import com.yourorg.jmoa.plugin.generated.GeneratedClassInventoryScanner;
 import com.yourorg.jmoa.plugin.generated.GeneratedClassOptimizer;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassRoiV2ReportWriter;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassRuntimeAttribution;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassRuntimeAttributionReportWriter;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassRuntimeAttributor;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassSafetyTaxonomy;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassSafetyTaxonomyBuilder;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassSafetyTaxonomyReportWriter;
+import com.yourorg.jmoa.plugin.generated.SyntheticPrototypeReportWriter;
 import com.yourorg.jmoa.plugin.modec.ModeCClasspathWriter;
 import com.yourorg.jmoa.plugin.roi.RewriteRoiAnalyzer;
 import com.yourorg.jmoa.plugin.roi.RewriteRoiReport;
@@ -233,6 +241,12 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
 
     @Parameter(property = "jmoa.synthetic.jarPaths")
     private String syntheticJarPaths;
+
+    @Parameter(property = "jmoa.synthetic.classLoadLog")
+    private File syntheticClassLoadLog;
+
+    @Parameter(property = "jmoa.synthetic.classHistogram")
+    private File syntheticClassHistogram;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -1130,13 +1144,38 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
         List<ClassRootDescriptor> inventoryRoots = syntheticInventoryRoots(classesDir, classRoots);
         List<File> inventoryJars = syntheticInventoryJars(classpathElements);
         GeneratedClassInventory inventory = new GeneratedClassInventoryScanner().scan(inventoryRoots, inventoryJars);
-        new GeneratedClassInventoryReportWriter().write(new File(project.getBuild().getDirectory()), inventory);
+        File outputDirectory = new File(project.getBuild().getDirectory());
+        new GeneratedClassInventoryReportWriter().write(outputDirectory, inventory);
+        GeneratedClassSafetyTaxonomy safetyTaxonomy = new GeneratedClassSafetyTaxonomyBuilder().build(inventory);
+        new GeneratedClassSafetyTaxonomyReportWriter().write(outputDirectory, safetyTaxonomy);
+        new SyntheticPrototypeReportWriter().write(outputDirectory, inventory);
+        GeneratedClassRuntimeAttribution runtimeAttribution = maybeWriteGeneratedRuntimeAttribution(outputDirectory, inventory);
+        new GeneratedClassRoiV2ReportWriter().write(outputDirectory, inventory, runtimeAttribution, safetyTaxonomy);
         getLog().info("V2-A generated-class inventory written under: " + project.getBuild().getDirectory());
         getLog().info("V2-A generated-class inventory summary: scanned=" + inventory.totalClassesScanned()
             + ", generatedLike=" + inventory.generatedLikeClasses()
             + ", families=" + inventory.familyBreakdown().size()
             + ", failOnUnsafe=" + syntheticFailOnUnsafe
             + ", inventoryOnly=" + syntheticInventoryOnly + ".");
+    }
+
+    private GeneratedClassRuntimeAttribution maybeWriteGeneratedRuntimeAttribution(
+        File outputDirectory,
+        GeneratedClassInventory inventory
+    ) throws IOException {
+        boolean hasClassLoadLog = syntheticClassLoadLog != null && syntheticClassLoadLog.isFile();
+        boolean hasClassHistogram = syntheticClassHistogram != null && syntheticClassHistogram.isFile();
+        if (!hasClassLoadLog && !hasClassHistogram) {
+            return null;
+        }
+        GeneratedClassRuntimeAttribution attribution = new GeneratedClassRuntimeAttributor()
+            .attribute(inventory, hasClassLoadLog ? syntheticClassLoadLog : null, hasClassHistogram ? syntheticClassHistogram : null);
+        new GeneratedClassRuntimeAttributionReportWriter().write(outputDirectory, attribution);
+        getLog().info("V2-A runtime attribution written"
+            + " (classLoadLog=" + hasClassLoadLog
+            + ", classHistogram=" + hasClassHistogram
+            + ", generatedRuntimeLoaded=" + attribution.totalGeneratedRuntimeLoadedClasses() + ").");
+        return attribution;
     }
 
     private List<ClassRootDescriptor> syntheticInventoryRoots(File classesDir, List<ClassRootDescriptor> classRoots) throws IOException {

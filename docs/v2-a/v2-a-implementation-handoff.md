@@ -6,7 +6,7 @@ Branch:
 codex/v2-a-generated-inventory
 ```
 
-Commit:
+Base commit:
 
 ```text
 235ad9f Add V2-A generated class inventory
@@ -15,13 +15,18 @@ Commit:
 ## Objective
 
 V2-A starts the generated/synthetic/proxy/AOT class optimizer work without
-rewriting any generated classes. The current branch implements V2-A0 and V2-A1:
+rewriting any generated classes. The current branch implements the V2-A
+infrastructure through report-only prototype selection:
 
 - safety flags,
 - inventory-only boundary,
 - static generated-class scanner,
 - family classification,
 - UNKNOWN-by-default risk model,
+- runtime attribution from class-load logs and class histograms,
+- safety taxonomy and transform eligibility,
+- Spring AOT BeanDefinition helper prototype family selection,
+- generated-class ROI V2 feature report,
 - report writer,
 - tests,
 - docs.
@@ -35,6 +40,8 @@ jmoa.synthetic.optimizeFamily=none
 jmoa.synthetic.failOnUnsafe=true
 jmoa.synthetic.scanClasspathJars=false
 jmoa.synthetic.jarPaths=<optional semicolon/newline separated jars>
+jmoa.synthetic.classLoadLog=<optional -Xlog:class+load file>
+jmoa.synthetic.classHistogram=<optional jcmd GC.class_histogram output>
 ```
 
 Default behavior remains V1 lambda optimization. The synthetic/generated-class
@@ -49,6 +56,27 @@ target/generated-class-inventory.json
 target/generated-class-inventory.md
 target/generated-class-family-breakdown.json
 target/generated-class-inventory-summary.csv
+target/generated-class-safety-taxonomy.json
+target/generated-class-safety-taxonomy.md
+target/generated-class-transform-eligibility.json
+target/synthetic-prototype-family-selection.json
+target/synthetic-prototype-family-selection.md
+target/synthetic-optimizer-prototype-report.json
+target/synthetic-optimizer-prototype-report.md
+target/synthetic-affected-classes.json
+target/synthetic-rewritten-classes.json
+target/synthetic-safety-validation.json
+target/jmoa-roi-v2-report.json
+target/jmoa-roi-v2-report.md
+```
+
+When runtime evidence is supplied:
+
+```text
+target/generated-class-runtime-attribution.json
+target/generated-class-runtime-attribution.md
+target/generated-class-origin-map.json
+target/generated-class-survival-report.md
 ```
 
 ## Implemented Families
@@ -74,22 +102,42 @@ Local checks run with Temurin JDK 26 and Maven 3.9.9:
 ```powershell
 mvn -q -pl jmoa-maven-plugin -Dtest=GeneratedClassInventoryScannerTest test
 mvn -q -pl jmoa-maven-plugin -Dtest=LambdaDeduplicationMojoIntegrationTest#optimizeGoalWritesGeneratedClassInventoryWhenSyntheticInventoryEnabled test
-mvn -q -pl jmoa-runtime-lib,jmoa-maven-plugin clean test
+mvn -q -pl jmoa-maven-plugin -Dtest=GeneratedClassRuntimeAttributorTest,GeneratedClassSafetyTaxonomyBuilderTest test
+mvn -q -pl jmoa-maven-plugin test
+mvn -q -pl jmoa-runtime-lib,jmoa-maven-plugin test
 ./scripts/check-publication-safety.ps1
 ```
 
 All passed.
 
+## Local Service Smokes
+
+PetClinic exploded Boot Phase 33 artifact:
+
+```text
+roots scanned: 3
+jars scanned: 162
+classes scanned: 54,326
+generated-like records: 12,152
+generated runtime-loaded classes attributed: 8
+```
+
+Doctor corrected fat JAR Phase 32 artifact:
+
+```text
+classes scanned: 59,424
+generated-like records: 14,469
+families reported: 9
+```
+
+These are scanner/attribution smokes, not generated-class memory-win claims.
+
 ## Next Recommended Work
 
-1. Run V2-A1 inventory on PetClinic customers-service.
-2. Run V2-A1 inventory on doctor-service if private source is available locally.
-3. Add V2-A2 runtime attribution:
-   - parse `-Xlog:class+load=info`,
-   - correlate with static inventory,
-   - parse `GC.class_histogram`,
-   - add family-level runtime loaded/instance/bytes counts.
-4. Keep all CGLIB/JDK proxy/ByteBuddy/Hibernate families report-only.
-5. Select the first optimizer family only after runtime attribution and safety
-   taxonomy are written.
-
+1. Keep all generated-class bytecode mutation disabled until semantic gates are
+   automated.
+2. Add a mutation-enabled Spring AOT helper prototype only after bean-count,
+   endpoint behavior, runtime-origin, and memory screen gates pass.
+3. Keep CGLIB/JDK proxy/ByteBuddy/Hibernate families report-only.
+4. Run paired service confirmation only after a mutation-enabled prototype
+   exists.
