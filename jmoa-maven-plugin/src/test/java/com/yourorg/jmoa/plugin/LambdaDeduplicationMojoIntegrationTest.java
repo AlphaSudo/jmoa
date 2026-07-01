@@ -126,6 +126,66 @@ class LambdaDeduplicationMojoIntegrationTest {
     }
 
     @Test
+    void optimizeGoalWritesGeneratedClassInventoryWhenSyntheticInventoryEnabled() throws Exception {
+        Path projectDir = Files.createTempDirectory("jmoa-it-generated-inventory");
+        Path sourceDir = projectDir.resolve(Path.of("src", "main", "java", "example"));
+        Path targetDir = projectDir.resolve("target");
+        Path classesDir = targetDir.resolve("classes");
+        Path runtimeClassesDir = targetDir.resolve("runtime-classes");
+        Files.createDirectories(sourceDir);
+        Files.createDirectories(classesDir);
+        Files.createDirectories(runtimeClassesDir);
+
+        compileRuntimeLibrary(runtimeClassesDir);
+
+        Path sourceFile = sourceDir.resolve("App__BeanDefinitions.java");
+        Files.writeString(sourceFile, springAotBeanDefinitionsSource());
+        compileProject(sourceFile, classesDir);
+
+        OptimizeMojo mojo = new OptimizeMojo();
+        MavenProject project = buildProject(projectDir, classesDir, runtimeClassesDir);
+        setField(mojo, "project", project);
+        setField(mojo, "excludes", List.of());
+        setField(mojo, "reportOnly", true);
+        setField(mojo, "widenSynthetics", true);
+        setField(mojo, "skip", false);
+        setField(mojo, "verbose", false);
+        setField(mojo, "hotThreshold", 10_000L);
+        setField(mojo, "frameworkExclusions", List.of());
+        setField(mojo, "generateTier1Runtime", false);
+        setField(mojo, "failOnMissingRuntimeLibrary", false);
+        setField(mojo, "failFastRewrite", false);
+        setField(mojo, "mode", JmoaExecutionMode.MODE_A);
+        setField(mojo, "additionalClassDirectories", List.of());
+        setField(mojo, "debugProfileMatches", false);
+        setField(mojo, "syntheticEnabled", true);
+        setField(mojo, "syntheticInventoryOnly", true);
+        setField(mojo, "syntheticOptimizeFamily", "none");
+        setField(mojo, "syntheticFailOnUnsafe", true);
+        setField(mojo, "syntheticScanClasspathJars", false);
+
+        mojo.execute();
+
+        Path inventoryFile = targetDir.resolve("generated-class-inventory.json");
+        Path markdownFile = targetDir.resolve("generated-class-inventory.md");
+        Path breakdownFile = targetDir.resolve("generated-class-family-breakdown.json");
+        assertTrue(Files.isRegularFile(inventoryFile), "expected generated-class JSON inventory");
+        assertTrue(Files.isRegularFile(markdownFile), "expected generated-class Markdown inventory");
+        assertTrue(Files.isRegularFile(breakdownFile), "expected generated-class family breakdown");
+
+        JsonNode inventory = MAPPER.readTree(inventoryFile.toFile());
+        assertEquals("v2-a1-inventory", inventory.path("metadataVersion").asText());
+        assertEquals(1, inventory.path("totalClassesScanned").asInt());
+        assertEquals(1, inventory.path("generatedLikeClasses").asInt());
+        JsonNode record = inventory.path("classes").get(0);
+        assertEquals("example.App__BeanDefinitions", record.path("className").asText());
+        assertEquals("SPRING_AOT_BEAN_DEFINITIONS", record.path("family").asText());
+        assertEquals("UNKNOWN", record.path("riskLevel").asText());
+
+        deleteRecursively(projectDir);
+    }
+
+    @Test
     void optimizeGoalLeavesHotAndExcludedSitesUntouched() throws Exception {
         Path projectDir = Files.createTempDirectory("jmoa-it-safety");
         Path sourceRoot = projectDir.resolve(Path.of("src", "main", "java"));
@@ -697,6 +757,18 @@ class LambdaDeduplicationMojoIntegrationTest {
 
                 public Function<String, String> normalizer() {
                     return String::trim;
+                }
+            }
+            """;
+    }
+
+    private static String springAotBeanDefinitionsSource() {
+        return """
+            package example;
+
+            public final class App__BeanDefinitions {
+                public Object register() {
+                    return null;
                 }
             }
             """;

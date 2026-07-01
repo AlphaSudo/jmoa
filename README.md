@@ -22,8 +22,8 @@ JMOA is a source release for the tooling behind the published portfolio:
   the default CI reactor until its process-exit integration tests are split out
 - `examples/spring-petclinic-customers-nocds`: public PetClinic reproduction
   workflow scaffold
-- `docs`: architecture, runtime-origin verification, materialization, and
-  measurement methodology
+- `docs`: architecture, runtime-origin verification, materialization,
+  generated-class inventory, and measurement methodology
 
 ## What This Is Not
 
@@ -83,6 +83,23 @@ The example is intentionally explicit about the claim boundary:
 - `MALLOC_ARENA_MAX=1`
 - exploded Boot / `JarLauncher`
 - dynamic runtime-origin verification
+
+## V2-A Generated Class Inventory
+
+V2-A starts the generated/synthetic/proxy/AOT class expansion in inventory-only
+mode. It does not optimize generated classes yet.
+
+```powershell
+mvn process-classes `
+  -Djmoa.synthetic.enabled=true `
+  -Djmoa.synthetic.inventoryOnly=true `
+  -Djmoa.synthetic.optimizeFamily=none
+```
+
+See:
+
+- [Generated Class Optimizer](docs/generated-class-optimizer.md)
+- [Synthetic Class Safety Model](docs/synthetic-class-safety-model.md)
 
 ## Safety
 

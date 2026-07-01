@@ -1,0 +1,15 @@
+package com.yourorg.jmoa.plugin.generated;
+
+public enum GeneratedClassFamily {
+    PLAIN,
+    LAMBDA_METAFATORY_SITE,
+    SPRING_CGLIB,
+    SPRING_AOT_BEAN_DEFINITIONS,
+    SPRING_AOT_REGISTRATION,
+    SPRING_DATA_GENERATED,
+    JDK_PROXY,
+    BYTEBUDDY,
+    HIBERNATE_PROXY,
+    SYNTHETIC_BRIDGE_METHODS,
+    COMPILER_SYNTHETIC_HELPER
+}

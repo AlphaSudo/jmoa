@@ -1,0 +1,17 @@
+{
+  "phase": "V2-A0",
+  "status": "implemented-inventory-only",
+  "featureFlags": {
+    "jmoa.synthetic.enabled": false,
+    "jmoa.synthetic.inventoryOnly": true,
+    "jmoa.synthetic.optimizeFamily": "none",
+    "jmoa.synthetic.failOnUnsafe": true
+  },
+  "defaultBehavior": "synthetic generated-class optimizer disabled",
+  "mutationAllowed": false,
+  "acceptance": {
+    "v1BuildStillSupported": true,
+    "inventoryOnlyCannotChangeBytecode": true,
+    "unsafeOptimizeRequestsFailFast": true
+  }
+}

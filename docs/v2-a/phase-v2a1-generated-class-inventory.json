@@ -1,0 +1,26 @@
+{
+  "phase": "V2-A1",
+  "status": "implemented-static-inventory",
+  "outputs": [
+    "generated-class-inventory.json",
+    "generated-class-inventory.md",
+    "generated-class-family-breakdown.json",
+    "generated-class-inventory-summary.csv"
+  ],
+  "families": [
+    "PLAIN",
+    "LAMBDA_METAFATORY_SITE",
+    "SPRING_CGLIB",
+    "SPRING_AOT_BEAN_DEFINITIONS",
+    "SPRING_AOT_REGISTRATION",
+    "SPRING_DATA_GENERATED",
+    "JDK_PROXY",
+    "BYTEBUDDY",
+    "HIBERNATE_PROXY",
+    "SYNTHETIC_BRIDGE_METHODS",
+    "COMPILER_SYNTHETIC_HELPER"
+  ],
+  "riskDefault": "UNKNOWN",
+  "runtimeAttribution": "deferred-to-v2-a2",
+  "bytecodeMutation": false
+}

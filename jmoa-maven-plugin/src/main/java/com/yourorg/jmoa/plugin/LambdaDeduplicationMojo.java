@@ -12,6 +12,10 @@ import com.yourorg.jmoa.plugin.filter.LambdaProfileReader;
 import com.yourorg.jmoa.plugin.filter.LambdaSourceIndex;
 import com.yourorg.jmoa.plugin.framework.FrameworkSafetyConfig;
 import com.yourorg.jmoa.plugin.framework.FrameworkAdmissionReportWriter;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassInventory;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassInventoryReportWriter;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassInventoryScanner;
+import com.yourorg.jmoa.plugin.generated.GeneratedClassOptimizer;
 import com.yourorg.jmoa.plugin.modec.ModeCClasspathWriter;
 import com.yourorg.jmoa.plugin.roi.RewriteRoiAnalyzer;
 import com.yourorg.jmoa.plugin.roi.RewriteRoiReport;
@@ -212,6 +216,24 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
     @Parameter(property = "jmoa.rewriteRoiIncludeCandidates", defaultValue = "true")
     private boolean rewriteRoiIncludeCandidates;
 
+    @Parameter(property = "jmoa.synthetic.enabled", defaultValue = "false")
+    private boolean syntheticEnabled;
+
+    @Parameter(property = "jmoa.synthetic.inventoryOnly", defaultValue = "true")
+    private boolean syntheticInventoryOnly;
+
+    @Parameter(property = "jmoa.synthetic.optimizeFamily", defaultValue = "none")
+    private String syntheticOptimizeFamily;
+
+    @Parameter(property = "jmoa.synthetic.failOnUnsafe", defaultValue = "true")
+    private boolean syntheticFailOnUnsafe;
+
+    @Parameter(property = "jmoa.synthetic.scanClasspathJars", defaultValue = "false")
+    private boolean syntheticScanClasspathJars;
+
+    @Parameter(property = "jmoa.synthetic.jarPaths")
+    private String syntheticJarPaths;
+
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip) {
@@ -273,6 +295,7 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             // Stage 1: Scan class files
             List<File> classFiles = collectClassFiles(classRoots);
             getLog().info("Found " + classFiles.size() + " class files to scan.");
+            maybeWriteGeneratedClassInventory(classesDir, classRoots, classpathElements);
 
             com.yourorg.jmoa.plugin.scanner.ScanResult scanResult = LambdaScanner.scanClassFiles(classFiles);
             List<LambdaSite> sites = scanResult.sites();
@@ -1088,6 +1111,100 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             files.addAll(ClassFileWalker.findClassFiles(root.rootDirectory()));
         }
         return files;
+    }
+
+    private void maybeWriteGeneratedClassInventory(
+        File classesDir,
+        List<ClassRootDescriptor> classRoots,
+        List<String> classpathElements
+    ) throws IOException {
+        if (!syntheticEnabled) {
+            return;
+        }
+        try {
+            new GeneratedClassOptimizer().ensureInventoryOnly(syntheticOptimizeFamily, syntheticInventoryOnly);
+        } catch (IllegalStateException e) {
+            throw new IOException(e.getMessage(), e);
+        }
+
+        List<ClassRootDescriptor> inventoryRoots = syntheticInventoryRoots(classesDir, classRoots);
+        List<File> inventoryJars = syntheticInventoryJars(classpathElements);
+        GeneratedClassInventory inventory = new GeneratedClassInventoryScanner().scan(inventoryRoots, inventoryJars);
+        new GeneratedClassInventoryReportWriter().write(new File(project.getBuild().getDirectory()), inventory);
+        getLog().info("V2-A generated-class inventory written under: " + project.getBuild().getDirectory());
+        getLog().info("V2-A generated-class inventory summary: scanned=" + inventory.totalClassesScanned()
+            + ", generatedLike=" + inventory.generatedLikeClasses()
+            + ", families=" + inventory.familyBreakdown().size()
+            + ", failOnUnsafe=" + syntheticFailOnUnsafe
+            + ", inventoryOnly=" + syntheticInventoryOnly + ".");
+    }
+
+    private List<ClassRootDescriptor> syntheticInventoryRoots(File classesDir, List<ClassRootDescriptor> classRoots) throws IOException {
+        Map<String, ClassRootDescriptor> roots = new LinkedHashMap<>();
+        for (ClassRootDescriptor root : classRoots) {
+            if (root != null && root.rootDirectory() != null && root.rootDirectory().isDirectory()) {
+                roots.put(root.rootDirectory().getCanonicalPath(), root);
+            }
+        }
+        addSyntheticRootIfPresent(roots, new File(project.getBuild().getDirectory(), "spring-aot/main/classes"), true);
+        addSyntheticRootIfPresent(roots, new File(project.getBuild().getDirectory(), "BOOT-INF/classes"), true);
+        addSyntheticRootIfPresent(roots, new File(classesDir, "BOOT-INF/classes"), true);
+        return new ArrayList<>(roots.values());
+    }
+
+    private void addSyntheticRootIfPresent(Map<String, ClassRootDescriptor> roots, File directory, boolean projectOwned) throws IOException {
+        if (directory == null || !directory.isDirectory()) {
+            return;
+        }
+        File canonical = directory.getCanonicalFile();
+        roots.putIfAbsent(
+            canonical.getCanonicalPath(),
+            new ClassRootDescriptor(canonical, projectOwned, ClassRootKind.ADDITIONAL_DIRECTORY)
+        );
+    }
+
+    private List<File> syntheticInventoryJars(List<String> classpathElements) throws IOException {
+        Map<String, File> jars = new LinkedHashMap<>();
+        addSyntheticJarPaths(jars, syntheticJarPaths);
+        if (syntheticScanClasspathJars && classpathElements != null) {
+            for (String element : classpathElements) {
+                addSyntheticJar(jars, new File(element));
+            }
+        }
+        addJarsUnderDirectory(jars, optimizedLibsDir);
+        addSyntheticJar(jars, new File(project.getBuild().getDirectory(), project.getBuild().getFinalName() + ".jar"));
+        return new ArrayList<>(jars.values());
+    }
+
+    private void addSyntheticJarPaths(Map<String, File> jars, String rawPaths) throws IOException {
+        if (rawPaths == null || rawPaths.isBlank()) {
+            return;
+        }
+        for (String raw : rawPaths.split("[;\\r\\n]+")) {
+            String trimmed = raw.trim();
+            if (!trimmed.isEmpty()) {
+                addSyntheticJar(jars, new File(trimmed));
+            }
+        }
+    }
+
+    private void addJarsUnderDirectory(Map<String, File> jars, File directory) throws IOException {
+        if (directory == null || !directory.isDirectory()) {
+            return;
+        }
+        try (java.util.stream.Stream<Path> walk = Files.walk(directory.toPath())) {
+            for (Path path : walk.filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".jar")).toList()) {
+                addSyntheticJar(jars, path.toFile());
+            }
+        }
+    }
+
+    private void addSyntheticJar(Map<String, File> jars, File jar) throws IOException {
+        if (jar == null || !jar.isFile() || !jar.getName().endsWith(".jar")) {
+            return;
+        }
+        File canonical = jar.getCanonicalFile();
+        jars.putIfAbsent(canonical.getCanonicalPath(), canonical);
     }
 
     private List<LambdaSite> filterSitesByRoots(List<LambdaSite> sites, List<ClassRootDescriptor> roots) {
