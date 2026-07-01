@@ -50,3 +50,11 @@ The smoke confirms that V2-B handles:
 - V2-A generated-family classification in size reports.
 
 No bytecode mutation was performed.
+
+## Follow-Up Analysis
+
+The smoke output was summarized into V2-B1.5 bytecode-footprint findings:
+
+- [PetClinic bytecode size analysis](v2b-petclinic-bytecode-size-analysis.md)
+- [Doctor bytecode size analysis](v2b-doctor-bytecode-size-analysis.md)
+- [Cross-service bytecode findings](v2b-cross-service-bytecode-findings.md)

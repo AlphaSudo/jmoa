@@ -1,0 +1,65 @@
+{
+  "phase": "V2-B1.5",
+  "status": "cross-service-analysis-completed",
+  "mutationEnabled": false,
+  "services": [
+    {
+      "name": "Spring PetClinic customers-service",
+      "deploymentShape": "EXPLODED_BOOT_APP",
+      "classesScanned": 54326,
+      "classfileBytes": 200152982,
+      "largestMethodCodeLength": 57198
+    },
+    {
+      "name": "doctor-service",
+      "deploymentShape": "SPRING_BOOT_FAT_JAR",
+      "classesScanned": 59424,
+      "classfileBytes": 219457652,
+      "largestMethodCodeLength": 57198
+    }
+  ],
+  "sharedNear64kRisks": [
+    {
+      "className": "org.bouncycastle.pqc.crypto.hqc.ReedSolomon",
+      "methodName": "<clinit>",
+      "artifact": "bcprov-jdk18on-1.81.jar",
+      "codeLength": 57198,
+      "generatedFamily": "PLAIN",
+      "runtimeFinding": "not observed in available PetClinic class-load proof; Doctor runtime evidence unavailable"
+    },
+    {
+      "className": "com.google.common.net.TldPatterns",
+      "methodName": "<clinit>",
+      "artifact": "guava-14.0.1.jar",
+      "codeLength": 49478,
+      "generatedFamily": "PLAIN",
+      "runtimeFinding": "not observed in available PetClinic class-load proof; Doctor runtime evidence unavailable"
+    }
+  ],
+  "commonLargeSurface": [
+    "Hibernate query and SQL translation classes",
+    "Spring Data JPA parser and renderer classes",
+    "dependency classes tagged LAMBDA_METAFATORY_SITE",
+    "dependency classes tagged SYNTHETIC_BRIDGE_METHODS"
+  ],
+  "serviceSpecificSurface": {
+    "petclinic": [
+      "MySQL connector static tables and connection implementation"
+    ],
+    "doctor": [
+      "Kotlin standard library collection helpers",
+      "PostgreSQL JDBC classes",
+      "Protobuf message schema classes",
+      "private Spring AOT registration output"
+    ]
+  },
+  "conclusions": [
+    "The shared near-64KB risks are dependency static initializers, not generated-class optimizer targets.",
+    "Runtime correlation is required before making any bytecode-size causality claim.",
+    "Debug-attribute savings analysis is the safest next reducer-preparation step.",
+    "Large-method splitting and BootstrapMethods rewriting remain blocked."
+  ],
+  "nextPhase": "V2-B2 runtime correlation",
+  "claimBoundary": "cross-service-bytecode-footprint-analysis-only"
+}
+

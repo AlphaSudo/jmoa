@@ -20,5 +20,10 @@
       "largestMethodCodeLength": 57198
     }
   ],
+  "followUpAnalysis": [
+    "v2b-petclinic-bytecode-size-analysis.md",
+    "v2b-doctor-bytecode-size-analysis.md",
+    "v2b-cross-service-bytecode-findings.md"
+  ],
   "claimBoundary": "profiler-smoke-only"
 }

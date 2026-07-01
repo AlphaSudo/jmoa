@@ -1,0 +1,64 @@
+{
+  "phase": "V2-B1.5",
+  "service": "Spring PetClinic customers-service",
+  "deploymentShape": "EXPLODED_BOOT_APP",
+  "status": "analysis-completed",
+  "mutationEnabled": false,
+  "totals": {
+    "classesScanned": 54326,
+    "classfileBytes": 200152982,
+    "methodCodeBytes": 16988241,
+    "largestMethodCodeLength": 57198,
+    "near64kDangerMethods": 3
+  },
+  "near64kMethods": [
+    {
+      "className": "org.bouncycastle.pqc.crypto.hqc.ReedSolomon",
+      "methodName": "<clinit>",
+      "descriptor": "()V",
+      "artifact": "bcprov-jdk18on-1.81.jar",
+      "codeLength": 57198,
+      "threshold": "DANGER",
+      "generatedFamily": "PLAIN",
+      "runtimeLoadedInAvailablePetClinicClassLoadLog": false
+    },
+    {
+      "className": "com.google.common.net.TldPatterns",
+      "methodName": "<clinit>",
+      "descriptor": "()V",
+      "artifact": "guava-14.0.1.jar",
+      "codeLength": 49478,
+      "threshold": "DANGER",
+      "generatedFamily": "PLAIN",
+      "runtimeLoadedInAvailablePetClinicClassLoadLog": false
+    }
+  ],
+  "familyBreakdown": [
+    {"family": "PLAIN", "classes": 42174, "bytes": 118527605, "methodBytes": 11064871, "debugBytes": 12477940, "largestMethod": 57198},
+    {"family": "SYNTHETIC_BRIDGE_METHODS", "classes": 8393, "bytes": 40931868, "methodBytes": 2972070, "debugBytes": 5307517, "largestMethod": 13313},
+    {"family": "LAMBDA_METAFATORY_SITE", "classes": 3446, "bytes": 39086800, "methodBytes": 2867692, "debugBytes": 4843374, "largestMethod": 6057},
+    {"family": "SPRING_DATA_GENERATED", "classes": 290, "bytes": 1379849, "methodBytes": 69182, "debugBytes": 128718, "largestMethod": 754},
+    {"family": "BYTEBUDDY", "classes": 21, "bytes": 222724, "methodBytes": 14303, "debugBytes": 15322, "largestMethod": 415},
+    {"family": "HIBERNATE_PROXY", "classes": 2, "bytes": 4136, "methodBytes": 123, "debugBytes": 360, "largestMethod": 32}
+  ],
+  "topArtifactsByClassfileBytes": [
+    {"artifact": "hibernate-core-7.2.0.Final.jar", "classes": 8009, "bytes": 36550865, "methodBytes": 2201522, "largestMethod": 2692},
+    {"artifact": "byte-buddy-1.17.8.jar", "classes": 5966, "bytes": 21533021, "methodBytes": 1193241, "largestMethod": 5208},
+    {"artifact": "bcprov-jdk18on-1.81.jar", "classes": 5994, "bytes": 12853894, "methodBytes": 2749794, "largestMethod": 57198},
+    {"artifact": "prometheus-metrics-exposition-formats-1.4.3.jar", "classes": 809, "bytes": 6674366, "methodBytes": 495101, "largestMethod": 2892},
+    {"artifact": "tomcat-embed-core-11.0.15.jar", "classes": 1464, "bytes": 6244902, "methodBytes": 775875, "largestMethod": 13313},
+    {"artifact": "mysql-connector-j-9.5.0.jar", "classes": 1066, "bytes": 6232375, "methodBytes": 652955, "largestMethod": 10737},
+    {"artifact": "spring-data-jpa-4.0.1.jar", "classes": 1064, "bytes": 6093380, "methodBytes": 356349, "largestMethod": 3408},
+    {"artifact": "spring-web-7.0.2.jar", "classes": 1318, "bytes": 4876190, "methodBytes": 265781, "largestMethod": 1539},
+    {"artifact": "guava-14.0.1.jar", "classes": 1594, "bytes": 4802058, "methodBytes": 316738, "largestMethod": 49478},
+    {"artifact": "jackson-databind-3.0.3.jar", "classes": 879, "bytes": 4620675, "methodBytes": 321971, "largestMethod": 1020}
+  ],
+  "conclusions": [
+    "The near-64KB risk is from plain dependency static initializers, not generated Spring/JMOA classes.",
+    "The available runtime-origin class-load proof did not observe the near-64KB Bouncy Castle or Guava classes loading.",
+    "Hibernate and Spring Data JPA dominate bytecode and attribute-heavy classes.",
+    "The correct next step is V2-B runtime correlation plus debug-attribute savings estimates."
+  ],
+  "claimBoundary": "bytecode-footprint-analysis-only"
+}
+

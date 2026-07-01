@@ -1,0 +1,68 @@
+{
+  "phase": "V2-B1.5",
+  "service": "doctor-service",
+  "deploymentShape": "SPRING_BOOT_FAT_JAR",
+  "status": "analysis-completed",
+  "mutationEnabled": false,
+  "privacy": "private application names and package details sanitized in public docs",
+  "totals": {
+    "classesScanned": 59424,
+    "classfileBytes": 219457652,
+    "methodCodeBytes": 17850196,
+    "largestMethodCodeLength": 57198,
+    "near64kDangerMethods": 3
+  },
+  "near64kMethods": [
+    {
+      "className": "org.bouncycastle.pqc.crypto.hqc.ReedSolomon",
+      "methodName": "<clinit>",
+      "descriptor": "()V",
+      "artifact": "bcprov-jdk18on-1.81.jar",
+      "codeLength": 57198,
+      "threshold": "DANGER",
+      "generatedFamily": "PLAIN",
+      "runtimeLoadedInExistingDoctorClassLoadEvidence": null
+    },
+    {
+      "className": "com.google.common.net.TldPatterns",
+      "methodName": "<clinit>",
+      "descriptor": "()V",
+      "artifact": "guava-14.0.1.jar",
+      "codeLength": 49478,
+      "threshold": "DANGER",
+      "generatedFamily": "PLAIN",
+      "runtimeLoadedInExistingDoctorClassLoadEvidence": null
+    }
+  ],
+  "familyBreakdown": [
+    {"family": "PLAIN", "classes": 44955, "bytes": 122932001, "methodBytes": 10871966, "debugBytes": 13385686, "largestMethod": 57198},
+    {"family": "SYNTHETIC_BRIDGE_METHODS", "classes": 9816, "bytes": 49514163, "methodBytes": 3689293, "debugBytes": 6574311, "largestMethod": 13313},
+    {"family": "LAMBDA_METAFATORY_SITE", "classes": 4001, "bytes": 44126922, "methodBytes": 3142094, "debugBytes": 5385568, "largestMethod": 6057},
+    {"family": "SPRING_DATA_GENERATED", "classes": 293, "bytes": 1387124, "methodBytes": 69362, "debugBytes": 129194, "largestMethod": 754},
+    {"family": "SPRING_AOT_BEAN_DEFINITIONS", "classes": 322, "bytes": 1057731, "methodBytes": 39941, "debugBytes": 34048, "largestMethod": 240},
+    {"family": "BYTEBUDDY", "classes": 21, "bytes": 222724, "methodBytes": 14303, "debugBytes": 15322, "largestMethod": 415},
+    {"family": "SPRING_AOT_REGISTRATION", "classes": 2, "bytes": 122767, "methodBytes": 6135, "debugBytes": 2576, "largestMethod": 5960},
+    {"family": "SPRING_CGLIB", "classes": 12, "bytes": 90084, "methodBytes": 16979, "debugBytes": 96, "largestMethod": 1768},
+    {"family": "HIBERNATE_PROXY", "classes": 2, "bytes": 4136, "methodBytes": 123, "debugBytes": 360, "largestMethod": 32}
+  ],
+  "topArtifactsByClassfileBytes": [
+    {"artifact": "hibernate-core-7.2.7.Final.jar", "classes": 8010, "bytes": 36568676, "methodBytes": 2203240, "largestMethod": 2692},
+    {"artifact": "byte-buddy-1.17.8.jar", "classes": 5966, "bytes": 21533021, "methodBytes": 1193241, "largestMethod": 5208},
+    {"artifact": "bcprov-jdk18on-1.81.jar", "classes": 5994, "bytes": 12853894, "methodBytes": 2749794, "largestMethod": 57198},
+    {"artifact": "prometheus-metrics-exposition-formats-1.4.3.jar", "classes": 809, "bytes": 6674366, "methodBytes": 495101, "largestMethod": 2892},
+    {"artifact": "tomcat-embed-core-11.0.20.jar", "classes": 1467, "bytes": 6266205, "methodBytes": 779161, "largestMethod": 13313},
+    {"artifact": "spring-data-jpa-4.0.4.jar", "classes": 1064, "bytes": 6110063, "methodBytes": 356811, "largestMethod": 3408},
+    {"artifact": "spring-web-7.0.6.jar", "classes": 1328, "bytes": 4926594, "methodBytes": 269186, "largestMethod": 1539},
+    {"artifact": "jackson-databind-3.1.0.jar", "classes": 905, "bytes": 4814805, "methodBytes": 336836, "largestMethod": 1020},
+    {"artifact": "guava-14.0.1.jar", "classes": 1594, "bytes": 4802058, "methodBytes": 316738, "largestMethod": 49478},
+    {"artifact": "protobuf-java-4.32.0.jar", "classes": 756, "bytes": 4778210, "methodBytes": 450018, "largestMethod": 2892}
+  ],
+  "conclusions": [
+    "Doctor shares the same near-64KB dependency static-initializer risks as PetClinic.",
+    "Doctor has extra Kotlin, PostgreSQL, Spring Security, and AOT footprint compared with PetClinic.",
+    "Runtime class-load correlation must be collected before claiming runtime cost causality.",
+    "No V2-B bytecode mutation is justified from this static analysis alone."
+  ],
+  "claimBoundary": "bytecode-footprint-analysis-only"
+}
+
