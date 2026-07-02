@@ -1,0 +1,69 @@
+{
+  "metadataVersion": "v2-c-historical-replay-results",
+  "status": "PASSED_WITH_OPTIONAL_SKIP",
+  "usedSanitizedMarkdownAsReplayEvidence": false,
+  "cases": [
+    {
+      "id": "phase33m-petclinic-exploded-full-p2",
+      "present": true,
+      "expectedVerdict": "CONFIRMED_WIN",
+      "actualVerdict": "CONFIRMED_WIN",
+      "passed": true,
+      "pairs": 3,
+      "pairedWins": 3,
+      "medianPssDeltaKb": -4758,
+      "medianPrivateDirtyDeltaKb": -4904,
+      "medianMemoryCurrentDeltaBytes": -4849664,
+      "medianHeapPssDeltaKb": -7152
+    },
+    {
+      "id": "phase33k7b-petclinic-fatjar-full-p2",
+      "present": true,
+      "expectedVerdict": "CONFIRMED_REGRESSION",
+      "actualVerdict": "CONFIRMED_REGRESSION",
+      "passed": true,
+      "pairs": 3,
+      "pairedWins": 0,
+      "medianPssDeltaKb": 8895,
+      "medianPrivateDirtyDeltaKb": 9072,
+      "medianMemoryCurrentDeltaBytes": 9392128,
+      "medianHeapPssDeltaKb": 8748,
+      "varianceCategories": [
+        "HEAP_PAGE_TOUCH"
+      ]
+    },
+    {
+      "id": "phase32l-doctor-corrected-fatjar-cds",
+      "present": false,
+      "expectedVerdict": "CONFIRMED_WIN",
+      "actualVerdict": null,
+      "passed": false,
+      "skipped": true,
+      "skipReason": "raw run-level evidence unavailable; sanitized summaries were not used"
+    },
+    {
+      "id": "phase32i-doctor-invalid-artifact",
+      "present": true,
+      "expectedVerdict": "INVALID_EVIDENCE",
+      "actualVerdict": "INVALID_EVIDENCE",
+      "passed": true,
+      "invalidReasons": [
+        "workload errors > 0",
+        "health is not UP",
+        "missing post smaps_rollup",
+        "artifact hash mismatch",
+        "runtime policy mismatch",
+        "CDS mode mismatch",
+        "javaagent present while policy forbids javaagent",
+        "missing or empty memory metrics"
+      ]
+    }
+  ],
+  "totals": {
+    "cases": 4,
+    "presentCases": 3,
+    "passedCases": 3,
+    "skippedCases": 1,
+    "failedCases": 0
+  }
+}

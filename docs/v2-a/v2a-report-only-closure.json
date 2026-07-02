@@ -1,0 +1,37 @@
+{
+  "metadataVersion": "v2-a-report-only-closure",
+  "status": "CLOSED_REPORT_ONLY",
+  "mutationEnabled": false,
+  "serviceSmokes": [
+    {
+      "service": "spring-petclinic-customers-service",
+      "deploymentShape": "EXPLODED_BOOT_APP",
+      "classesScanned": 54326,
+      "generatedLikeRecords": 12152,
+      "runtimeGeneratedLoadsAttributed": 8
+    },
+    {
+      "service": "doctor-service",
+      "deploymentShape": "CORRECTED_SPRING_BOOT_FAT_JAR",
+      "classesScanned": 59424,
+      "generatedLikeRecords": 14469,
+      "familiesReported": 9
+    }
+  ],
+  "closedAs": [
+    "generated-class inventory",
+    "runtime attribution infrastructure",
+    "safety taxonomy",
+    "transform eligibility reporting",
+    "ROI feature reporting",
+    "report-only prototype selection"
+  ],
+  "remainingBlocked": [
+    "generated-class bytecode mutation",
+    "Spring AOT helper rewrite",
+    "CGLIB proxy rewrite",
+    "JDK proxy rewrite",
+    "ByteBuddy or Hibernate proxy rewrite",
+    "generated-class memory win claim"
+  ]
+}

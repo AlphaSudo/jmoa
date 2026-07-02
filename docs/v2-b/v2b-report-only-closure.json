@@ -1,0 +1,46 @@
+{
+  "metadataVersion": "v2-b-report-only-closure",
+  "status": "CLOSED_REPORT_ONLY",
+  "mutationEnabled": false,
+  "serviceSmokes": [
+    {
+      "service": "spring-petclinic-customers-service",
+      "deploymentShape": "EXPLODED_BOOT_APP",
+      "classesScanned": 54326,
+      "classfileBytes": 200152982,
+      "largestMethodCodeBytes": 57198
+    },
+    {
+      "service": "doctor-service",
+      "deploymentShape": "CORRECTED_SPRING_BOOT_FAT_JAR",
+      "classesScanned": 59424,
+      "classfileBytes": 219457652,
+      "largestMethodCodeBytes": 57198
+    }
+  ],
+  "petclinicRuntimeCorrelation": {
+    "profileClasses": 54672,
+    "runtimeLoadedClassesObserved": 22538,
+    "profileClassesObservedLoaded": 16737,
+    "profileClassesWithHistogramInstances": 5298,
+    "near64kMethodsRuntimeLoaded": 0,
+    "near64kRuntimeStatus": "STATIC_ONLY_RISK"
+  },
+  "closedAs": [
+    "classfile size profiler",
+    "method Code length and near-64KB reporting",
+    "constant-pool bloat reporting",
+    "attribute footprint reporting",
+    "V2-A generated-family integration",
+    "runtime correlation infrastructure"
+  ],
+  "remainingBlocked": [
+    "bytecode mutation",
+    "debug attribute stripping",
+    "LocalVariableTable reducer",
+    "large-method splitting",
+    "constant-pool reducer",
+    "BootstrapMethods reducer",
+    "bytecode-size memory or startup win claim"
+  ]
+}

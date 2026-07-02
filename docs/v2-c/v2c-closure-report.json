@@ -1,0 +1,32 @@
+{
+  "metadataVersion": "v2-c-closure-report",
+  "status": "CLOSED_EVIDENCE_ENGINE_FOUNDATION",
+  "optimizerBehaviorChanged": false,
+  "v2aMutationEnabled": false,
+  "v2bMutationEnabled": false,
+  "replayGate": {
+    "status": "PASSED_WITH_OPTIONAL_SKIP",
+    "petclinic33m": "CONFIRMED_WIN",
+    "petclinic33k7b": "CONFIRMED_REGRESSION",
+    "doctor32iInvalidFixture": "INVALID_EVIDENCE",
+    "doctor32l": "SKIPPED_RAW_EVIDENCE_UNAVAILABLE"
+  },
+  "implemented": [
+    "evidence schema and models",
+    "smaps_rollup parser",
+    "full smaps parser",
+    "memory.current parser",
+    "workload JSON parser",
+    "GC.heap_info parser",
+    "GC.class_histogram parser",
+    "NMT summary parser",
+    "evidence validator",
+    "paired confirmation analyzer",
+    "variance classifier",
+    "perturbation detector",
+    "historical replay mode",
+    "jmoa:evidence Maven goal",
+    "JSON and Markdown reports"
+  ],
+  "futureGate": "Future V2-A or V2-B mutation must pass V2-C validation before any performance claim."
+}
