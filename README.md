@@ -162,6 +162,39 @@ See:
 - [Evidence Engine](docs/evidence-engine.md)
 - [V2-C Evidence Schema](docs/v2-c/jmoa-evidence-schema.md)
 
+## V2-D Memory Attribution Engine
+
+V2-D adds a report-only memory attribution layer. It consumes V2-C-valid
+evidence and explains why memory moved: heap page touch, retained objects,
+anonymous mappings, class/metaspace movement, generated-family context, and
+bytecode/runtime correlation. It does not mutate bytecode and does not claim a
+new optimizer win by itself.
+
+```powershell
+mvn jmoa:attribution `
+  -Djmoa.attribution.enabled=true `
+  -Djmoa.attribution.inputDir=<v2-c-evidence-dir> `
+  -Djmoa.evidence.expectedPolicy=NO_CDS_LOW_DIRTY
+```
+
+Optional V2-A and V2-B reports can be supplied to enrich generated-family and
+bytecode/runtime attribution:
+
+```powershell
+mvn jmoa:attribution `
+  -Djmoa.attribution.enabled=true `
+  -Djmoa.attribution.inputDir=<v2-c-evidence-dir> `
+  -Djmoa.attribution.generatedClassReport=<generated-class-inventory.json> `
+  -Djmoa.attribution.bytecodeRuntimeCorrelationReport=<bytecode-runtime-correlation.json>
+```
+
+See:
+
+- [V2-D Scope](docs/v2-d/phase-v2d0-scope.md)
+- [Memory Category Model](docs/v2-d/memory-category-model.md)
+- [Historical Attribution Replay](docs/v2-d/v2d-historical-attribution-replay.md)
+- [V2-D Closure Report](docs/v2-d/v2d-closure-report.md)
+
 ## Safety
 
 Before publishing or tagging a release, run:

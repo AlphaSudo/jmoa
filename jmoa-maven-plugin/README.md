@@ -14,6 +14,8 @@ Current responsibilities:
 - write V2-A generated/synthetic/proxy/AOT inventory reports when explicitly
   enabled
 - write V2-B bytecode/classfile size reports when explicitly enabled
+- write V2-C evidence validation reports for already-captured measurements
+- write V2-D memory attribution reports for V2-C-valid evidence
 
 The plugin is intentionally not a runtime javaagent. Optimized artifacts are
 produced at build time and then verified in the target deployment shape.
@@ -24,6 +26,8 @@ produced at build time and then verified in the target deployment shape.
 - `jmoa:coverage-report`
 - `jmoa:check-coverage`
 - `jmoa:measure-impact`
+- `jmoa:evidence`
+- `jmoa:attribution`
 
 ## V2-A Generated-Class Flags
 
@@ -61,6 +65,43 @@ jmoa.size.failMethodBytes=65535
 When enabled, the plugin writes classfile, method, constant-pool, attribute, and
 bytecode ROI reports under `target/`. Mutation and strip flags fail fast in this
 release.
+
+## V2-C Evidence Flags
+
+Evidence analysis is disabled by default and operates on already-captured run
+folders.
+
+```text
+jmoa.evidence.enabled=false
+jmoa.evidence.mode=analyze
+jmoa.evidence.inputDir=<evidence-dir>
+jmoa.evidence.outputDir=<output-dir>
+jmoa.evidence.expectedPolicy=UNKNOWN
+```
+
+The evidence goal validates runs, analyzes paired confirmations, detects
+diagnostic perturbation, and emits JSON/Markdown reports. It does not start
+containers or change optimizer behavior.
+
+## V2-D Attribution Flags
+
+Memory attribution is disabled by default and requires V2-C-valid evidence by
+default.
+
+```text
+jmoa.attribution.enabled=false
+jmoa.attribution.mode=analyze
+jmoa.attribution.inputDir=<v2-c-evidence-dir>
+jmoa.attribution.outputDir=<output-dir>
+jmoa.attribution.requireV2CValid=true
+jmoa.attribution.generatedClassReport=<optional-v2a-report>
+jmoa.attribution.bytecodeRuntimeCorrelationReport=<optional-v2b-report>
+```
+
+The attribution goal explains memory movement across smaps, NMT, heap/object
+histograms, class/metaspace signals, optional V2-A generated-family context, and
+optional V2-B bytecode runtime correlation. It is report-only and does not make
+V2-A or V2-B mutation safe by itself.
 
 See the repository-level docs for deployment materialization and measurement
 boundaries.

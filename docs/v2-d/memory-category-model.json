@@ -1,0 +1,52 @@
+{
+  "metadataVersion": "v2-d-memory-category-model",
+  "categories": [
+    "TOTAL_PSS",
+    "PRIVATE_DIRTY",
+    "CGROUP_MEMORY_CURRENT",
+    "HEAP_PSS",
+    "HEAP_PRIVATE_DIRTY",
+    "HEAP_USED",
+    "HEAP_COMMITTED",
+    "CLASS_HISTOGRAM_BYTES",
+    "ANONYMOUS_RW_PSS",
+    "ANONYMOUS_EXECUTABLE_CODE_PSS",
+    "NATIVE_LIBRARY_PSS",
+    "MAPPED_FILE_PSS",
+    "STACK_PSS",
+    "NMT_TOTAL_COMMITTED",
+    "NMT_JAVA_HEAP_COMMITTED",
+    "NMT_METASPACE_COMMITTED",
+    "NMT_CLASS_COMMITTED",
+    "NMT_CODE_COMMITTED",
+    "NMT_ARENA_CHUNK_COMMITTED",
+    "NMT_MALLOC"
+  ],
+  "heapClassifications": [
+    "HEAP_PAGE_TOUCH_GROWTH",
+    "HEAP_PAGE_TOUCH_REDUCTION",
+    "RETAINED_OBJECT_GROWTH",
+    "RETAINED_OBJECT_REDUCTION",
+    "UNKNOWN"
+  ],
+  "objectFamilies": [
+    "byte_arrays",
+    "char_arrays",
+    "arrays",
+    "strings",
+    "maps",
+    "collections",
+    "spring",
+    "jackson",
+    "hibernate",
+    "tomcat",
+    "netty",
+    "lambda_objects",
+    "jmoa_runtime",
+    "reflection",
+    "method_handles",
+    "classloader",
+    "proxy_objects",
+    "unknown"
+  ]
+}
