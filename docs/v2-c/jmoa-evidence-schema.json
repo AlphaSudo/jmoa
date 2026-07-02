@@ -1,0 +1,21 @@
+{
+  "metadataVersion": "v2-c-evidence-schema",
+  "records": [
+    "RunManifest",
+    "EvidenceCapture",
+    "MemoryMetrics",
+    "SmapsRegionSummary",
+    "NmtSummary",
+    "HeapInfo",
+    "ClassHistogramSummary",
+    "WorkloadResult",
+    "RuntimeVerificationGate",
+    "PerturbationReport",
+    "RunEvidence",
+    "PairResult",
+    "ConfirmationReport",
+    "VarianceClassification",
+    "EvidenceValidationReport",
+    "EvidenceAnalysisReport"
+  ]
+}

@@ -132,6 +132,36 @@ See:
 - [Debug Attribute Stripping](docs/debug-attribute-stripping.md)
 - [Large Generated Methods](docs/large-generated-methods.md)
 
+## V2-C Evidence Engine
+
+V2-C adds a report-only measurement stability engine. It parses already-captured
+run folders, validates evidence, detects perturbing diagnostics, analyzes
+baseline/candidate pairs, classifies variance patterns, and writes confirmation
+reports. It does not run containers and does not change optimizer behavior.
+
+```powershell
+mvn jmoa:evidence `
+  -Djmoa.evidence.enabled=true `
+  -Djmoa.evidence.inputDir=<evidence-dir> `
+  -Djmoa.evidence.expectedPolicy=NO_CDS_LOW_DIRTY
+```
+
+Historical replay mode can enforce audited outcomes when local archived evidence
+folders are available:
+
+```powershell
+mvn jmoa:evidence `
+  -Djmoa.evidence.enabled=true `
+  -Djmoa.evidence.mode=replay `
+  -Djmoa.evidence.inputDir=<historical-evidence-root> `
+  -Djmoa.evidence.replaySuite=docs/v2-c/historical-replay-suite.example.json
+```
+
+See:
+
+- [Evidence Engine](docs/evidence-engine.md)
+- [V2-C Evidence Schema](docs/v2-c/jmoa-evidence-schema.md)
+
 ## Safety
 
 Before publishing or tagging a release, run:

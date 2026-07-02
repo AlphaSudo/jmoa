@@ -1,0 +1,37 @@
+{
+  "metadataVersion": "v2-c-historical-replay-suite",
+  "cases": [
+    {
+      "id": "phase33m-petclinic-exploded-full-p2",
+      "description": "PetClinic customers-service EXPLODED_BOOT_APP full P2 no-CDS confirmed win.",
+      "inputDir": "petclinic/phase33m",
+      "expectedPolicy": "NO_CDS_LOW_DIRTY",
+      "expectedVerdict": "CONFIRMED_WIN",
+      "optional": true
+    },
+    {
+      "id": "phase33k7b-petclinic-fatjar-full-p2",
+      "description": "PetClinic fat-JAR full P2 allocator-controlled confirmation failure.",
+      "inputDir": "petclinic/phase33k7b",
+      "expectedPolicy": "NO_CDS_LOW_DIRTY",
+      "expectedVerdict": "CONFIRMED_REGRESSION",
+      "expectedVarianceCategories": ["HEAP_PAGE_TOUCH"],
+      "optional": true
+    },
+    {
+      "id": "phase32l-doctor-corrected-fatjar-cds",
+      "description": "Doctor-service corrected fat-JAR/CDS confirmation.",
+      "inputDir": "doctor/phase32l",
+      "expectedPolicy": "CDS",
+      "expectedVerdict": "CONFIRMED_WIN",
+      "optional": true
+    },
+    {
+      "id": "phase32i-doctor-invalid-artifact",
+      "description": "Doctor-service invalid measurement caused by artifact/runtime materialization mismatch.",
+      "inputDir": "doctor/phase32i",
+      "expectedVerdict": "INVALID_EVIDENCE",
+      "optional": true
+    }
+  ]
+}

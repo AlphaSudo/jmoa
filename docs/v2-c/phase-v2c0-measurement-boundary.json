@@ -1,0 +1,7 @@
+{
+  "phase": "V2-C0 measurement boundary",
+  "status": "implemented-report-only",
+  "optimizerBehaviorChanged": false,
+  "mavenGoal": "jmoa:evidence",
+  "defaultEnabled": false
+}
