@@ -43,6 +43,9 @@ import com.yourorg.jmoa.plugin.runtime.Tier2AdapterNamingStrategy;
 import com.yourorg.jmoa.plugin.runtime.Tier2PackageAdapterGenerator;
 import com.yourorg.jmoa.plugin.size.BytecodeSizeConfig;
 import com.yourorg.jmoa.plugin.size.BytecodeSizeReportWriter;
+import com.yourorg.jmoa.plugin.size.BytecodeRuntimeCorrelationReport;
+import com.yourorg.jmoa.plugin.size.BytecodeRuntimeCorrelationReportWriter;
+import com.yourorg.jmoa.plugin.size.BytecodeRuntimeCorrelator;
 import com.yourorg.jmoa.plugin.size.ClassfileSizeProfile;
 import com.yourorg.jmoa.plugin.size.ClassfileSizeScanner;
 import com.yourorg.jmoa.plugin.size.MethodSizeRecord;
@@ -297,6 +300,12 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
 
     @Parameter(property = "jmoa.size.jarPaths")
     private String sizeJarPaths;
+
+    @Parameter(property = "jmoa.size.classLoadLog")
+    private File sizeClassLoadLog;
+
+    @Parameter(property = "jmoa.size.classHistogram")
+    private File sizeClassHistogram;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -1247,7 +1256,9 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             sizeFailOnNear64k
         );
         ClassfileSizeProfile profile = new ClassfileSizeScanner(config).scan(sizeRoots, sizeJars);
-        new BytecodeSizeReportWriter().write(new File(project.getBuild().getDirectory()), profile);
+        File outputDirectory = new File(project.getBuild().getDirectory());
+        new BytecodeSizeReportWriter().write(outputDirectory, profile);
+        maybeWriteBytecodeRuntimeCorrelation(outputDirectory, profile);
         if (sizeFailOnNear64k) {
             List<MethodSizeRecord> dangerMethods = profile.methods().stream()
                 .filter(method -> method.codeLength() >= sizeDangerMethodBytes)
@@ -1262,6 +1273,32 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             + ", totalClassfileBytes=" + profile.totalClassfileBytes()
             + ", largestMethodCodeLength=" + profile.largestMethodCodeLength()
             + ", reportOnly=" + sizeReportOnly + ".");
+    }
+
+    private void maybeWriteBytecodeRuntimeCorrelation(File outputDirectory, ClassfileSizeProfile profile) throws IOException {
+        File classLoadLog = firstExistingFile(sizeClassLoadLog, syntheticClassLoadLog);
+        File classHistogram = firstExistingFile(sizeClassHistogram, syntheticClassHistogram);
+        if (classLoadLog == null && classHistogram == null) {
+            return;
+        }
+        BytecodeRuntimeCorrelationReport report = new BytecodeRuntimeCorrelator()
+            .correlate(profile, classLoadLog, classHistogram);
+        new BytecodeRuntimeCorrelationReportWriter().write(outputDirectory, report);
+        getLog().info("V2-B runtime correlation written"
+            + " (classLoadLog=" + (classLoadLog != null)
+            + ", classHistogram=" + (classHistogram != null)
+            + ", profileClassesObservedLoaded=" + report.profileClassesObservedLoaded()
+            + ", profileClassesWithHistogramInstances=" + report.profileClassesWithHistogramInstances() + ").");
+    }
+
+    private static File firstExistingFile(File first, File second) {
+        if (first != null && first.isFile()) {
+            return first;
+        }
+        if (second != null && second.isFile()) {
+            return second;
+        }
+        return null;
     }
 
     private void ensureBytecodeSizeReportOnly() throws IOException {

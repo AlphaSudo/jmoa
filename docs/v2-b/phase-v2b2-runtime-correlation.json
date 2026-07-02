@@ -1,0 +1,28 @@
+{
+  "phase": "V2-B2 runtime correlation",
+  "status": "implemented-report-only",
+  "mutationEnabled": false,
+  "inputs": [
+    "jmoa.size.classLoadLog",
+    "jmoa.size.classHistogram",
+    "fallback: jmoa.synthetic.classLoadLog",
+    "fallback: jmoa.synthetic.classHistogram"
+  ],
+  "outputs": [
+    "bytecode-runtime-correlation.json",
+    "bytecode-runtime-correlation.md",
+    "bytecode-runtime-correlation-top-loaded.json",
+    "bytecode-runtime-correlation-near64k.json"
+  ],
+  "categories": [
+    "STATIC_ONLY_RISK",
+    "RUNTIME_LOADED_COLD",
+    "RUNTIME_LOADED_HOT",
+    "WORKLOAD_SURVIVOR",
+    "MEMORY_CORRELATED",
+    "STARTUP_CORRELATED",
+    "UNKNOWN_NEEDS_JFR"
+  ],
+  "claimBoundary": "runtime-correlation-only"
+}
+

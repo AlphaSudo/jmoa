@@ -215,6 +215,9 @@ class LambdaDeduplicationMojoIntegrationTest {
         Path sourceFile = sourceDir.resolve("App__BeanDefinitions.java");
         Files.writeString(sourceFile, springAotBeanDefinitionsSource());
         compileProject(sourceFile, classesDir);
+        Path classLoadLog = targetDir.resolve("classload-size.log");
+        Files.writeString(classLoadLog,
+            "[0.100s][info][class,load] example.App__BeanDefinitions source: file:/app/classes/\n");
 
         OptimizeMojo mojo = new OptimizeMojo();
         MavenProject project = buildProject(projectDir, classesDir, runtimeClassesDir);
@@ -246,6 +249,7 @@ class LambdaDeduplicationMojoIntegrationTest {
         setField(mojo, "sizeOptimizeBootstrapMethods", false);
         setField(mojo, "sizeOptimizeConstantPool", false);
         setField(mojo, "sizeScanClasspathJars", false);
+        setField(mojo, "sizeClassLoadLog", classLoadLog.toFile());
 
         mojo.execute();
 
@@ -254,16 +258,23 @@ class LambdaDeduplicationMojoIntegrationTest {
         Path constantPoolFile = targetDir.resolve("constant-pool-bloat-report.json");
         Path attributeFile = targetDir.resolve("attribute-size-report.json");
         Path roiFile = targetDir.resolve("bytecode-roi-v2-report.json");
+        Path runtimeCorrelationFile = targetDir.resolve("bytecode-runtime-correlation.json");
         assertTrue(Files.isRegularFile(profileFile), "expected classfile size profile");
         assertTrue(Files.isRegularFile(methodFile), "expected method code size report");
         assertTrue(Files.isRegularFile(constantPoolFile), "expected constant-pool bloat report");
         assertTrue(Files.isRegularFile(attributeFile), "expected attribute size report");
         assertTrue(Files.isRegularFile(roiFile), "expected bytecode ROI report");
+        assertTrue(Files.isRegularFile(runtimeCorrelationFile), "expected bytecode runtime correlation report");
 
         JsonNode profile = MAPPER.readTree(profileFile.toFile());
         assertEquals("v2-b1-classfile-size-profile", profile.path("metadataVersion").asText());
         assertEquals(1, profile.path("totalClassesScanned").asInt());
         assertEquals("SPRING_AOT_BEAN_DEFINITIONS", profile.path("classes").get(0).path("generatedFamily").asText());
+
+        JsonNode runtimeCorrelation = MAPPER.readTree(runtimeCorrelationFile.toFile());
+        assertEquals("v2-b2-bytecode-runtime-correlation", runtimeCorrelation.path("metadataVersion").asText());
+        assertEquals(1, runtimeCorrelation.path("profileClassesObservedLoaded").asInt());
+        assertEquals("RUNTIME_LOADED_COLD", runtimeCorrelation.path("classes").get(0).path("category").asText());
 
         deleteRecursively(projectDir);
     }

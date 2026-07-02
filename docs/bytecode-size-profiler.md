@@ -40,6 +40,25 @@ attribute-size-report.json
 bytecode-roi-v2-report.json
 ```
 
+When runtime evidence is supplied, V2-B also emits:
+
+```text
+bytecode-runtime-correlation.json
+bytecode-runtime-correlation.md
+bytecode-runtime-correlation-top-loaded.json
+bytecode-runtime-correlation-near64k.json
+```
+
+Runtime evidence inputs:
+
+```text
+-Djmoa.size.classLoadLog=/path/to/classload.log
+-Djmoa.size.classHistogram=/path/to/GC.class_histogram.txt
+```
+
+If those are not set, V2-B reuses the V2-A synthetic runtime inputs when they
+exist.
+
 ## What Is Measured
 
 Per class:
@@ -69,4 +88,6 @@ Per method:
 
 V2-B does not mutate bytecode. Any optimization or stripping flag fails fast in
 this release. The profiler is intended to answer which classes and methods are
-large before JMOA admits any reducer.
+large before JMOA admits any reducer. Runtime correlation reports are evidence
+for prioritization only; they do not prove PSS, Private_Dirty, or startup
+causality without paired runtime experiments.
