@@ -117,6 +117,7 @@ public class EvidenceMojo extends AbstractMojo {
         getLog().info("JMOA evidence replay: cases=" + report.cases()
             + ", present=" + report.presentCases()
             + ", passed=" + report.passedCases()
+            + ", skipped=" + report.skippedCases()
             + ", failed=" + report.failedCases());
         if (failOnInvalidRun && report.failedCases() > 0) {
             throw new MojoExecutionException("JMOA evidence replay failed with "

@@ -39,18 +39,18 @@ public final class EvidenceReplaySuite {
             ReplayCase replayCase = parseCase(json);
             File input = resolveInput(baseDirectory, suiteFile, replayCase.inputDir());
             if (!input.isDirectory()) {
-                boolean passed = replayCase.optional();
                 results.add(new ReplayResult(
                     replayCase.id(),
                     replayCase.description(),
                     replayCase.inputDir(),
                     false,
-                    passed,
+                    false,
+                    replayCase.optional(),
                     replayCase.expectedVerdict(),
                     null,
                     replayCase.expectedVarianceCategories(),
                     List.of(),
-                    passed ? "optional evidence directory not present" : "evidence directory not present"
+                    replayCase.optional() ? "optional evidence directory not present" : "evidence directory not present"
                 ));
                 continue;
             }
@@ -68,6 +68,7 @@ public final class EvidenceReplaySuite {
                     replayCase.inputDir(),
                     true,
                     passed,
+                    false,
                     replayCase.expectedVerdict(),
                     analysis.verdict(),
                     replayCase.expectedVarianceCategories(),
@@ -81,6 +82,7 @@ public final class EvidenceReplaySuite {
                     replayCase.inputDir(),
                     true,
                     false,
+                    false,
                     replayCase.expectedVerdict(),
                     null,
                     replayCase.expectedVarianceCategories(),
@@ -91,13 +93,15 @@ public final class EvidenceReplaySuite {
         }
         int present = (int) results.stream().filter(ReplayResult::present).count();
         int passed = (int) results.stream().filter(ReplayResult::passed).count();
-        int failed = results.size() - passed;
+        int skipped = (int) results.stream().filter(ReplayResult::skipped).count();
+        int failed = (int) results.stream().filter(result -> !result.passed() && !result.skipped()).count();
         return new ReplayReport(
             "v2-c-historical-replay-report",
             Instant.now().toString(),
             results.size(),
             present,
             passed,
+            skipped,
             failed,
             results
         );
@@ -111,13 +115,15 @@ public final class EvidenceReplaySuite {
         md.append("- Cases: `").append(report.cases()).append("`\n");
         md.append("- Present cases: `").append(report.presentCases()).append("`\n");
         md.append("- Passed cases: `").append(report.passedCases()).append("`\n");
+        md.append("- Skipped cases: `").append(report.skippedCases()).append("`\n");
         md.append("- Failed cases: `").append(report.failedCases()).append("`\n\n");
-        md.append("| Case | Present | Passed | Expected | Actual | Expected variance | Actual variance | Message |\n");
-        md.append("| --- | --- | --- | --- | --- | --- | --- | --- |\n");
+        md.append("| Case | Present | Passed | Skipped | Expected | Actual | Expected variance | Actual variance | Message |\n");
+        md.append("| --- | --- | --- | --- | --- | --- | --- | --- | --- |\n");
         for (ReplayResult result : report.results()) {
             md.append("| `").append(result.id()).append("` | ")
                 .append(result.present()).append(" | ")
                 .append(result.passed()).append(" | ")
+                .append(result.skipped()).append(" | ")
                 .append(result.expectedVerdict()).append(" | ")
                 .append(result.actualVerdict()).append(" | `")
                 .append(result.expectedVarianceCategories()).append("` | `")
@@ -209,6 +215,7 @@ public final class EvidenceReplaySuite {
         String inputDir,
         boolean present,
         boolean passed,
+        boolean skipped,
         Verdict expectedVerdict,
         Verdict actualVerdict,
         List<VarianceCategory> expectedVarianceCategories,
@@ -231,6 +238,7 @@ public final class EvidenceReplaySuite {
         int cases,
         int presentCases,
         int passedCases,
+        int skippedCases,
         int failedCases,
         List<ReplayResult> results
     ) {
