@@ -1,0 +1,54 @@
+{
+  "metadataVersion": "v2-d-historical-attribution-replay",
+  "status": "passed",
+  "rawEvidenceCommitted": false,
+  "cases": [
+    {
+      "id": "phase33m-petclinic-exploded-boot-win",
+      "verdict": "CONFIRMED_WIN",
+      "service": "spring-petclinic-customers-service",
+      "phase": "33M",
+      "medianDeltas": {
+        "totalPssKb": -4758,
+        "privateDirtyKb": -4904,
+        "memoryCurrentBytes": -4849664,
+        "heapPssKb": -7152,
+        "heapPrivateDirtyKb": -7152,
+        "heapUsedKb": -90,
+        "classHistogramBytes": -94312,
+        "anonymousRwPssKb": 1976,
+        "nmtTotalCommittedKb": 979
+      },
+      "heapClassification": "HEAP_PAGE_TOUCH_REDUCTION",
+      "smapsNmtClassification": "NMT_INVISIBLE_OR_PARTIAL",
+      "classHistogramClassCountDelta": -154,
+      "near64kMethods": 3,
+      "near64kRuntimeLoadedMethods": 0,
+      "primaryHypothesis": "HEAP_PAGE_TOUCH_REDUCTION"
+    },
+    {
+      "id": "phase33k7b-petclinic-fatjar-regression",
+      "verdict": "CONFIRMED_REGRESSION",
+      "service": "spring-petclinic-customers-service",
+      "phase": "33K.7b",
+      "medianDeltas": {
+        "totalPssKb": 8895,
+        "privateDirtyKb": 9072,
+        "memoryCurrentBytes": 9392128,
+        "heapPssKb": 8748,
+        "heapPrivateDirtyKb": 8748,
+        "heapUsedKb": -45,
+        "classHistogramBytes": -46888,
+        "anonymousRwPssKb": -128,
+        "nmtTotalCommittedKb": 1472
+      },
+      "heapClassification": "HEAP_PAGE_TOUCH_GROWTH",
+      "smapsNmtClassification": "NMT_INVISIBLE_OR_PARTIAL",
+      "classHistogramClassCountDelta": -177,
+      "near64kMethods": 3,
+      "near64kRuntimeLoadedMethods": 0,
+      "primaryHypothesis": "HEAP_PAGE_TOUCH_GROWTH"
+    }
+  ],
+  "conclusion": "V2-D explains both the accepted exploded-Boot win and the rejected fat-JAR regression as heap page-touch/residency movements, with class-count reduction as supporting evidence rather than sole causality."
+}

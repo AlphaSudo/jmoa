@@ -1,0 +1,28 @@
+{
+  "metadataVersion": "v2-d0-scope",
+  "status": "implemented-report-only",
+  "goal": "explain why memory moved after V2-C validates evidence",
+  "mavenGoal": "jmoa:attribution",
+  "defaultEnabled": false,
+  "defaultRequireV2CValid": true,
+  "mutationEnabled": false,
+  "outputs": [
+    "jmoa-memory-attribution.json",
+    "jmoa-memory-attribution.md",
+    "jmoa-category-deltas.json",
+    "jmoa-smaps-nmt-reconciliation.json",
+    "jmoa-heap-object-attribution.json",
+    "jmoa-causal-hypotheses.json",
+    "jmoa-top-object-deltas.csv"
+  ],
+  "optionalInputs": [
+    "V2-A generated-class inventory",
+    "V2-B bytecode runtime correlation"
+  ],
+  "boundaries": [
+    "does not mutate bytecode",
+    "does not alter runtime policy",
+    "does not claim a new memory win",
+    "runs on V2-C-valid evidence by default"
+  ]
+}

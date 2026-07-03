@@ -1,0 +1,47 @@
+{
+  "metadataVersion": "v2-d-closure-report",
+  "status": "closed-report-only",
+  "implemented": [
+    "jmoa:attribution Maven goal",
+    "category-level memory delta calculation",
+    "smaps/NMT reconciliation",
+    "heap/object attribution",
+    "class/metaspace attribution",
+    "optional V2-A generated-family enrichment",
+    "optional V2-B bytecode runtime enrichment",
+    "causal hypothesis classification",
+    "historical attribution replay"
+  ],
+  "historicalReplay": {
+    "phase33m": {
+      "verdict": "CONFIRMED_WIN",
+      "primaryAttribution": "HEAP_PAGE_TOUCH_REDUCTION",
+      "supportingAttribution": "CLASS_COUNT_SAVINGS"
+    },
+    "phase33k7b": {
+      "verdict": "CONFIRMED_REGRESSION",
+      "primaryAttribution": "HEAP_PAGE_TOUCH_GROWTH",
+      "supportingAttribution": "CLASS_COUNT_SAVINGS"
+    }
+  },
+  "mutationEnabled": false,
+  "remainingV2A": [
+    "generated-class mutation disabled",
+    "Spring AOT helper rewrite not implemented",
+    "proxy rewriting not implemented",
+    "no generated-class memory win claim"
+  ],
+  "remainingV2B": [
+    "bytecode mutation disabled",
+    "debug attribute stripping not implemented",
+    "LocalVariableTable reducer not implemented",
+    "large-method splitting not implemented",
+    "no bytecode-size memory or startup win claim"
+  ],
+  "futureGate": [
+    "semantic safety gate",
+    "V2-C confirmation",
+    "V2-D attribution",
+    "claim reconciliation"
+  ]
+}
