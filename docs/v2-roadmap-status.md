@@ -1,9 +1,10 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-D report-only foundation complete.
+Status: V2-A through V2-E foundation complete through the first artifact
+reducer prototype and PetClinic runtime screen.
 
 This document records the public roadmap boundary after
-`v0.5.0-v2d-memory-attribution`.
+`v0.6.0-v2e-debug-metadata-reducer`.
 
 ## Closed Milestones
 
@@ -13,6 +14,7 @@ This document records the public roadmap boundary after
 | V2-B | Closed | Bytecode/classfile footprint profiler, near-64KB risk reporting, attribute/constant-pool reporting, and runtime correlation |
 | V2-C | Closed | Evidence truth engine with validation, paired confirmation, variance classification, perturbation detection, and historical replay proof |
 | V2-D | Closed | Memory attribution engine with category deltas, smaps/NMT reconciliation, heap/object attribution, class/metaspace attribution, and historical attribution proof |
+| V2-E | Closed as prototype | Opt-in debug metadata artifact reducer for dependency jars, with PetClinic artifact smoke, semantic smoke, and single-screen runtime promotion gate |
 
 ## Current Foundation
 
@@ -21,10 +23,12 @@ V2-A = what generated/synthetic shapes exist?
 V2-B = what bytecode/classfile footprint exists?
 V2-C = can we trust the measurement?
 V2-D = why did memory move?
+V2-E = can the first safe artifact reducer pass controlled gates?
 ```
 
-Together, these milestones provide visibility, validation, and explanation. They
-do not enable new post-v1 bytecode reducers by default.
+Together, these milestones provide visibility, validation, explanation, and the
+first controlled post-v1 artifact reducer. V2-E is still disabled by default and
+report-only by default.
 
 ## Still Blocked
 
@@ -40,25 +44,58 @@ no generated-class memory win claim
 V2-B mutation remains blocked:
 
 ```text
-debug attribute stripping not enabled
-LocalVariableTable reducer not enabled
+debug stripping beyond V2-E LVT/LVTT not enabled
 large-method splitting not implemented
 constant-pool reducer not implemented
 BootstrapMethods reducer not implemented
 no bytecode-size memory or startup win claim
 ```
 
-## Next Allowed Phase
-
-The next phase starts the first controlled reducer prototype:
+V2-E confirmed performance claim remains blocked:
 
 ```text
-V2-E = opt-in release-low-footprint reducer for LocalVariableTable and
-       LocalVariableTypeTable only.
+runtime memory claim not made
+startup claim not made
+3-pair P2 vs P2+Reducer confirmation not run
+V2-C/V2-D performance gate not passed
 ```
 
-V2-E must stay disabled by default, report-only by default, and performance
-claims must pass V2-C validation plus V2-D attribution.
+## Latest V2-E Screen
+
+The V2-E runtime screen has passed:
+
+```text
+full P2
+vs
+full P2 + V2-E reducer
+```
+
+The screen used the real PetClinic exploded Boot no-CDS deployment shape,
+`NO_CDS_LOW_DIRTY`, `MALLOC_ARENA_MAX=1`, no runtime javaagent, and the corrected
+27 endpoint x 3 round workload. It passed the promotion gate:
+
+```text
+artifact byte delta: -5,395,897
+workload errors: 0
+PSS delta: -17,880 KB
+Private_Dirty delta: -18,068 KB
+memory.current delta: -35,205,120 bytes
+```
+
+This is still a single-screen result. It promotes V2-E to 3-pair confirmation,
+but it is not a confirmed runtime memory claim.
+
+## Next Gate
+
+The next gate is:
+
+```text
+P2-1  -> P2R-1
+P2-2  -> P2R-2
+P2-3  -> P2R-3
+```
+
+using V2-C validation and V2-D attribution.
 
 ## V2-E Boundary
 
@@ -66,3 +103,6 @@ V2-E does not reopen generated-class mutation. It also does not implement
 large-method splitting, constant-pool rewriting, BootstrapMethods rewriting,
 annotation stripping, StackMapTable stripping, or LineNumberTable stripping.
 Classes with `BootstrapMethods` are skipped by the first mutation prototype.
+
+V2-E has only an artifact-footprint claim so far. Any runtime performance claim
+requires V2-C validation and V2-D attribution.
