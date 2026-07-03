@@ -1,0 +1,29 @@
+{
+  "metadataVersion": "v2-e-petclinic-artifact-smoke",
+  "service": "spring-petclinic-customers-service",
+  "inputShape": "phase33m-full-p2-exploded-boot-dependency-libs",
+  "reducerProfile": "release-low-footprint",
+  "mutationEnabled": true,
+  "strippedAttributes": [
+    "LocalVariableTable",
+    "LocalVariableTypeTable"
+  ],
+  "preservedAttributes": [
+    "LineNumberTable",
+    "SourceFile",
+    "StackMapTable",
+    "RuntimeVisibleAnnotations",
+    "RuntimeInvisibleAnnotations",
+    "Signature"
+  ],
+  "bootstrapMethodsPolicy": "skip-class-in-mutation-mode",
+  "jarCount": 162,
+  "classCount": 54196,
+  "reducedClassCount": 12697,
+  "skippedBootstrapMethodsClassCount": 1480,
+  "totalOriginalBytes": 92466274,
+  "totalEstimatedRemovableBytes": 13508782,
+  "totalReducedBytes": 87070377,
+  "totalRemovedBytes": 5417754,
+  "claimBoundary": "artifact-size smoke only; no service-level runtime or memory claim"
+}
