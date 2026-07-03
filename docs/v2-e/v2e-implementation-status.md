@@ -1,6 +1,7 @@
 # V2-E Implementation Status
 
-Status: reducer prototype implemented; service confirmation not claimed.
+Status: reducer prototype implemented; runtime screen passed; service
+confirmation not claimed.
 
 Implemented:
 
@@ -44,6 +45,22 @@ JVM linkage/class errors in sampled logs: false
 semantic smoke: passed
 ```
 
+PetClinic P2 vs P2+Reducer memory screen:
+
+```text
+comparison: full P2 vs full P2 + V2-E reducer
+launch mode: EXPLODED_BOOT_APP
+runtime policy: NO_CDS_LOW_DIRTY
+MALLOC_ARENA_MAX: 1
+workload requests per variant: 81
+workload errors: 0
+artifact byte delta: -5,395,897
+PSS delta: -17,880 KB
+Private_Dirty delta: -18,068 KB
+memory.current delta: -35,205,120 bytes
+screen gate: passed
+```
+
 Not claimed:
 
 ```text
@@ -56,7 +73,6 @@ Doctor service-level confirmation
 Next gate:
 
 ```text
-Run P2 vs P2+Reducer service screen.
-If artifact bytes shrink and memory is not worse by more than 1 MB, proceed to
-3-pair V2-C confirmation and V2-D attribution.
+Run 3-pair P2 vs P2+Reducer V2-C confirmation and V2-D attribution.
+Do not claim runtime memory benefit from the single-screen result.
 ```

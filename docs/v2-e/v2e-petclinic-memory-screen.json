@@ -1,0 +1,75 @@
+{
+  "metadataVersion": "v2e-petclinic-memory-screen",
+  "service": "spring-petclinic-customers-service",
+  "comparison": "full-p2 vs full-p2-plus-v2e-reducer",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "mallocArenaMax": "1",
+  "noCds": true,
+  "noJavaagent": true,
+  "artifactBytes": {
+    "fullP2": 92466274,
+    "fullP2PlusReducer": 87070377,
+    "delta": -5395897
+  },
+  "workload": {
+    "endpoints": 27,
+    "rounds": 3,
+    "requestsPerVariant": 81,
+    "fullP2Errors": 0,
+    "fullP2PlusReducerErrors": 0
+  },
+  "postMetrics": {
+    "fullP2": {
+      "health": "UP",
+      "startupSeconds": 16.614,
+      "smapsRssKb": 367200,
+      "smapsPssKb": 354002,
+      "smapsPrivateDirtyKb": 344956,
+      "memoryCurrentBytes": 435200000,
+      "nmtTotalCommittedKb": 303574,
+      "nmtJavaHeapCommittedKb": 107024,
+      "nmtClassCommittedKb": 19378,
+      "nmtCodeCommittedKb": 23070,
+      "nmtClasses": 24252,
+      "classHistogramLines": 8856
+    },
+    "fullP2PlusReducer": {
+      "health": "UP",
+      "startupSeconds": 16.162,
+      "smapsRssKb": 349224,
+      "smapsPssKb": 336122,
+      "smapsPrivateDirtyKb": 326888,
+      "memoryCurrentBytes": 399994880,
+      "nmtTotalCommittedKb": 301576,
+      "nmtJavaHeapCommittedKb": 109656,
+      "nmtClassCommittedKb": 19361,
+      "nmtCodeCommittedKb": 23349,
+      "nmtClasses": 24250,
+      "classHistogramLines": 8859
+    }
+  },
+  "deltas": {
+    "smapsPssKb": -17880,
+    "smapsPrivateDirtyKb": -18068,
+    "memoryCurrentBytes": -35205120,
+    "smapsRssKb": -17976,
+    "nmtTotalCommittedKb": -1998,
+    "nmtJavaHeapCommittedKb": 2632,
+    "nmtClassCommittedKb": -17,
+    "nmtCodeCommittedKb": 279,
+    "nmtClasses": -2,
+    "startupSeconds": -0.452
+  },
+  "promotionGate": {
+    "artifactBytesLower": true,
+    "workloadErrorsZero": true,
+    "noClassOrLinkageErrors": true,
+    "pssNotWorseByMoreThan1Mb": true,
+    "privateDirtyNotWorseByMoreThan1Mb": true,
+    "memoryCurrentNotWorseByMoreThan1Mb": true,
+    "screenPass": true
+  },
+  "claimBoundary": "single-screen only; no confirmed runtime memory claim",
+  "nextStep": "Run 3-pair V2-C confirmation and V2-D attribution before any runtime performance claim."
+}

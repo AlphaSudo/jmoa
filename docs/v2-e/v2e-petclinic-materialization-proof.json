@@ -1,0 +1,33 @@
+{
+  "metadataVersion": "v2e-petclinic-materialization-proof",
+  "service": "spring-petclinic-customers-service",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "variant": "full-p2-plus-v2e-reducer",
+  "originalJarCount": 162,
+  "reducedJarCount": 162,
+  "missingJarCount": 0,
+  "extraJarCount": 0,
+  "allSampleHashesMatch": true,
+  "sampleHashProof": [
+    {
+      "jar": "HdrHistogram-2.2.2.jar",
+      "match": true
+    },
+    {
+      "jar": "spring-boot-4.0.1.jar",
+      "match": true
+    },
+    {
+      "jar": "jackson-databind-2.20.1.jar",
+      "match": true
+    },
+    {
+      "jar": "guava-14.0.1.jar",
+      "match": true
+    }
+  ],
+  "originalTotalBytes": 92466274,
+  "reducedTotalBytes": 87070377,
+  "deltaBytes": -5395897,
+  "claimBoundary": "materialization proof only; no runtime performance claim"
+}
