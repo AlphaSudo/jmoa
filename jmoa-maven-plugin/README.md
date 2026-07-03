@@ -28,6 +28,7 @@ produced at build time and then verified in the target deployment shape.
 - `jmoa:measure-impact`
 - `jmoa:evidence`
 - `jmoa:attribution`
+- `jmoa:reduce-bytecode`
 
 ## V2-A Generated-Class Flags
 
@@ -102,6 +103,38 @@ The attribution goal explains memory movement across smaps, NMT, heap/object
 histograms, class/metaspace signals, optional V2-A generated-family context, and
 optional V2-B bytecode runtime correlation. It is report-only and does not make
 V2-A or V2-B mutation safe by itself.
+
+## V2-E Reducer Flags
+
+The bytecode reducer is disabled by default and report-only by default.
+
+```text
+jmoa.reducer.enabled=false
+jmoa.reducer.reportOnly=true
+jmoa.reducer.optimize=false
+jmoa.reducer.profile=none
+jmoa.reducer.inputDir=<optimized-lib-dir>
+jmoa.reducer.outputDir=${project.build.directory}/jmoa-reduced-libs
+jmoa.reducer.stripLocalVariableTable=false
+jmoa.reducer.stripLocalVariableTypeTable=false
+```
+
+Unsafe strip flags fail fast:
+
+```text
+jmoa.reducer.stripLineNumberTable=false
+jmoa.reducer.stripSourceFile=false
+jmoa.reducer.stripStackMapTable=false
+jmoa.reducer.stripAnnotations=false
+jmoa.reducer.stripSignature=false
+jmoa.reducer.stripBootstrapMethods=false
+```
+
+Mutation is allowed only when `reportOnly=false`, `optimize=true`,
+`profile=release-low-footprint`, and both local-variable strip flags are true.
+V2-E preserves line numbers, stack-map frames, annotations, signatures, and
+BootstrapMethods. Classes that carry `BootstrapMethods` are skipped in mutation
+mode instead of being rewritten.
 
 See the repository-level docs for deployment materialization and measurement
 boundaries.

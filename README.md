@@ -195,6 +195,45 @@ See:
 - [Historical Attribution Replay](docs/v2-d/v2d-historical-attribution-replay.md)
 - [V2-D Closure Report](docs/v2-d/v2d-closure-report.md)
 
+## V2-E Debug Metadata Reducer
+
+V2-E adds the first controlled post-v1 reducer prototype: an opt-in
+release-low-footprint reducer for `LocalVariableTable` and
+`LocalVariableTypeTable` in dependency jars. It is disabled by default and
+report-only by default.
+
+It does not strip line numbers, source files, stack-map frames, annotations,
+signatures, BootstrapMethods, or framework-sensitive metadata. In mutation mode,
+classes that carry `BootstrapMethods` are skipped rather than rewritten.
+
+```powershell
+mvn jmoa:reduce-bytecode `
+  -Djmoa.reducer.enabled=true `
+  -Djmoa.reducer.inputDir=<optimized-lib-dir>
+```
+
+Mutation requires the explicit release-low-footprint gate:
+
+```powershell
+mvn jmoa:reduce-bytecode `
+  -Djmoa.reducer.enabled=true `
+  -Djmoa.reducer.reportOnly=false `
+  -Djmoa.reducer.optimize=true `
+  -Djmoa.reducer.profile=release-low-footprint `
+  -Djmoa.reducer.stripLocalVariableTable=true `
+  -Djmoa.reducer.stripLocalVariableTypeTable=true `
+  -Djmoa.reducer.inputDir=<optimized-lib-dir>
+```
+
+See:
+
+- [V2-E Debug Metadata Reducer](docs/v2-e/v2e-debug-metadata-reducer.md)
+- [V2-E Reducer Safety Taxonomy](docs/v2-e/v2e-reducer-safety-taxonomy.md)
+- [V2-E Failure Handling](docs/v2-e/v2e-failure-handling.md)
+- [V2-E Implementation Status](docs/v2-e/v2e-implementation-status.md)
+- [V2-E PetClinic Artifact Smoke](docs/v2-e/v2e-petclinic-artifact-smoke.md)
+- [V2-E PetClinic Service Smoke](docs/v2-e/v2e-petclinic-service-smoke.md)
+
 ## Safety
 
 Before publishing or tagging a release, run:

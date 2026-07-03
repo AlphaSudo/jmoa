@@ -50,7 +50,7 @@ no bytecode-size memory or startup win claim
 
 ## Next Allowed Phase
 
-The next phase may start the first controlled reducer prototype:
+The next phase starts the first controlled reducer prototype:
 
 ```text
 V2-E = opt-in release-low-footprint reducer for LocalVariableTable and
@@ -59,3 +59,10 @@ V2-E = opt-in release-low-footprint reducer for LocalVariableTable and
 
 V2-E must stay disabled by default, report-only by default, and performance
 claims must pass V2-C validation plus V2-D attribution.
+
+## V2-E Boundary
+
+V2-E does not reopen generated-class mutation. It also does not implement
+large-method splitting, constant-pool rewriting, BootstrapMethods rewriting,
+annotation stripping, StackMapTable stripping, or LineNumberTable stripping.
+Classes with `BootstrapMethods` are skipped by the first mutation prototype.

@@ -1,0 +1,15 @@
+{
+  "metadataVersion": "v2-e-petclinic-service-smoke",
+  "service": "spring-petclinic-customers-service",
+  "artifactShape": "full-p2-plus-v2e-reduced-dependency-jars",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "mallocArenaMax": "1",
+  "cdsMode": "OFF",
+  "javaagentPresent": false,
+  "workloadRequests": 24,
+  "workloadErrors": 0,
+  "classErrorLogDetected": false,
+  "semanticSmokePassed": true,
+  "claimBoundary": "single semantic smoke only; no memory, startup, PSS, Private_Dirty, or memory.current claim"
+}
