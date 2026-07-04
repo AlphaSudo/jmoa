@@ -3,9 +3,10 @@ package com.yourorg.jmoa.plugin.reducer;
 import org.objectweb.asm.ClassReader;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
@@ -19,6 +20,7 @@ public final class JarReducer {
     private final ReducerConfig config;
     private final ClassDebugMetadataInspector inspector = new ClassDebugMetadataInspector();
     private final LocalVariableDebugAttributeReducer reducer = new LocalVariableDebugAttributeReducer();
+    private final JarSafetyInspector safetyInspector = new JarSafetyInspector();
 
     public JarReducer(ReducerConfig config) {
         this.config = config;
@@ -41,8 +43,37 @@ public final class JarReducer {
         long estimated = 0;
         int classCount = 0;
         int reducedClassCount = 0;
+        int skippedBootstrapMethodsClassCount = 0;
+        JarSafetyAssessment safety;
         try (JarFile source = new JarFile(jar);
              JarOutputStream target = new JarOutputStream(new FileOutputStream(output))) {
+            safety = safetyInspector.assess(source);
+            if (!safety.mutationAllowed()) {
+                target.close();
+                ScanResult scan = scanSkippedJar(jar, source, safety.skipReason());
+                Files.copy(jar.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                return new JarReductionRecord(
+                    jar.getName(),
+                    jar.getAbsolutePath(),
+                    output.getAbsolutePath(),
+                    JarSafetyInspector.sha256(jar),
+                    JarSafetyInspector.sha256(output),
+                    jar.length(),
+                    output.length(),
+                    scan.estimatedRemovableBytes(),
+                    0,
+                    scan.classCount(),
+                    0,
+                    0,
+                    safety.signedJar(),
+                    safety.multiReleaseJar(),
+                    safety.sealedJar(),
+                    safety.skipReason(),
+                    "preserve",
+                    safety.skipReason(),
+                    scan.records().stream().limit(200).toList()
+                );
+            }
             Enumeration<JarEntry> entries = source.entries();
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
@@ -57,9 +88,18 @@ public final class JarReducer {
                     classCount++;
                     ClassDebugMetadata before = inspector.inspect(bytes);
                     estimated += before.removableBytes();
+                    if (isModuleInfo(entry.getName())) {
+                        target.write(bytes);
+                        if (before.removableBytes() > 0) {
+                            classRecords.add(skippedRecord(jar.getName(), entry.getName(), before, bytes.length,
+                                "SKIPPED_MODULE_INFO"));
+                        }
+                        continue;
+                    }
                     if (before.removableBytes() > 0) {
                         if (before.bootstrapMethodsAttributeBytes() > 0) {
                             target.write(bytes);
+                            skippedBootstrapMethodsClassCount++;
                             classRecords.add(skippedRecord(jar.getName(), entry.getName(), before, bytes.length,
                                 "SKIPPED_BOOTSTRAP_METHODS"));
                             continue;
@@ -107,12 +147,20 @@ public final class JarReducer {
             jar.getName(),
             jar.getAbsolutePath(),
             output.getAbsolutePath(),
+            JarSafetyInspector.sha256(jar),
+            JarSafetyInspector.sha256(output),
             jar.length(),
             output.length(),
             estimated,
             removed,
             classCount,
             reducedClassCount,
+            skippedBootstrapMethodsClassCount,
+            safety.signedJar(),
+            safety.multiReleaseJar(),
+            safety.sealedJar(),
+            safety.skipReason(),
+            "preserve",
             "REDUCED",
             classRecords.stream().limit(200).toList()
         );
@@ -120,6 +168,36 @@ public final class JarReducer {
 
     private static String reducedName(String name) {
         return name;
+    }
+
+    private ScanResult scanSkippedJar(File jar, JarFile source, String status) throws IOException {
+        List<ClassReductionRecord> records = new ArrayList<>();
+        long estimated = 0;
+        int classCount = 0;
+        Enumeration<JarEntry> entries = source.entries();
+        while (entries.hasMoreElements()) {
+            JarEntry entry = entries.nextElement();
+            if (entry.isDirectory() || !entry.getName().endsWith(".class")) {
+                continue;
+            }
+            classCount++;
+            byte[] bytes;
+            try (var input = source.getInputStream(entry)) {
+                bytes = input.readAllBytes();
+            }
+            ClassDebugMetadata before = inspector.inspect(bytes);
+            estimated += before.removableBytes();
+            if (before.removableBytes() > 0) {
+                records.add(skippedRecord(jar.getName(), entry.getName(), before, bytes.length, status));
+            }
+        }
+        records.sort(Comparator.comparingLong((ClassReductionRecord r) ->
+            r.localVariableTableBytesRemoved() + r.localVariableTypeTableBytesRemoved()).reversed());
+        return new ScanResult(classCount, estimated, records);
+    }
+
+    private static boolean isModuleInfo(String entryName) {
+        return "module-info.class".equals(entryName) || entryName.endsWith("/module-info.class");
     }
 
     private static void verifyClass(byte[] bytes, String entryName) {
@@ -181,5 +259,12 @@ public final class JarReducer {
 
     private static boolean attributeStillPresent(long before, long after) {
         return before == 0 || after > 0;
+    }
+
+    private record ScanResult(
+        int classCount,
+        long estimatedRemovableBytes,
+        List<ClassReductionRecord> records
+    ) {
     }
 }

@@ -1,0 +1,24 @@
+{
+  "metadataVersion": "v2f-petclinic-hardened-artifact-smoke",
+  "service": "spring-petclinic-customers-service",
+  "source": "Phase 33M full P2 exploded Boot dependency libs",
+  "runtimeClaim": false,
+  "artifactSmoke": {
+    "jarCount": 162,
+    "classCount": 54196,
+    "reducedClassCount": 23680,
+    "originalBytes": 92466274,
+    "reducedBytes": 88610904,
+    "removedBytes": 3870720,
+    "signedJarsDetected": 1,
+    "multiReleaseJarsDetected": 21,
+    "sealedJarsDetected": 1,
+    "signedJarsSkipped": 1,
+    "multiReleaseJarsSkipped": 20,
+    "sealedJarsSkipped": 1,
+    "bootstrapMethodsClassesSkipped": 6029,
+    "manifestArtifacts": 162
+  },
+  "note": "This smoke uses the V2-F hardened safety policy, so the artifact delta is smaller than the original V2-E smoke."
+}
+

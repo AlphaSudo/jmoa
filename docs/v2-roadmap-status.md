@@ -86,6 +86,8 @@ memory.current delta: -35,205,120 bytes
 This is still a single-screen result. It promotes V2-E to 3-pair confirmation,
 but it is not a confirmed runtime memory claim.
 
+This screen has now been superseded by the 3-pair V2-E confirmation below.
+
 ## V2-E Confirmation
 
 The 3-pair confirmation passed:
@@ -126,6 +128,16 @@ The next gate is V2-F:
 
 ```text
 generalize V2-E to a second service or productize the release-low-footprint reducer profile
+```
+
+V2-F has started and is focused on reducer productization, not a new runtime claim:
+
+```text
+signed / multi-release / sealed JAR safety
+reducer manifest with input/output hashes
+PetClinic hardened artifact smoke
+Doctor artifact-level smoke
+reducer admission policy
 ```
 
 ## V2-E Boundary
