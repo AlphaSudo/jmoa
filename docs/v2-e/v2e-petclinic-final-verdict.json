@@ -1,0 +1,22 @@
+{
+  "metadataVersion": "v2e-petclinic-final-verdict",
+  "status": "CONFIRMED_RUNTIME_REDUCER",
+  "recommendedTag": "v0.7.0-v2e-runtime-confirmed",
+  "service": "spring-petclinic-customers-service",
+  "comparison": "full-p2 vs full-p2-plus-v2e-reducer",
+  "confirmedClaims": [
+    "V2-E reduced dependency jar footprint by 5,395,897 bytes.",
+    "V2-E passed PetClinic semantic smoke and 3-pair confirmation under EXPLODED_BOOT_APP no-CDS policy.",
+    "V2-C confirmed an incremental runtime memory win with 2/3 paired wins.",
+    "Median deltas were PSS -1,624 KB, Private_Dirty -1,636 KB, and memory.current -12,255,232 bytes."
+  ],
+  "notClaimed": [
+    "No startup win claim.",
+    "No fat-JAR claim.",
+    "No CDS/AppCDS claim.",
+    "No cross-service generalization claim.",
+    "No broad debug-metadata stripping claim.",
+    "No LineNumberTable, StackMapTable, annotation, Signature, or BootstrapMethods stripping."
+  ],
+  "nextRecommendedPhase": "V2-F generalize reducer to a second service or productize the release-low-footprint reducer profile."
+}

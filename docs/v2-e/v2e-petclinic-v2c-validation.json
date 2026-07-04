@@ -1,0 +1,24 @@
+{
+  "metadataVersion": "v2e-petclinic-v2c-validation",
+  "v2cVerdict": "CONFIRMED_WIN",
+  "runs": 6,
+  "validRuns": 6,
+  "invalidRuns": 0,
+  "pairs": 3,
+  "pairedWins": 2,
+  "expectedPolicy": "NO_CDS_LOW_DIRTY",
+  "workloadErrors": 0,
+  "cdsMode": "OFF",
+  "javaagentPresent": false,
+  "classLoadLoggingEnabled": false,
+  "jfrEnabled": false,
+  "nmtMode": "summary",
+  "gcRunBeforeCapture": false,
+  "varianceCategories": [
+    "CGROUP_MEMORY_CURRENT_DIVERGENCE"
+  ],
+  "notes": [
+    "Runtime class-load logging was intentionally not enabled during memory pairs.",
+    "Materialization proof is tracked separately in v2e-petclinic-materialization-proof."
+  ]
+}

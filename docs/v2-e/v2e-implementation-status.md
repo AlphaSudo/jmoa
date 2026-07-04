@@ -1,7 +1,6 @@
 # V2-E Implementation Status
 
-Status: reducer prototype implemented; runtime screen passed; service
-confirmation not claimed.
+Status: reducer prototype implemented; PetClinic runtime confirmation passed.
 
 Implemented:
 
@@ -61,18 +60,33 @@ memory.current delta: -35,205,120 bytes
 screen gate: passed
 ```
 
+PetClinic 3-pair confirmation:
+
+```text
+comparison: full P2 vs full P2 + V2-E reducer
+valid runs: 6/6
+pairs: 3
+paired wins: 2/3
+workload errors: 0
+V2-C verdict: CONFIRMED_WIN
+median PSS delta: -1,624 KB
+median Private_Dirty delta: -1,636 KB
+median memory.current delta: -12,255,232 bytes
+```
+
 Not claimed:
 
 ```text
-runtime memory win
 startup win
-PetClinic memory confirmation
+fat-JAR win
+CDS/AppCDS win
+cross-service generalization
 Doctor service-level confirmation
 ```
 
 Next gate:
 
 ```text
-Run 3-pair P2 vs P2+Reducer V2-C confirmation and V2-D attribution.
-Do not claim runtime memory benefit from the single-screen result.
+Tag v0.7.0-v2e-runtime-confirmed after merge.
+Then run V2-F against a second service or productize the release-low-footprint profile.
 ```

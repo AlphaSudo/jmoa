@@ -1,0 +1,53 @@
+{
+  "metadataVersion": "v2e-petclinic-v2d-attribution",
+  "evidenceVerdict": "CONFIRMED_WIN",
+  "v2cValid": true,
+  "categoryDeltas": {
+    "totalPssKb": -1624,
+    "privateDirtyKb": -1636,
+    "memoryCurrentBytes": -12255232,
+    "heapPssKb": 1572,
+    "heapUsedKb": 145,
+    "classHistogramBytes": 148296,
+    "anonymousRwPssKb": -2456,
+    "anonymousExecutableCodePssKb": -376,
+    "mappedFilePssKb": -59,
+    "nmtTotalCommittedKb": -2074,
+    "nmtJavaHeapCommittedKb": 2668,
+    "nmtMetaspaceCommittedKb": -3271,
+    "nmtClassCommittedKb": -19,
+    "nmtCodeCommittedKb": -349
+  },
+  "smapsNmtReconciliation": {
+    "classification": "NMT_VISIBLE",
+    "nmtToPssGapKb": 450,
+    "reasons": [
+      "NMT total committed explains at least 60% of PSS movement.",
+      "Heap PSS moved while heap used and histogram bytes stayed near flat.",
+      "anonymous_rw PSS moved by at least 1 MB."
+    ]
+  },
+  "heapObjectAttribution": {
+    "classification": "HEAP_PAGE_TOUCH_GROWTH",
+    "medianHeapPssDeltaKb": 1572,
+    "medianHeapUsedDeltaKb": 145,
+    "medianClassHistogramBytesDelta": 148296
+  },
+  "classMetaspaceAttribution": {
+    "medianMetaspaceCommittedDeltaKb": -3271,
+    "medianClassCommittedDeltaKb": -19,
+    "medianCodeCommittedDeltaKb": -349,
+    "interpretation": "Class count was neutral or higher; do not attribute result to class-count savings alone."
+  },
+  "causalHypotheses": [
+    {
+      "hypothesis": "HEAP_PAGE_TOUCH_GROWTH",
+      "confidence": "HIGH"
+    },
+    {
+      "hypothesis": "ANONYMOUS_RW_ALLOCATOR_REDUCTION",
+      "confidence": "MEDIUM"
+    }
+  ],
+  "claimBoundary": "V2-D explains the confirmed win as NMT-visible plus anonymous_rw movement, with heap page-touch growth as a countervailing effect."
+}

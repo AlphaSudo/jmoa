@@ -1,10 +1,9 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-E foundation complete through the first artifact
-reducer prototype and PetClinic runtime screen.
+Status: V2-A through V2-E complete through the first confirmed runtime reducer.
 
 This document records the public roadmap boundary after
-`v0.6.0-v2e-debug-metadata-reducer`.
+`v0.7.0-v2e-runtime-confirmed`.
 
 ## Closed Milestones
 
@@ -14,7 +13,7 @@ This document records the public roadmap boundary after
 | V2-B | Closed | Bytecode/classfile footprint profiler, near-64KB risk reporting, attribute/constant-pool reporting, and runtime correlation |
 | V2-C | Closed | Evidence truth engine with validation, paired confirmation, variance classification, perturbation detection, and historical replay proof |
 | V2-D | Closed | Memory attribution engine with category deltas, smaps/NMT reconciliation, heap/object attribution, class/metaspace attribution, and historical attribution proof |
-| V2-E | Closed as prototype | Opt-in debug metadata artifact reducer for dependency jars, with PetClinic artifact smoke, semantic smoke, and single-screen runtime promotion gate |
+| V2-E | Closed | Opt-in LVT/LVTT artifact reducer for dependency jars, with PetClinic artifact smoke, semantic smoke, V2-C confirmation, and V2-D attribution |
 
 ## Current Foundation
 
@@ -27,8 +26,9 @@ V2-E = can the first safe artifact reducer pass controlled gates?
 ```
 
 Together, these milestones provide visibility, validation, explanation, and the
-first controlled post-v1 artifact reducer. V2-E is still disabled by default and
-report-only by default.
+first controlled post-v1 reducer. V2-E is still disabled by default and
+report-only by default unless explicit release-low-footprint reducer flags are
+enabled.
 
 ## Still Blocked
 
@@ -51,13 +51,14 @@ BootstrapMethods reducer not implemented
 no bytecode-size memory or startup win claim
 ```
 
-V2-E confirmed performance claim remains blocked:
+V2-E broader performance claims remain blocked:
 
 ```text
-runtime memory claim not made
+PetClinic EXPLODED_BOOT_APP no-CDS runtime claim confirmed
 startup claim not made
-3-pair P2 vs P2+Reducer confirmation not run
-V2-C/V2-D performance gate not passed
+fat-JAR claim not made
+CDS/AppCDS claim not made
+cross-service generalization not made
 ```
 
 ## Latest V2-E Screen
@@ -85,9 +86,9 @@ memory.current delta: -35,205,120 bytes
 This is still a single-screen result. It promotes V2-E to 3-pair confirmation,
 but it is not a confirmed runtime memory claim.
 
-## Next Gate
+## V2-E Confirmation
 
-The next gate is:
+The 3-pair confirmation passed:
 
 ```text
 P2-1  -> P2R-1
@@ -95,7 +96,37 @@ P2-2  -> P2R-2
 P2-3  -> P2R-3
 ```
 
-using V2-C validation and V2-D attribution.
+Result:
+
+```text
+V2-C verdict: CONFIRMED_WIN
+valid runs: 6/6
+paired wins: 2/3
+median PSS delta: -1,624 KB
+median Private_Dirty delta: -1,636 KB
+median memory.current delta: -12,255,232 bytes
+```
+
+V2-D attribution:
+
+```text
+NMT/smaps reconciliation: NMT_VISIBLE
+heap/object attribution: HEAP_PAGE_TOUCH_GROWTH
+anonymous_rw PSS median delta: -2,456 KB
+NMT total committed median delta: -2,074 KB
+NMT metaspace committed median delta: -3,271 KB
+```
+
+The confirmed result should not be explained as retained-object or class-count
+reduction.
+
+## Next Gate
+
+The next gate is V2-F:
+
+```text
+generalize V2-E to a second service or productize the release-low-footprint reducer profile
+```
 
 ## V2-E Boundary
 
@@ -104,5 +135,6 @@ large-method splitting, constant-pool rewriting, BootstrapMethods rewriting,
 annotation stripping, StackMapTable stripping, or LineNumberTable stripping.
 Classes with `BootstrapMethods` are skipped by the first mutation prototype.
 
-V2-E has only an artifact-footprint claim so far. Any runtime performance claim
-requires V2-C validation and V2-D attribution.
+V2-E has a confirmed PetClinic runtime claim only for the documented
+EXPLODED_BOOT_APP no-CDS protocol. Any broader runtime performance claim requires
+fresh V2-C validation and V2-D attribution.

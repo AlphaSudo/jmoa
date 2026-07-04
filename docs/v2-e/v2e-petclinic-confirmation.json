@@ -1,0 +1,73 @@
+{
+  "metadataVersion": "v2e-petclinic-confirmation",
+  "service": "spring-petclinic-customers-service",
+  "comparison": "full-p2 vs full-p2-plus-v2e-reducer",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "mallocArenaMax": "1",
+  "noCds": true,
+  "noJavaagent": true,
+  "workload": {
+    "id": "corrected-petclinic-27x3",
+    "requestsPerRun": 81,
+    "totalRuns": 6,
+    "totalErrors": 0
+  },
+  "artifactGate": {
+    "originalDependencyJarBytes": 92466274,
+    "reducedDependencyJarBytes": 87070377,
+    "deltaBytes": -5395897,
+    "sameJarCount": true,
+    "sampleHashesMatched": true
+  },
+  "evidenceGate": {
+    "runs": 6,
+    "validRuns": 6,
+    "invalidRuns": 0,
+    "classLoadLoggingEnabled": false,
+    "jfrEnabled": false,
+    "gcRunBeforeCapture": false,
+    "v2cVerdict": "CONFIRMED_WIN"
+  },
+  "confirmation": {
+    "pairs": 3,
+    "pairedWins": 2,
+    "medianPssDeltaKb": -1624,
+    "medianPrivateDirtyDeltaKb": -1636,
+    "medianMemoryCurrentDeltaBytes": -12255232,
+    "medianHeapPssDeltaKb": 1572,
+    "medianAnonymousRwDeltaKb": -2456,
+    "medianAnonymousExecutableDeltaKb": -376,
+    "verdict": "CONFIRMED_WIN"
+  },
+  "pairResults": [
+    {
+      "pair": 1,
+      "deltaPssKb": -1624,
+      "deltaPrivateDirtyKb": -1636,
+      "deltaMemoryCurrentBytes": -18149376,
+      "deltaHeapPssKb": 1572,
+      "deltaAnonymousRwPssKb": -2456,
+      "pass": true
+    },
+    {
+      "pair": 2,
+      "deltaPssKb": -12093,
+      "deltaPrivateDirtyKb": -12084,
+      "deltaMemoryCurrentBytes": -12255232,
+      "deltaHeapPssKb": -10468,
+      "deltaAnonymousRwPssKb": -1248,
+      "pass": true
+    },
+    {
+      "pair": 3,
+      "deltaPssKb": 546,
+      "deltaPrivateDirtyKb": 768,
+      "deltaMemoryCurrentBytes": 831488,
+      "deltaHeapPssKb": 2992,
+      "deltaAnonymousRwPssKb": -2708,
+      "pass": false
+    }
+  ],
+  "claimBoundary": "Confirmed incremental runtime memory win for V2-E on PetClinic under this no-CDS exploded Boot protocol; no startup claim and no cross-service generalization claim."
+}
