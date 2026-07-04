@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
+import java.util.jar.Manifest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -150,6 +151,86 @@ class LocalVariableDebugAttributeReducerTest {
         ReducerReport report = new JarReducer(config).reduce();
 
         assertEquals("SKIPPED_BOOTSTRAP_METHODS", report.artifacts().get(0).classes().get(0).status());
+    }
+
+    @Test
+    void jarReducerSkipsSignedJarsByDefault() throws Exception {
+        Path input = tempDir.resolve("input-signed");
+        Path output = tempDir.resolve("out-signed");
+        Files.createDirectories(input);
+        Path jar = input.resolve("signed.jar");
+        writeJar(jar, "com/example/DebugFixture.class", localVariableFixtureWithoutBootstrap(),
+            "META-INF/TEST.SF", "Signature-Version: 1.0\n");
+        ReducerConfig config = releaseReducerConfig(input, output);
+
+        ReducerReport report = new JarReducer(config).reduce();
+        JarReductionRecord artifact = report.artifacts().get(0);
+
+        assertEquals("SKIPPED_SIGNED_JAR", artifact.status());
+        assertTrue(artifact.signedJar());
+        assertEquals(0, artifact.reducedClassCount());
+        assertEquals(artifact.inputSha256(), artifact.outputSha256());
+        assertTrue(output.resolve("signed.jar").toFile().isFile());
+    }
+
+    @Test
+    void jarReducerSkipsMultiReleaseJarsByDefault() throws Exception {
+        Path input = tempDir.resolve("input-mr");
+        Path output = tempDir.resolve("out-mr");
+        Files.createDirectories(input);
+        Path jar = input.resolve("multi-release.jar");
+        writeJar(jar, "com/example/DebugFixture.class", localVariableFixtureWithoutBootstrap(),
+            "META-INF/versions/17/com/example/DebugFixture.class", localVariableFixtureWithoutBootstrap());
+        ReducerConfig config = releaseReducerConfig(input, output);
+
+        ReducerReport report = new JarReducer(config).reduce();
+        JarReductionRecord artifact = report.artifacts().get(0);
+
+        assertEquals("SKIPPED_MULTI_RELEASE_JAR", artifact.status());
+        assertTrue(artifact.multiReleaseJar());
+        assertEquals(0, artifact.reducedClassCount());
+        assertEquals(artifact.inputSha256(), artifact.outputSha256());
+    }
+
+    @Test
+    void jarReducerSkipsSealedJarsByDefault() throws Exception {
+        Path input = tempDir.resolve("input-sealed");
+        Path output = tempDir.resolve("out-sealed");
+        Files.createDirectories(input);
+        Path jar = input.resolve("sealed.jar");
+        Manifest manifest = new Manifest();
+        manifest.getMainAttributes().putValue("Manifest-Version", "1.0");
+        manifest.getMainAttributes().putValue("Sealed", "true");
+        writeJar(jar, manifest, "com/example/DebugFixture.class", localVariableFixtureWithoutBootstrap());
+        ReducerConfig config = releaseReducerConfig(input, output);
+
+        ReducerReport report = new JarReducer(config).reduce();
+        JarReductionRecord artifact = report.artifacts().get(0);
+
+        assertEquals("SKIPPED_SEALED_JAR", artifact.status());
+        assertTrue(artifact.sealedJar());
+        assertEquals(0, artifact.reducedClassCount());
+        assertEquals(artifact.inputSha256(), artifact.outputSha256());
+    }
+
+    @Test
+    void jarReducerPreservesModuleInfoClass() throws Exception {
+        Path input = tempDir.resolve("input-module");
+        Path output = tempDir.resolve("out-module");
+        Files.createDirectories(input);
+        Path jar = input.resolve("module.jar");
+        writeJar(jar, "module-info.class", localVariableFixtureWithoutBootstrap());
+        ReducerConfig config = releaseReducerConfig(input, output);
+
+        ReducerReport report = new JarReducer(config).reduce();
+
+        assertEquals("SKIPPED_MODULE_INFO", report.artifacts().get(0).classes().get(0).status());
+        try (JarFile reducedJar = new JarFile(output.resolve("module.jar").toFile())) {
+            byte[] bytes = reducedJar.getInputStream(reducedJar.getEntry("module-info.class")).readAllBytes();
+            ClassDebugMetadata after = new ClassDebugMetadataInspector().inspect(bytes);
+            assertTrue(after.localVariableTableBytes() > 0);
+            assertTrue(after.localVariableTypeTableBytes() > 0);
+        }
     }
 
     @Test
@@ -338,5 +419,60 @@ class LocalVariableDebugAttributeReducerTest {
             jar.write(classBytes);
             jar.closeEntry();
         }
+    }
+
+    private static void writeJar(Path jarPath, String entryName, byte[] classBytes, String extraEntry, String extraText)
+        throws IOException {
+        try (JarOutputStream jar = new JarOutputStream(Files.newOutputStream(jarPath))) {
+            JarEntry entry = new JarEntry(entryName);
+            jar.putNextEntry(entry);
+            jar.write(classBytes);
+            jar.closeEntry();
+            JarEntry extra = new JarEntry(extraEntry);
+            jar.putNextEntry(extra);
+            jar.write(extraText.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            jar.closeEntry();
+        }
+    }
+
+    private static void writeJar(Path jarPath, String entryName, byte[] classBytes, String extraEntry, byte[] extraBytes)
+        throws IOException {
+        try (JarOutputStream jar = new JarOutputStream(Files.newOutputStream(jarPath))) {
+            JarEntry entry = new JarEntry(entryName);
+            jar.putNextEntry(entry);
+            jar.write(classBytes);
+            jar.closeEntry();
+            JarEntry extra = new JarEntry(extraEntry);
+            jar.putNextEntry(extra);
+            jar.write(extraBytes);
+            jar.closeEntry();
+        }
+    }
+
+    private static void writeJar(Path jarPath, Manifest manifest, String entryName, byte[] classBytes) throws IOException {
+        try (JarOutputStream jar = new JarOutputStream(Files.newOutputStream(jarPath), manifest)) {
+            JarEntry entry = new JarEntry(entryName);
+            jar.putNextEntry(entry);
+            jar.write(classBytes);
+            jar.closeEntry();
+        }
+    }
+
+    private static ReducerConfig releaseReducerConfig(Path input, Path output) {
+        return new ReducerConfig(
+            false,
+            true,
+            "release-low-footprint",
+            input.toFile(),
+            output.toFile(),
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+        );
     }
 }

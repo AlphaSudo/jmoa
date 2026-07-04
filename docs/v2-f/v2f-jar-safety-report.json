@@ -1,0 +1,56 @@
+{
+  "metadataVersion": "v2f-jar-safety-report-summary",
+  "status": "IMPLEMENTED",
+  "policy": {
+    "signedJars": "SKIP_BY_DEFAULT",
+    "multiReleaseJars": "SKIP_BY_DEFAULT",
+    "sealedJars": "SKIP_BY_DEFAULT",
+    "moduleInfoClass": "PRESERVE",
+    "bootstrapMethodsClasses": "SKIP_CLASS_IN_MUTATION_MODE",
+    "timestampPolicy": "preserve"
+  },
+  "preservedAttributes": [
+    "LineNumberTable",
+    "SourceFile",
+    "StackMapTable",
+    "RuntimeVisibleAnnotations",
+    "RuntimeInvisibleAnnotations",
+    "Signature",
+    "BootstrapMethods",
+    "module-info.class"
+  ],
+  "petclinicArtifactSmoke": {
+    "jarCount": 162,
+    "classCount": 54196,
+    "reducedClassCount": 23680,
+    "originalBytes": 92466274,
+    "reducedBytes": 88610904,
+    "removedBytes": 3870720,
+    "signedJarsDetected": 1,
+    "multiReleaseJarsDetected": 21,
+    "sealedJarsDetected": 1,
+    "signedJarsSkipped": 1,
+    "multiReleaseJarsSkipped": 20,
+    "sealedJarsSkipped": 1,
+    "bootstrapMethodsClassesSkipped": 6029,
+    "manifestArtifacts": 162
+  },
+  "doctorArtifactSmoke": {
+    "jarCount": 184,
+    "classCount": 58924,
+    "reducedClassCount": 25181,
+    "originalBytes": 100970980,
+    "reducedBytes": 96831060,
+    "removedBytes": 4156014,
+    "signedJarsDetected": 1,
+    "multiReleaseJarsDetected": 24,
+    "sealedJarsDetected": 0,
+    "signedJarsSkipped": 1,
+    "multiReleaseJarsSkipped": 23,
+    "sealedJarsSkipped": 0,
+    "bootstrapMethodsClassesSkipped": 6761,
+    "manifestArtifacts": 184
+  },
+  "claimBoundary": "V2-F jar safety hardens artifact mutation. Doctor numbers are artifact-smoke only and are not a runtime memory claim."
+}
+

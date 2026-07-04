@@ -1,19 +1,19 @@
 package com.yourorg.jmoa.plugin.reducer;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
+import java.util.jar.JarFile;
 
 public final class DebugMetadataSavingsEstimator {
 
     private final ReducerConfig config;
     private final ClassDebugMetadataInspector inspector = new ClassDebugMetadataInspector();
+    private final JarSafetyInspector safetyInspector = new JarSafetyInspector();
 
     public DebugMetadataSavingsEstimator(ReducerConfig config) {
         this.config = config;
@@ -54,18 +54,25 @@ public final class DebugMetadataSavingsEstimator {
         List<ClassReductionRecord> classes = new ArrayList<>();
         long estimated = 0;
         int classCount = 0;
-        try (JarInputStream input = new JarInputStream(new FileInputStream(jar))) {
-            JarEntry entry;
-            while ((entry = input.getNextJarEntry()) != null) {
+        JarSafetyAssessment safety;
+        try (JarFile input = new JarFile(jar)) {
+            safety = safetyInspector.assess(input);
+            var entries = input.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry entry = entries.nextElement();
                 if (entry.isDirectory() || !entry.getName().endsWith(".class")) {
                     continue;
                 }
                 classCount++;
-                byte[] bytes = input.readAllBytes();
+                byte[] bytes;
+                try (var stream = input.getInputStream(entry)) {
+                    bytes = stream.readAllBytes();
+                }
                 ClassDebugMetadata metadata = inspector.inspect(bytes);
                 estimated += metadata.removableBytes();
                 if (metadata.removableBytes() > 0) {
-                    classes.add(recordFor(jar.getName(), entry.getName(), metadata, bytes.length, bytes.length, "ESTIMATED"));
+                    String status = safety.mutationAllowed() ? "ESTIMATED" : safety.skipReason();
+                    classes.add(recordFor(jar.getName(), entry.getName(), metadata, bytes.length, bytes.length, status));
                 }
             }
         }
@@ -75,13 +82,21 @@ public final class DebugMetadataSavingsEstimator {
             jar.getName(),
             jar.getAbsolutePath(),
             null,
+            JarSafetyInspector.sha256(jar),
+            null,
             jar.length(),
             jar.length(),
             estimated,
             0,
             classCount,
             0,
-            "ESTIMATED",
+            0,
+            safety.signedJar(),
+            safety.multiReleaseJar(),
+            safety.sealedJar(),
+            safety.skipReason(),
+            "preserve",
+            safety.mutationAllowed() ? "ESTIMATED" : safety.skipReason(),
             classes.stream().limit(200).toList()
         );
     }

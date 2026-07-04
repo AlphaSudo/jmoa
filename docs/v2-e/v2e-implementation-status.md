@@ -87,6 +87,12 @@ Doctor service-level confirmation
 Next gate:
 
 ```text
-Tag v0.7.0-v2e-runtime-confirmed after merge.
-Then run V2-F against a second service or productize the release-low-footprint profile.
+v0.7.0-v2e-runtime-confirmed has been tagged.
+
+Next gate:
+V2-F reducer generalization and productization:
+- signed / multi-release / sealed JAR safety
+- reducer manifest with input/output hashes
+- second-service artifact smoke
+- reducer admission policy
 ```

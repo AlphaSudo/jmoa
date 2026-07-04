@@ -1,0 +1,25 @@
+{
+  "metadataVersion": "v2f-reducer-productization-status",
+  "status": "IMPLEMENTED",
+  "completed": [
+    "V2-E stale docs updated after v0.7.0.",
+    "Signed JARs are skipped by default.",
+    "Multi-release JARs are skipped by default.",
+    "Sealed JARs are skipped by default.",
+    "module-info.class is preserved.",
+    "BootstrapMethods classes remain skipped in mutation mode.",
+    "LineNumberTable, StackMapTable, annotations, Signature, and BootstrapMethods are preserved.",
+    "Reducer manifest is emitted with input/output hashes and timestamp policy.",
+    "PetClinic hardened artifact smoke passed.",
+    "Doctor corrected D2 dependency artifact smoke passed."
+  ],
+  "notClaimed": [
+    "No new runtime memory claim.",
+    "No Doctor runtime claim.",
+    "No fat-JAR runtime claim.",
+    "No startup claim.",
+    "No new reducer type."
+  ],
+  "nextGate": "Optional Doctor semantic smoke or launch-mode matrix, followed by a V2-F release tag."
+}
+

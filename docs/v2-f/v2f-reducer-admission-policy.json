@@ -1,0 +1,24 @@
+{
+  "metadataVersion": "v2f-reducer-admission-policy",
+  "status": "DRAFT_FOR_RELEASE_LOW_FOOTPRINT",
+  "recommendV2EWhen": [
+    "The target is a release artifact, not a developer/debug artifact.",
+    "The user explicitly enables reducer mutation.",
+    "The reducer profile is release-low-footprint.",
+    "Only LocalVariableTable and LocalVariableTypeTable stripping is requested.",
+    "V2-B or reducer dry-run estimates meaningful removable local-variable metadata.",
+    "Signed, multi-release, and sealed jars are skipped or explicitly reviewed.",
+    "Semantic smoke passes for the deployment shape.",
+    "Any runtime performance claim passes V2-C validation and V2-D attribution."
+  ],
+  "doNotRecommendWhen": [
+    "The build is intended for debugging local variable values.",
+    "The user requests LineNumberTable, StackMapTable, annotation, Signature, or BootstrapMethods stripping.",
+    "The deployment relies on unreviewed signed, multi-release, or sealed jars being rewritten.",
+    "No semantic smoke is available.",
+    "A runtime claim is desired but V2-C confirmation is unavailable."
+  ],
+  "currentConfirmedRuntimeScope": "PetClinic customers-service only, EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1, no CDS/AppCDS/Leyden/javaagent.",
+  "doctorStatus": "artifact-smoke-only"
+}
+

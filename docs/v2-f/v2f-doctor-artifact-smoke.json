@@ -1,0 +1,24 @@
+{
+  "metadataVersion": "v2f-doctor-artifact-smoke",
+  "service": "doctor-service",
+  "source": "corrected D2 fat-JAR dependency libs",
+  "runtimeClaim": false,
+  "artifactSmoke": {
+    "jarCount": 184,
+    "classCount": 58924,
+    "reducedClassCount": 25181,
+    "originalBytes": 100970980,
+    "reducedBytes": 96831060,
+    "removedBytes": 4156014,
+    "signedJarsDetected": 1,
+    "multiReleaseJarsDetected": 24,
+    "sealedJarsDetected": 0,
+    "signedJarsSkipped": 1,
+    "multiReleaseJarsSkipped": 23,
+    "sealedJarsSkipped": 0,
+    "bootstrapMethodsClassesSkipped": 6761,
+    "manifestArtifacts": 184
+  },
+  "claimBoundary": "Artifact smoke only. No Doctor semantic smoke, V2-C confirmation, V2-D attribution, or runtime memory claim is made here."
+}
+
