@@ -1,9 +1,9 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-E complete through the first confirmed runtime reducer.
+Status: V2-A through V2-F are closed as the current V2 foundation.
 
 This document records the public roadmap boundary after
-`v0.7.0-v2e-runtime-confirmed`.
+`v0.7.1-v2f-reducer-productization`.
 
 ## Closed Milestones
 
@@ -14,6 +14,7 @@ This document records the public roadmap boundary after
 | V2-C | Closed | Evidence truth engine with validation, paired confirmation, variance classification, perturbation detection, and historical replay proof |
 | V2-D | Closed | Memory attribution engine with category deltas, smaps/NMT reconciliation, heap/object attribution, class/metaspace attribution, and historical attribution proof |
 | V2-E | Closed | Opt-in LVT/LVTT artifact reducer for dependency jars, with PetClinic artifact smoke, semantic smoke, V2-C confirmation, and V2-D attribution |
+| V2-F | Closed | Reducer productization with signed/MR/sealed JAR safety, reducer manifest hashes, PetClinic hardened artifact smoke, Doctor artifact smoke, and admission policy |
 
 ## Current Foundation
 
@@ -23,12 +24,13 @@ V2-B = what bytecode/classfile footprint exists?
 V2-C = can we trust the measurement?
 V2-D = why did memory move?
 V2-E = can the first safe artifact reducer pass controlled gates?
+V2-F = can that reducer be made safer and auditable for real dependency surfaces?
 ```
 
 Together, these milestones provide visibility, validation, explanation, and the
-first controlled post-v1 reducer. V2-E is still disabled by default and
-report-only by default unless explicit release-low-footprint reducer flags are
-enabled.
+first controlled post-v1 reducer, and reducer productization through V2-F. V2-E
+is still disabled by default and report-only by default unless explicit
+release-low-footprint reducer flags are enabled.
 
 ## Still Blocked
 
@@ -122,15 +124,9 @@ NMT metaspace committed median delta: -3,271 KB
 The confirmed result should not be explained as retained-object or class-count
 reduction.
 
-## Next Gate
+## V2-F Productization
 
-The next gate is V2-F:
-
-```text
-generalize V2-E to a second service or productize the release-low-footprint reducer profile
-```
-
-V2-F has started and is focused on reducer productization, not a new runtime claim:
+V2-F is closed as reducer productization:
 
 ```text
 signed / multi-release / sealed JAR safety
@@ -138,6 +134,17 @@ reducer manifest with input/output hashes
 PetClinic hardened artifact smoke
 Doctor artifact-level smoke
 reducer admission policy
+```
+
+V2-F does not add a new runtime performance claim.
+
+## Next Gate
+
+The next gate is V2-G:
+
+```text
+cross-service/runtime generalization of the V2-E reducer,
+or release-profile hardening if no second runtime target is available
 ```
 
 ## V2-E Boundary

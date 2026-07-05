@@ -136,5 +136,10 @@ V2-E preserves line numbers, stack-map frames, annotations, signatures, and
 BootstrapMethods. Classes that carry `BootstrapMethods` are skipped in mutation
 mode instead of being rewritten.
 
+V2-F hardens this reducer for product use. Signed, multi-release, and sealed
+JARs are skipped by default; `module-info.class` is preserved; and the reducer
+emits `jmoa-reducer-manifest.json` with input/output hashes and timestamp
+policy.
+
 See the repository-level docs for deployment materialization and measurement
 boundaries.

@@ -10,6 +10,8 @@ with PSS-oriented evidence.
 The case-study portfolio is published separately:
 
 - Portfolio: https://github.com/AlphaSudo/jmoa-jvm-optimization-portfolio
+- V2 claim register: [docs/v2-claim-register.md](docs/v2-claim-register.md)
+- V2 foundation closure: [docs/v2-foundation-closure.md](docs/v2-foundation-closure.md)
 
 ## What This Is
 
@@ -233,6 +235,31 @@ See:
 - [V2-E Implementation Status](docs/v2-e/v2e-implementation-status.md)
 - [V2-E PetClinic Artifact Smoke](docs/v2-e/v2e-petclinic-artifact-smoke.md)
 - [V2-E PetClinic Service Smoke](docs/v2-e/v2e-petclinic-service-smoke.md)
+- [V2-E Claim Boundary](docs/v2-e/v2e-claim-boundary.md)
+
+## V2-F Reducer Productization
+
+V2-F closes product hardening for the V2-E reducer. It does not add a new
+runtime claim; it makes the existing reducer safer to run on real dependency
+surfaces.
+
+V2-F adds:
+
+- signed JAR skip policy
+- multi-release JAR skip policy
+- sealed JAR skip policy
+- reducer manifest with input/output hashes
+- PetClinic hardened artifact smoke
+- Doctor artifact-level smoke
+- reducer admission policy
+
+See:
+
+- [V2-F Jar Safety Report](docs/v2-f/v2f-jar-safety-report.md)
+- [V2-F Reducer Admission Policy](docs/v2-f/v2f-reducer-admission-policy.md)
+- [V2-F Productization Status](docs/v2-f/v2f-reducer-productization-status.md)
+- [V2 Foundation Closure](docs/v2-foundation-closure.md)
+- [V2 Claim Register](docs/v2-claim-register.md)
 
 ## Safety
 

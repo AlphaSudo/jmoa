@@ -1,0 +1,55 @@
+{
+  "metadataVersion": "v2-claim-register",
+  "status": "CURRENT_AFTER_V2F",
+  "confirmedRuntimeClaims": [
+    {
+      "id": "petclinic-full-p2-no-cds",
+      "claim": "JMOA full P2 confirmed a public no-CDS PetClinic memory win under EXPLODED_BOOT_APP.",
+      "service": "Spring PetClinic customers-service",
+      "runtimeScope": "EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1, no CDS/AppCDS/Leyden/javaagent",
+      "medianPssReductionKbApprox": 4600,
+      "source": "Phase 33M public case study"
+    },
+    {
+      "id": "v2e-petclinic-incremental-reducer",
+      "claim": "V2-E confirmed an incremental PetClinic runtime win over full P2 using the LVT/LVTT reducer.",
+      "service": "Spring PetClinic customers-service",
+      "comparison": "full P2 vs full P2 + V2-E reducer",
+      "runtimeScope": "EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1, no CDS/AppCDS/Leyden/javaagent",
+      "pairedWins": "2/3",
+      "medianPssDeltaKb": -1624,
+      "medianPrivateDirtyDeltaKb": -1636,
+      "medianMemoryCurrentDeltaBytes": -12255232
+    }
+  ],
+  "artifactOnlyClaims": [
+    {
+      "id": "v2f-petclinic-hardened-artifact-smoke",
+      "claim": "V2-F reduces PetClinic dependency jar footprint under the hardened JAR safety policy.",
+      "removedBytes": 3870720,
+      "runtimeClaim": false
+    },
+    {
+      "id": "v2f-doctor-artifact-smoke",
+      "claim": "V2-F reduces Doctor corrected D2 dependency jar footprint at artifact level.",
+      "removedBytes": 4156014,
+      "runtimeClaim": false
+    }
+  ],
+  "notClaimed": [
+    "startup win",
+    "fat-JAR runtime win",
+    "CDS/AppCDS runtime win",
+    "Doctor runtime win",
+    "cross-service runtime generalization",
+    "all debug metadata stripping safety",
+    "LineNumberTable stripping",
+    "StackMapTable stripping",
+    "annotation stripping",
+    "Signature stripping",
+    "BootstrapMethods rewriting or stripping",
+    "CGLIB/JDK proxy rewriting",
+    "Spring AOT generated-class mutation"
+  ]
+}
+

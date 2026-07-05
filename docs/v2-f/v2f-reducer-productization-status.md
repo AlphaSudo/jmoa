@@ -1,6 +1,6 @@
 # V2-F Reducer Productization Status
 
-Status: implemented as reducer product hardening and second-service artifact smoke.
+Status: closed as reducer product hardening and second-service artifact smoke.
 
 Completed:
 
@@ -33,3 +33,11 @@ new reducer type
 
 The most important V2-F change is conservative product behavior: the reducer now skips JAR surfaces where mutation could invalidate signatures, version-specific class behavior, or package sealing.
 
+Next gate:
+
+```text
+V2-G cross-service/runtime generalization or release-profile hardening
+```
+
+V2-F does not prove Doctor runtime behavior, fat-JAR runtime behavior, startup
+benefit, or cross-service runtime generalization.

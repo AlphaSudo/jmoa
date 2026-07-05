@@ -1,0 +1,82 @@
+{
+  "metadataVersion": "v2-foundation-closure",
+  "status": "CLOSED_THROUGH_V2F",
+  "closureTag": "v0.7.2-v2-foundation-closure",
+  "latestProductizationTag": "v0.7.1-v2f-reducer-productization",
+  "milestones": [
+    {
+      "id": "V2-A",
+      "status": "CLOSED_REPORT_ONLY",
+      "closedAs": [
+        "generated/synthetic/proxy/AOT visibility",
+        "runtime attribution",
+        "safety taxonomy",
+        "ROI infrastructure"
+      ],
+      "mutationEnabled": false
+    },
+    {
+      "id": "V2-B",
+      "status": "CLOSED_REPORT_ONLY",
+      "closedAs": [
+        "bytecode/classfile footprint profiling",
+        "near-64KB method risk reporting",
+        "constant-pool and attribute footprint reporting",
+        "runtime correlation"
+      ],
+      "broadBytecodeMutationEnabled": false
+    },
+    {
+      "id": "V2-C",
+      "status": "CLOSED",
+      "closedAs": [
+        "evidence validation",
+        "paired confirmation",
+        "variance classification",
+        "perturbation detection",
+        "historical replay proof"
+      ]
+    },
+    {
+      "id": "V2-D",
+      "status": "CLOSED",
+      "closedAs": [
+        "memory attribution",
+        "smaps/NMT reconciliation",
+        "heap/object attribution",
+        "class/metaspace attribution",
+        "historical attribution proof"
+      ]
+    },
+    {
+      "id": "V2-E",
+      "status": "CLOSED_CONFIRMED_PETCLINIC",
+      "closedAs": [
+        "opt-in LVT/LVTT reducer",
+        "PetClinic artifact smoke",
+        "PetClinic semantic smoke",
+        "PetClinic V2-C runtime confirmation",
+        "PetClinic V2-D attribution"
+      ],
+      "confirmedRuntimeScope": "PetClinic customers-service, EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1, no CDS/AppCDS/Leyden/javaagent"
+    },
+    {
+      "id": "V2-F",
+      "status": "CLOSED_PRODUCTIZATION",
+      "closedAs": [
+        "signed/MR/sealed JAR safety",
+        "reducer manifest with input/output hashes",
+        "PetClinic hardened artifact smoke",
+        "Doctor artifact-level smoke",
+        "reducer admission policy"
+      ],
+      "runtimeClaimAdded": false
+    }
+  ],
+  "nextPhase": {
+    "id": "V2-G",
+    "name": "Reducer generalization and runtime portability",
+    "rule": "No new reducer type and no broadened metadata stripping until V2-E LVT/LVTT reducer generalization is tested."
+  }
+}
+

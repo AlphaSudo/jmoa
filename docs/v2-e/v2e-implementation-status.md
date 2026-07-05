@@ -89,10 +89,8 @@ Next gate:
 ```text
 v0.7.0-v2e-runtime-confirmed has been tagged.
 
+V2-F has completed reducer productization and second-service artifact smoke.
+
 Next gate:
-V2-F reducer generalization and productization:
-- signed / multi-release / sealed JAR safety
-- reducer manifest with input/output hashes
-- second-service artifact smoke
-- reducer admission policy
+V2-G cross-service/runtime generalization or release-profile hardening.
 ```
