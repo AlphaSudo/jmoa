@@ -56,6 +56,11 @@ V2-F PetClinic hardened artifact smoke:
 V2-F Doctor corrected D2 artifact smoke:
   removed bytes: 4,156,014
   runtime claim: false
+
+V2-G Doctor corrected D2 artifact generalization:
+  removed dependency-jar bytes: 4,156,014
+  BOOT-INF/lib entries replaced in materialized fat JAR: 184
+  runtime claim: false
 ```
 
 ## Not Claimed
@@ -77,4 +82,3 @@ Spring AOT generated-class mutation
 ```
 
 Any new runtime performance claim must pass V2-C validation and V2-D attribution.
-

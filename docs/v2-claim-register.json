@@ -34,6 +34,13 @@
       "claim": "V2-F reduces Doctor corrected D2 dependency jar footprint at artifact level.",
       "removedBytes": 4156014,
       "runtimeClaim": false
+    },
+    {
+      "id": "v2g-doctor-artifact-generalization",
+      "claim": "V2-G materializes Doctor corrected D2 plus the V2-E reducer at artifact level.",
+      "removedDependencyJarBytes": 4156014,
+      "bootInfLibEntriesReplaced": 184,
+      "runtimeClaim": false
     }
   ],
   "notClaimed": [
@@ -52,4 +59,3 @@
     "Spring AOT generated-class mutation"
   ]
 }
-

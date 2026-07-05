@@ -1,0 +1,31 @@
+{
+  "metadataVersion": "v2g-doctor-artifact-smoke",
+  "target": "doctor-corrected-d2",
+  "comparison": "corrected D2 dependency libs vs corrected D2 dependency libs + V2-E reducer",
+  "runtimeClaim": false,
+  "semanticSmoke": "NOT_RUN",
+  "artifactSmoke": {
+    "jarCount": 184,
+    "classCount": 58924,
+    "reducedClassCount": 25181,
+    "originalDependencyJarBytes": 100970980,
+    "reducedDependencyJarBytes": 96831060,
+    "removedDependencyJarBytes": 4156014,
+    "signedJarsSkipped": 1,
+    "multiReleaseJarsSkipped": 23,
+    "sealedJarsSkipped": 0,
+    "bootstrapMethodsClassesSkipped": 6761,
+    "manifestArtifacts": 184,
+    "manifestArtifactsWithHashes": 184
+  },
+  "gate": {
+    "bytesRemovedGreaterThanZero": true,
+    "reducerFailure": false,
+    "jarCountStable": true,
+    "manifestGenerated": true,
+    "hashesRecorded": true,
+    "artifactGateVerdict": "PASS"
+  },
+  "claimBoundary": "Artifact-level generalization only. No Doctor runtime, startup, fat-JAR memory, V2-C, or V2-D claim is made."
+}
+

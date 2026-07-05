@@ -1,0 +1,22 @@
+{
+  "metadataVersion": "v2g-doctor-semantic-smoke-blocked",
+  "target": "doctor-corrected-d2",
+  "semanticSmokeStatus": "BLOCKED",
+  "reasons": [
+    "Corrected Doctor runtime requires a private HMS compose stack.",
+    "The required private config and database inputs are local-only and are not committed.",
+    "The local Podman installation is available, but the required Doctor service images are not currently present.",
+    "The corrected D2 CDS archive exists, but it was trained for the non-reduced D2 artifact and should not be reused as runtime-confirmation proof for the reduced artifact without an explicit retraining or no-CDS policy decision."
+  ],
+  "localChecks": {
+    "podmanAvailable": true,
+    "privateConfigInputsPresent": true,
+    "correctedD2CdsArchivePresent": true,
+    "doctorD2FixedImagePresent": false,
+    "doctorBaselineImagePresent": false
+  },
+  "runtimeScreenRun": false,
+  "confirmationRun": false,
+  "claimBoundary": "Doctor remains artifact-generalized only. No semantic, runtime memory, V2-C, or V2-D claim is made."
+}
+

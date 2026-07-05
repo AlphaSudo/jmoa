@@ -1,0 +1,23 @@
+{
+  "metadataVersion": "v2g-final-verdict",
+  "status": "ARTIFACT_GENERALIZATION_ONLY",
+  "recommendedTag": "v0.7.3-v2g-artifact-generalization",
+  "confirmed": [
+    "The V2-E LVT/LVTT reducer processed Doctor corrected D2 dependency libs under the V2-F safety policy.",
+    "The reducer removed 4,156,014 dependency-jar bytes.",
+    "Reducer manifest hashes were recorded for all 184 artifacts.",
+    "A Doctor corrected D2 + reducer fat JAR was materialized in target with all 184 BOOT-INF/lib entries replaced."
+  ],
+  "notClaimed": [
+    "No Doctor semantic smoke.",
+    "No Doctor runtime memory screen.",
+    "No Doctor 3-pair confirmation.",
+    "No V2-C validation for Doctor reducer runtime.",
+    "No V2-D attribution for Doctor reducer runtime.",
+    "No cross-service runtime generalization claim.",
+    "No new reducer type.",
+    "No broader metadata stripping."
+  ],
+  "nextGate": "Rebuild or provide the Doctor runtime image stack and decide CDS retraining/no-CDS policy, or choose a public second runtime target."
+}
+
