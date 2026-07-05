@@ -147,6 +147,21 @@ cross-service/runtime generalization of the V2-E reducer,
 or release-profile hardening if no second runtime target is available
 ```
 
+## V2-G Artifact Generalization
+
+V2-G selected Doctor corrected D2 as the second-service target and completed
+artifact-level generalization:
+
+```text
+dependency-jar bytes removed: 4,156,014
+manifest artifacts with hashes: 184/184
+BOOT-INF/lib entries replaced in materialized fat JAR: 184
+```
+
+Doctor semantic smoke and runtime memory screening are blocked until the Doctor
+runtime image stack is rebuilt or provided and the CDS policy for the reduced
+artifact is decided. V2-G does not add a cross-service runtime claim.
+
 ## V2-E Boundary
 
 V2-E does not reopen generated-class mutation. It also does not implement

@@ -1,0 +1,15 @@
+{
+  "metadataVersion": "v2g-doctor-materialization-proof",
+  "target": "doctor-corrected-d2",
+  "materializedArtifact": "doctor-corrected-d2-plus-v2e-reducer.jar",
+  "committedToRepo": false,
+  "sourceFatJarBytes": 101906981,
+  "materializedFatJarBytes": 86696325,
+  "bootInfLibEntries": 184,
+  "replacedBootInfLibEntries": 184,
+  "outputBootInfLibEntries": 184,
+  "bootJarLauncherPresent": true,
+  "sourceSha256": "1818b210028987085c782df9e5cd8cfbb159b809966d80d0aa0b458c39569b85",
+  "materializedSha256": "ade17737f9390e18316e2901bae235fda6fa74e51fa64bd34cfa4c14403630f6",
+  "claimBoundary": "The total fat-JAR byte delta is not claimed as reducer savings because ZIP recompression can affect the archive size. The clean reducer claim is the dependency-jar byte delta."
+}

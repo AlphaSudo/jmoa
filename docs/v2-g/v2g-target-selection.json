@@ -1,0 +1,27 @@
+{
+  "metadataVersion": "v2g-target-selection",
+  "selectedTarget": "doctor-corrected-d2",
+  "selectionReason": "Doctor corrected D2 is the strongest second-service target because V2-F already proved artifact-level reducer savings on its dependency surface and historical corrected D2 runtime acceptance exists.",
+  "fallbacksConsidered": [
+    {
+      "target": "another public PetClinic microservice",
+      "status": "DEFERRED",
+      "reason": "Would require creating a fresh optimized target artifact before testing reducer generalization."
+    },
+    {
+      "target": "PetClinic fat-JAR diagnostic",
+      "status": "DEFERRED",
+      "reason": "Useful as launch-mode diagnostic, but not second-service generalization."
+    }
+  ],
+  "rules": [
+    "No new reducer type.",
+    "No LineNumberTable stripping.",
+    "No StackMapTable stripping.",
+    "No annotation stripping.",
+    "No Signature stripping.",
+    "No BootstrapMethods rewriting or stripping.",
+    "Use only the existing V2-E LVT/LVTT reducer."
+  ]
+}
+

@@ -1,0 +1,10 @@
+{
+  "metadataVersion": "v2g-runtime-screen-status",
+  "target": "doctor-corrected-d2",
+  "runtimeScreenStatus": "NOT_RUN",
+  "reason": "Semantic smoke was blocked because required Doctor container images are not currently present and the corrected D2 CDS archive needs explicit policy handling for the reduced artifact.",
+  "v2cValidationRun": false,
+  "v2dAttributionRun": false,
+  "crossServiceRuntimeClaim": false
+}
+
