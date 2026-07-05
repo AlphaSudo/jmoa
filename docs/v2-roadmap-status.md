@@ -1,9 +1,9 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-F are closed as the current V2 foundation.
+Status: V2-A through V2-H are closed or screened as the current V2 foundation.
 
 This document records the public roadmap boundary after
-`v0.7.1-v2f-reducer-productization`.
+`v0.7.3-v2g-artifact-generalization` and the V2-H hardened reducer screen.
 
 ## Closed Milestones
 
@@ -15,6 +15,8 @@ This document records the public roadmap boundary after
 | V2-D | Closed | Memory attribution engine with category deltas, smaps/NMT reconciliation, heap/object attribution, class/metaspace attribution, and historical attribution proof |
 | V2-E | Closed | Opt-in LVT/LVTT artifact reducer for dependency jars, with PetClinic artifact smoke, semantic smoke, V2-C confirmation, and V2-D attribution |
 | V2-F | Closed | Reducer productization with signed/MR/sealed JAR safety, reducer manifest hashes, PetClinic hardened artifact smoke, Doctor artifact smoke, and admission policy |
+| V2-G | Closed | Doctor corrected D2 artifact-level reducer generalization and materialization proof, with runtime smoke blocked |
+| V2-H | Screened | Productized V2-F-hardened PetClinic reducer screen; artifact gate passed, runtime promotion failed |
 
 ## Current Foundation
 
@@ -25,12 +27,16 @@ V2-C = can we trust the measurement?
 V2-D = why did memory move?
 V2-E = can the first safe artifact reducer pass controlled gates?
 V2-F = can that reducer be made safer and auditable for real dependency surfaces?
+V2-G = does the hardened reducer generalize to a second service at artifact level?
+V2-H = does the hardened reducer retain the PetClinic runtime win?
 ```
 
-Together, these milestones provide visibility, validation, explanation, and the
-first controlled post-v1 reducer, and reducer productization through V2-F. V2-E
-is still disabled by default and report-only by default unless explicit
-release-low-footprint reducer flags are enabled.
+Together, these milestones provide visibility, validation, explanation, the
+first controlled post-v1 reducer, reducer productization, and a clear claim
+boundary between the earlier runtime-confirmed V2-E reducer and the safer
+V2-F-hardened reducer. V2-E/V2-F reducer behavior is still disabled by default
+and report-only by default unless explicit release-low-footprint reducer flags
+are enabled.
 
 ## Still Blocked
 
@@ -138,15 +144,6 @@ reducer admission policy
 
 V2-F does not add a new runtime performance claim.
 
-## Next Gate
-
-The next gate is V2-G:
-
-```text
-cross-service/runtime generalization of the V2-E reducer,
-or release-profile hardening if no second runtime target is available
-```
-
 ## V2-G Artifact Generalization
 
 V2-G selected Doctor corrected D2 as the second-service target and completed
@@ -162,6 +159,51 @@ Doctor semantic smoke and runtime memory screening are blocked until the Doctor
 runtime image stack is rebuilt or provided and the CDS policy for the reduced
 artifact is decided. V2-G does not add a cross-service runtime claim.
 
+## V2-H Hardened Reducer Screen
+
+V2-H reconciled the earlier V2-E runtime-confirmed reducer with the V2-F
+hardened/productized reducer policy. The `v0.7.0-v2e-runtime-confirmed` result
+used an earlier reducer artifact set:
+
+```text
+artifact byte delta: -5,395,897
+median PSS delta: -1,624 KB
+paired wins: 2/3
+```
+
+The V2-F-hardened reducer skips signed, multi-release, sealed, and
+BootstrapMethods-bearing surfaces. The hardened PetClinic artifact is smaller,
+but removes fewer total bytes:
+
+```text
+materialized dependency jar byte delta: -3,855,370
+BOOT-INF/lib entries replaced: 162/162
+```
+
+The V2-H single-screen runtime gate did not pass:
+
+```text
+PSS delta: +7,804 KB
+Private_Dirty delta: +7,824 KB
+memory.current delta: -7,364,608 bytes
+workload errors: 0
+```
+
+Because PSS and Private_Dirty regressed by more than 1 MB, V2-H did not proceed
+to 3-pair confirmation. The productized hardened reducer is not runtime
+confirmed.
+
+## Next Gate
+
+The next gate is policy-diff analysis before another hardened reducer runtime
+attempt:
+
+```text
+compare the v0.7.0 reducer artifact set against the V2-F hardened artifact set
+identify jars skipped by hardening that contributed to the V2-E runtime result
+consider a reviewed allowlist policy before re-running PetClinic confirmation
+```
+
 ## V2-E Boundary
 
 V2-E does not reopen generated-class mutation. It also does not implement
@@ -170,5 +212,7 @@ annotation stripping, StackMapTable stripping, or LineNumberTable stripping.
 Classes with `BootstrapMethods` are skipped by the first mutation prototype.
 
 V2-E has a confirmed PetClinic runtime claim only for the documented
-EXPLODED_BOOT_APP no-CDS protocol. Any broader runtime performance claim requires
-fresh V2-C validation and V2-D attribution.
+EXPLODED_BOOT_APP no-CDS protocol and the earlier V2-E reducer policy. That
+runtime claim is not transferred to the V2-F-hardened/productized reducer. Any
+broader runtime performance claim requires fresh V2-C validation and V2-D
+attribution.

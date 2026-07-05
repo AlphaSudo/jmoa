@@ -1,0 +1,23 @@
+{
+  "metadataVersion": "v2h-petclinic-hardened-final-verdict",
+  "status": "SCREEN_FAILED_NO_CONFIRMATION",
+  "runtimeClaim": false,
+  "artifactClaim": true,
+  "artifactResult": {
+    "materializedDependencyJarDeltaBytes": -3855370,
+    "bootInfLibEntriesReplaced": 162
+  },
+  "screenResult": {
+    "deltaPssKb": 7804,
+    "deltaPrivateDirtyKb": 7824,
+    "deltaMemoryCurrentBytes": -7364608,
+    "workloadErrors": 0
+  },
+  "decision": [
+    "Do not run 3-pair confirmation.",
+    "Do not tag v0.8.0-v2h-productized-reducer-confirmed.",
+    "Do not transfer the v0.7.0 V2-E runtime claim to the V2-F hardened reducer."
+  ],
+  "nextRecommendedAction": "Run policy-diff analysis between the v0.7.0 reducer artifact set and the V2-F hardened artifact set before another runtime confirmation attempt."
+}
+

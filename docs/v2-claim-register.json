@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2F",
+  "status": "CURRENT_AFTER_V2H",
   "confirmedRuntimeClaims": [
     {
       "id": "petclinic-full-p2-no-cds",
@@ -19,7 +19,8 @@
       "pairedWins": "2/3",
       "medianPssDeltaKb": -1624,
       "medianPrivateDirtyDeltaKb": -1636,
-      "medianMemoryCurrentDeltaBytes": -12255232
+      "medianMemoryCurrentDeltaBytes": -12255232,
+      "claimBoundary": "Confirmed for the earlier V2-E reducer policy used in v0.7.0; not automatically transferable to the V2-F hardened reducer."
     }
   ],
   "artifactOnlyClaims": [
@@ -41,9 +42,20 @@
       "removedDependencyJarBytes": 4156014,
       "bootInfLibEntriesReplaced": 184,
       "runtimeClaim": false
+    },
+    {
+      "id": "v2h-petclinic-hardened-screen",
+      "claim": "V2-H screened the V2-F-hardened PetClinic reducer and did not promote it to runtime confirmation.",
+      "materializedDependencyJarDeltaBytes": -3855370,
+      "bootInfLibEntriesReplaced": 162,
+      "screenDeltaPssKb": 7804,
+      "screenDeltaPrivateDirtyKb": 7824,
+      "screenDeltaMemoryCurrentBytes": -7364608,
+      "runtimeClaim": false
     }
   ],
   "notClaimed": [
+    "V2-F-hardened/productized reducer runtime win",
     "startup win",
     "fat-JAR runtime win",
     "CDS/AppCDS runtime win",

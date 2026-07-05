@@ -1,6 +1,6 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after V2-F.
+This is the source of truth for public V2 claims after V2-H.
 
 ## Confirmed Runtime Claims
 
@@ -44,7 +44,10 @@ NO_CDS_LOW_DIRTY
 MALLOC_ARENA_MAX=1
 no CDS/AppCDS/Leyden
 no runtime javaagent
+earlier V2-E reducer policy used for v0.7.0
 ```
+
+This claim is not transferred to the later V2-F-hardened/productized reducer.
 
 ## Artifact-Only Claims
 
@@ -61,11 +64,19 @@ V2-G Doctor corrected D2 artifact generalization:
   removed dependency-jar bytes: 4,156,014
   BOOT-INF/lib entries replaced in materialized fat JAR: 184
   runtime claim: false
+
+V2-H PetClinic hardened/productized reducer screen:
+  materialized dependency jar byte delta: -3,855,370
+  BOOT-INF/lib entries replaced: 162
+  screen PSS delta: +7,804 KB
+  screen Private_Dirty delta: +7,824 KB
+  runtime claim: false
 ```
 
 ## Not Claimed
 
 ```text
+V2-F-hardened/productized reducer runtime win
 startup win
 fat-JAR runtime win
 CDS/AppCDS runtime win

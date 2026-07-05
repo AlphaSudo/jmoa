@@ -1,0 +1,22 @@
+{
+  "metadataVersion": "v2h-petclinic-hardened-v2c-validation",
+  "mode": "screen-validation",
+  "runs": 2,
+  "validRuns": 2,
+  "invalidRuns": 0,
+  "healthUp": true,
+  "workloadErrors": 0,
+  "smapsRollupPresent": true,
+  "fullSmapsPresent": true,
+  "memoryCurrentPresent": true,
+  "nmtSummaryPresent": true,
+  "heapInfoPresent": true,
+  "classHistogramPresent": true,
+  "cdsMode": "OFF",
+  "javaagentPresent": false,
+  "mallocArenaMax": "1",
+  "classLoadLoggingDuringMemoryRun": false,
+  "pairedConfirmationVerdict": "NOT_RUN_SCREEN_FAILED",
+  "runtimeClaim": false
+}
+
