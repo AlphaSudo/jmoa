@@ -1,0 +1,50 @@
+{
+  "metadataVersion": "v2h-petclinic-hardened-screen",
+  "service": "spring-petclinic-customers-service",
+  "comparison": "full-p2 vs full-p2-plus-v2f-hardened-reducer",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "mallocArenaMax": "1",
+  "noCds": true,
+  "noAppCds": true,
+  "noLeyden": true,
+  "noJavaagent": true,
+  "classLoadLoggingDuringMemoryRun": false,
+  "workload": {
+    "id": "corrected-petclinic-27x3",
+    "requestsPerRun": 81,
+    "totalRuns": 2,
+    "totalErrors": 0
+  },
+  "artifactGate": {
+    "originalDependencyJarBytes": 92466274,
+    "hardenedDependencyJarBytes": 88610904,
+    "deltaBytes": -3855370,
+    "sameJarCount": true,
+    "bootInfLibEntriesReplaced": 162,
+    "allMaterializedHashesMatchedReducedJars": true
+  },
+  "screen": {
+    "deltaPssKb": 7804,
+    "deltaPrivateDirtyKb": 7824,
+    "deltaMemoryCurrentBytes": -7364608,
+    "deltaHeapPssKb": 6756,
+    "deltaAnonymousRwPssKb": 940,
+    "deltaNmtTotalCommittedKb": -1797,
+    "deltaHeapUsedKb": 24,
+    "deltaClassHistogramBytes": 45256,
+    "deltaLoadedClasses": 1,
+    "deltaStartupSeconds": 4.088
+  },
+  "promotionGate": {
+    "artifactBytesLower": true,
+    "workloadErrorsZero": true,
+    "pssNotWorseByMoreThan1Mb": false,
+    "privateDirtyNotWorseByMoreThan1Mb": false,
+    "memoryCurrentNotWorseByMoreThan1Mb": true,
+    "screenPassed": false
+  },
+  "decision": "DO_NOT_PROMOTE_TO_3PAIR_CONFIRMATION",
+  "runtimeClaim": false
+}
+

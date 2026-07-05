@@ -1,0 +1,27 @@
+{
+  "metadataVersion": "v2h-claim-reconciliation",
+  "status": "RECONCILED",
+  "reason": "The V2-E runtime confirmation used an earlier reducer policy. V2-F hardened the reducer by skipping signed, multi-release, sealed, and BootstrapMethods-bearing surfaces, so the productized reducer needs its own runtime screen.",
+  "v2eRuntimeConfirmedArtifact": {
+    "tag": "v0.7.0-v2e-runtime-confirmed",
+    "comparison": "full P2 vs full P2 + V2-E reducer",
+    "artifactDeltaBytes": -5395897,
+    "medianPssDeltaKb": -1624,
+    "medianPrivateDirtyDeltaKb": -1636,
+    "medianMemoryCurrentDeltaBytes": -12255232,
+    "pairedWins": "2/3"
+  },
+  "v2fHardenedPetClinicArtifact": {
+    "reducerPositiveRemovedBytes": 3870720,
+    "materializedDependencyJarDeltaBytes": -3855370,
+    "signedJarsSkipped": 1,
+    "multiReleaseJarsSkipped": 20,
+    "sealedJarsSkipped": 1,
+    "bootstrapMethodsClassesSkipped": 6029
+  },
+  "notTransferableWithoutV2H": [
+    "V2-E runtime win cannot be automatically applied to the V2-F hardened/productized reducer.",
+    "Doctor V2-G artifact generalization is not a runtime claim."
+  ]
+}
+

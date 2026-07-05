@@ -1,0 +1,45 @@
+{
+  "metadataVersion": "v2h-petclinic-hardened-v2d-attribution",
+  "mode": "screen-attribution",
+  "primaryMovement": {
+    "deltaPssKb": 7804,
+    "deltaPrivateDirtyKb": 7824,
+    "deltaMemoryCurrentBytes": -7364608
+  },
+  "heapObjectAttribution": {
+    "deltaHeapPssKb": 6756,
+    "deltaHeapUsedKb": 24,
+    "deltaClassHistogramBytes": 45256,
+    "classification": "HEAP_PAGE_TOUCH_GROWTH",
+    "retainedObjectGrowthSupported": false
+  },
+  "classMetaspaceAttribution": {
+    "deltaLoadedClasses": 1,
+    "classCountSavingsSupported": false
+  },
+  "smapsNmtReconciliation": {
+    "deltaNmtTotalCommittedKb": -1797,
+    "nmtExplainsPssRegression": false,
+    "classification": "NMT_DIVERGENCE"
+  },
+  "causalHypotheses": [
+    {
+      "hypothesis": "HEAP_PAGE_TOUCH_GROWTH",
+      "confidence": "HIGH",
+      "evidence": [
+        "heap PSS increased by 6,756 KB",
+        "heap used increased by only 24 KB",
+        "class histogram bytes increased by only 45,256 bytes"
+      ]
+    },
+    {
+      "hypothesis": "ANONYMOUS_RW_SMALL_GROWTH",
+      "confidence": "MEDIUM",
+      "evidence": [
+        "anonymous_rw PSS increased by 940 KB"
+      ]
+    }
+  ],
+  "runtimeClaim": false
+}
+

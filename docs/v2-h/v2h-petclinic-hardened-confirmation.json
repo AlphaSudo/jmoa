@@ -1,0 +1,17 @@
+{
+  "metadataVersion": "v2h-petclinic-hardened-confirmation",
+  "status": "NOT_RUN",
+  "reason": "The V2-H single-screen promotion gate failed because PSS and Private_Dirty regressed by more than 1 MB.",
+  "screenDeltas": {
+    "deltaPssKb": 7804,
+    "deltaPrivateDirtyKb": 7824,
+    "deltaMemoryCurrentBytes": -7364608
+  },
+  "confirmationPlanSkipped": [
+    "P2-1 -> P2H-1",
+    "P2-2 -> P2H-2",
+    "P2-3 -> P2H-3"
+  ],
+  "runtimeClaim": false
+}
+
