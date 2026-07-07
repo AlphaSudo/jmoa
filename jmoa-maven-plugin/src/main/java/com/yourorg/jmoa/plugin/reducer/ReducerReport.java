@@ -8,6 +8,7 @@ public record ReducerReport(
     boolean mutationEnabled,
     boolean reportOnly,
     String profile,
+    String engine,
     int jarCount,
     int classCount,
     long totalOriginalBytes,

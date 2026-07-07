@@ -206,7 +206,8 @@ report-only by default.
 
 It does not strip line numbers, source files, stack-map frames, annotations,
 signatures, BootstrapMethods, or framework-sensitive metadata. In mutation mode,
-classes that carry `BootstrapMethods` are skipped rather than rewritten.
+the default `asm` engine skips classes that carry `BootstrapMethods` rather than
+rewriting them.
 
 ```powershell
 mvn jmoa:reduce-bytecode `
@@ -222,10 +223,29 @@ mvn jmoa:reduce-bytecode `
   -Djmoa.reducer.reportOnly=false `
   -Djmoa.reducer.optimize=true `
   -Djmoa.reducer.profile=release-low-footprint `
+  -Djmoa.reducer.engine=asm `
   -Djmoa.reducer.stripLocalVariableTable=true `
   -Djmoa.reducer.stripLocalVariableTypeTable=true `
   -Djmoa.reducer.inputDir=<optimized-lib-dir>
 ```
+
+V2-I adds an explicit raw engine:
+
+```powershell
+mvn jmoa:reduce-bytecode `
+  -Djmoa.reducer.enabled=true `
+  -Djmoa.reducer.reportOnly=false `
+  -Djmoa.reducer.optimize=true `
+  -Djmoa.reducer.profile=release-low-footprint `
+  -Djmoa.reducer.engine=raw `
+  -Djmoa.reducer.stripLocalVariableTable=true `
+  -Djmoa.reducer.stripLocalVariableTypeTable=true `
+  -Djmoa.reducer.inputDir=<optimized-lib-dir>
+```
+
+The raw engine preserves BootstrapMethods and removes only nested local-variable
+debug tables from method `Code` attributes. It keeps the V2-F signed,
+multi-release, and sealed JAR skip policy.
 
 See:
 
@@ -236,6 +256,8 @@ See:
 - [V2-E PetClinic Artifact Smoke](docs/v2-e/v2e-petclinic-artifact-smoke.md)
 - [V2-E PetClinic Service Smoke](docs/v2-e/v2e-petclinic-service-smoke.md)
 - [V2-E Claim Boundary](docs/v2-e/v2e-claim-boundary.md)
+- [V2-I Policy Diff](docs/v2-i/v2i-policy-diff.md)
+- [V2-I Raw Reducer Final Verdict](docs/v2-i/v2i-final-verdict.md)
 
 ## V2-F Reducer Productization
 

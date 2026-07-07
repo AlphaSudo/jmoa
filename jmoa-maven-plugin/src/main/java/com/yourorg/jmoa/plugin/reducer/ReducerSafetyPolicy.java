@@ -9,6 +9,7 @@ public final class ReducerSafetyPolicy {
         if (config.inputDir() == null || !config.inputDir().isDirectory()) {
             throw new IllegalArgumentException("jmoa.reducer.inputDir must point to a directory containing dependency jars.");
         }
+        config.parsedEngine();
         if (config.stripLineNumberTable()) {
             unsafe("LineNumberTable", ReducerSafetyCategory.UNSAFE_DIAGNOSTIC_CRITICAL);
         }
@@ -62,14 +63,14 @@ public final class ReducerSafetyPolicy {
                 new ReducerSafetyEntry("Signature", ReducerSafetyCategory.UNSAFE_FRAMEWORK_SEMANTIC,
                     "Preserved because generic signatures can be inspected by frameworks."),
                 new ReducerSafetyEntry("BootstrapMethods", ReducerSafetyCategory.UNSAFE_FRAMEWORK_SEMANTIC,
-                    "Classes carrying BootstrapMethods are skipped during mutation because invokedynamic bootstrap metadata is executable semantics."),
+                    "Preserved because invokedynamic bootstrap metadata is executable semantics; the asm engine skips these classes, while the opt-in raw engine preserves the attribute byte-for-byte and removes only nested Code local-variable tables."),
                 new ReducerSafetyEntry("InnerClasses/Nest/Record/PermittedSubclasses", ReducerSafetyCategory.UNSAFE_FRAMEWORK_SEMANTIC,
                     "Preserved because nesting, records, sealed classes, and proxies can depend on metadata.")
             ),
             Map.of(
                 "default", "disabled and report-only",
                 "firstMutation", "LocalVariableTable and LocalVariableTypeTable only",
-                "bootstrapMethodsPolicy", "skip class in mutation mode",
+                "bootstrapMethodsPolicy", "asm engine skips class in mutation mode; raw engine may reduce only by preserving BootstrapMethods",
                 "mutationProfile", "release-low-footprint"
             )
         );

@@ -30,9 +30,13 @@ Record
 PermittedSubclasses
 ```
 
-Mutation mode skips classes that contain `BootstrapMethods`. This keeps the
-first reducer away from invokedynamic metadata while still allowing safe
-local-variable metadata reduction in ordinary classes.
+The default `asm` mutation engine skips classes that contain `BootstrapMethods`.
+This keeps the first reducer away from invokedynamic metadata while still
+allowing safe local-variable metadata reduction in ordinary classes.
+
+V2-I adds an explicit `raw` engine for the same LVT/LVTT reducer. The raw engine
+preserves BootstrapMethods and rewrites only nested `Code` local-variable debug
+tables. It is not the default.
 
 ## Maven Goal
 
@@ -58,10 +62,29 @@ mvn jmoa:reduce-bytecode `
   -Djmoa.reducer.reportOnly=false `
   -Djmoa.reducer.optimize=true `
   -Djmoa.reducer.profile=release-low-footprint `
+  -Djmoa.reducer.engine=asm `
   -Djmoa.reducer.stripLocalVariableTable=true `
   -Djmoa.reducer.stripLocalVariableTypeTable=true `
   -Djmoa.reducer.inputDir=<optimized-lib-dir>
 ```
+
+## V2-I Raw Engine
+
+```powershell
+mvn jmoa:reduce-bytecode `
+  -Djmoa.reducer.enabled=true `
+  -Djmoa.reducer.reportOnly=false `
+  -Djmoa.reducer.optimize=true `
+  -Djmoa.reducer.profile=release-low-footprint `
+  -Djmoa.reducer.engine=raw `
+  -Djmoa.reducer.stripLocalVariableTable=true `
+  -Djmoa.reducer.stripLocalVariableTypeTable=true `
+  -Djmoa.reducer.inputDir=<optimized-lib-dir>
+```
+
+The raw engine keeps signed, multi-release, and sealed JAR skips from V2-F. It
+does not strip or rewrite BootstrapMethods; it only allows BootstrapMethods-
+bearing classes to keep that attribute while losing local-variable debug tables.
 
 ## Outputs
 

@@ -1,0 +1,4 @@
+"milestone","engine","jarPolicy","jars","classes","reducedClasses","skippedBootstrapMethodsClasses","signedJarsSkipped","multiReleaseJarsSkipped","sealedJarsSkipped","reportRemovedBytes","materializedDependencyJarDeltaBytes","runtimeStatus","medianPssDeltaKb","pairedWins"
+"V2-E v0.7.0","asm pre-engine-field","no signed/MR/sealed skip policy","162","54196","31910","0","0","0","0","5417754","-5395897","CONFIRMED_WIN","-1624","2/3"
+"V2-F/V2-H hardened","asm","skip signed/MR/sealed jars and BootstrapMethods classes","162","54196","23680","6029","1","20","1","3870720","-3855370","SCREEN_FAILED",,"n/a"
+"V2-I raw recovery","raw","skip signed/MR/sealed jars; preserve BootstrapMethods while reducing LVT/LVTT","162","54196","29709","0","1","20","1","3684536","-3668109","CONFIRMED_WIN","-4467","2/3"

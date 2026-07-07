@@ -113,6 +113,7 @@ jmoa.reducer.enabled=false
 jmoa.reducer.reportOnly=true
 jmoa.reducer.optimize=false
 jmoa.reducer.profile=none
+jmoa.reducer.engine=asm
 jmoa.reducer.inputDir=<optimized-lib-dir>
 jmoa.reducer.outputDir=${project.build.directory}/jmoa-reduced-libs
 jmoa.reducer.stripLocalVariableTable=false
@@ -133,8 +134,20 @@ jmoa.reducer.stripBootstrapMethods=false
 Mutation is allowed only when `reportOnly=false`, `optimize=true`,
 `profile=release-low-footprint`, and both local-variable strip flags are true.
 V2-E preserves line numbers, stack-map frames, annotations, signatures, and
-BootstrapMethods. Classes that carry `BootstrapMethods` are skipped in mutation
-mode instead of being rewritten.
+BootstrapMethods. The default `asm` engine skips classes that carry
+`BootstrapMethods` in mutation mode instead of rewriting them.
+
+V2-I adds an explicit `raw` engine:
+
+```text
+jmoa.reducer.engine=raw
+```
+
+The raw engine rewrites only method `Code` attributes to remove
+`LocalVariableTable` and `LocalVariableTypeTable`. It preserves BootstrapMethods
+while still keeping signed, multi-release, and sealed JAR skips from V2-F. The
+raw engine is opt-in and remains under the same release-low-footprint mutation
+gate.
 
 V2-F hardens this reducer for product use. Signed, multi-release, and sealed
 JARs are skipped by default; `module-info.class` is preserved; and the reducer

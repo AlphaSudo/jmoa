@@ -34,6 +34,7 @@ public final class DebugMetadataSavingsEstimator {
             mutationEnabled,
             config.reportOnly(),
             config.profile(),
+            config.parsedEngine().propertyValue(),
             jars.size(),
             jars.stream().mapToInt(JarReductionRecord::classCount).sum(),
             jars.stream().mapToLong(JarReductionRecord::originalBytes).sum(),
@@ -45,6 +46,7 @@ public final class DebugMetadataSavingsEstimator {
             List.of(
                 "V2-E only allows LocalVariableTable and LocalVariableTypeTable stripping.",
                 "LineNumberTable, StackMapTable, annotations, signatures, and BootstrapMethods are preserved.",
+                "The default asm engine skips BootstrapMethods-bearing classes during mutation; the opt-in raw engine preserves BootstrapMethods while rewriting only Code attribute debug tables.",
                 "Performance claims require V2-C confirmation and V2-D attribution."
             )
         );

@@ -1,9 +1,10 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-H are closed or screened as the current V2 foundation.
+Status: V2-A through V2-I are closed or confirmed as the current V2 foundation.
 
 This document records the public roadmap boundary after
-`v0.7.3-v2g-artifact-generalization` and the V2-H hardened reducer screen.
+`v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, and the
+V2-I raw reducer recovery confirmation.
 
 ## Closed Milestones
 
@@ -17,6 +18,7 @@ This document records the public roadmap boundary after
 | V2-F | Closed | Reducer productization with signed/MR/sealed JAR safety, reducer manifest hashes, PetClinic hardened artifact smoke, Doctor artifact smoke, and admission policy |
 | V2-G | Closed | Doctor corrected D2 artifact-level reducer generalization and materialization proof, with runtime smoke blocked |
 | V2-H | Screened | Productized V2-F-hardened PetClinic reducer screen; artifact gate passed, runtime promotion failed |
+| V2-I | Closed | Reducer policy-diff recovery with an explicit raw engine and V2-C-confirmed PetClinic runtime win |
 
 ## Current Foundation
 
@@ -29,14 +31,15 @@ V2-E = can the first safe artifact reducer pass controlled gates?
 V2-F = can that reducer be made safer and auditable for real dependency surfaces?
 V2-G = does the hardened reducer generalize to a second service at artifact level?
 V2-H = does the hardened reducer retain the PetClinic runtime win?
+V2-I = can a narrower raw engine recover runtime-positive behavior while preserving V2-F jar safety?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
 first controlled post-v1 reducer, reducer productization, and a clear claim
-boundary between the earlier runtime-confirmed V2-E reducer and the safer
-V2-F-hardened reducer. V2-E/V2-F reducer behavior is still disabled by default
-and report-only by default unless explicit release-low-footprint reducer flags
-are enabled.
+boundary between the earlier runtime-confirmed V2-E reducer, the safer
+V2-F-hardened reducer, and the V2-I raw recovery engine. Reducer behavior is
+still disabled by default and report-only by default unless explicit
+release-low-footprint reducer flags are enabled.
 
 ## Still Blocked
 
@@ -193,15 +196,62 @@ Because PSS and Private_Dirty regressed by more than 1 MB, V2-H did not proceed
 to 3-pair confirmation. The productized hardened reducer is not runtime
 confirmed.
 
-## Next Gate
+## V2-I Raw Reducer Recovery
 
-The next gate is policy-diff analysis before another hardened reducer runtime
-attempt:
+V2-I analyzed the policy difference between V2-E and V2-H and added an explicit
+raw reducer engine:
 
 ```text
-compare the v0.7.0 reducer artifact set against the V2-F hardened artifact set
-identify jars skipped by hardening that contributed to the V2-E runtime result
-consider a reviewed allowlist policy before re-running PetClinic confirmation
+jmoa.reducer.engine=raw
+```
+
+The raw engine preserves BootstrapMethods while removing only nested
+LocalVariableTable and LocalVariableTypeTable attributes. It keeps the V2-F jar
+safety policy:
+
+```text
+signed jars skipped
+multi-release jars skipped
+sealed jars skipped
+module-info.class preserved
+```
+
+Artifact diff:
+
+```text
+V2-H hardened materialized jar delta: -3,855,370 bytes
+V2-I raw materialized jar delta: -3,668,109 bytes
+V2-H BootstrapMethods classes skipped: 6,029
+V2-I BootstrapMethods classes skipped: 0
+```
+
+V2-I runtime confirmation:
+
+```text
+V2-C verdict: CONFIRMED_WIN
+valid runs: 6/6
+paired wins: 2/3
+median PSS delta: -4,467 KB
+median Private_Dirty delta: -4,208 KB
+median memory.current delta: -4,493,312 bytes
+```
+
+V2-D attribution:
+
+```text
+primary: HEAP_PAGE_TOUCH_REDUCTION
+secondary: ANONYMOUS_RW_ALLOCATOR_REDUCTION
+not retained-object shrinkage or class-count savings alone
+```
+
+## Next Gate
+
+The next gate is raw-engine productization and portability:
+
+```text
+document raw engine usage and safety boundaries
+avoid transferring the PetClinic claim to Doctor/fat-JAR/CDS modes
+run second-service semantic smoke or Doctor runtime unblock only with fresh policy-specific artifacts
 ```
 
 ## V2-E Boundary
@@ -213,6 +263,10 @@ Classes with `BootstrapMethods` are skipped by the first mutation prototype.
 
 V2-E has a confirmed PetClinic runtime claim only for the documented
 EXPLODED_BOOT_APP no-CDS protocol and the earlier V2-E reducer policy. That
-runtime claim is not transferred to the V2-F-hardened/productized reducer. Any
-broader runtime performance claim requires fresh V2-C validation and V2-D
-attribution.
+runtime claim is not transferred to the V2-F-hardened/productized reducer.
+
+V2-I has a separate confirmed PetClinic runtime claim for the explicit raw
+engine under the same EXPLODED_BOOT_APP no-CDS protocol. That claim is not
+transferred to Doctor, fat-JAR mode, CDS/AppCDS mode, startup performance, or
+cross-service generalization. Any broader runtime performance claim requires
+fresh V2-C validation and V2-D attribution.

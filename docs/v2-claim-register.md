@@ -1,6 +1,6 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after V2-H.
+This is the source of truth for public V2 claims after V2-I.
 
 ## Confirmed Runtime Claims
 
@@ -49,6 +49,34 @@ earlier V2-E reducer policy used for v0.7.0
 
 This claim is not transferred to the later V2-F-hardened/productized reducer.
 
+### 3. V2-I Raw Reducer PetClinic Win
+
+V2-I confirmed an incremental runtime win over full P2 using the explicit raw
+reducer engine:
+
+```text
+comparison: full P2 vs full P2 + V2-I raw LVT/LVTT reducer
+paired wins: 2/3
+median PSS delta: -4,467 KB
+median Private_Dirty delta: -4,208 KB
+median memory.current delta: -4,493,312 bytes
+```
+
+Scope:
+
+```text
+Spring PetClinic customers-service
+EXPLODED_BOOT_APP / JarLauncher
+NO_CDS_LOW_DIRTY
+MALLOC_ARENA_MAX=1
+no CDS/AppCDS/Leyden
+no runtime javaagent
+jmoa.reducer.engine=raw
+```
+
+This claim is separate from the older V2-E claim and from the V2-F/V2-H
+hardened `asm` reducer result.
+
 ## Artifact-Only Claims
 
 ```text
@@ -71,12 +99,17 @@ V2-H PetClinic hardened/productized reducer screen:
   screen PSS delta: +7,804 KB
   screen Private_Dirty delta: +7,824 KB
   runtime claim: false
+
+V2-I PetClinic raw reducer materialization:
+  materialized dependency jar byte delta: -3,668,109
+  BOOT-INF/lib entries replaced: 162
+  runtime claim: true under the V2-I PetClinic scope above
 ```
 
 ## Not Claimed
 
 ```text
-V2-F-hardened/productized reducer runtime win
+V2-F-hardened/productized asm reducer runtime win
 startup win
 fat-JAR runtime win
 CDS/AppCDS runtime win
