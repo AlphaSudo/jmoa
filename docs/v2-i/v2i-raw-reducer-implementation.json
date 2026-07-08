@@ -1,0 +1,28 @@
+{
+  "metadataVersion": "v2i-raw-reducer-implementation",
+  "reducerEngine": "raw",
+  "defaultEngine": "asm",
+  "defaultBehavior": "unchanged; BootstrapMethods-bearing classes are skipped by asm mutation mode",
+  "rawBehavior": "rewrites only method Code attributes by removing LocalVariableTable and LocalVariableTypeTable nested attributes",
+  "preserved": [
+    "constant pool",
+    "LineNumberTable",
+    "SourceFile",
+    "StackMapTable",
+    "annotations",
+    "Signature",
+    "BootstrapMethods",
+    "InnerClasses",
+    "NestHost/NestMembers",
+    "Record",
+    "PermittedSubclasses",
+    "module-info.class"
+  ],
+  "stillSkipped": [
+    "signed jars",
+    "multi-release jars",
+    "sealed jars",
+    "module-info.class"
+  ],
+  "mutationScope": "explicit release-low-footprint profile only"
+}

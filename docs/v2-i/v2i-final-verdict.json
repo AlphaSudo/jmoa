@@ -1,0 +1,17 @@
+{
+  "metadataVersion": "v2i-final-verdict",
+  "status": "CONFIRMED_RUNTIME_WIN",
+  "runtimeClaim": true,
+  "artifactClaim": true,
+  "claim": "V2-I raw reducer is runtime-confirmed on Spring PetClinic customers-service under EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1.",
+  "notClaimed": [
+    "Doctor runtime win",
+    "fat-JAR win",
+    "CDS/AppCDS win",
+    "startup win",
+    "cross-service runtime generalization",
+    "BootstrapMethods stripping",
+    "all debug metadata stripping"
+  ],
+  "nextRecommendedAction": "Productize raw engine cautiously, then run second-service semantic smoke or controlled Doctor unblock plan."
+}

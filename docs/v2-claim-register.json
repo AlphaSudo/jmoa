@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2H",
+  "status": "CURRENT_AFTER_V2I",
   "confirmedRuntimeClaims": [
     {
       "id": "petclinic-full-p2-no-cds",
@@ -21,6 +21,18 @@
       "medianPrivateDirtyDeltaKb": -1636,
       "medianMemoryCurrentDeltaBytes": -12255232,
       "claimBoundary": "Confirmed for the earlier V2-E reducer policy used in v0.7.0; not automatically transferable to the V2-F hardened reducer."
+    },
+    {
+      "id": "v2i-petclinic-raw-reducer",
+      "claim": "V2-I confirmed an incremental PetClinic runtime win over full P2 using the explicit raw LVT/LVTT reducer engine.",
+      "service": "Spring PetClinic customers-service",
+      "comparison": "full P2 vs full P2 + V2-I raw reducer",
+      "runtimeScope": "EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1, no CDS/AppCDS/Leyden/javaagent, jmoa.reducer.engine=raw",
+      "pairedWins": "2/3",
+      "medianPssDeltaKb": -4467,
+      "medianPrivateDirtyDeltaKb": -4208,
+      "medianMemoryCurrentDeltaBytes": -4493312,
+      "claimBoundary": "Confirmed only for the explicit raw engine under the PetClinic no-CDS exploded Boot protocol; not transferable to Doctor, fat-JAR, CDS/AppCDS, startup, or cross-service claims."
     }
   ],
   "artifactOnlyClaims": [
@@ -52,10 +64,17 @@
       "screenDeltaPrivateDirtyKb": 7824,
       "screenDeltaMemoryCurrentBytes": -7364608,
       "runtimeClaim": false
+    },
+    {
+      "id": "v2i-petclinic-raw-materialization",
+      "claim": "V2-I materializes the raw reducer into the PetClinic exploded Boot dependency layer.",
+      "materializedDependencyJarDeltaBytes": -3668109,
+      "bootInfLibEntriesReplaced": 162,
+      "runtimeClaim": true
     }
   ],
   "notClaimed": [
-    "V2-F-hardened/productized reducer runtime win",
+    "V2-F-hardened/productized asm reducer runtime win",
     "startup win",
     "fat-JAR runtime win",
     "CDS/AppCDS runtime win",

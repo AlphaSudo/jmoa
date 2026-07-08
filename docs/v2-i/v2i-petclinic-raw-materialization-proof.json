@@ -1,0 +1,14 @@
+{
+  "metadataVersion": "v2i-petclinic-raw-materialization-proof",
+  "service": "spring-petclinic-customers-service",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "baseJarCount": 162,
+  "reducedJarCount": 162,
+  "materializedJarCount": 162,
+  "bootInfLibEntriesReplaced": 162,
+  "sameJarCount": true,
+  "originalDependencyJarBytes": 92466274,
+  "rawDependencyJarBytes": 88798165,
+  "materializedDependencyJarDeltaBytes": -3668109,
+  "allMaterializedHashesMatchReduced": true
+}

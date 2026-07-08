@@ -19,7 +19,8 @@ public final class JarReducer {
 
     private final ReducerConfig config;
     private final ClassDebugMetadataInspector inspector = new ClassDebugMetadataInspector();
-    private final LocalVariableDebugAttributeReducer reducer = new LocalVariableDebugAttributeReducer();
+    private final LocalVariableDebugAttributeReducer asmReducer = new LocalVariableDebugAttributeReducer();
+    private final RawLocalVariableDebugAttributeReducer rawReducer = new RawLocalVariableDebugAttributeReducer();
     private final JarSafetyInspector safetyInspector = new JarSafetyInspector();
 
     public JarReducer(ReducerConfig config) {
@@ -98,13 +99,15 @@ public final class JarReducer {
                     }
                     if (before.removableBytes() > 0) {
                         if (before.bootstrapMethodsAttributeBytes() > 0) {
-                            target.write(bytes);
-                            skippedBootstrapMethodsClassCount++;
-                            classRecords.add(skippedRecord(jar.getName(), entry.getName(), before, bytes.length,
-                                "SKIPPED_BOOTSTRAP_METHODS"));
-                            continue;
+                            if (config.parsedEngine() != ReducerEngine.RAW) {
+                                target.write(bytes);
+                                skippedBootstrapMethodsClassCount++;
+                                classRecords.add(skippedRecord(jar.getName(), entry.getName(), before, bytes.length,
+                                    "SKIPPED_BOOTSTRAP_METHODS"));
+                                continue;
+                            }
                         }
-                        byte[] reduced = reducer.reduce(bytes);
+                        byte[] reduced = reduceClass(bytes);
                         verifyClass(reduced, entry.getName());
                         ClassDebugMetadata after = inspector.inspect(reduced);
                         verifyPreserved(before, after, entry.getName());
@@ -124,7 +127,7 @@ public final class JarReducer {
                             attributeStillPresent(before.annotationAttributeBytes(), after.annotationAttributeBytes()),
                             attributeStillPresent(before.signatureAttributeBytes(), after.signatureAttributeBytes()),
                             attributeStillPresent(before.bootstrapMethodsAttributeBytes(), after.bootstrapMethodsAttributeBytes()),
-                            "REDUCED"
+                            config.parsedEngine() == ReducerEngine.RAW ? "REDUCED_RAW" : "REDUCED"
                         ));
                     } else {
                         target.write(bytes);
@@ -168,6 +171,12 @@ public final class JarReducer {
 
     private static String reducedName(String name) {
         return name;
+    }
+
+    private byte[] reduceClass(byte[] bytes) {
+        return config.parsedEngine() == ReducerEngine.RAW
+            ? rawReducer.reduce(bytes)
+            : asmReducer.reduce(bytes);
     }
 
     private ScanResult scanSkippedJar(File jar, JarFile source, String status) throws IOException {

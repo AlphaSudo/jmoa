@@ -1,0 +1,65 @@
+{
+  "metadataVersion": "v2i-policy-diff",
+  "status": "complete",
+  "purpose": "Explain why V2-H hardened ASM policy was not runtime-confirmed and what V2-I raw recovery changed.",
+  "rows": [
+    {
+      "milestone": "V2-E v0.7.0",
+      "engine": "asm pre-engine-field",
+      "jarPolicy": "no signed/MR/sealed skip policy",
+      "jars": 162,
+      "classes": 54196,
+      "reducedClasses": 31910,
+      "skippedBootstrapMethodsClasses": 0,
+      "signedJarsSkipped": 0,
+      "multiReleaseJarsSkipped": 0,
+      "sealedJarsSkipped": 0,
+      "reportRemovedBytes": 5417754,
+      "materializedDependencyJarDeltaBytes": -5395897,
+      "runtimeStatus": "CONFIRMED_WIN",
+      "medianPssDeltaKb": -1624,
+      "pairedWins": "2/3"
+    },
+    {
+      "milestone": "V2-F/V2-H hardened",
+      "engine": "asm",
+      "jarPolicy": "skip signed/MR/sealed jars and BootstrapMethods classes",
+      "jars": 162,
+      "classes": 54196,
+      "reducedClasses": 23680,
+      "skippedBootstrapMethodsClasses": 6029,
+      "signedJarsSkipped": 1,
+      "multiReleaseJarsSkipped": 20,
+      "sealedJarsSkipped": 1,
+      "reportRemovedBytes": 3870720,
+      "materializedDependencyJarDeltaBytes": -3855370,
+      "runtimeStatus": "SCREEN_FAILED",
+      "medianPssDeltaKb": null,
+      "pairedWins": "n/a"
+    },
+    {
+      "milestone": "V2-I raw recovery",
+      "engine": "raw",
+      "jarPolicy": "skip signed/MR/sealed jars; preserve BootstrapMethods while reducing LVT/LVTT",
+      "jars": 162,
+      "classes": 54196,
+      "reducedClasses": 29709,
+      "skippedBootstrapMethodsClasses": 0,
+      "signedJarsSkipped": 1,
+      "multiReleaseJarsSkipped": 20,
+      "sealedJarsSkipped": 1,
+      "reportRemovedBytes": 3684536,
+      "materializedDependencyJarDeltaBytes": -3668109,
+      "runtimeStatus": "CONFIRMED_WIN",
+      "medianPssDeltaKb": -4467,
+      "pairedWins": "2/3"
+    }
+  ],
+  "interpretation": [
+    "V2-F hardening removed jar-level risk by skipping signed, multi-release, and sealed jars.",
+    "V2-F/H also skipped 6,029 BootstrapMethods-bearing classes under the ASM engine.",
+    "V2-I keeps the V2-F jar-level skips but uses a raw byte-preserving engine for BootstrapMethods-bearing classes.",
+    "V2-I recovered the BootstrapMethods class surface, but did not recreate the old V2-E artifact byte delta because raw rewriting preserves class bytes more literally than ASM round-tripping.",
+    "Runtime behavior, not artifact bytes alone, determined promotion: V2-I passed V2-C confirmation while V2-H failed its screen."
+  ]
+}

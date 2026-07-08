@@ -154,6 +154,46 @@ class LocalVariableDebugAttributeReducerTest {
     }
 
     @Test
+    void rawJarReducerProcessesClassesWithBootstrapMethods() throws Exception {
+        Path input = tempDir.resolve("input-bootstrap-raw");
+        Path output = tempDir.resolve("out-bootstrap-raw");
+        Files.createDirectories(input);
+        Path jar = input.resolve("fixture.jar");
+        writeJar(jar, "com/example/DebugFixture.class", localVariableFixture());
+        ReducerConfig config = new ReducerConfig(
+            false,
+            true,
+            "release-low-footprint",
+            input.toFile(),
+            output.toFile(),
+            true,
+            true,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            "raw"
+        );
+
+        ReducerReport report = new JarReducer(config).reduce();
+
+        assertEquals(0, report.artifacts().get(0).skippedBootstrapMethodsClassCount());
+        assertEquals("REDUCED_RAW", report.artifacts().get(0).classes().get(0).status());
+        try (JarFile reducedJar = new JarFile(output.resolve("fixture.jar").toFile())) {
+            byte[] bytes = reducedJar.getInputStream(reducedJar.getEntry("com/example/DebugFixture.class")).readAllBytes();
+            ClassDebugMetadata after = new ClassDebugMetadataInspector().inspect(bytes);
+            assertEquals(0, after.localVariableTableBytes());
+            assertEquals(0, after.localVariableTypeTableBytes());
+            assertTrue(after.bootstrapMethodsAttributeBytes() > 0);
+            assertTrue(after.lineNumberTableBytes() > 0);
+            assertTrue(after.annotationAttributeBytes() > 0);
+            assertTrue(after.signatureAttributeBytes() > 0);
+        }
+    }
+
+    @Test
     void jarReducerSkipsSignedJarsByDefault() throws Exception {
         Path input = tempDir.resolve("input-signed");
         Path output = tempDir.resolve("out-signed");

@@ -38,6 +38,9 @@ public class ReduceBytecodeMojo extends AbstractMojo {
     @Parameter(property = "jmoa.reducer.profile", defaultValue = "none")
     private String profile;
 
+    @Parameter(property = "jmoa.reducer.engine", defaultValue = "asm")
+    private String engine;
+
     @Parameter(property = "jmoa.reducer.inputDir", required = true)
     private File inputDir;
 
@@ -87,7 +90,8 @@ public class ReduceBytecodeMojo extends AbstractMojo {
             stripStackMapTable,
             stripAnnotations,
             stripSignature,
-            stripBootstrapMethods
+            stripBootstrapMethods,
+            engine
         );
         try {
             new ReducerSafetyPolicy().validate(config);
@@ -100,6 +104,7 @@ public class ReduceBytecodeMojo extends AbstractMojo {
                 + ", classes=" + report.classCount()
                 + ", estimatedRemovableBytes=" + report.totalEstimatedRemovableBytes()
                 + ", removedBytes=" + report.totalRemovedBytes()
+                + ", engine=" + report.engine()
                 + ", mutationEnabled=" + report.mutationEnabled());
         } catch (IllegalArgumentException e) {
             writeFailure(e);

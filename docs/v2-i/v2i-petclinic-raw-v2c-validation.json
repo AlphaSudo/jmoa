@@ -1,0 +1,19 @@
+{
+  "metadataVersion": "v2i-petclinic-raw-v2c-validation",
+  "verdict": "CONFIRMED_WIN",
+  "runs": 6,
+  "validRuns": 6,
+  "invalidRuns": 0,
+  "pairs": 3,
+  "pairedWins": 2,
+  "evidenceArchiveShape": "V2-C run directories b1/b2/b3/c1/c2/c3",
+  "workloadErrors": 0,
+  "noCds": true,
+  "noJavaagent": true,
+  "smapsRollupPresent": true,
+  "fullSmapsPresent": true,
+  "memoryCurrentPresent": true,
+  "nmtSummaryPresent": true,
+  "heapInfoPresent": true,
+  "classHistogramPresent": true
+}

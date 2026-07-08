@@ -35,6 +35,7 @@ public final class ReducerReportWriter {
         root.put("metadataVersion", "v2-e2-debug-metadata-savings-estimate");
         root.put("generatedAt", report.generatedAt());
         root.put("mutationEnabled", report.mutationEnabled());
+        root.put("engine", report.engine());
         root.put("jarCount", report.jarCount());
         root.put("classCount", report.classCount());
         root.put("totalEstimatedRemovableBytes", report.totalEstimatedRemovableBytes());
@@ -78,6 +79,7 @@ public final class ReducerReportWriter {
         root.put("metadataVersion", "v2f-jmoa-reducer-manifest");
         root.put("generatedAt", report.generatedAt());
         root.put("profile", report.profile());
+        root.put("engine", report.engine());
         root.put("mutationEnabled", report.mutationEnabled());
         root.put("timestampPolicy", "preserve");
         root.put("strippedAttributes", report.mutationEnabled()
@@ -125,6 +127,7 @@ public final class ReducerReportWriter {
         md.append("- Mutation enabled: `").append(report.mutationEnabled()).append("`\n");
         md.append("- Report only: `").append(report.reportOnly()).append("`\n");
         md.append("- Profile: `").append(report.profile()).append("`\n");
+        md.append("- Engine: `").append(report.engine()).append("`\n");
         md.append("- Jars: `").append(report.jarCount()).append("`\n");
         md.append("- Classes: `").append(report.classCount()).append("`\n");
         md.append("- Estimated removable bytes: `").append(report.totalEstimatedRemovableBytes()).append("`\n");
