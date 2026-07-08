@@ -21,7 +21,9 @@ public final class JarReducer {
     private final ClassDebugMetadataInspector inspector = new ClassDebugMetadataInspector();
     private final LocalVariableDebugAttributeReducer asmReducer = new LocalVariableDebugAttributeReducer();
     private final RawLocalVariableDebugAttributeReducer rawReducer = new RawLocalVariableDebugAttributeReducer();
+    private final RawReducerBytePreservationAuditor rawAuditor = new RawReducerBytePreservationAuditor();
     private final JarSafetyInspector safetyInspector = new JarSafetyInspector();
+    private final List<RawReducerClassAuditRecord> rawClassAudits = new ArrayList<>();
 
     public JarReducer(ReducerConfig config) {
         this.config = config;
@@ -31,11 +33,12 @@ public final class JarReducer {
         if (config.outputDir() != null) {
             config.outputDir().mkdirs();
         }
+        rawClassAudits.clear();
         List<JarReductionRecord> jars = new ArrayList<>();
         for (File jar : DebugMetadataSavingsEstimator.jarFiles(config.inputDir())) {
             jars.add(reduceJar(jar));
         }
-        return new DebugMetadataSavingsEstimator(config).report(true, jars);
+        return new DebugMetadataSavingsEstimator(config).report(true, jars, rawClassAudits);
     }
 
     private JarReductionRecord reduceJar(File jar) throws IOException {
@@ -111,6 +114,11 @@ public final class JarReducer {
                         verifyClass(reduced, entry.getName());
                         ClassDebugMetadata after = inspector.inspect(reduced);
                         verifyPreserved(before, after, entry.getName());
+                        RawReducerClassAuditRecord rawAudit = null;
+                        if (config.parsedEngine() == ReducerEngine.RAW) {
+                            rawAudit = rawAuditor.audit(jar.getName(), entry.getName(), before, after, bytes, reduced);
+                            rawClassAudits.add(rawAudit);
+                        }
                         target.write(reduced);
                         reducedClassCount++;
                         classRecords.add(new ClassReductionRecord(
@@ -127,7 +135,7 @@ public final class JarReducer {
                             attributeStillPresent(before.annotationAttributeBytes(), after.annotationAttributeBytes()),
                             attributeStillPresent(before.signatureAttributeBytes(), after.signatureAttributeBytes()),
                             attributeStillPresent(before.bootstrapMethodsAttributeBytes(), after.bootstrapMethodsAttributeBytes()),
-                            config.parsedEngine() == ReducerEngine.RAW ? "REDUCED_RAW" : "REDUCED"
+                            rawAudit != null ? "REDUCED_RAW_AUDITED" : "REDUCED"
                         ));
                     } else {
                         target.write(bytes);

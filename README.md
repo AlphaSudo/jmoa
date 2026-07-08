@@ -247,6 +247,18 @@ The raw engine preserves BootstrapMethods and removes only nested local-variable
 debug tables from method `Code` attributes. It keeps the V2-F signed,
 multi-release, and sealed JAR skip policy.
 
+V2-J productizes the raw engine with per-class byte-preservation auditing. Raw
+reducer reports now include:
+
+```text
+raw-reducer-byte-preservation-report.json
+raw-reducer-byte-preservation-report.md
+jmoa-reducer-manifest-v2.json
+```
+
+The auditor normalizes original and reduced class bytes by removing only
+`LocalVariableTable` and `LocalVariableTypeTable`; all other bytes must match.
+
 See:
 
 - [V2-E Debug Metadata Reducer](docs/v2-e/v2e-debug-metadata-reducer.md)
@@ -258,6 +270,8 @@ See:
 - [V2-E Claim Boundary](docs/v2-e/v2e-claim-boundary.md)
 - [V2-I Policy Diff](docs/v2-i/v2i-policy-diff.md)
 - [V2-I Raw Reducer Final Verdict](docs/v2-i/v2i-final-verdict.md)
+- [V2-J Raw Byte Preservation Report](docs/v2-j/v2j-raw-byte-preservation-report.md)
+- [V2-J Final Verdict](docs/v2-j/v2j-final-verdict.md)
 
 ## V2-F Reducer Productization
 

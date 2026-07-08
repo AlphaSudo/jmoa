@@ -1,0 +1,16 @@
+{
+  "metadataVersion": "v2j-raw-byte-preservation-report-summary",
+  "engine": "raw",
+  "target": "doctor-corrected-d2-dependency-libs",
+  "jarCount": 184,
+  "classCount": 58924,
+  "rawAuditedClassCount": 31942,
+  "failedAuditCount": 0,
+  "preservedNonTargetStructures": true,
+  "signedJarsSkipped": 1,
+  "multiReleaseJarsSkipped": 23,
+  "sealedJarsSkipped": 0,
+  "bootstrapMethodsClassesSkipped": 0,
+  "compressedDependencyJarBytesRemoved": 3926870,
+  "claimBoundary": "Artifact-level byte-preservation audit only. No Doctor runtime, startup, fat-JAR memory, CDS/AppCDS, V2-C, or V2-D claim is made."
+}

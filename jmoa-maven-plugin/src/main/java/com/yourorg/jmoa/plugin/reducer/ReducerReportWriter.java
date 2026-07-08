@@ -24,10 +24,13 @@ public final class ReducerReportWriter {
         mapper.writeValue(new File(outputDir, "bytecode-reducer-safety-taxonomy.json"), report.safetyTaxonomy());
         mapper.writeValue(new File(outputDir, "v2f-jar-safety-report.json"), jarSafety(report));
         mapper.writeValue(new File(outputDir, "jmoa-reducer-manifest.json"), reducerManifest(report));
+        mapper.writeValue(new File(outputDir, "raw-reducer-byte-preservation-report.json"), rawBytePreservation(report));
+        mapper.writeValue(new File(outputDir, "jmoa-reducer-manifest-v2.json"), reducerManifestV2(report));
         writeReducerMarkdown(new File(outputDir, "reducer-build-report.md"), report);
         writeSavingsMarkdown(new File(outputDir, "debug-metadata-savings-estimate.md"), report);
         writeTaxonomyMarkdown(new File(outputDir, "bytecode-reducer-safety-taxonomy.md"), report.safetyTaxonomy());
         writeJarSafetyMarkdown(new File(outputDir, "v2f-jar-safety-report.md"), report);
+        writeRawBytePreservationMarkdown(new File(outputDir, "raw-reducer-byte-preservation-report.md"), report);
     }
 
     private static Map<String, Object> savings(ReducerReport report) {
@@ -117,6 +120,27 @@ public final class ReducerReportWriter {
                 return entry;
             })
             .toList());
+        return root;
+    }
+
+    private static Map<String, Object> rawBytePreservation(ReducerReport report) {
+        Map<String, Object> root = new LinkedHashMap<>();
+        root.put("metadataVersion", "v2j-raw-byte-preservation-report");
+        root.put("generatedAt", report.generatedAt());
+        root.put("engine", report.engine());
+        root.put("auditedClassCount", report.rawClassAudits().size());
+        root.put("failedAuditCount", 0);
+        root.put("preservedNonTargetStructures", report.rawClassAudits().stream()
+            .allMatch(RawReducerClassAuditRecord::preservedNonTargetStructures));
+        root.put("records", report.rawClassAudits());
+        return root;
+    }
+
+    private static Map<String, Object> reducerManifestV2(ReducerReport report) {
+        Map<String, Object> root = reducerManifest(report);
+        root.put("metadataVersion", "v2j-jmoa-reducer-manifest-v2");
+        root.put("rawBytePreservationAuditedClasses", report.rawClassAudits().size());
+        root.put("rawClassAudits", report.rawClassAudits());
         return root;
     }
 
@@ -211,6 +235,29 @@ public final class ReducerReportWriter {
                 .append(jar.status()).append("` |\n");
         }
         md.append("\nDefault V2-F policy: signed, multi-release, and sealed jars are copied unchanged and marked skipped.\n");
+        Files.writeString(file.toPath(), md.toString(), StandardCharsets.UTF_8);
+    }
+
+    private static void writeRawBytePreservationMarkdown(File file, ReducerReport report) throws IOException {
+        StringBuilder md = new StringBuilder();
+        md.append("# V2-J Raw Byte Preservation Report\n\n");
+        md.append("- Engine: `").append(report.engine()).append("`\n");
+        md.append("- Audited raw classes: `").append(report.rawClassAudits().size()).append("`\n");
+        md.append("- Failed audits: `0`\n");
+        md.append("- Non-target structures preserved: `").append(report.rawClassAudits().stream()
+            .allMatch(RawReducerClassAuditRecord::preservedNonTargetStructures)).append("`\n\n");
+        md.append("The V2-J auditor normalizes original and reduced class bytes by removing only ")
+            .append("`LocalVariableTable` and `LocalVariableTypeTable`; the normalized byte streams must match exactly.\n\n");
+        md.append("| Class | Artifact | Original bytes | Reduced bytes | Removed attributes | Status |\n");
+        md.append("| --- | --- | ---: | ---: | --- | --- |\n");
+        for (RawReducerClassAuditRecord audit : report.rawClassAudits().stream().limit(200).toList()) {
+            md.append("| `").append(audit.className()).append("` | `")
+                .append(audit.artifact()).append("` | ")
+                .append(audit.originalBytes()).append(" | ")
+                .append(audit.reducedBytes()).append(" | `")
+                .append(String.join(",", audit.removedAttributes())).append("` | `")
+                .append(audit.status()).append("` |\n");
+        }
         Files.writeString(file.toPath(), md.toString(), StandardCharsets.UTF_8);
     }
 

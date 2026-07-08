@@ -1,0 +1,25 @@
+{
+  "metadataVersion": "v2j-phase-open",
+  "status": "OPENED_AFTER_V2I",
+  "baseTag": "v0.8.0-v2i-raw-reducer-confirmed",
+  "goal": "Productize the V2-I raw reducer engine without adding new reducer types.",
+  "stripScope": [
+    "LocalVariableTable",
+    "LocalVariableTypeTable"
+  ],
+  "preservedAttributes": [
+    "LineNumberTable",
+    "SourceFile",
+    "StackMapTable",
+    "RuntimeVisibleAnnotations",
+    "RuntimeInvisibleAnnotations",
+    "Signature",
+    "BootstrapMethods",
+    "InnerClasses",
+    "NestHost",
+    "NestMembers",
+    "Record"
+  ],
+  "runtimeClaim": false,
+  "claimBoundary": "V2-J productizes the raw engine and does not create Doctor, fat-JAR, CDS/AppCDS, startup, or cross-service runtime claims."
+}

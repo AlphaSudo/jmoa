@@ -28,6 +28,14 @@ public final class DebugMetadataSavingsEstimator {
     }
 
     ReducerReport report(boolean mutationEnabled, List<JarReductionRecord> jars) {
+        return report(mutationEnabled, jars, List.of());
+    }
+
+    ReducerReport report(
+        boolean mutationEnabled,
+        List<JarReductionRecord> jars,
+        List<RawReducerClassAuditRecord> rawClassAudits
+    ) {
         return new ReducerReport(
             "v2-e-debug-metadata-reducer",
             Instant.now().toString(),
@@ -43,6 +51,7 @@ public final class DebugMetadataSavingsEstimator {
             jars.stream().mapToLong(JarReductionRecord::removedBytes).sum(),
             new ReducerSafetyPolicy().taxonomy(),
             jars,
+            rawClassAudits,
             List.of(
                 "V2-E only allows LocalVariableTable and LocalVariableTypeTable stripping.",
                 "LineNumberTable, StackMapTable, annotations, signatures, and BootstrapMethods are preserved.",

@@ -1,0 +1,17 @@
+{
+  "metadataVersion": "v2j-public-second-target-selection",
+  "recommendedTarget": "spring-petclinic-visits-service",
+  "reason": "Public PetClinic service, different surface from customers-service, familiar deployment shape, and better reproducibility than private Doctor runtime work.",
+  "alternatives": [
+    "spring-petclinic-vets-service",
+    "spring-petclinic-api-gateway",
+    "another public Spring Boot service with simple Docker/Podman runtime"
+  ],
+  "requiredGatesBeforeClaim": [
+    "semantic smoke",
+    "single runtime screen",
+    "V2-C confirmation if screen passes",
+    "V2-D attribution"
+  ],
+  "claimBoundary": "Target selection only. No cross-service runtime claim is made."
+}

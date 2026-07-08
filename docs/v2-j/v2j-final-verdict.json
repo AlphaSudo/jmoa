@@ -1,0 +1,30 @@
+{
+  "metadataVersion": "v2j-final-verdict",
+  "status": "RAW_ENGINE_PRODUCTIZED",
+  "recommendedTag": "v0.8.1-v2j-raw-engine-productized",
+  "closedAs": [
+    "raw reducer byte-preservation auditor",
+    "manifest v2 with per-class raw preservation records",
+    "stronger raw reducer verifier tests",
+    "Doctor corrected D2 raw artifact smoke",
+    "Doctor runtime unblock plan",
+    "public second runtime target selection"
+  ],
+  "doctorArtifactSmoke": {
+    "jarCount": 184,
+    "classCount": 58924,
+    "reducedClassCount": 31942,
+    "rawAuditedClassCount": 31942,
+    "failedAuditCount": 0,
+    "removedDependencyJarBytes": 3926870
+  },
+  "notClaimed": [
+    "Doctor runtime win",
+    "fat-JAR runtime win",
+    "CDS/AppCDS runtime win",
+    "startup improvement",
+    "cross-service runtime generalization",
+    "new reducer type"
+  ],
+  "nextRecommendedPhase": "V2-K public second runtime target screen"
+}

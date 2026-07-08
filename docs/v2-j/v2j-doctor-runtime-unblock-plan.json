@@ -1,0 +1,32 @@
+{
+  "metadataVersion": "v2j-doctor-runtime-unblock-plan",
+  "target": "doctor-corrected-d2",
+  "status": "BLOCKED",
+  "blockers": [
+    "private HMS compose/runtime stack dependency",
+    "private database/config initialization dependency",
+    "Doctor runtime images not available locally",
+    "existing corrected D2 CDS archive was trained for the non-reduced artifact",
+    "raw-reduced D2 artifact needs fresh policy-specific runtime proof"
+  ],
+  "allowedPaths": [
+    {
+      "id": "retrain-cds",
+      "description": "Retrain CDS for the D2 + raw reducer artifact before semantic/runtime measurement."
+    },
+    {
+      "id": "no-cds-diagnostic",
+      "description": "Run an explicit no-CDS diagnostic path that is not claimed comparable to historical Doctor CDS evidence."
+    },
+    {
+      "id": "blocked",
+      "description": "Keep Doctor runtime blocked if private stack or policy-specific artifacts are unavailable."
+    }
+  ],
+  "forbidden": [
+    "reuse old D2 CDS archive with raw-reduced artifact",
+    "compare no-CDS diagnostic runs to historical CDS runs as equivalent",
+    "claim Doctor runtime savings from artifact smoke"
+  ],
+  "recommendedNextAction": "If Doctor remains blocked, select a public second runtime target for V2-K."
+}
