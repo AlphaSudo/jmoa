@@ -1,6 +1,7 @@
 {
   "metadataVersion": "v2-claim-register",
   "status": "CURRENT_AFTER_V2J",
+  "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
       "id": "petclinic-full-p2-no-cds",

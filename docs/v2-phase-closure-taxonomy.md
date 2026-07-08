@@ -1,0 +1,47 @@
+# V2 Phase Closure Taxonomy
+
+This taxonomy prevents report-only, artifact-only, failed-screen, and
+runtime-confirmed milestones from being described as the same kind of closure.
+
+## Closure Types
+
+| Closure type | Meaning | Allowed claim |
+| --- | --- | --- |
+| `CLOSED_INFRASTRUCTURE` | Report-only or visibility infrastructure is implemented and validated. | Tooling/analysis capability only |
+| `CLOSED_CONFIRMED` | Runtime behavior is confirmed by V2-C evidence gates and explained by V2-D attribution where relevant. | Narrow runtime claim within the measured protocol |
+| `CLOSED_CONFIRMED_INFRASTRUCTURE` | Infrastructure is implemented and proven against replay/historical evidence. | Evidence/attribution capability only |
+| `CLOSED_ARTIFACT_ONLY` | Artifact mutation/materialization passed artifact gates but runtime behavior was not confirmed. | Artifact footprint or materialization only |
+| `SCREEN_FAILED` | A single-screen runtime gate ran and blocked confirmation. | Negative or blocked screen result only |
+| `BLOCKED` | Work cannot proceed because required artifacts, runtime stack, credentials, or policy decisions are unavailable. | No claim beyond blocked status |
+| `OPEN_BACKLOG` | Planned work exists but is not implemented. | No implementation claim |
+
+## Current V2 Closure Map
+
+| Milestone | Closure type | Claim boundary |
+| --- | --- | --- |
+| V2-A | `CLOSED_INFRASTRUCTURE` | Generated/synthetic/proxy/AOT visibility and safety reports; no generated-class mutation |
+| V2-B | `CLOSED_INFRASTRUCTURE` | Bytecode/classfile footprint reporting; no broad bytecode surgery |
+| V2-C | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Evidence truth engine replay-proven; not an optimizer |
+| V2-D | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Memory attribution replay-proven; not an optimizer |
+| V2-E | `CLOSED_CONFIRMED` | PetClinic runtime-confirmed only for the earlier V2-E reducer protocol |
+| V2-F | `CLOSED_ARTIFACT_ONLY` | Productized hardened artifact reducer; no runtime win |
+| V2-G | `CLOSED_ARTIFACT_ONLY` | Doctor corrected D2 artifact generalization; Doctor runtime blocked |
+| V2-H | `SCREEN_FAILED` | Hardened PetClinic screen failed promotion; no confirmation |
+| V2-I | `CLOSED_CONFIRMED` | PetClinic runtime-confirmed for explicit `jmoa.reducer.engine=raw` protocol |
+| V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productized and Doctor artifact-smoked; no new runtime claim |
+| V2-K | `OPEN_BACKLOG` | Public second runtime target not yet screened |
+
+## Rule
+
+Do not upgrade a closure type by wording alone.
+
+```text
+artifact-only does not become runtime-confirmed
+screen-passed does not become confirmed
+screen-failed does not become regression-confirmed unless V2-C supports it
+infrastructure-closed does not mean optimizer-complete
+blocked does not become skipped-success
+```
+
+Any new runtime performance claim requires fresh V2-C validation and V2-D
+attribution within the exact runtime policy and launch mode being claimed.

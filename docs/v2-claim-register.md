@@ -2,6 +2,10 @@
 
 This is the source of truth for public V2 claims after V2-J.
 
+Closure terms follow:
+
+- [V2 Phase Closure Taxonomy](v2-phase-closure-taxonomy.md)
+
 ## Confirmed Runtime Claims
 
 ### 1. PetClinic Full P2 No-CDS Win

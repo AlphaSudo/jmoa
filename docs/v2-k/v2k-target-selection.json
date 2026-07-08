@@ -1,0 +1,27 @@
+{
+  "metadataVersion": "v2k-target-selection",
+  "selectedTarget": "spring-petclinic-visits-service",
+  "selectionCriteria": {
+    "publicSource": "pass",
+    "publicReproducibility": "pass",
+    "springBootService": "pass",
+    "differentFromCustomersService": "pass",
+    "dockerPodmanRuntime": "candidate",
+    "representativeWorkload": "candidate",
+    "existingProjectFamiliarity": "pass",
+    "noPrivateHmsDependency": "pass"
+  },
+  "doctorDeferredReason": [
+    "private HMS compose/runtime stack",
+    "private database/config initialization",
+    "missing local Doctor runtime images",
+    "CDS archive mismatch for reduced artifact"
+  ],
+  "alternatives": [
+    "spring-petclinic-vets-service",
+    "spring-petclinic-api-gateway",
+    "another public Spring Boot service with simple Docker/Podman runtime"
+  ],
+  "fallback": "If visits-service is blocked by runtime complexity, fall back to vets-service before introducing a new repository.",
+  "runtimeClaim": false
+}

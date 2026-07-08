@@ -1,0 +1,61 @@
+{
+  "metadataVersion": "v2k-execution-plan",
+  "target": "spring-petclinic-visits-service",
+  "gates": [
+    {
+      "id": "K1",
+      "name": "Artifact build",
+      "outputs": [
+        "baseline or full-P2 artifact",
+        "raw-reduced artifact"
+      ]
+    },
+    {
+      "id": "K2",
+      "name": "Artifact smoke",
+      "gate": [
+        "bytes removed > 0",
+        "0 failed raw byte-preservation audits",
+        "manifest v2 present",
+        "jar count stable"
+      ],
+      "outputs": [
+        "v2k-visits-artifact-smoke.md",
+        "v2k-visits-artifact-smoke.json"
+      ]
+    },
+    {
+      "id": "K3",
+      "name": "Semantic smoke",
+      "gate": [
+        "health UP",
+        "representative workload",
+        "0 workload errors",
+        "no VerifyError",
+        "no ClassFormatError",
+        "no linkage errors"
+      ]
+    },
+    {
+      "id": "K4",
+      "name": "Runtime screen",
+      "gate": [
+        "artifact smaller",
+        "workload errors = 0",
+        "PSS not worse by > 1 MB",
+        "Private_Dirty not worse by > 1 MB",
+        "memory.current not worse by > 1 MB"
+      ]
+    },
+    {
+      "id": "K5",
+      "name": "V2-C/V2-D confirmation",
+      "condition": "only if runtime screen passes"
+    }
+  ],
+  "claimRules": {
+    "confirmed": "second public runtime confirmation for raw reducer",
+    "screenFailed": "raw reducer remains PetClinic customers-service confirmed only",
+    "blocked": "no runtime claim"
+  }
+}

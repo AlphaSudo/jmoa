@@ -7,20 +7,31 @@ This document records the public roadmap boundary after
 V2-I raw reducer recovery confirmation, and the V2-J raw engine productization
 work.
 
+## Closure Taxonomy
+
+V2 phase status uses explicit closure types. See:
+
+- [V2 Phase Closure Taxonomy](v2-phase-closure-taxonomy.md)
+
+Report-only and artifact-only phases are considered closed only within their
+declared closure type. They are not silently promoted into runtime or optimizer
+claims.
+
 ## Closed Milestones
 
-| Milestone | Status | Closed As |
+| Milestone | Closure Type | Closed As |
 | --- | --- | --- |
-| V2-A | Closed | Generated/synthetic/proxy/AOT visibility, runtime attribution, safety taxonomy, and ROI infrastructure |
-| V2-B | Closed | Bytecode/classfile footprint profiler, near-64KB risk reporting, attribute/constant-pool reporting, and runtime correlation |
-| V2-C | Closed | Evidence truth engine with validation, paired confirmation, variance classification, perturbation detection, and historical replay proof |
-| V2-D | Closed | Memory attribution engine with category deltas, smaps/NMT reconciliation, heap/object attribution, class/metaspace attribution, and historical attribution proof |
-| V2-E | Closed | Opt-in LVT/LVTT artifact reducer for dependency jars, with PetClinic artifact smoke, semantic smoke, V2-C confirmation, and V2-D attribution |
-| V2-F | Closed | Reducer productization with signed/MR/sealed JAR safety, reducer manifest hashes, PetClinic hardened artifact smoke, Doctor artifact smoke, and admission policy |
-| V2-G | Closed | Doctor corrected D2 artifact-level reducer generalization and materialization proof, with runtime smoke blocked |
-| V2-H | Screened | Productized V2-F-hardened PetClinic reducer screen; artifact gate passed, runtime promotion failed |
-| V2-I | Closed | Reducer policy-diff recovery with an explicit raw engine and V2-C-confirmed PetClinic runtime win |
-| V2-J | Closed | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
+| V2-A | `CLOSED_INFRASTRUCTURE` | Generated/synthetic/proxy/AOT visibility, runtime attribution, safety taxonomy, and ROI infrastructure |
+| V2-B | `CLOSED_INFRASTRUCTURE` | Bytecode/classfile footprint profiler, near-64KB risk reporting, attribute/constant-pool reporting, and runtime correlation |
+| V2-C | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Evidence truth engine with validation, paired confirmation, variance classification, perturbation detection, and historical replay proof |
+| V2-D | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Memory attribution engine with category deltas, smaps/NMT reconciliation, heap/object attribution, class/metaspace attribution, and historical attribution proof |
+| V2-E | `CLOSED_CONFIRMED` | Opt-in LVT/LVTT artifact reducer for dependency jars, with PetClinic artifact smoke, semantic smoke, V2-C confirmation, and V2-D attribution |
+| V2-F | `CLOSED_ARTIFACT_ONLY` | Reducer productization with signed/MR/sealed JAR safety, reducer manifest hashes, PetClinic hardened artifact smoke, Doctor artifact smoke, and admission policy |
+| V2-G | `CLOSED_ARTIFACT_ONLY` | Doctor corrected D2 artifact-level reducer generalization and materialization proof, with runtime smoke blocked |
+| V2-H | `SCREEN_FAILED` | Productized V2-F-hardened PetClinic reducer screen; artifact gate passed, runtime promotion failed |
+| V2-I | `CLOSED_CONFIRMED` | Reducer policy-diff recovery with an explicit raw engine and V2-C-confirmed PetClinic runtime win |
+| V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
+| V2-K | `OPEN_BACKLOG` | Public second runtime target has been selected but not yet screened |
 
 ## Current Foundation
 
@@ -289,6 +300,16 @@ run semantic smoke
 run single-screen raw reducer runtime check
 promote to V2-C confirmation only if the screen passes
 ```
+
+Recommended public second runtime target:
+
+```text
+Spring PetClinic visits-service
+```
+
+See:
+
+- [V2-K Target Selection](v2-k/v2k-target-selection.md)
 
 ## V2-E Boundary
 

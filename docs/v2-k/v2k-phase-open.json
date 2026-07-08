@@ -1,0 +1,14 @@
+{
+  "metadataVersion": "v2k-phase-open",
+  "status": "OPEN",
+  "selectedTarget": "spring-petclinic-visits-service",
+  "goal": "Test whether the V2-I/V2-J raw reducer can generalize at runtime beyond Spring PetClinic customers-service.",
+  "runtimeClaim": false,
+  "requiredBeforeClaim": [
+    "artifact smoke",
+    "semantic smoke",
+    "runtime screen",
+    "V2-C confirmation if screen passes",
+    "V2-D attribution"
+  ]
+}

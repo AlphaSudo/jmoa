@@ -1,0 +1,98 @@
+{
+  "metadataVersion": "v2-phase-closure-taxonomy",
+  "closureTypes": [
+    {
+      "id": "CLOSED_INFRASTRUCTURE",
+      "meaning": "Report-only or visibility infrastructure is implemented and validated.",
+      "allowedClaim": "Tooling or analysis capability only."
+    },
+    {
+      "id": "CLOSED_CONFIRMED",
+      "meaning": "Runtime behavior is confirmed by V2-C evidence gates and explained by V2-D attribution where relevant.",
+      "allowedClaim": "Narrow runtime claim within the measured protocol."
+    },
+    {
+      "id": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+      "meaning": "Infrastructure is implemented and proven against replay or historical evidence.",
+      "allowedClaim": "Evidence or attribution capability only."
+    },
+    {
+      "id": "CLOSED_ARTIFACT_ONLY",
+      "meaning": "Artifact mutation or materialization passed artifact gates but runtime behavior was not confirmed.",
+      "allowedClaim": "Artifact footprint or materialization only."
+    },
+    {
+      "id": "SCREEN_FAILED",
+      "meaning": "A single-screen runtime gate ran and blocked confirmation.",
+      "allowedClaim": "Negative or blocked screen result only."
+    },
+    {
+      "id": "BLOCKED",
+      "meaning": "Work cannot proceed because required artifacts, runtime stack, credentials, or policy decisions are unavailable.",
+      "allowedClaim": "No claim beyond blocked status."
+    },
+    {
+      "id": "OPEN_BACKLOG",
+      "meaning": "Planned work exists but is not implemented.",
+      "allowedClaim": "No implementation claim."
+    }
+  ],
+  "currentMilestones": [
+    {
+      "milestone": "V2-A",
+      "closureType": "CLOSED_INFRASTRUCTURE",
+      "claimBoundary": "Generated/synthetic/proxy/AOT visibility and safety reports; no generated-class mutation."
+    },
+    {
+      "milestone": "V2-B",
+      "closureType": "CLOSED_INFRASTRUCTURE",
+      "claimBoundary": "Bytecode/classfile footprint reporting; no broad bytecode surgery."
+    },
+    {
+      "milestone": "V2-C",
+      "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+      "claimBoundary": "Evidence truth engine replay-proven; not an optimizer."
+    },
+    {
+      "milestone": "V2-D",
+      "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+      "claimBoundary": "Memory attribution replay-proven; not an optimizer."
+    },
+    {
+      "milestone": "V2-E",
+      "closureType": "CLOSED_CONFIRMED",
+      "claimBoundary": "PetClinic runtime-confirmed only for the earlier V2-E reducer protocol."
+    },
+    {
+      "milestone": "V2-F",
+      "closureType": "CLOSED_ARTIFACT_ONLY",
+      "claimBoundary": "Productized hardened artifact reducer; no runtime win."
+    },
+    {
+      "milestone": "V2-G",
+      "closureType": "CLOSED_ARTIFACT_ONLY",
+      "claimBoundary": "Doctor corrected D2 artifact generalization; Doctor runtime blocked."
+    },
+    {
+      "milestone": "V2-H",
+      "closureType": "SCREEN_FAILED",
+      "claimBoundary": "Hardened PetClinic screen failed promotion; no confirmation."
+    },
+    {
+      "milestone": "V2-I",
+      "closureType": "CLOSED_CONFIRMED",
+      "claimBoundary": "PetClinic runtime-confirmed for explicit jmoa.reducer.engine=raw protocol."
+    },
+    {
+      "milestone": "V2-J",
+      "closureType": "CLOSED_ARTIFACT_ONLY",
+      "claimBoundary": "Raw engine productized and Doctor artifact-smoked; no new runtime claim."
+    },
+    {
+      "milestone": "V2-K",
+      "closureType": "OPEN_BACKLOG",
+      "claimBoundary": "Public second runtime target not yet screened."
+    }
+  ],
+  "rule": "Do not upgrade a closure type by wording alone. Runtime performance claims require fresh V2-C validation and V2-D attribution."
+}
