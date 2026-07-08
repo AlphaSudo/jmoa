@@ -1,9 +1,54 @@
 {
   "metadataVersion": "v2k-execution-plan",
-  "target": "spring-petclinic-visits-service",
+  "primaryTarget": "doctor-corrected-d2",
+  "fallbackTarget": "spring-petclinic-visits-service",
   "gates": [
     {
       "id": "K1",
+      "lane": "doctor",
+      "name": "Doctor runtime inventory",
+      "outputs": [
+        "v2k-doctor-runtime-inventory.md",
+        "v2k-doctor-runtime-inventory.json"
+      ]
+    },
+    {
+      "id": "K2",
+      "lane": "doctor",
+      "name": "Doctor CDS policy",
+      "preferred": "D2 + corrected D2 CDS vs D2R + freshly trained D2R CDS",
+      "allowedDiagnostic": "D2 no-CDS vs D2R no-CDS",
+      "forbidden": [
+        "reuse old D2 CDS archive with raw-reduced D2R artifact",
+        "compare historical CDS baseline to no-CDS reduced candidate"
+      ]
+    },
+    {
+      "id": "K3",
+      "lane": "doctor",
+      "name": "Doctor image rebuild and runtime materialization proof"
+    },
+    {
+      "id": "K4",
+      "lane": "doctor",
+      "name": "Doctor semantic smoke",
+      "condition": "only after K1-K3 are clean"
+    },
+    {
+      "id": "K5",
+      "lane": "doctor",
+      "name": "Doctor runtime screen",
+      "condition": "only after semantic smoke passes"
+    },
+    {
+      "id": "K6",
+      "lane": "doctor",
+      "name": "Doctor V2-C/V2-D confirmation",
+      "condition": "only if Doctor runtime screen passes"
+    },
+    {
+      "id": "VISITS-K1",
+      "lane": "public-fallback",
       "name": "Artifact build",
       "outputs": [
         "baseline or full-P2 artifact",
@@ -11,7 +56,8 @@
       ]
     },
     {
-      "id": "K2",
+      "id": "VISITS-K2",
+      "lane": "public-fallback",
       "name": "Artifact smoke",
       "gate": [
         "bytes removed > 0",
@@ -25,7 +71,8 @@
       ]
     },
     {
-      "id": "K3",
+      "id": "VISITS-K3",
+      "lane": "public-fallback",
       "name": "Semantic smoke",
       "gate": [
         "health UP",
@@ -37,7 +84,8 @@
       ]
     },
     {
-      "id": "K4",
+      "id": "VISITS-K4",
+      "lane": "public-fallback",
       "name": "Runtime screen",
       "gate": [
         "artifact smaller",
@@ -48,7 +96,8 @@
       ]
     },
     {
-      "id": "K5",
+      "id": "VISITS-K5",
+      "lane": "public-fallback",
       "name": "V2-C/V2-D confirmation",
       "condition": "only if runtime screen passes"
     }

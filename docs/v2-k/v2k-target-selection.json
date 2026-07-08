@@ -1,7 +1,16 @@
 {
   "metadataVersion": "v2k-target-selection",
-  "selectedTarget": "spring-petclinic-visits-service",
-  "selectionCriteria": {
+  "primaryTarget": "doctor-corrected-d2",
+  "fallbackTarget": "spring-petclinic-visits-service",
+  "doctorSelectionCriteria": {
+    "alreadyHasArtifactSmoke": "pass",
+    "rawReducerArtifactSmokeAvailable": "pass",
+    "privateSecondServiceCredibility": "high",
+    "fatJarCdsPolicyCoverage": "high",
+    "runtimeCurrentlyRunnable": "blocked",
+    "privateStackDependency": "present"
+  },
+  "publicFallbackSelectionCriteria": {
     "publicSource": "pass",
     "publicReproducibility": "pass",
     "springBootService": "pass",
@@ -22,6 +31,7 @@
     "spring-petclinic-api-gateway",
     "another public Spring Boot service with simple Docker/Podman runtime"
   ],
+  "decision": "Work Doctor first. If Doctor remains blocked after the runtime inventory/rebuild attempt, start visits-service as the public second-runtime track.",
   "fallback": "If visits-service is blocked by runtime complexity, fall back to vets-service before introducing a new repository.",
   "runtimeClaim": false
 }

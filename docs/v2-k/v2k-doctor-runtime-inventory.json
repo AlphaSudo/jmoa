@@ -1,0 +1,41 @@
+{
+  "metadataVersion": "v2k-doctor-runtime-inventory",
+  "target": "doctor-corrected-d2",
+  "inventoryDate": "2026-07-08",
+  "artifactInventory": {
+    "correctedD2FatJar": "present",
+    "d2PlusRawReducerFatJar": "materialized-locally-not-committed",
+    "rawReducedDependencyLibs": "present",
+    "correctedD2CdsArchive": "present-for-non-reduced-d2",
+    "d2RawReducerCdsArchive": "missing",
+    "runtimeComposeAndScripts": "present-private"
+  },
+  "localMaterialization": {
+    "sourceFatJarBytes": 101906981,
+    "materializedFatJarBytes": 97989324,
+    "bootInfLibEntries": 184,
+    "replacedBootInfLibEntries": 184,
+    "missingReplacementLibs": 0,
+    "sourceSha256": "1818b210028987085c782df9e5cd8cfbb159b809966d80d0aa0b458c39569b85",
+    "materializedSha256": "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742",
+    "runtimeClaim": false
+  },
+  "runtimeStackInventory": {
+    "hmsConfigServerImage": "missing-locally",
+    "hmsDiscoveryServerImage": "missing-locally",
+    "hmsDoctorBaseImage": "missing-locally",
+    "hmsDoctorD2FixedImage": "missing-locally",
+    "postgresImage": "missing-locally",
+    "privateConfigRepo": "required",
+    "doctorDbInitSql": "required",
+    "podman": "available"
+  },
+  "verdict": [
+    "MISSING_IMAGE",
+    "MISSING_CONFIG",
+    "MISSING_DATABASE",
+    "CDS_POLICY_UNDECIDED",
+    "BLOCKED_PRIVATE_STACK"
+  ],
+  "claimBoundary": "Doctor is not failed and not confirmed. It is blocked until private runtime stack and CDS/no-CDS policy are resolved."
+}

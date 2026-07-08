@@ -1,0 +1,21 @@
+{
+  "metadataVersion": "v2k-doctor-cds-policy",
+  "target": "doctor-corrected-d2",
+  "currentDecision": "CDS_POLICY_UNDECIDED",
+  "preferredPolicy": {
+    "baseline": "corrected D2 artifact + corrected D2 CDS archive",
+    "candidate": "corrected D2 + raw reducer artifact + freshly trained D2R CDS archive",
+    "reason": "Preserves historical Doctor runtime mode and avoids comparing unlike policies."
+  },
+  "allowedDiagnosticPolicy": {
+    "comparison": "D2 no-CDS vs D2R no-CDS",
+    "boundary": "Diagnostic only; not comparable to historical Doctor corrected fat-JAR/CDS result."
+  },
+  "forbiddenComparisons": [
+    "old D2 CDS archive reused with D2R raw-reduced artifact",
+    "historical D2 CDS result compared to new D2R no-CDS result",
+    "CDS baseline compared to no-CDS candidate",
+    "artifact smoke described as runtime evidence"
+  ],
+  "recommendedNextAction": "Try fresh D2R CDS retraining first; if blocked, use explicit no-CDS diagnostic; if private stack cannot be rebuilt, keep Doctor blocked and proceed with visits-service fallback."
+}

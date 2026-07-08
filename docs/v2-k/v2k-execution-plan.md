@@ -1,8 +1,118 @@
 # V2-K Execution Plan
 
-V2-K should advance one gate at a time.
+V2-K has two lanes:
 
-## K1 Artifact Build
+```text
+Lane A: Doctor runtime unblock
+Lane B: public visits-service fallback / parallel portability
+```
+
+Doctor is the primary lane. Visits-service is the public fallback if Doctor
+remains blocked.
+
+## K1 Doctor Runtime Inventory
+
+Create and maintain:
+
+```text
+v2k-doctor-runtime-inventory.md/json
+```
+
+Verdict categories:
+
+```text
+READY
+MISSING_IMAGE
+MISSING_CONFIG
+MISSING_DATABASE
+CDS_POLICY_UNDECIDED
+BLOCKED_PRIVATE_STACK
+```
+
+## K2 Doctor CDS Policy
+
+Preferred:
+
+```text
+D2 + corrected D2 CDS
+vs
+D2R + freshly trained D2R CDS
+```
+
+Allowed diagnostic:
+
+```text
+D2 no-CDS
+vs
+D2R no-CDS
+```
+
+Forbidden:
+
+```text
+reuse old D2 CDS archive with raw-reduced D2R artifact
+compare historical CDS baseline to no-CDS reduced candidate
+```
+
+## K3 Doctor Image Rebuild / Materialization Proof
+
+Required before semantic smoke:
+
+```text
+Doctor baseline/candidate image exists
+raw-reduced artifact hash known
+BOOT-INF/lib hashes match reducer manifest
+CDS archive hash matches candidate artifact if CDS is used
+runtime command uses expected artifact
+```
+
+## K4 Doctor Semantic Smoke
+
+Run only after K1-K3 are clean:
+
+```text
+health UP
+database reachable
+representative endpoints pass
+0 workload errors
+no VerifyError / ClassFormatError / linkage errors
+```
+
+## K5 Doctor Runtime Screen
+
+Run only after semantic smoke passes.
+
+Valid comparisons:
+
+```text
+D2 + CDS vs D2R + freshly retrained D2R CDS
+D2 no-CDS vs D2R no-CDS diagnostic
+```
+
+Invalid comparison:
+
+```text
+historical CDS D2 vs new no-CDS D2R
+```
+
+## K6 Doctor 3-Pair Confirmation
+
+Only if Doctor screen passes:
+
+```text
+D2-1  -> D2R-1
+D2-2  -> D2R-2
+D2-3  -> D2R-3
+```
+
+Use V2-C and V2-D.
+
+## K7 Public Fallback: Visits-Service
+
+Use visits-service if Doctor remains blocked or while the Doctor rebuild takes
+too long.
+
+## Visits K1 Artifact Build
 
 Build:
 
@@ -30,7 +140,7 @@ service artifact + raw reducer
 
 Do not mix those claims.
 
-## K2 Artifact Smoke
+## Visits K2 Artifact Smoke
 
 Run:
 
@@ -57,7 +167,7 @@ Outputs:
 v2k-visits-artifact-smoke.md/json
 ```
 
-## K3 Semantic Smoke
+## Visits K3 Semantic Smoke
 
 Run the service and verify:
 
@@ -79,7 +189,7 @@ v2k-visits-semantic-smoke.md/json
 v2k-visits-blocked-report.md/json if blocked
 ```
 
-## K4 Runtime Screen
+## Visits K4 Runtime Screen
 
 Compare:
 
@@ -125,7 +235,7 @@ Private_Dirty not worse by > 1 MB
 memory.current not worse by > 1 MB
 ```
 
-## K5 Confirmation
+## Visits K5 Confirmation
 
 Only if the screen passes:
 

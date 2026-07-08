@@ -29,7 +29,7 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | V2-H | `SCREEN_FAILED` | Hardened PetClinic screen failed promotion; no confirmation |
 | V2-I | `CLOSED_CONFIRMED` | PetClinic runtime-confirmed for explicit `jmoa.reducer.engine=raw` protocol |
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productized and Doctor artifact-smoked; no new runtime claim |
-| V2-K | `OPEN_BACKLOG` | Public second runtime target not yet screened |
+| V2-K | `BLOCKED` / `OPEN_BACKLOG` | Doctor runtime unblock is active and blocked; visits-service fallback not yet screened |
 
 ## Rule
 

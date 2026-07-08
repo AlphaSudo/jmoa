@@ -31,7 +31,7 @@ claims.
 | V2-H | `SCREEN_FAILED` | Productized V2-F-hardened PetClinic reducer screen; artifact gate passed, runtime promotion failed |
 | V2-I | `CLOSED_CONFIRMED` | Reducer policy-diff recovery with an explicit raw engine and V2-C-confirmed PetClinic runtime win |
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
-| V2-K | `OPEN_BACKLOG` | Public second runtime target has been selected but not yet screened |
+| V2-K | `BLOCKED` / `OPEN_BACKLOG` | Doctor runtime unblock is primary and currently blocked; visits-service is selected as public fallback |
 
 ## Current Foundation
 
@@ -292,16 +292,22 @@ remain blocked until the private runtime stack and CDS/no-CDS policy are settled
 
 ## Next Gate
 
-The next gate is public second-runtime portability:
+The next gate is Doctor runtime unblock plus public second-runtime portability:
 
 ```text
-select a public second Spring Boot runtime target
-run semantic smoke
-run single-screen raw reducer runtime check
-promote to V2-C confirmation only if the screen passes
+resolve Doctor runtime image/config/database blockers
+decide Doctor CDS policy
+run Doctor semantic smoke only after materialization proof is clean
+use visits-service as public fallback/parallel lane if Doctor remains blocked
 ```
 
-Recommended public second runtime target:
+Primary target:
+
+```text
+Doctor corrected D2
+```
+
+Public fallback target:
 
 ```text
 Spring PetClinic visits-service
@@ -310,6 +316,9 @@ Spring PetClinic visits-service
 See:
 
 - [V2-K Target Selection](v2-k/v2k-target-selection.md)
+- [V2-K Doctor Runtime Inventory](v2-k/v2k-doctor-runtime-inventory.md)
+- [V2-K Doctor CDS Policy](v2-k/v2k-doctor-cds-policy.md)
+- [V2-K Doctor Runtime Blocked](v2-k/v2k-doctor-runtime-blocked.md)
 
 ## V2-E Boundary
 

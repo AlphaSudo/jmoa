@@ -90,8 +90,8 @@
     },
     {
       "milestone": "V2-K",
-      "closureType": "OPEN_BACKLOG",
-      "claimBoundary": "Public second runtime target not yet screened."
+      "closureType": "BLOCKED / OPEN_BACKLOG",
+      "claimBoundary": "Doctor runtime unblock is active and blocked; visits-service fallback not yet screened."
     }
   ],
   "rule": "Do not upgrade a closure type by wording alone. Runtime performance claims require fresh V2-C validation and V2-D attribution."

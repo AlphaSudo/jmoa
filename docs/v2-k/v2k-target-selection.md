@@ -1,12 +1,32 @@
 # V2-K Target Selection
 
-Selected target:
+Primary target:
+
+```text
+Doctor corrected D2
+```
+
+Fallback / public target:
 
 ```text
 Spring PetClinic visits-service
 ```
 
-## Selection Criteria
+## Doctor Selection Criteria
+
+| Criterion | Result |
+| --- | --- |
+| Already has artifact smoke | pass |
+| Raw reducer artifact smoke available | pass |
+| Private second-service credibility | high |
+| Fat-JAR/CDS policy coverage | high |
+| Runtime currently runnable | blocked |
+| Private stack dependency | present |
+
+Doctor remains the preferred second runtime target, but it must be unblocked
+honestly.
+
+## Public Fallback Selection Criteria
 
 | Criterion | Result |
 | --- | --- |
@@ -19,10 +39,14 @@ Spring PetClinic visits-service
 | Existing project familiarity | pass |
 | No private HMS dependency | pass |
 
-## Why Not Doctor First?
+## Why Keep Visits-Service?
 
-Doctor remains the stronger private second-service candidate at artifact level,
-but its runtime remains blocked by:
+Visits-service keeps the public reproducibility lane moving if Doctor remains
+blocked by the private runtime stack.
+
+## Doctor Runtime Blockers
+
+Doctor runtime currently remains blocked by:
 
 ```text
 private HMS compose/runtime stack
@@ -30,9 +54,6 @@ private database/config initialization
 missing local Doctor runtime images
 CDS archive mismatch for reduced artifact
 ```
-
-V2-K should avoid waiting on private runtime recovery and use a public service
-for the next portability signal.
 
 ## Alternatives
 
@@ -44,5 +65,7 @@ another public Spring Boot service with simple Docker/Podman runtime
 
 ## Decision
 
-Use `visits-service` first. If visits-service is blocked by runtime complexity,
-fall back to `vets-service` before introducing a new repository.
+V2-K should work Doctor first. If Doctor remains blocked after the runtime
+inventory/rebuild attempt, start `visits-service` as the public second-runtime
+track. If visits-service is blocked by runtime complexity, fall back to
+`vets-service` before introducing a new repository.

@@ -80,6 +80,13 @@
       "classesReducedAndAudited": 31942,
       "failedRawBytePreservationAudits": 0,
       "runtimeClaim": false
+    },
+    {
+      "id": "v2k-doctor-raw-materialization",
+      "claim": "V2-K locally materializes Doctor corrected D2 plus raw reducer dependency libs.",
+      "bootInfLibEntriesReplaced": "184/184",
+      "materializedSha256": "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742",
+      "runtimeClaim": false
     }
   ],
   "notClaimed": [
@@ -89,6 +96,7 @@
     "CDS/AppCDS runtime win",
     "Doctor runtime win",
     "Doctor semantic smoke",
+    "Doctor D2R CDS confirmation",
     "cross-service runtime generalization",
     "all debug metadata stripping safety",
     "LineNumberTable stripping",
