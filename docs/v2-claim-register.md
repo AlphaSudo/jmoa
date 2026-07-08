@@ -1,6 +1,6 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after V2-I.
+This is the source of truth for public V2 claims after V2-J.
 
 ## Confirmed Runtime Claims
 
@@ -104,6 +104,12 @@ V2-I PetClinic raw reducer materialization:
   materialized dependency jar byte delta: -3,668,109
   BOOT-INF/lib entries replaced: 162
   runtime claim: true under the V2-I PetClinic scope above
+
+V2-J Doctor raw artifact smoke:
+  removed dependency-jar bytes: 3,926,870
+  classes reduced and audited: 31,942
+  failed raw byte-preservation audits: 0
+  runtime claim: false
 ```
 
 ## Not Claimed
@@ -114,6 +120,7 @@ startup win
 fat-JAR runtime win
 CDS/AppCDS runtime win
 Doctor runtime win
+Doctor semantic smoke
 cross-service runtime generalization
 all debug metadata stripping safety
 LineNumberTable stripping

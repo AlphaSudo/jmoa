@@ -17,10 +17,12 @@ public record ReducerReport(
     long totalRemovedBytes,
     ReducerSafetyTaxonomy safetyTaxonomy,
     List<JarReductionRecord> artifacts,
+    List<RawReducerClassAuditRecord> rawClassAudits,
     List<String> boundaries
 ) {
     public ReducerReport {
         artifacts = artifacts == null ? List.of() : List.copyOf(artifacts);
+        rawClassAudits = rawClassAudits == null ? List.of() : List.copyOf(rawClassAudits);
         boundaries = boundaries == null ? List.of() : List.copyOf(boundaries);
     }
 }

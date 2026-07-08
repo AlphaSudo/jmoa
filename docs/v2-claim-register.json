@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2I",
+  "status": "CURRENT_AFTER_V2J",
   "confirmedRuntimeClaims": [
     {
       "id": "petclinic-full-p2-no-cds",
@@ -71,6 +71,14 @@
       "materializedDependencyJarDeltaBytes": -3668109,
       "bootInfLibEntriesReplaced": 162,
       "runtimeClaim": true
+    },
+    {
+      "id": "v2j-doctor-raw-artifact-smoke",
+      "claim": "V2-J processes Doctor corrected D2 dependency libs with the raw reducer and per-class byte-preservation auditing.",
+      "removedDependencyJarBytes": 3926870,
+      "classesReducedAndAudited": 31942,
+      "failedRawBytePreservationAudits": 0,
+      "runtimeClaim": false
     }
   ],
   "notClaimed": [
@@ -79,6 +87,7 @@
     "fat-JAR runtime win",
     "CDS/AppCDS runtime win",
     "Doctor runtime win",
+    "Doctor semantic smoke",
     "cross-service runtime generalization",
     "all debug metadata stripping safety",
     "LineNumberTable stripping",

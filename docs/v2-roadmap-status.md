@@ -1,10 +1,11 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-I are closed or confirmed as the current V2 foundation.
+Status: V2-A through V2-J are closed or confirmed as the current V2 foundation.
 
 This document records the public roadmap boundary after
-`v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, and the
-V2-I raw reducer recovery confirmation.
+`v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
+V2-I raw reducer recovery confirmation, and the V2-J raw engine productization
+work.
 
 ## Closed Milestones
 
@@ -19,6 +20,7 @@ V2-I raw reducer recovery confirmation.
 | V2-G | Closed | Doctor corrected D2 artifact-level reducer generalization and materialization proof, with runtime smoke blocked |
 | V2-H | Screened | Productized V2-F-hardened PetClinic reducer screen; artifact gate passed, runtime promotion failed |
 | V2-I | Closed | Reducer policy-diff recovery with an explicit raw engine and V2-C-confirmed PetClinic runtime win |
+| V2-J | Closed | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
 
 ## Current Foundation
 
@@ -32,14 +34,15 @@ V2-F = can that reducer be made safer and auditable for real dependency surfaces
 V2-G = does the hardened reducer generalize to a second service at artifact level?
 V2-H = does the hardened reducer retain the PetClinic runtime win?
 V2-I = can a narrower raw engine recover runtime-positive behavior while preserving V2-F jar safety?
+V2-J = can the raw engine be made byte-auditable and portable at artifact level?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
 first controlled post-v1 reducer, reducer productization, and a clear claim
 boundary between the earlier runtime-confirmed V2-E reducer, the safer
-V2-F-hardened reducer, and the V2-I raw recovery engine. Reducer behavior is
-still disabled by default and report-only by default unless explicit
-release-low-footprint reducer flags are enabled.
+V2-F-hardened reducer, the V2-I raw recovery engine, and the V2-J productized
+raw engine. Reducer behavior is still disabled by default and report-only by
+default unless explicit release-low-footprint reducer flags are enabled.
 
 ## Still Blocked
 
@@ -244,14 +247,47 @@ secondary: ANONYMOUS_RW_ALLOCATOR_REDUCTION
 not retained-object shrinkage or class-count savings alone
 ```
 
-## Next Gate
+## V2-J Raw Engine Productization
 
-The next gate is raw-engine productization and portability:
+V2-J adds byte-level product hardening around the raw reducer:
 
 ```text
-document raw engine usage and safety boundaries
-avoid transferring the PetClinic claim to Doctor/fat-JAR/CDS modes
-run second-service semantic smoke or Doctor runtime unblock only with fresh policy-specific artifacts
+raw byte-preservation auditor
+jmoa-reducer-manifest-v2.json
+raw-reducer-byte-preservation-report.json/md
+stronger raw verifier tests
+Doctor corrected D2 raw artifact smoke
+Doctor runtime unblock plan
+public second runtime target selection
+```
+
+The raw auditor independently normalizes original and reduced class bytes by
+removing only `LocalVariableTable` and `LocalVariableTypeTable`. The normalized
+byte streams must match exactly.
+
+Doctor corrected D2 raw artifact smoke:
+
+```text
+dependency jars processed: 184
+static classes scanned: 58,924
+classes reduced and audited: 31,942
+failed audits: 0
+BootstrapMethods classes skipped: 0
+compressed dependency-jar bytes removed: 3,926,870
+```
+
+This is still artifact-level only. Doctor semantic smoke and runtime measurement
+remain blocked until the private runtime stack and CDS/no-CDS policy are settled.
+
+## Next Gate
+
+The next gate is public second-runtime portability:
+
+```text
+select a public second Spring Boot runtime target
+run semantic smoke
+run single-screen raw reducer runtime check
+promote to V2-C confirmation only if the screen passes
 ```
 
 ## V2-E Boundary
@@ -270,3 +306,7 @@ engine under the same EXPLODED_BOOT_APP no-CDS protocol. That claim is not
 transferred to Doctor, fat-JAR mode, CDS/AppCDS mode, startup performance, or
 cross-service generalization. Any broader runtime performance claim requires
 fresh V2-C validation and V2-D attribution.
+
+V2-J productizes the raw engine and proves artifact-level portability on Doctor
+corrected D2 dependency libs with byte-preservation auditing. It does not add a
+new runtime memory claim.

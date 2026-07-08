@@ -1,0 +1,31 @@
+{
+  "metadataVersion": "v2j-doctor-raw-artifact-smoke",
+  "target": "doctor-corrected-d2",
+  "comparison": "corrected D2 dependency libs vs corrected D2 dependency libs + raw reducer",
+  "runtimeClaim": false,
+  "semanticSmoke": "NOT_RUN",
+  "artifactSmoke": {
+    "engine": "raw",
+    "jarCount": 184,
+    "classCount": 58924,
+    "reducedClassCount": 31942,
+    "rawAuditedClassCount": 31942,
+    "failedAuditCount": 0,
+    "originalDependencyJarBytes": 100970980,
+    "reducedDependencyJarBytes": 97061899,
+    "removedDependencyJarBytes": 3926870,
+    "signedJarsSkipped": 1,
+    "multiReleaseJarsSkipped": 23,
+    "sealedJarsSkipped": 0,
+    "bootstrapMethodsClassesSkipped": 0
+  },
+  "comparisonToV2G": {
+    "v2gAsmRemovedDependencyJarBytes": 4156014,
+    "v2jRawRemovedDependencyJarBytes": 3926870,
+    "v2gAsmReducedClassCount": 25181,
+    "v2jRawReducedClassCount": 31942,
+    "v2gAsmBootstrapMethodsClassesSkipped": 6761,
+    "v2jRawBootstrapMethodsClassesSkipped": 0
+  },
+  "claimBoundary": "Artifact-level raw engine smoke only. No Doctor semantic smoke, V2-C confirmation, V2-D attribution, startup claim, CDS/AppCDS claim, or runtime memory claim is made."
+}

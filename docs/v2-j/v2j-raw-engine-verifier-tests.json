@@ -1,0 +1,28 @@
+{
+  "metadataVersion": "v2j-raw-engine-verifier-tests",
+  "status": "PASSED",
+  "focusedTestCommand": "mvn -q -pl jmoa-maven-plugin -Dtest=LocalVariableDebugAttributeReducerTest test",
+  "coveredFixtures": [
+    "ordinary debug class",
+    "generic Signature class",
+    "annotations",
+    "LineNumberTable",
+    "StackMapTable readable output",
+    "invokedynamic BootstrapMethods",
+    "inner class metadata",
+    "nest metadata",
+    "record metadata",
+    "module-info.class",
+    "signed jar",
+    "multi-release jar",
+    "sealed jar"
+  ],
+  "assertions": [
+    "raw engine removes only LVT/LVTT",
+    "asm engine still skips BootstrapMethods-bearing classes",
+    "raw auditor accepts LVT/LVTT-only reduction",
+    "raw auditor rejects non-target byte drift",
+    "unsafe flags fail fast",
+    "manifest v2 and raw byte preservation reports are emitted"
+  ]
+}

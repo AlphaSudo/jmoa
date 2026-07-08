@@ -154,5 +154,18 @@ JARs are skipped by default; `module-info.class` is preserved; and the reducer
 emits `jmoa-reducer-manifest.json` with input/output hashes and timestamp
 policy.
 
+V2-J adds raw-engine productization outputs:
+
+```text
+raw-reducer-byte-preservation-report.json
+raw-reducer-byte-preservation-report.md
+jmoa-reducer-manifest-v2.json
+```
+
+For raw-reduced classes, the auditor normalizes original and reduced class bytes
+by removing only `LocalVariableTable` and `LocalVariableTypeTable`; the
+normalized byte streams must match exactly. Any non-target byte drift hard-fails
+the reducer.
+
 See the repository-level docs for deployment materialization and measurement
 boundaries.

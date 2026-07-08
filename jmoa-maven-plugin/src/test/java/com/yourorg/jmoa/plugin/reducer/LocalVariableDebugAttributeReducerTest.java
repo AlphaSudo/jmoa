@@ -180,7 +180,9 @@ class LocalVariableDebugAttributeReducerTest {
         ReducerReport report = new JarReducer(config).reduce();
 
         assertEquals(0, report.artifacts().get(0).skippedBootstrapMethodsClassCount());
-        assertEquals("REDUCED_RAW", report.artifacts().get(0).classes().get(0).status());
+        assertEquals("REDUCED_RAW_AUDITED", report.artifacts().get(0).classes().get(0).status());
+        assertEquals(1, report.rawClassAudits().size());
+        assertTrue(report.rawClassAudits().get(0).preservedNonTargetStructures());
         try (JarFile reducedJar = new JarFile(output.resolve("fixture.jar").toFile())) {
             byte[] bytes = reducedJar.getInputStream(reducedJar.getEntry("com/example/DebugFixture.class")).readAllBytes();
             ClassDebugMetadata after = new ClassDebugMetadataInspector().inspect(bytes);
@@ -191,6 +193,54 @@ class LocalVariableDebugAttributeReducerTest {
             assertTrue(after.annotationAttributeBytes() > 0);
             assertTrue(after.signatureAttributeBytes() > 0);
         }
+    }
+
+    @Test
+    void rawAuditorAcceptsRecordAndNestMetadataWhenOnlyLocalVariablesChange() {
+        ClassDebugMetadataInspector inspector = new ClassDebugMetadataInspector();
+        byte[] original = recordMetadataFixture();
+        byte[] reduced = new RawLocalVariableDebugAttributeReducer().reduce(original);
+        ClassDebugMetadata before = inspector.inspect(original);
+        ClassDebugMetadata after = inspector.inspect(reduced);
+
+        RawReducerClassAuditRecord audit = new RawReducerBytePreservationAuditor().audit(
+            "fixture.jar",
+            "com/example/ComplexRecord.class",
+            before,
+            after,
+            original,
+            reduced
+        );
+
+        assertTrue(audit.preservedNonTargetStructures());
+        assertEquals("PRESERVED_EXCEPT_LVT_LVTT", audit.status());
+        assertEquals(0, after.localVariableTableBytes());
+        assertEquals(0, after.localVariableTypeTableBytes());
+        assertEquals(before.lineNumberTableBytes(), after.lineNumberTableBytes());
+    }
+
+    @Test
+    void rawAuditorRejectsNonTargetByteDrift() {
+        ClassDebugMetadataInspector inspector = new ClassDebugMetadataInspector();
+        byte[] original = localVariableFixture();
+        byte[] reduced = new RawLocalVariableDebugAttributeReducer().reduce(original);
+        byte[] drifted = reduced.clone();
+        int marker = indexOf(drifted, "ok".getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        assertTrue(marker > 0);
+        drifted[marker] = 'n';
+        ClassDebugMetadata before = inspector.inspect(original);
+        ClassDebugMetadata after = inspector.inspect(drifted);
+
+        IllegalStateException error = assertThrows(IllegalStateException.class,
+            () -> new RawReducerBytePreservationAuditor().audit(
+                "fixture.jar",
+                "com/example/DebugFixture.class",
+                before,
+                after,
+                original,
+                drifted
+            ));
+        assertTrue(error.getMessage().contains("non-target"));
     }
 
     @Test
@@ -325,6 +375,8 @@ class LocalVariableDebugAttributeReducerTest {
         assertTrue(output.resolve("reducer-build-report.md").toFile().isFile());
         assertTrue(output.resolve("debug-metadata-savings-estimate.json").toFile().isFile());
         assertTrue(output.resolve("bytecode-reducer-safety-taxonomy.json").toFile().isFile());
+        assertTrue(output.resolve("raw-reducer-byte-preservation-report.json").toFile().isFile());
+        assertTrue(output.resolve("jmoa-reducer-manifest-v2.json").toFile().isFile());
     }
 
     private static byte[] localVariableFixture() {
@@ -450,6 +502,73 @@ class LocalVariableDebugAttributeReducerTest {
         method.visitEnd();
         writer.visitEnd();
         return writer.toByteArray();
+    }
+
+    private static byte[] recordMetadataFixture() {
+        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+        writer.visit(
+            Opcodes.V17,
+            Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_RECORD,
+            "com/example/ComplexRecord",
+            null,
+            "java/lang/Record",
+            null
+        );
+        writer.visitNestMember("com/example/ComplexRecord$Nested");
+        writer.visitInnerClass(
+            "com/example/ComplexRecord$Nested",
+            "com/example/ComplexRecord",
+            "Nested",
+            Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC
+        );
+        writer.visitRecordComponent("value", "Ljava/lang/String;", null).visitEnd();
+        writer.visitAnnotation("Ljava/lang/Deprecated;", true).visitEnd();
+
+        MethodVisitor init = writer.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "(Ljava/lang/String;)V", null, null);
+        init.visitCode();
+        Label start = new Label();
+        Label end = new Label();
+        init.visitLabel(start);
+        init.visitLineNumber(7, start);
+        init.visitVarInsn(Opcodes.ALOAD, 0);
+        init.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Record", "<init>", "()V", false);
+        init.visitLabel(end);
+        init.visitInsn(Opcodes.RETURN);
+        init.visitLocalVariable("this", "Lcom/example/ComplexRecord;", null, start, end, 0);
+        init.visitLocalVariable("value", "Ljava/lang/String;", null, start, end, 1);
+        init.visitMaxs(1, 2);
+        init.visitEnd();
+
+        MethodVisitor method = writer.visitMethod(Opcodes.ACC_PUBLIC, "value", "()Ljava/lang/String;", null, null);
+        method.visitCode();
+        Label methodStart = new Label();
+        Label methodEnd = new Label();
+        method.visitLabel(methodStart);
+        method.visitLineNumber(12, methodStart);
+        method.visitLdcInsn("ok");
+        method.visitLabel(methodEnd);
+        method.visitInsn(Opcodes.ARETURN);
+        method.visitLocalVariable("this", "Lcom/example/ComplexRecord;", null, methodStart, methodEnd, 0);
+        method.visitMaxs(1, 1);
+        method.visitEnd();
+        writer.visitEnd();
+        return writer.toByteArray();
+    }
+
+    private static int indexOf(byte[] haystack, byte[] needle) {
+        for (int i = 0; i <= haystack.length - needle.length; i++) {
+            boolean found = true;
+            for (int j = 0; j < needle.length; j++) {
+                if (haystack[i + j] != needle[j]) {
+                    found = false;
+                    break;
+                }
+            }
+            if (found) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private static void writeJar(Path jarPath, String entryName, byte[] classBytes) throws IOException {
