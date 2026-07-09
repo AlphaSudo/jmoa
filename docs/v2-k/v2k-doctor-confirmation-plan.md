@@ -35,7 +35,17 @@ V2-D attribution present
 Current status:
 
 ```text
-NOT_ALLOWED
-SEMANTIC_SMOKE_NOT_RUN
-RUNTIME_SCREEN_NOT_RUN
+EXECUTED
+V2-C_CONFIRMED_WIN
+V2-D_ATTRIBUTION_PRESENT
+```
+
+Result:
+
+```text
+valid runs: 6/6
+paired wins: 3/3
+median PSS delta: -5,156 KB
+median Private_Dirty delta: -5,212 KB
+median memory.current delta: -6,975,488 bytes
 ```

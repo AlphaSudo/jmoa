@@ -1,0 +1,59 @@
+{
+  "metadataVersion": "v2k-doctor-confirmation",
+  "status": "CONFIRMED_WIN",
+  "comparison": "D2 + fresh current-runtime D2 CDS vs D2R + fresh D2R CDS",
+  "runtimeScope": {
+    "launchMode": "SPRING_BOOT_FAT_JAR",
+    "runtimePolicy": "CDS",
+    "cdsMode": "ON",
+    "javaagentPresent": false,
+    "classLoadLoggingEnabledDuringMemoryPairs": false,
+    "jfrEnabled": false,
+    "nmtMode": "summary",
+    "workload": "36-request Doctor smoke per run"
+  },
+  "v2c": {
+    "verdict": "CONFIRMED_WIN",
+    "validRuns": 6,
+    "invalidRuns": 0,
+    "pairs": 3,
+    "pairedWins": 3,
+    "medianPssDeltaKb": -5156,
+    "medianPrivateDirtyDeltaKb": -5212,
+    "medianMemoryCurrentDeltaBytes": -6975488
+  },
+  "pairs": [
+    {
+      "pair": 1,
+      "deltaPssKb": -5156,
+      "deltaPrivateDirtyKb": -5212,
+      "deltaMemoryCurrentBytes": -6975488,
+      "workloadErrors": 0
+    },
+    {
+      "pair": 2,
+      "deltaPssKb": -10511,
+      "deltaPrivateDirtyKb": -10532,
+      "deltaMemoryCurrentBytes": -12423168,
+      "workloadErrors": 0
+    },
+    {
+      "pair": 3,
+      "deltaPssKb": -3520,
+      "deltaPrivateDirtyKb": -3872,
+      "deltaMemoryCurrentBytes": -5627904,
+      "workloadErrors": 0
+    }
+  ],
+  "claimBoundary": {
+    "confirmed": "Private Doctor corrected D2 vs raw-reduced D2R under Spring Boot fat JAR with variant-specific CDS archives.",
+    "notClaimed": [
+      "public reproducibility",
+      "all Doctor deployments",
+      "all fat-JAR services",
+      "all CDS/AppCDS modes",
+      "startup improvement",
+      "generated-class mutation"
+    ]
+  }
+}

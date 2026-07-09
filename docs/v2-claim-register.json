@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2K_DOCTOR_INVENTORY_AND_UNBLOCK_GATES",
+  "status": "CURRENT_AFTER_V2K_DOCTOR_RUNTIME_CONFIRMATION",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
@@ -34,6 +34,18 @@
       "medianPrivateDirtyDeltaKb": -4208,
       "medianMemoryCurrentDeltaBytes": -4493312,
       "claimBoundary": "Confirmed only for the explicit raw engine under the PetClinic no-CDS exploded Boot protocol; not transferable to Doctor, fat-JAR, CDS/AppCDS, startup, or cross-service claims."
+    },
+    {
+      "id": "v2k-doctor-raw-reducer",
+      "claim": "V2-K confirmed an incremental Doctor runtime win for raw-reduced D2R over corrected D2.",
+      "service": "Private Doctor corrected D2 runtime",
+      "comparison": "D2 + fresh current-runtime D2 CDS vs D2R + fresh D2R CDS",
+      "runtimeScope": "SPRING_BOOT_FAT_JAR, CDS, variant-specific CDS archives, Java 26 container runtime, no javaagent, no class-load logging during memory pairs",
+      "pairedWins": "3/3",
+      "medianPssDeltaKb": -5156,
+      "medianPrivateDirtyDeltaKb": -5212,
+      "medianMemoryCurrentDeltaBytes": -6975488,
+      "claimBoundary": "Private Doctor runtime confirmation only; not public-reproducible and not transferable to all fat-JAR/CDS deployments or startup performance."
     }
   ],
   "artifactOnlyClaims": [
@@ -86,47 +98,17 @@
       "claim": "V2-K locally materializes Doctor corrected D2 plus raw reducer dependency libs.",
       "bootInfLibEntriesReplaced": "184/184",
       "materializedSha256": "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742",
-      "runtimeClaim": false
-    },
-    {
-      "id": "v2k-doctor-inventory-unblock-gate",
-      "claim": "V2-K verifies Doctor corrected D2, raw-reduced D2, and corrected D2 CDS artifacts but blocks before smoke due missing runtime stack and D2R CDS.",
-      "verifiedArtifactHashes": [
-        "1818b210028987085c782df9e5cd8cfbb159b809966d80d0aa0b458c39569b85",
-        "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742",
-        "02955a369bb9f675706e4715e28437220a95637294fc23d07d0a381ad216f6d2"
-      ],
-      "currentBlockers": [
-        "D2R_CDS_NOT_TRAINED",
-        "MISSING_IMAGE",
-        "MISSING_CONFIG",
-        "MISSING_DATABASE",
-        "MISSING_NETWORK",
-        "PORT_BUSY_OR_BLOCKED"
-      ],
-      "runtimeClaim": false
-    },
-    {
-      "id": "v2k-doctor-runtime-recovery-audit",
-      "claim": "V2-K attempted Doctor runtime recovery and closed the Doctor lane as blocked with root cause.",
-      "outcome": "BLOCKED_WITH_ROOT_CAUSE",
-      "semanticSmokeAttempted": false,
-      "runtimeScreenAttempted": false,
-      "runtimeClaim": false
+      "runtimeClaim": true
     }
   ],
   "notClaimed": [
     "V2-F-hardened/productized asm reducer runtime win",
     "startup win",
-    "fat-JAR runtime win",
-    "CDS/AppCDS runtime win",
-    "Doctor runtime win",
-    "Doctor semantic smoke",
-    "Doctor D2R CDS confirmation",
-    "Doctor runtime materialization proof",
-    "Doctor runtime screen",
-    "Doctor runtime recovery",
-    "cross-service runtime generalization",
+    "public Doctor reproducibility",
+    "all Doctor deployments",
+    "all fat-JAR services",
+    "all CDS/AppCDS runtime modes",
+    "public cross-service generalization",
     "all debug metadata stripping safety",
     "LineNumberTable stripping",
     "StackMapTable stripping",

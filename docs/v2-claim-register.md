@@ -1,7 +1,7 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after the V2-K Doctor
-inventory and unblock gates.
+This is the source of truth for public V2 claims after the V2-K Doctor runtime
+confirmation.
 
 Closure terms follow:
 
@@ -82,6 +82,35 @@ jmoa.reducer.engine=raw
 This claim is separate from the older V2-E claim and from the V2-F/V2-H
 hardened `asm` reducer result.
 
+### 4. V2-K Doctor Raw Reducer Runtime Win
+
+V2-K confirmed an incremental runtime win for the private Doctor corrected D2
+runtime:
+
+```text
+comparison: D2 + fresh current-runtime D2 CDS vs D2R + fresh D2R CDS
+launch mode: SPRING_BOOT_FAT_JAR
+runtime policy: CDS
+paired wins: 3/3
+median PSS delta: -5,156 KB
+median Private_Dirty delta: -5,212 KB
+median memory.current delta: -6,975,488 bytes
+```
+
+Scope:
+
+```text
+private Doctor corrected D2 runtime stack
+raw-reduced D2R artifact
+variant-specific CDS archives
+Java 26 container runtime
+class-load logging disabled during memory pairs
+JFR disabled
+```
+
+This claim is not public-reproducible and is not transferred to all Doctor
+deployments, all fat-JAR services, all CDS/AppCDS modes, or startup performance.
+
 ## Artifact-Only Claims
 
 ```text
@@ -119,22 +148,7 @@ V2-J Doctor raw artifact smoke:
 V2-K Doctor raw materialization:
   BOOT-INF/lib entries replaced: 184/184
   materialized raw D2R fat-JAR SHA-256 recorded
-  runtime claim: false
-
-V2-K Doctor inventory/unblock gate:
-  corrected D2 artifact hash verified
-  raw-reduced D2 artifact hash verified
-  corrected D2 CDS archive hash verified
-  current blockers: D2R_CDS_NOT_TRAINED, MISSING_IMAGE, MISSING_CONFIG,
-    MISSING_DATABASE, MISSING_NETWORK, PORT_BUSY_OR_BLOCKED
-  runtime claim: false
-
-V2-K Doctor runtime recovery audit:
-  legacy runtime assets found
-  blocked with root cause
-  semantic smoke: not attempted
-  runtime screen: not attempted
-  runtime claim: false
+  runtime claim: true under the V2-K Doctor scope above
 ```
 
 ## Not Claimed
@@ -142,15 +156,11 @@ V2-K Doctor runtime recovery audit:
 ```text
 V2-F-hardened/productized asm reducer runtime win
 startup win
-fat-JAR runtime win
-CDS/AppCDS runtime win
-Doctor runtime win
-Doctor semantic smoke
-Doctor D2R CDS confirmation
-Doctor runtime materialization proof
-Doctor runtime screen
-Doctor runtime recovery
-cross-service runtime generalization
+public Doctor reproducibility
+all Doctor deployments
+all fat-JAR services
+all CDS/AppCDS runtime modes
+public cross-service generalization
 all debug metadata stripping safety
 LineNumberTable stripping
 StackMapTable stripping

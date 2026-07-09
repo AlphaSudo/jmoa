@@ -3,25 +3,36 @@
 Status:
 
 ```text
-NOT_ATTEMPTED_BLOCKED
+PASSED_PROMOTED_TO_CONFIRMATION
 ```
 
-Doctor runtime screen did not run because semantic smoke did not run.
+The first Doctor D2 vs D2R runtime screen passed after the local Doctor runtime
+stack was recovered and fresh variant-specific CDS archives were used.
 
-Valid future comparisons remain:
+Comparison:
 
 ```text
-D2 + corrected D2 CDS
+D2 + fresh current-runtime D2 CDS
 vs
 D2R + freshly trained D2R CDS
 ```
 
-or an explicitly labeled diagnostic:
+Screen result:
 
 ```text
-D2 no-CDS
-vs
-D2R no-CDS
+PSS delta: -1,689 KB
+Private_Dirty delta: -1,608 KB
+memory.current delta: -3,244,032 bytes
+workload errors: 0
+verdict: SCREEN_PASSED_PROMOTE_TO_3PAIR
 ```
 
-No runtime screen means no V2-C confirmation and no V2-D attribution.
+This single screen is superseded by the 3-pair V2-C confirmation:
+
+```text
+V2-C verdict: CONFIRMED_WIN
+paired wins: 3/3
+median PSS delta: -5,156 KB
+median Private_Dirty delta: -5,212 KB
+median memory.current delta: -6,975,488 bytes
+```

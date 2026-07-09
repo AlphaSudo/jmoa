@@ -1,13 +1,14 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-J are closed or confirmed as the current V2 foundation.
-V2-K is open, and Doctor has moved from blocked runtime recovery to recovered
-semantic smoke with a freshly trained D2R CDS archive.
+Status: V2-A through V2-K are closed or confirmed as the current V2 foundation.
+V2-K moved Doctor from blocked runtime recovery to a V2-C-confirmed and
+V2-D-attributed runtime win for raw-reduced D2R over corrected D2.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
 V2-I raw reducer recovery confirmation, the V2-J raw engine productization
-work, and the V2-K Doctor inventory/unblock gate.
+work, the V2-K Doctor inventory/unblock gate, and the V2-K Doctor runtime
+confirmation.
 
 ## Closure Taxonomy
 
@@ -33,7 +34,7 @@ claims.
 | V2-H | `SCREEN_FAILED` | Productized V2-F-hardened PetClinic reducer screen; artifact gate passed, runtime promotion failed |
 | V2-I | `CLOSED_CONFIRMED` | Reducer policy-diff recovery with an explicit raw engine and V2-C-confirmed PetClinic runtime win |
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
-| V2-K | `RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN` / `OPEN_MEASUREMENT_GATE` | Doctor runtime recovery succeeded with rebuilt support images, fresh D2R CDS training, and semantic smoke; Doctor runtime screen is next |
+| V2-K | `CLOSED_CONFIRMED_DOCTOR` | Doctor runtime recovery succeeded, D2/D2R semantic smoke passed, single-screen measurement promoted, and 3-pair V2-C/V2-D confirmation passed |
 
 ## Current Foundation
 
@@ -48,14 +49,16 @@ V2-G = does the hardened reducer generalize to a second service at artifact leve
 V2-H = does the hardened reducer retain the PetClinic runtime win?
 V2-I = can a narrower raw engine recover runtime-positive behavior while preserving V2-F jar safety?
 V2-J = can the raw engine be made byte-auditable and portable at artifact level?
+V2-K = can the raw-reduced Doctor D2R artifact pass real private fat-JAR/CDS runtime confirmation?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
 first controlled post-v1 reducer, reducer productization, and a clear claim
 boundary between the earlier runtime-confirmed V2-E reducer, the safer
-V2-F-hardened reducer, the V2-I raw recovery engine, and the V2-J productized
-raw engine. Reducer behavior is still disabled by default and report-only by
-default unless explicit release-low-footprint reducer flags are enabled.
+V2-F-hardened reducer, the V2-I raw recovery engine, the V2-J productized
+raw engine, and the V2-K private Doctor runtime confirmation. Reducer behavior is
+still disabled by default and report-only by default unless explicit
+release-low-footprint reducer flags are enabled.
 
 ## Still Blocked
 
@@ -85,7 +88,7 @@ PetClinic EXPLODED_BOOT_APP no-CDS runtime claim confirmed
 startup claim not made
 fat-JAR claim not made
 CDS/AppCDS claim not made
-cross-service generalization not made
+public cross-service generalization not made
 ```
 
 ## Latest V2-E Screen
@@ -174,9 +177,10 @@ manifest artifacts with hashes: 184/184
 BOOT-INF/lib entries replaced in materialized fat JAR: 184
 ```
 
-Doctor semantic smoke and runtime memory screening are blocked until the Doctor
-runtime image stack is rebuilt or provided and the CDS policy for the reduced
-artifact is decided. V2-G does not add a cross-service runtime claim.
+Doctor semantic smoke and runtime memory screening were blocked at V2-G time
+until the Doctor runtime image stack was rebuilt and the CDS policy for the
+reduced artifact was decided. V2-G itself does not add a cross-service runtime
+claim; V2-K supersedes the blocker with a private Doctor runtime confirmation.
 
 ## V2-H Hardened Reducer Screen
 
@@ -289,10 +293,10 @@ BootstrapMethods classes skipped: 0
 compressed dependency-jar bytes removed: 3,926,870
 ```
 
-This artifact-level result is now followed by a recovered Doctor runtime smoke.
-The runtime memory claim is still not made until D2 vs D2R measurement passes.
+This artifact-level result was followed by the V2-K Doctor runtime recovery and
+confirmation below.
 
-## Next Gate
+## V2-K Doctor Runtime Confirmation
 
 The Doctor runtime recovery blocker has been superseded. The missing pieces were
 located or rebuilt locally:
@@ -306,7 +310,9 @@ fresh D2R CDS archive trained
 D2R with fresh CDS reached health UP
 secured Doctor endpoint returned HTTP 200
 semantic smoke passed
-runtime screen did not run
+single runtime screen passed
+3-pair V2-C confirmation passed
+V2-D attribution passed
 ```
 
 Fresh D2R CDS archive:
@@ -316,16 +322,28 @@ bytes: 126,636,032
 sha256: 64A4331695D092148A105ADAA47FEEA0CA46CB0CC561C3289F0413D1A67B6ACC
 ```
 
-The next executable gate is:
+Confirmed result:
 
 ```text
-Doctor corrected D2 vs Doctor corrected D2R single-screen measurement
+comparison: D2 + fresh current-runtime D2 CDS vs D2R + fresh D2R CDS
+runtime policy: CDS
+launch mode: SPRING_BOOT_FAT_JAR
+V2-C verdict: CONFIRMED_WIN
+valid runs: 6/6
+paired wins: 3/3
+median PSS delta: -5,156 KB
+median Private_Dirty delta: -5,212 KB
+median memory.current delta: -6,975,488 bytes
 ```
 
-Public fallback target:
+V2-D attribution:
 
 ```text
-Spring PetClinic visits-service
+anonymous_rw PSS median delta: -3,460 KB
+mapped-file PSS median delta: -1,642 KB
+NMT metaspace committed median delta: -843 KB
+NMT class committed median delta: -262 KB
+heap PSS median delta: 0 KB
 ```
 
 See:
@@ -344,8 +362,14 @@ See:
 - [V2-K Doctor Runtime Materialization Proof Result](v2-k/v2k-doctor-runtime-materialization-proof-result.md)
 - [V2-K Doctor Semantic Smoke](v2-k/v2k-doctor-semantic-smoke.md)
 - [V2-K Doctor Semantic Smoke Result](v2-k/v2k-doctor-semantic-smoke-result.md)
+- [V2-K Doctor D2 Baseline Smoke](v2-k/v2k-doctor-d2-baseline-smoke.md)
+- [V2-K Doctor D2R Candidate Smoke](v2-k/v2k-doctor-d2r-candidate-smoke.md)
 - [V2-K Doctor Runtime Screen](v2-k/v2k-doctor-runtime-screen.md)
 - [V2-K Doctor Runtime Screen Result](v2-k/v2k-doctor-runtime-screen-result.md)
+- [V2-K Doctor Runtime Confirmation](v2-k/v2k-doctor-confirmation.md)
+- [V2-K Doctor V2-C Validation](v2-k/v2k-doctor-v2c-validation.md)
+- [V2-K Doctor V2-D Attribution](v2-k/v2k-doctor-v2d-attribution.md)
+- [V2-K Doctor Final Verdict](v2-k/v2k-doctor-final-verdict.md)
 - [V2-K Doctor Final Blocked Root Cause](v2-k/v2k-doctor-final-blocked-root-cause.md)
 - [V2-K Closure Outcomes](v2-k/v2k-closure-outcomes.md)
 - [V2-K Doctor Runtime Blocked](v2-k/v2k-doctor-runtime-blocked.md)
@@ -371,3 +395,9 @@ fresh V2-C validation and V2-D attribution.
 V2-J productizes the raw engine and proves artifact-level portability on Doctor
 corrected D2 dependency libs with byte-preservation auditing. It does not add a
 new runtime memory claim.
+
+V2-K adds a private Doctor runtime confirmation for corrected D2 vs raw-reduced
+D2R under a Spring Boot fat-JAR/CDS protocol with variant-specific CDS archives.
+That claim is not public-reproducible and is not transferred to all Doctor
+deployments, all fat-JAR services, all CDS/AppCDS modes, startup performance, or
+generated-class mutation.

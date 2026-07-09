@@ -1,15 +1,24 @@
 {
   "metadataVersion": "v2k-doctor-runtime-screen-result",
-  "status": "NOT_ATTEMPTED_BLOCKED",
-  "runtimeScreenAttempted": false,
-  "blockedBy": [
-    "SEMANTIC_SMOKE_NOT_RUN"
-  ],
-  "validFutureComparisons": [
-    "D2 + corrected D2 CDS vs D2R + freshly trained D2R CDS",
-    "D2 no-CDS vs D2R no-CDS diagnostic"
-  ],
-  "v2cConfirmationAttempted": false,
-  "v2dAttributionAttempted": false,
-  "claimBoundary": "Doctor runtime screen did not run. No runtime claim is made."
+  "status": "PASSED_PROMOTED_TO_CONFIRMATION",
+  "runtimeScreenAttempted": true,
+  "comparison": "D2 + fresh current-runtime D2 CDS vs D2R + fresh D2R CDS",
+  "singleScreenDelta": {
+    "pssKb": -1689,
+    "privateDirtyKb": -1608,
+    "memoryCurrentBytes": -3244032
+  },
+  "singleScreenGate": {
+    "artifactBytesLower": true,
+    "workloadErrorsZero": true,
+    "noLinkageErrors": true,
+    "pssNotWorseByMoreThan1Mb": true,
+    "privateDirtyNotWorseByMoreThan1Mb": true,
+    "memoryCurrentNotWorseByMoreThan1Mb": true
+  },
+  "promotedToThreePairConfirmation": true,
+  "v2cConfirmationAttempted": true,
+  "v2dAttributionAttempted": true,
+  "supersedingConfirmation": "docs/v2-k/v2k-doctor-confirmation.md",
+  "claimBoundary": "Single-screen result only promoted the measurement to 3-pair confirmation."
 }

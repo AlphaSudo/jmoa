@@ -1,0 +1,38 @@
+{
+  "metadataVersion": "v2k-doctor-final-verdict",
+  "status": "CLOSED_CONFIRMED_DOCTOR",
+  "confirmedClaim": "Doctor corrected D2 plus raw-reduced D2R is a confirmed incremental runtime win over corrected D2 under the recovered private Spring Boot fat-JAR/CDS protocol.",
+  "confirmation": {
+    "v2cVerdict": "CONFIRMED_WIN",
+    "validRuns": 6,
+    "pairedWins": "3/3",
+    "medianPssDeltaKb": -5156,
+    "medianPrivateDirtyDeltaKb": -5212,
+    "medianMemoryCurrentDeltaBytes": -6975488
+  },
+  "attribution": {
+    "primaryMovement": [
+      "anonymous_rw PSS reduction",
+      "mapped-file PSS reduction"
+    ],
+    "supportingMovement": [
+      "NMT class/metaspace committed reduction",
+      "class-count savings"
+    ],
+    "notPrimary": [
+      "retained heap-object reduction"
+    ]
+  },
+  "notClaimed": [
+    "public reproducibility",
+    "all Doctor deployments",
+    "all fat-JAR services",
+    "all CDS/AppCDS modes",
+    "startup improvement",
+    "generated-class mutation",
+    "large-method splitting",
+    "constant-pool rewriting",
+    "BootstrapMethods rewriting or stripping"
+  ],
+  "suggestedReleaseTagAfterMerge": "v0.9.0-v2k-doctor-runtime-confirmed"
+}
