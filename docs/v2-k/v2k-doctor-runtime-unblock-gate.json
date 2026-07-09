@@ -1,0 +1,35 @@
+{
+  "metadataVersion": "v2k-doctor-runtime-unblock-gate",
+  "script": "scripts/doctor-runtime-unblock-gate.ps1",
+  "runtimePolicy": "RetrainD2RCds",
+  "verifiedArtifacts": {
+    "correctedD2FatJar": {
+      "status": "PRESENT",
+      "sha256": "1818b210028987085c782df9e5cd8cfbb159b809966d80d0aa0b458c39569b85"
+    },
+    "d2RawReducerFatJar": {
+      "status": "PRESENT",
+      "sha256": "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742"
+    },
+    "correctedD2CdsArchive": {
+      "status": "PRESENT",
+      "sha256": "02955a369bb9f675706e4715e28437220a95637294fc23d07d0a381ad216f6d2"
+    },
+    "d2RawReducerCdsArchive": {
+      "status": "NOT_CONFIGURED"
+    }
+  },
+  "verdict": [
+    "D2R_CDS_NOT_TRAINED",
+    "MISSING_IMAGE",
+    "MISSING_CONFIG",
+    "MISSING_DATABASE",
+    "MISSING_NETWORK",
+    "PORT_BUSY_OR_BLOCKED",
+    "BLOCKED_PRIVATE_STACK"
+  ],
+  "nextGate": "Restore private runtime stack inputs, images, network, and D2R CDS archive before semantic smoke.",
+  "semanticSmokeAttempted": false,
+  "runtimeScreenAttempted": false,
+  "claimBoundary": "Pre-smoke runtime unblock gate only. No Doctor semantic, runtime screen, V2-C, V2-D, or memory claim is made."
+}

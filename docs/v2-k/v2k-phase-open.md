@@ -19,6 +19,12 @@ The first executable gate is:
 scripts/doctor-runtime-inventory.ps1
 ```
 
+The next executable pre-smoke gate is:
+
+```text
+scripts/doctor-runtime-unblock-gate.ps1
+```
+
 ## Primary Target
 
 ```text

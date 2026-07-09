@@ -1,11 +1,13 @@
 # JMOA V2 Roadmap Status
 
 Status: V2-A through V2-J are closed or confirmed as the current V2 foundation.
+V2-K is open, with the Doctor inventory gate tagged as
+`v0.8.2-v2k-doctor-inventory-gate`.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
-V2-I raw reducer recovery confirmation, and the V2-J raw engine productization
-work.
+V2-I raw reducer recovery confirmation, the V2-J raw engine productization
+work, and the V2-K Doctor inventory/unblock gate.
 
 ## Closure Taxonomy
 
@@ -296,7 +298,8 @@ The next gate is Doctor runtime unblock plus public second-runtime portability:
 
 ```text
 resolve Doctor runtime image/config/database blockers
-decide Doctor CDS policy
+run the policy-aware Doctor runtime unblock gate
+train fresh D2R CDS archive or explicitly choose no-CDS diagnostic
 run Doctor semantic smoke only after materialization proof is clean
 use visits-service as public fallback/parallel lane if Doctor remains blocked
 ```
@@ -318,8 +321,14 @@ See:
 - [V2-K Target Selection](v2-k/v2k-target-selection.md)
 - [V2-K Doctor Runtime Inventory](v2-k/v2k-doctor-runtime-inventory.md)
 - [V2-K Doctor Runtime Inventory Update](v2-k/v2k-doctor-runtime-inventory-update.md)
+- [V2-K Doctor Runtime Unblock Gate](v2-k/v2k-doctor-runtime-unblock-gate.md)
 - [V2-K Doctor CDS Policy](v2-k/v2k-doctor-cds-policy.md)
+- [V2-K Doctor D2R CDS Training](v2-k/v2k-doctor-d2r-cds-training.md)
 - [V2-K Doctor Image Rebuild Plan](v2-k/v2k-doctor-image-rebuild.md)
+- [V2-K Doctor Runtime Materialization Proof](v2-k/v2k-doctor-runtime-materialization-proof.md)
+- [V2-K Doctor Semantic Smoke](v2-k/v2k-doctor-semantic-smoke.md)
+- [V2-K Doctor Runtime Screen](v2-k/v2k-doctor-runtime-screen.md)
+- [V2-K Closure Outcomes](v2-k/v2k-closure-outcomes.md)
 - [V2-K Doctor Runtime Blocked](v2-k/v2k-doctor-runtime-blocked.md)
 
 ## V2-E Boundary

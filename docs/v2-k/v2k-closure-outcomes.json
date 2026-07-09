@@ -1,0 +1,32 @@
+{
+  "metadataVersion": "v2k-closure-outcomes",
+  "currentState": "BLOCKED",
+  "outcomes": [
+    {
+      "id": "CLOSED_CONFIRMED_DOCTOR",
+      "meaning": "Doctor passes smoke, screen, V2-C confirmation, and V2-D attribution",
+      "tagGuidance": "v0.9.0-v2k-doctor-runtime-confirmed"
+    },
+    {
+      "id": "CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME",
+      "meaning": "Doctor remains blocked but visits-service confirms publicly",
+      "tagGuidance": "v0.9.0-v2k-public-second-runtime-confirmed"
+    },
+    {
+      "id": "SCREEN_FAILED",
+      "meaning": "Doctor smoke passes but runtime screen fails",
+      "tagGuidance": "no runtime-generalization tag"
+    },
+    {
+      "id": "BLOCKED",
+      "meaning": "Doctor remains blocked and visits-service does not run",
+      "tagGuidance": "no runtime-generalization tag"
+    },
+    {
+      "id": "ARTIFACT_ONLY",
+      "meaning": "Doctor or visits only reach artifact/smoke evidence",
+      "tagGuidance": "optional portability-smoke tag only"
+    }
+  ],
+  "currentReason": "Doctor runtime stack is not ready for semantic smoke. Visits-service fallback has not been started in this branch."
+}

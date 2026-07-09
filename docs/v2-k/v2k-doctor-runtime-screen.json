@@ -1,0 +1,26 @@
+{
+  "metadataVersion": "v2k-doctor-runtime-screen",
+  "status": "NOT_ATTEMPTED",
+  "blockedBy": [
+    "SEMANTIC_SMOKE_NOT_RUN"
+  ],
+  "validComparisons": [
+    "D2 + corrected D2 CDS vs D2R + freshly trained D2R CDS",
+    "D2 no-CDS vs D2R no-CDS diagnostic"
+  ],
+  "forbiddenComparisons": [
+    "historical CDS D2 vs new no-CDS D2R",
+    "D2 + old CDS vs D2R + old D2 CDS",
+    "D2 + old CDS vs D2R no-CDS"
+  ],
+  "promotionGate": [
+    "artifact bytes lower",
+    "workload errors = 0",
+    "PSS not worse by > 1 MB",
+    "Private_Dirty not worse by > 1 MB",
+    "memory.current not worse by > 1 MB"
+  ],
+  "v2cConfirmationAllowed": false,
+  "v2dAttributionAllowed": false,
+  "claimBoundary": "Runtime screen has not run. No Doctor runtime claim is made."
+}

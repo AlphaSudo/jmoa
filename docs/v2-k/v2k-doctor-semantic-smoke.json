@@ -1,0 +1,26 @@
+{
+  "metadataVersion": "v2k-doctor-semantic-smoke",
+  "status": "NOT_ATTEMPTED",
+  "blockedBy": [
+    "MISSING_IMAGE",
+    "MISSING_CONFIG",
+    "MISSING_DATABASE",
+    "D2R_CDS_NOT_TRAINED",
+    "MISSING_NETWORK",
+    "PORT_BUSY_OR_BLOCKED"
+  ],
+  "requiredChecks": [
+    "health UP",
+    "config loaded",
+    "database reachable",
+    "representative endpoints return success",
+    "0 workload errors",
+    "no VerifyError",
+    "no ClassFormatError",
+    "no NoSuchMethodError",
+    "no NoClassDefFoundError",
+    "no ExceptionInInitializerError"
+  ],
+  "runtimeScreenAllowed": false,
+  "claimBoundary": "Semantic smoke has not run. No Doctor runtime claim is made."
+}

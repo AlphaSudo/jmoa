@@ -9,10 +9,13 @@
       "name": "Doctor runtime inventory",
       "outputs": [
         "scripts/doctor-runtime-inventory.ps1",
+        "scripts/doctor-runtime-unblock-gate.ps1",
         "v2k-doctor-runtime-inventory.md",
         "v2k-doctor-runtime-inventory.json",
         "v2k-doctor-runtime-inventory-update.md",
-        "v2k-doctor-runtime-inventory-update.json"
+        "v2k-doctor-runtime-inventory-update.json",
+        "v2k-doctor-runtime-unblock-gate.md",
+        "v2k-doctor-runtime-unblock-gate.json"
       ]
     },
     {
@@ -29,25 +32,45 @@
     {
       "id": "K3",
       "lane": "doctor",
-      "name": "Doctor image rebuild and runtime materialization proof"
+      "name": "Doctor image rebuild and runtime materialization proof",
+      "outputs": [
+        "v2k-doctor-image-rebuild.md",
+        "v2k-doctor-image-rebuild.json",
+        "v2k-doctor-d2r-cds-training.md",
+        "v2k-doctor-d2r-cds-training.json",
+        "v2k-doctor-runtime-materialization-proof.md",
+        "v2k-doctor-runtime-materialization-proof.json"
+      ]
     },
     {
       "id": "K4",
       "lane": "doctor",
       "name": "Doctor semantic smoke",
-      "condition": "only after K1-K3 are clean"
+      "condition": "only after K1-K3 are clean",
+      "outputs": [
+        "v2k-doctor-semantic-smoke.md",
+        "v2k-doctor-semantic-smoke.json"
+      ]
     },
     {
       "id": "K5",
       "lane": "doctor",
       "name": "Doctor runtime screen",
-      "condition": "only after semantic smoke passes"
+      "condition": "only after semantic smoke passes",
+      "outputs": [
+        "v2k-doctor-runtime-screen.md",
+        "v2k-doctor-runtime-screen.json"
+      ]
     },
     {
       "id": "K6",
       "lane": "doctor",
       "name": "Doctor V2-C/V2-D confirmation",
-      "condition": "only if Doctor runtime screen passes"
+      "condition": "only if Doctor runtime screen passes",
+      "outputs": [
+        "v2k-doctor-confirmation-plan.md",
+        "v2k-doctor-confirmation-plan.json"
+      ]
     },
     {
       "id": "VISITS-K1",

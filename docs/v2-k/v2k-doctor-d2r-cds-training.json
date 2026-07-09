@@ -1,0 +1,25 @@
+{
+  "metadataVersion": "v2k-doctor-d2r-cds-training",
+  "preferredPolicy": "RetrainD2RCds",
+  "status": "BLOCKED",
+  "blocker": "D2R_CDS_NOT_TRAINED",
+  "existingCorrectedD2CdsArchive": {
+    "status": "PRESENT",
+    "sha256": "02955a369bb9f675706e4715e28437220a95637294fc23d07d0a381ad216f6d2",
+    "validForCandidate": false
+  },
+  "requiredProof": [
+    "D2R CDS archive exists",
+    "D2R CDS archive SHA-256 is recorded",
+    "training run used the D2 + raw reducer artifact",
+    "runtime command references the D2R CDS archive",
+    "old corrected D2 CDS archive is not used by the candidate"
+  ],
+  "allowedFallback": "Explicit D2 no-CDS vs D2R no-CDS diagnostic only",
+  "forbiddenComparisons": [
+    "D2 + old CDS vs D2R + old D2 CDS",
+    "D2 + old CDS vs D2R no-CDS",
+    "historical CDS result vs new no-CDS result"
+  ],
+  "claimBoundary": "CDS training is blocked. No Doctor runtime claim is made."
+}

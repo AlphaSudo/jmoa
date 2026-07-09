@@ -16,8 +16,10 @@ Create and maintain:
 
 ```text
 scripts/doctor-runtime-inventory.ps1
+scripts/doctor-runtime-unblock-gate.ps1
 v2k-doctor-runtime-inventory.md/json
 v2k-doctor-runtime-inventory-update.md/json
+v2k-doctor-runtime-unblock-gate.md/json
 ```
 
 Verdict categories:
@@ -30,6 +32,9 @@ MISSING_DATABASE
 D2R_CDS_NOT_TRAINED
 BLOCKED_PRIVATE_STACK
 ```
+
+Doctor can move past inventory only when the runtime unblock gate no longer
+reports private stack, image, network, CDS, or port blockers.
 
 ## K2 Doctor CDS Policy
 
@@ -68,6 +73,14 @@ CDS archive hash matches candidate artifact if CDS is used
 runtime command uses expected artifact
 ```
 
+Outputs:
+
+```text
+v2k-doctor-image-rebuild.md/json
+v2k-doctor-d2r-cds-training.md/json
+v2k-doctor-runtime-materialization-proof.md/json
+```
+
 ## K4 Doctor Semantic Smoke
 
 Run only after K1-K3 are clean:
@@ -78,6 +91,13 @@ database reachable
 representative endpoints pass
 0 workload errors
 no VerifyError / ClassFormatError / linkage errors
+```
+
+Outputs:
+
+```text
+v2k-doctor-semantic-smoke.md/json
+v2k-doctor-semantic-failure.md/json if failed
 ```
 
 ## K5 Doctor Runtime Screen
@@ -97,6 +117,12 @@ Invalid comparison:
 historical CDS D2 vs new no-CDS D2R
 ```
 
+Outputs:
+
+```text
+v2k-doctor-runtime-screen.md/json
+```
+
 ## K6 Doctor 3-Pair Confirmation
 
 Only if Doctor screen passes:
@@ -108,6 +134,15 @@ D2-3  -> D2R-3
 ```
 
 Use V2-C and V2-D.
+
+Outputs:
+
+```text
+v2k-doctor-confirmation.md/json
+v2k-doctor-v2c-validation.md/json
+v2k-doctor-v2d-attribution.md/json
+v2k-doctor-final-verdict.md/json
+```
 
 ## K7 Public Fallback: Visits-Service
 
@@ -267,4 +302,10 @@ If blocked:
 
 ```text
 no runtime claim
+```
+
+See:
+
+```text
+v2k-closure-outcomes.md/json
 ```
