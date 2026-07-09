@@ -305,9 +305,12 @@ does not add a new reducer type or broaden metadata stripping.
 The first V2-G target is Doctor corrected D2. V2-G currently closes as
 artifact-level generalization only: the reducer removed 4,156,014 dependency-jar
 bytes and a reduced fat JAR was materialized with all 184 `BOOT-INF/lib` entries
-replaced. Doctor semantic/runtime confirmation remains blocked until the Doctor
-runtime image stack is available and the CDS policy for the reduced artifact is
-decided.
+replaced.
+
+V2-K later recovered the local Doctor runtime stack: support images were rebuilt,
+a fresh D2R CDS archive was trained for the raw-reduced artifact, and Doctor D2R
+passed health plus a secured endpoint smoke. This is still not a Doctor memory
+claim; the next gate is D2 vs D2R runtime screening with V2-C/V2-D.
 
 See:
 
@@ -315,6 +318,7 @@ See:
 - [V2-G Doctor Artifact Smoke](docs/v2-g/v2g-doctor-artifact-smoke.md)
 - [V2-G Doctor Semantic Smoke Blocked](docs/v2-g/v2g-doctor-semantic-smoke-blocked.md)
 - [V2-G Final Verdict](docs/v2-g/v2g-final-verdict.md)
+- [V2-K Doctor Runtime Recovery Result](docs/v2-k/v2k-doctor-runtime-recovery-result.md)
 
 ## Safety
 

@@ -1,0 +1,41 @@
+{
+  "metadataVersion": "v2k-doctor-runtime-recovery-result",
+  "target": "doctor-corrected-d2",
+  "status": "RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN",
+  "supersedes": "v0.8.4-v2k-doctor-runtime-blocked",
+  "runtimeFailure": false,
+  "semanticSmokeAttempted": true,
+  "semanticSmokePassed": true,
+  "memoryScreenAttempted": false,
+  "recoveredInputs": {
+    "privateConfigRepository": "found-local-not-committed",
+    "doctorDbInitSql": "found-local-not-committed",
+    "java26RuntimeImage": "pulled-local",
+    "postgresRuntimeImage": "pulled-local",
+    "configRuntimeImage": "rebuilt-local",
+    "discoveryRuntimeImage": "rebuilt-local",
+    "doctorD2RuntimeImage": "rebuilt-local",
+    "doctorD2RRuntimeImage": "rebuilt-local",
+    "freshD2RCdsArchive": "trained-local"
+  },
+  "artifacts": {
+    "correctedD2JarSha256": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+    "rawReducedD2RJarSha256": "9D00877C0AF90E02B0C8D812F8BC659297CA67D6A939016CAF96D3D5CED79742",
+    "freshD2RCdsArchiveSha256": "64A4331695D092148A105ADAA47FEEA0CA46CB0CC561C3289F0413D1A67B6ACC",
+    "freshD2RCdsArchiveBytes": 126636032
+  },
+  "runtimeSmoke": {
+    "configHealth": "HTTP_200_UP",
+    "discoveryHealth": "HTTP_200_UP",
+    "doctorD2RTrainingHealth": "HTTP_200_UP",
+    "doctorD2RFreshCdsHealth": "HTTP_200_UP",
+    "securedDoctorEndpoint": "HTTP_200"
+  },
+  "cdsPolicy": {
+    "oldD2ArchiveReusedForD2R": false,
+    "freshD2RArchiveTrained": true,
+    "freshD2RArchiveValidatedByRuntimeStart": true
+  },
+  "nextGate": "Doctor D2 vs D2R single-screen measurement",
+  "claimBoundary": "Semantic/runtime recovery only. No Doctor memory, startup, V2-C, V2-D, or cross-service runtime claim is made."
+}

@@ -1,6 +1,8 @@
 {
   "metadataVersion": "v2k-doctor-runtime-blocked",
   "target": "doctor-corrected-d2",
+  "supersededBy": "docs/v2-k/v2k-doctor-runtime-recovery-result.json",
+  "historicalStatus": true,
   "status": "BLOCKED",
   "runtimeFailure": false,
   "semanticSmokeAttempted": false,

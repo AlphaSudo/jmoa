@@ -1,5 +1,17 @@
 # V2-K Doctor Runtime Blocked
 
+Superseded status:
+
+```text
+This historical blocker was superseded by the V2-K Doctor Runtime Recovery
+Result after the private runtime inputs were located and the D2R CDS archive was
+trained.
+```
+
+Current status:
+
+- [V2-K Doctor Runtime Recovery Result](v2k-doctor-runtime-recovery-result.md)
+
 Doctor runtime remains blocked after the V2-K inventory pass.
 
 Blocked reasons:

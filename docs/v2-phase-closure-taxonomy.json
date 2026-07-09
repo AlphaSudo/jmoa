@@ -71,7 +71,7 @@
     {
       "milestone": "V2-G",
       "closureType": "CLOSED_ARTIFACT_ONLY",
-      "claimBoundary": "Doctor corrected D2 artifact generalization; Doctor runtime blocked."
+      "claimBoundary": "Doctor corrected D2 artifact generalization; runtime not claimed in V2-G."
     },
     {
       "milestone": "V2-H",
@@ -90,8 +90,8 @@
     },
     {
       "milestone": "V2-K",
-      "closureType": "BLOCKED / OPEN_BACKLOG",
-      "claimBoundary": "Doctor runtime unblock is active and blocked; visits-service fallback not yet screened."
+      "closureType": "RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN",
+      "claimBoundary": "Doctor runtime stack recovered locally with fresh D2R CDS and semantic smoke; no memory claim yet."
     }
   ],
   "rule": "Do not upgrade a closure type by wording alone. Runtime performance claims require fresh V2-C validation and V2-D attribution."
