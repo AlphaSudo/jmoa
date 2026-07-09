@@ -13,14 +13,19 @@ V2-K can close in one of these states:
 Current state:
 
 ```text
-BLOCKED_WITH_ROOT_CAUSE
+RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN
 ```
 
 Reason:
 
 ```text
-Doctor runtime stack recovery was attempted and remains blocked by stale/private
-runtime assets, missing private inputs, missing images, missing network, and
-missing D2R CDS training.
-Visits-service fallback has not been started yet.
+Doctor runtime stack recovery succeeded after the private config and DB init
+inputs were located locally, support images were rebuilt, a fresh D2R CDS archive
+was trained, and the D2R runtime passed health plus a secured endpoint smoke.
+```
+
+Next gate:
+
+```text
+Doctor corrected D2 vs Doctor corrected D2R single-screen measurement.
 ```

@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2k-closure-outcomes",
-  "currentState": "BLOCKED_WITH_ROOT_CAUSE",
+  "currentState": "RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN",
   "outcomes": [
     {
       "id": "CLOSED_CONFIRMED_DOCTOR",
@@ -28,5 +28,6 @@
       "tagGuidance": "optional portability-smoke tag only"
     }
   ],
-  "currentReason": "Doctor runtime stack recovery was attempted and remains blocked by stale/private runtime assets, missing private inputs, missing images, missing network, and missing D2R CDS training. Visits-service fallback has not been started yet."
+  "currentReason": "Doctor runtime stack recovery succeeded after the private config and DB init inputs were located locally, support images were rebuilt, a fresh D2R CDS archive was trained, and the D2R runtime passed health plus a secured endpoint smoke.",
+  "nextGate": "Doctor corrected D2 vs Doctor corrected D2R single-screen measurement"
 }

@@ -1,8 +1,8 @@
 # JMOA V2 Roadmap Status
 
 Status: V2-A through V2-J are closed or confirmed as the current V2 foundation.
-V2-K is open, with the Doctor inventory gate tagged as
-`v0.8.2-v2k-doctor-inventory-gate`.
+V2-K is open, and Doctor has moved from blocked runtime recovery to recovered
+semantic smoke with a freshly trained D2R CDS archive.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
@@ -33,7 +33,7 @@ claims.
 | V2-H | `SCREEN_FAILED` | Productized V2-F-hardened PetClinic reducer screen; artifact gate passed, runtime promotion failed |
 | V2-I | `CLOSED_CONFIRMED` | Reducer policy-diff recovery with an explicit raw engine and V2-C-confirmed PetClinic runtime win |
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
-| V2-K | `BLOCKED_WITH_ROOT_CAUSE` / `OPEN_BACKLOG` | Doctor runtime recovery is blocked with root cause; visits-service is selected as public fallback |
+| V2-K | `RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN` / `OPEN_MEASUREMENT_GATE` | Doctor runtime recovery succeeded with rebuilt support images, fresh D2R CDS training, and semantic smoke; Doctor runtime screen is next |
 
 ## Current Foundation
 
@@ -289,32 +289,37 @@ BootstrapMethods classes skipped: 0
 compressed dependency-jar bytes removed: 3,926,870
 ```
 
-This is still artifact-level only. Doctor semantic smoke and runtime measurement
-remain blocked until the private runtime stack and CDS/no-CDS policy are settled.
+This artifact-level result is now followed by a recovered Doctor runtime smoke.
+The runtime memory claim is still not made until D2 vs D2R measurement passes.
 
 ## Next Gate
 
-The Doctor runtime recovery attempt is blocked with root cause:
+The Doctor runtime recovery blocker has been superseded. The missing pieces were
+located or rebuilt locally:
 
 ```text
-legacy Doctor runtime assets exist but require sanitization/private inputs
-runtime images are missing
-runtime network is missing
-D2R CDS archive is not trained
-semantic smoke did not run
+private config repo located
+Doctor DB init SQL located
+Java 26 and Postgres images pulled locally
+config/discovery/D2/D2R images rebuilt locally
+fresh D2R CDS archive trained
+D2R with fresh CDS reached health UP
+secured Doctor endpoint returned HTTP 200
+semantic smoke passed
 runtime screen did not run
 ```
 
-The next executable gate is the public second-runtime fallback:
+Fresh D2R CDS archive:
 
 ```text
-Spring PetClinic visits-service artifact build and raw reducer artifact smoke
+bytes: 126,636,032
+sha256: 64A4331695D092148A105ADAA47FEEA0CA46CB0CC561C3289F0413D1A67B6ACC
 ```
 
-Primary target:
+The next executable gate is:
 
 ```text
-Doctor corrected D2
+Doctor corrected D2 vs Doctor corrected D2R single-screen measurement
 ```
 
 Public fallback target:
@@ -344,6 +349,7 @@ See:
 - [V2-K Doctor Final Blocked Root Cause](v2-k/v2k-doctor-final-blocked-root-cause.md)
 - [V2-K Closure Outcomes](v2-k/v2k-closure-outcomes.md)
 - [V2-K Doctor Runtime Blocked](v2-k/v2k-doctor-runtime-blocked.md)
+- [V2-K Doctor Runtime Recovery Result](v2-k/v2k-doctor-runtime-recovery-result.md)
 
 ## V2-E Boundary
 

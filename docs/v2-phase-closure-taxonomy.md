@@ -25,11 +25,11 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | V2-D | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Memory attribution replay-proven; not an optimizer |
 | V2-E | `CLOSED_CONFIRMED` | PetClinic runtime-confirmed only for the earlier V2-E reducer protocol |
 | V2-F | `CLOSED_ARTIFACT_ONLY` | Productized hardened artifact reducer; no runtime win |
-| V2-G | `CLOSED_ARTIFACT_ONLY` | Doctor corrected D2 artifact generalization; Doctor runtime blocked |
+| V2-G | `CLOSED_ARTIFACT_ONLY` | Doctor corrected D2 artifact generalization; runtime not claimed in V2-G |
 | V2-H | `SCREEN_FAILED` | Hardened PetClinic screen failed promotion; no confirmation |
 | V2-I | `CLOSED_CONFIRMED` | PetClinic runtime-confirmed for explicit `jmoa.reducer.engine=raw` protocol |
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productized and Doctor artifact-smoked; no new runtime claim |
-| V2-K | `BLOCKED` / `OPEN_BACKLOG` | Doctor runtime unblock is active and blocked; visits-service fallback not yet screened |
+| V2-K | `RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN` | Doctor runtime stack recovered locally with fresh D2R CDS and semantic smoke; no memory claim yet |
 
 ## Rule
 
