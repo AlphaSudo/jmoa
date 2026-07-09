@@ -1,0 +1,23 @@
+{
+  "metadataVersion": "v2k-doctor-runtime-materialization-proof",
+  "status": "NOT_ATTEMPTED",
+  "blockedBy": [
+    "MISSING_IMAGE",
+    "MISSING_CONFIG",
+    "MISSING_DATABASE",
+    "D2R_CDS_NOT_TRAINED"
+  ],
+  "requiredProof": [
+    "D2 baseline image exists",
+    "D2 baseline image contains the corrected D2 artifact",
+    "D2 baseline image uses corrected D2 CDS if CDS mode is selected",
+    "D2R candidate image exists",
+    "D2R candidate image contains the D2 + raw reducer artifact",
+    "D2R candidate image BOOT-INF/lib count is 184",
+    "sample BOOT-INF/lib hashes match the reducer manifest",
+    "D2R candidate image uses fresh D2R CDS if CDS mode is selected",
+    "old non-reduced D2 artifact does not shadow the D2R artifact",
+    "runtime command points at the expected artifact and archive"
+  ],
+  "claimBoundary": "No runtime materialization proof exists yet. No Doctor semantic or runtime claim is made."
+}

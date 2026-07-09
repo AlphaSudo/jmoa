@@ -23,7 +23,9 @@
     "MISSING_IMAGE",
     "MISSING_CONFIG",
     "MISSING_DATABASE",
-    "D2R_CDS_NOT_TRAINED"
+    "D2R_CDS_NOT_TRAINED",
+    "MISSING_NETWORK",
+    "PORT_BUSY_OR_BLOCKED"
   ],
   "imageRebuildPerformed": false,
   "claimBoundary": "Image rebuild plan only. No semantic, runtime, V2-C, V2-D, or memory claim is made."

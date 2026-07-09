@@ -1,6 +1,7 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after V2-J.
+This is the source of truth for public V2 claims after the V2-K Doctor
+inventory and unblock gates.
 
 Closure terms follow:
 
@@ -119,6 +120,14 @@ V2-K Doctor raw materialization:
   BOOT-INF/lib entries replaced: 184/184
   materialized raw D2R fat-JAR SHA-256 recorded
   runtime claim: false
+
+V2-K Doctor inventory/unblock gate:
+  corrected D2 artifact hash verified
+  raw-reduced D2 artifact hash verified
+  corrected D2 CDS archive hash verified
+  current blockers: D2R_CDS_NOT_TRAINED, MISSING_IMAGE, MISSING_CONFIG,
+    MISSING_DATABASE, MISSING_NETWORK, PORT_BUSY_OR_BLOCKED
+  runtime claim: false
 ```
 
 ## Not Claimed
@@ -131,6 +140,8 @@ CDS/AppCDS runtime win
 Doctor runtime win
 Doctor semantic smoke
 Doctor D2R CDS confirmation
+Doctor runtime materialization proof
+Doctor runtime screen
 cross-service runtime generalization
 all debug metadata stripping safety
 LineNumberTable stripping

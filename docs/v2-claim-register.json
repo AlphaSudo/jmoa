@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2J",
+  "status": "CURRENT_AFTER_V2K_DOCTOR_INVENTORY_AND_UNBLOCK_GATES",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
@@ -87,6 +87,24 @@
       "bootInfLibEntriesReplaced": "184/184",
       "materializedSha256": "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742",
       "runtimeClaim": false
+    },
+    {
+      "id": "v2k-doctor-inventory-unblock-gate",
+      "claim": "V2-K verifies Doctor corrected D2, raw-reduced D2, and corrected D2 CDS artifacts but blocks before smoke due missing runtime stack and D2R CDS.",
+      "verifiedArtifactHashes": [
+        "1818b210028987085c782df9e5cd8cfbb159b809966d80d0aa0b458c39569b85",
+        "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742",
+        "02955a369bb9f675706e4715e28437220a95637294fc23d07d0a381ad216f6d2"
+      ],
+      "currentBlockers": [
+        "D2R_CDS_NOT_TRAINED",
+        "MISSING_IMAGE",
+        "MISSING_CONFIG",
+        "MISSING_DATABASE",
+        "MISSING_NETWORK",
+        "PORT_BUSY_OR_BLOCKED"
+      ],
+      "runtimeClaim": false
     }
   ],
   "notClaimed": [
@@ -97,6 +115,8 @@
     "Doctor runtime win",
     "Doctor semantic smoke",
     "Doctor D2R CDS confirmation",
+    "Doctor runtime materialization proof",
+    "Doctor runtime screen",
     "cross-service runtime generalization",
     "all debug metadata stripping safety",
     "LineNumberTable stripping",

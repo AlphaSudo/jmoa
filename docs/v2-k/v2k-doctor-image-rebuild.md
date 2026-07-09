@@ -44,5 +44,12 @@ MISSING_DATABASE
 D2R_CDS_NOT_TRAINED
 ```
 
+The policy-aware unblock gate additionally reports:
+
+```text
+MISSING_NETWORK
+PORT_BUSY_OR_BLOCKED
+```
+
 No image rebuild was performed in this commit because the required private
 runtime stack inputs are not configured.

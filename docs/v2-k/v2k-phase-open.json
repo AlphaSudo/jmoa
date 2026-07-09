@@ -6,6 +6,7 @@
   "goal": "Resolve the Doctor runtime blocker and, in parallel or fallback, prepare a public second runtime target for the V2-I/V2-J raw reducer.",
   "runtimeClaim": false,
   "firstExecutableGate": "scripts/doctor-runtime-inventory.ps1",
+  "nextExecutableGate": "scripts/doctor-runtime-unblock-gate.ps1",
   "requiredBeforeClaim": [
     "runtime materialization proof",
     "semantic smoke",
