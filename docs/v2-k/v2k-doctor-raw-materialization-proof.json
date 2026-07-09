@@ -1,0 +1,14 @@
+{
+  "metadataVersion": "v2k-doctor-raw-materialization-proof",
+  "target": "doctor-corrected-d2",
+  "sourceFatJarBytes": 101906981,
+  "materializedFatJarBytes": 97989324,
+  "bootInfLibEntries": 184,
+  "replacedBootInfLibEntries": 184,
+  "missingReplacementLibs": 0,
+  "sourceSha256": "1818b210028987085c782df9e5cd8cfbb159b809966d80d0aa0b458c39569b85",
+  "materializedSha256": "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742",
+  "committedToRepo": false,
+  "runtimeClaim": false,
+  "claimBoundary": "Local artifact materialization only. No runtime image, CDS, semantic, V2-C, V2-D, or memory claim is made."
+}

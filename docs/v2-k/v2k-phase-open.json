@@ -1,0 +1,16 @@
+{
+  "metadataVersion": "v2k-phase-open",
+  "status": "OPEN",
+  "primaryTarget": "doctor-corrected-d2",
+  "fallbackTarget": "spring-petclinic-visits-service",
+  "goal": "Resolve the Doctor runtime blocker and, in parallel or fallback, prepare a public second runtime target for the V2-I/V2-J raw reducer.",
+  "runtimeClaim": false,
+  "requiredBeforeClaim": [
+    "runtime materialization proof",
+    "semantic smoke",
+    "artifact smoke",
+    "runtime screen",
+    "V2-C confirmation if screen passes",
+    "V2-D attribution"
+  ]
+}

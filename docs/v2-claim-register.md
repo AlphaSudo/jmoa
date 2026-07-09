@@ -2,6 +2,10 @@
 
 This is the source of truth for public V2 claims after V2-J.
 
+Closure terms follow:
+
+- [V2 Phase Closure Taxonomy](v2-phase-closure-taxonomy.md)
+
 ## Confirmed Runtime Claims
 
 ### 1. PetClinic Full P2 No-CDS Win
@@ -110,6 +114,11 @@ V2-J Doctor raw artifact smoke:
   classes reduced and audited: 31,942
   failed raw byte-preservation audits: 0
   runtime claim: false
+
+V2-K Doctor raw materialization:
+  BOOT-INF/lib entries replaced: 184/184
+  materialized raw D2R fat-JAR SHA-256 recorded
+  runtime claim: false
 ```
 
 ## Not Claimed
@@ -121,6 +130,7 @@ fat-JAR runtime win
 CDS/AppCDS runtime win
 Doctor runtime win
 Doctor semantic smoke
+Doctor D2R CDS confirmation
 cross-service runtime generalization
 all debug metadata stripping safety
 LineNumberTable stripping
