@@ -1,7 +1,7 @@
 {
   "metadataVersion": "v2k-doctor-cds-policy",
   "target": "doctor-corrected-d2",
-  "currentDecision": "CDS_POLICY_UNDECIDED",
+  "currentDecision": "PREFER_RETRAIN_D2R_CDS",
   "preferredPolicy": {
     "baseline": "corrected D2 artifact + corrected D2 CDS archive",
     "candidate": "corrected D2 + raw reducer artifact + freshly trained D2R CDS archive",
@@ -17,5 +17,10 @@
     "CDS baseline compared to no-CDS candidate",
     "artifact smoke described as runtime evidence"
   ],
-  "recommendedNextAction": "Try fresh D2R CDS retraining first; if blocked, use explicit no-CDS diagnostic; if private stack cannot be rebuilt, keep Doctor blocked and proceed with visits-service fallback."
+  "currentState": [
+    "preferred CDS-comparable path selected",
+    "D2R CDS archive not trained",
+    "runtime stack still blocked"
+  ],
+  "recommendedNextAction": "Use the comparable CDS path first. If retraining remains blocked after image/config/database recovery, run an explicitly labeled no-CDS diagnostic screen."
 }

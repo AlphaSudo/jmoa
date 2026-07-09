@@ -1,0 +1,32 @@
+{
+  "metadataVersion": "v2k-doctor-runtime-inventory-update",
+  "generatedBy": "scripts/doctor-runtime-inventory.ps1",
+  "runDate": "2026-07-09",
+  "result": {
+    "podman": "PRESENT",
+    "correctedD2FatJar": "PRESENT",
+    "d2RawReducerFatJar": "PRESENT",
+    "correctedD2CdsArchive": "PRESENT",
+    "d2RawReducerCdsArchive": "NOT_CONFIGURED",
+    "requiredRuntimeImages": "MISSING",
+    "privateConfigInput": "NOT_CONFIGURED",
+    "databaseInitSql": "NOT_CONFIGURED",
+    "runtimeNetwork": "MISSING",
+    "port5432": "BUSY_OR_BLOCKED"
+  },
+  "hashes": {
+    "correctedD2FatJarSha256": "1818b210028987085c782df9e5cd8cfbb159b809966d80d0aa0b458c39569b85",
+    "d2RawReducerFatJarSha256": "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742",
+    "correctedD2CdsArchiveSha256": "02955a369bb9f675706e4715e28437220a95637294fc23d07d0a381ad216f6d2"
+  },
+  "verdict": [
+    "MISSING_IMAGE",
+    "MISSING_CONFIG",
+    "MISSING_DATABASE",
+    "D2R_CDS_NOT_TRAINED",
+    "BLOCKED_PRIVATE_STACK"
+  ],
+  "semanticSmokeAttempted": false,
+  "runtimeScreenAttempted": false,
+  "claimBoundary": "Doctor remains blocked, not failed. No semantic smoke, runtime screen, V2-C, V2-D, or memory claim is made."
+}

@@ -12,6 +12,7 @@ private config repo is required by existing compose
 private Doctor database init SQL is required by existing compose
 existing D2 CDS archive targets the non-reduced D2 artifact
 D2R raw-reduced CDS archive has not been trained
+inventory script verdict still reports BLOCKED_PRIVATE_STACK
 ```
 
 This is not a runtime failure. No semantic smoke or memory screen was attempted.

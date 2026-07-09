@@ -13,6 +13,12 @@ V2-K does not begin with a runtime claim. It begins with Doctor runtime
 inventory, CDS policy selection, image/materialization proof, and only then
 semantic smoke or runtime screening.
 
+The first executable gate is:
+
+```text
+scripts/doctor-runtime-inventory.ps1
+```
+
 ## Primary Target
 
 ```text
