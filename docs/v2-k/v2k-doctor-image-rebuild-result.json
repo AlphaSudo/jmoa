@@ -1,0 +1,20 @@
+{
+  "metadataVersion": "v2k-doctor-image-rebuild-result",
+  "status": "BLOCKED_WITH_ROOT_CAUSE",
+  "legacyRebuildAssetsPresent": true,
+  "imageRebuildPerformed": false,
+  "unresolvedImageRoles": [
+    "config server",
+    "discovery server",
+    "database",
+    "Doctor base image",
+    "Doctor corrected D2 image",
+    "Doctor D2 + raw reducer candidate image"
+  ],
+  "blockedBy": [
+    "MISSING_IMAGE",
+    "MISSING_PRIVATE_INPUT",
+    "LEGACY_ASSETS_REQUIRE_SANITIZATION"
+  ],
+  "claimBoundary": "Image rebuild did not run. No Doctor runtime claim is made."
+}

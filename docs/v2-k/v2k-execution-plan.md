@@ -10,6 +10,15 @@ Lane B: public visits-service fallback / parallel portability
 Doctor is the primary lane. Visits-service is the public fallback if Doctor
 remains blocked.
 
+Current Doctor result:
+
+```text
+BLOCKED_WITH_ROOT_CAUSE
+```
+
+The next executable lane is visits-service unless the missing Doctor runtime
+pieces are restored.
+
 ## K1 Doctor Runtime Inventory
 
 Create and maintain:

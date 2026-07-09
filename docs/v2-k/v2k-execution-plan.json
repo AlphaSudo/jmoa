@@ -2,6 +2,8 @@
   "metadataVersion": "v2k-execution-plan",
   "primaryTarget": "doctor-corrected-d2",
   "fallbackTarget": "spring-petclinic-visits-service",
+  "currentDoctorOutcome": "BLOCKED_WITH_ROOT_CAUSE",
+  "nextExecutableLane": "spring-petclinic-visits-service",
   "gates": [
     {
       "id": "K1",

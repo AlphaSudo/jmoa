@@ -1,0 +1,31 @@
+{
+  "metadataVersion": "v2k-doctor-runtime-recovery-audit",
+  "outcome": "BLOCKED_WITH_ROOT_CAUSE",
+  "legacyRuntimeAssets": {
+    "status": "PRESENT",
+    "publicSafe": false,
+    "assets": [
+      "Dockerfile.d2-fixed",
+      "docker-compose.32k-d2-fixed.yml",
+      "docker-compose.32k-train.yml",
+      "build-and-test-image.ps1",
+      "train-cds.ps1",
+      "validate-cds.ps1"
+    ]
+  },
+  "verifiedArtifacts": {
+    "correctedD2FatJar": "PRESENT",
+    "d2RawReducerFatJar": "PRESENT",
+    "correctedD2CdsArchive": "PRESENT",
+    "d2RawReducerCdsArchive": "NOT_CONFIGURED"
+  },
+  "verdict": [
+    "LEGACY_RUNTIME_ASSETS_FOUND",
+    "LEGACY_ASSETS_REQUIRE_SANITIZATION",
+    "D2R_CDS_NOT_TRAINED",
+    "MISSING_PRIVATE_INPUT",
+    "MISSING_IMAGE",
+    "MISSING_NETWORK"
+  ],
+  "claimBoundary": "Recovery audit only. No Doctor semantic smoke, runtime screen, V2-C, V2-D, startup, CDS, or memory claim is made."
+}

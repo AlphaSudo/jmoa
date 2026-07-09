@@ -1,0 +1,15 @@
+{
+  "metadataVersion": "v2k-doctor-runtime-materialization-proof-result",
+  "status": "NOT_ATTEMPTED_BLOCKED",
+  "runtimeImagesInspected": false,
+  "artifactLevelMaterialization": {
+    "bootInfLibEntriesReplaced": "184/184",
+    "runtimeProof": false
+  },
+  "blockedBy": [
+    "MISSING_IMAGE",
+    "MISSING_PRIVATE_INPUT",
+    "D2R_CDS_NOT_TRAINED"
+  ],
+  "claimBoundary": "No runtime image materialization proof exists. No Doctor semantic or runtime claim is made."
+}

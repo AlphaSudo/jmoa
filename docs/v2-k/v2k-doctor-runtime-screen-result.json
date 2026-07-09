@@ -1,0 +1,15 @@
+{
+  "metadataVersion": "v2k-doctor-runtime-screen-result",
+  "status": "NOT_ATTEMPTED_BLOCKED",
+  "runtimeScreenAttempted": false,
+  "blockedBy": [
+    "SEMANTIC_SMOKE_NOT_RUN"
+  ],
+  "validFutureComparisons": [
+    "D2 + corrected D2 CDS vs D2R + freshly trained D2R CDS",
+    "D2 no-CDS vs D2R no-CDS diagnostic"
+  ],
+  "v2cConfirmationAttempted": false,
+  "v2dAttributionAttempted": false,
+  "claimBoundary": "Doctor runtime screen did not run. No runtime claim is made."
+}

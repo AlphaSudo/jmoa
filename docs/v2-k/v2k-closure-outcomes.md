@@ -13,12 +13,14 @@ V2-K can close in one of these states:
 Current state:
 
 ```text
-BLOCKED
+BLOCKED_WITH_ROOT_CAUSE
 ```
 
 Reason:
 
 ```text
-Doctor runtime stack is not ready for semantic smoke.
-Visits-service fallback has not been started in this branch.
+Doctor runtime stack recovery was attempted and remains blocked by stale/private
+runtime assets, missing private inputs, missing images, missing network, and
+missing D2R CDS training.
+Visits-service fallback has not been started yet.
 ```

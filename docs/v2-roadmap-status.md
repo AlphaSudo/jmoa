@@ -33,7 +33,7 @@ claims.
 | V2-H | `SCREEN_FAILED` | Productized V2-F-hardened PetClinic reducer screen; artifact gate passed, runtime promotion failed |
 | V2-I | `CLOSED_CONFIRMED` | Reducer policy-diff recovery with an explicit raw engine and V2-C-confirmed PetClinic runtime win |
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
-| V2-K | `BLOCKED` / `OPEN_BACKLOG` | Doctor runtime unblock is primary and currently blocked; visits-service is selected as public fallback |
+| V2-K | `BLOCKED_WITH_ROOT_CAUSE` / `OPEN_BACKLOG` | Doctor runtime recovery is blocked with root cause; visits-service is selected as public fallback |
 
 ## Current Foundation
 
@@ -294,14 +294,21 @@ remain blocked until the private runtime stack and CDS/no-CDS policy are settled
 
 ## Next Gate
 
-The next gate is Doctor runtime unblock plus public second-runtime portability:
+The Doctor runtime recovery attempt is blocked with root cause:
 
 ```text
-resolve Doctor runtime image/config/database blockers
-run the policy-aware Doctor runtime unblock gate
-train fresh D2R CDS archive or explicitly choose no-CDS diagnostic
-run Doctor semantic smoke only after materialization proof is clean
-use visits-service as public fallback/parallel lane if Doctor remains blocked
+legacy Doctor runtime assets exist but require sanitization/private inputs
+runtime images are missing
+runtime network is missing
+D2R CDS archive is not trained
+semantic smoke did not run
+runtime screen did not run
+```
+
+The next executable gate is the public second-runtime fallback:
+
+```text
+Spring PetClinic visits-service artifact build and raw reducer artifact smoke
 ```
 
 Primary target:
@@ -322,12 +329,19 @@ See:
 - [V2-K Doctor Runtime Inventory](v2-k/v2k-doctor-runtime-inventory.md)
 - [V2-K Doctor Runtime Inventory Update](v2-k/v2k-doctor-runtime-inventory-update.md)
 - [V2-K Doctor Runtime Unblock Gate](v2-k/v2k-doctor-runtime-unblock-gate.md)
+- [V2-K Doctor Runtime Recovery Audit](v2-k/v2k-doctor-runtime-recovery-audit.md)
 - [V2-K Doctor CDS Policy](v2-k/v2k-doctor-cds-policy.md)
 - [V2-K Doctor D2R CDS Training](v2-k/v2k-doctor-d2r-cds-training.md)
+- [V2-K Doctor D2R CDS Training Result](v2-k/v2k-doctor-d2r-cds-training-result.md)
 - [V2-K Doctor Image Rebuild Plan](v2-k/v2k-doctor-image-rebuild.md)
+- [V2-K Doctor Image Rebuild Result](v2-k/v2k-doctor-image-rebuild-result.md)
 - [V2-K Doctor Runtime Materialization Proof](v2-k/v2k-doctor-runtime-materialization-proof.md)
+- [V2-K Doctor Runtime Materialization Proof Result](v2-k/v2k-doctor-runtime-materialization-proof-result.md)
 - [V2-K Doctor Semantic Smoke](v2-k/v2k-doctor-semantic-smoke.md)
+- [V2-K Doctor Semantic Smoke Result](v2-k/v2k-doctor-semantic-smoke-result.md)
 - [V2-K Doctor Runtime Screen](v2-k/v2k-doctor-runtime-screen.md)
+- [V2-K Doctor Runtime Screen Result](v2-k/v2k-doctor-runtime-screen-result.md)
+- [V2-K Doctor Final Blocked Root Cause](v2-k/v2k-doctor-final-blocked-root-cause.md)
 - [V2-K Closure Outcomes](v2-k/v2k-closure-outcomes.md)
 - [V2-K Doctor Runtime Blocked](v2-k/v2k-doctor-runtime-blocked.md)
 

@@ -45,6 +45,15 @@ Doctor exercises the private fat-JAR/CDS runtime shape.
 Spring PetClinic visits-service
 ```
 
+## Current Doctor Outcome
+
+```text
+BLOCKED_WITH_ROOT_CAUSE
+```
+
+Doctor can resume only after the missing private runtime pieces are restored.
+Until then, the next executable V2-K lane is visits-service.
+
 Reason:
 
 ```text

@@ -128,6 +128,13 @@ V2-K Doctor inventory/unblock gate:
   current blockers: D2R_CDS_NOT_TRAINED, MISSING_IMAGE, MISSING_CONFIG,
     MISSING_DATABASE, MISSING_NETWORK, PORT_BUSY_OR_BLOCKED
   runtime claim: false
+
+V2-K Doctor runtime recovery audit:
+  legacy runtime assets found
+  blocked with root cause
+  semantic smoke: not attempted
+  runtime screen: not attempted
+  runtime claim: false
 ```
 
 ## Not Claimed
@@ -142,6 +149,7 @@ Doctor semantic smoke
 Doctor D2R CDS confirmation
 Doctor runtime materialization proof
 Doctor runtime screen
+Doctor runtime recovery
 cross-service runtime generalization
 all debug metadata stripping safety
 LineNumberTable stripping

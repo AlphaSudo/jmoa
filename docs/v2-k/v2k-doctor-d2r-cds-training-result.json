@@ -1,0 +1,19 @@
+{
+  "metadataVersion": "v2k-doctor-d2r-cds-training-result",
+  "status": "BLOCKED_WITH_ROOT_CAUSE",
+  "preferredComparison": "D2 + corrected D2 CDS vs D2R + freshly trained D2R CDS",
+  "correctedD2CdsArchive": "PRESENT",
+  "d2RawReducerCdsArchive": "NOT_CONFIGURED",
+  "trainingAttempted": false,
+  "blockedBy": [
+    "D2R_CDS_NOT_TRAINED",
+    "MISSING_IMAGE",
+    "MISSING_PRIVATE_INPUT"
+  ],
+  "forbiddenComparisons": [
+    "reuse corrected D2 CDS with D2R",
+    "compare CDS baseline against no-CDS candidate",
+    "compare historical CDS result against new no-CDS diagnostic"
+  ],
+  "claimBoundary": "CDS training did not run. No Doctor CDS or runtime claim is made."
+}
