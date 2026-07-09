@@ -105,6 +105,14 @@
         "PORT_BUSY_OR_BLOCKED"
       ],
       "runtimeClaim": false
+    },
+    {
+      "id": "v2k-doctor-runtime-recovery-audit",
+      "claim": "V2-K attempted Doctor runtime recovery and closed the Doctor lane as blocked with root cause.",
+      "outcome": "BLOCKED_WITH_ROOT_CAUSE",
+      "semanticSmokeAttempted": false,
+      "runtimeScreenAttempted": false,
+      "runtimeClaim": false
     }
   ],
   "notClaimed": [
@@ -117,6 +125,7 @@
     "Doctor D2R CDS confirmation",
     "Doctor runtime materialization proof",
     "Doctor runtime screen",
+    "Doctor runtime recovery",
     "cross-service runtime generalization",
     "all debug metadata stripping safety",
     "LineNumberTable stripping",

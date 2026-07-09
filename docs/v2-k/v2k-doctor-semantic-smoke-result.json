@@ -1,0 +1,13 @@
+{
+  "metadataVersion": "v2k-doctor-semantic-smoke-result",
+  "status": "NOT_ATTEMPTED_BLOCKED",
+  "semanticSmokeAttempted": false,
+  "blockedBy": [
+    "MISSING_IMAGE",
+    "MISSING_PRIVATE_INPUT",
+    "D2R_CDS_NOT_TRAINED",
+    "RUNTIME_MATERIALIZATION_PROOF_MISSING"
+  ],
+  "runtimeScreenAllowed": false,
+  "claimBoundary": "Doctor semantic smoke did not run. No Doctor runtime claim is made."
+}

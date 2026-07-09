@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2k-closure-outcomes",
-  "currentState": "BLOCKED",
+  "currentState": "BLOCKED_WITH_ROOT_CAUSE",
   "outcomes": [
     {
       "id": "CLOSED_CONFIRMED_DOCTOR",
@@ -28,5 +28,5 @@
       "tagGuidance": "optional portability-smoke tag only"
     }
   ],
-  "currentReason": "Doctor runtime stack is not ready for semantic smoke. Visits-service fallback has not been started in this branch."
+  "currentReason": "Doctor runtime stack recovery was attempted and remains blocked by stale/private runtime assets, missing private inputs, missing images, missing network, and missing D2R CDS training. Visits-service fallback has not been started yet."
 }
