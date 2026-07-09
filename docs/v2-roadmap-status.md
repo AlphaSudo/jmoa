@@ -317,7 +317,9 @@ See:
 
 - [V2-K Target Selection](v2-k/v2k-target-selection.md)
 - [V2-K Doctor Runtime Inventory](v2-k/v2k-doctor-runtime-inventory.md)
+- [V2-K Doctor Runtime Inventory Update](v2-k/v2k-doctor-runtime-inventory-update.md)
 - [V2-K Doctor CDS Policy](v2-k/v2k-doctor-cds-policy.md)
+- [V2-K Doctor Image Rebuild Plan](v2-k/v2k-doctor-image-rebuild.md)
 - [V2-K Doctor Runtime Blocked](v2-k/v2k-doctor-runtime-blocked.md)
 
 ## V2-E Boundary

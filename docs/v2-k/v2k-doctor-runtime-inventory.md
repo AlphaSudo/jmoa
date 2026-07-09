@@ -59,9 +59,10 @@ This is materialization proof only. It is not runtime proof.
 MISSING_IMAGE
 MISSING_CONFIG
 MISSING_DATABASE
-CDS_POLICY_UNDECIDED
+D2R_CDS_NOT_TRAINED
 BLOCKED_PRIVATE_STACK
 ```
 
 Doctor is not failed and not confirmed. It is blocked until the private runtime
-stack and CDS/no-CDS policy are resolved.
+stack is restored and a fresh D2R CDS archive is trained for the raw-reduced
+artifact.

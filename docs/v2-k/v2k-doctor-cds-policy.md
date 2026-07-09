@@ -41,14 +41,22 @@ artifact smoke described as runtime evidence
 ## Current Decision
 
 ```text
-CDS_POLICY_UNDECIDED
+PREFER_RETRAIN_D2R_CDS
 ```
 
 Recommendation:
 
 ```text
-Try fresh D2R CDS retraining first.
-If retraining is blocked, run an explicitly labeled no-CDS diagnostic screen.
-If the private stack cannot be rebuilt, keep Doctor runtime blocked and proceed
-with the public visits-service fallback.
+Use the comparable CDS path first:
+  D2 + corrected D2 CDS
+  vs
+  D2R + freshly trained D2R CDS
+
+Current state:
+  preferred path selected
+  D2R CDS archive not trained
+  runtime stack still blocked
+
+If retraining remains blocked after image/config/database recovery, run an
+explicitly labeled no-CDS diagnostic screen.
 ```

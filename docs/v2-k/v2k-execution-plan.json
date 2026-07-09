@@ -8,8 +8,11 @@
       "lane": "doctor",
       "name": "Doctor runtime inventory",
       "outputs": [
+        "scripts/doctor-runtime-inventory.ps1",
         "v2k-doctor-runtime-inventory.md",
-        "v2k-doctor-runtime-inventory.json"
+        "v2k-doctor-runtime-inventory.json",
+        "v2k-doctor-runtime-inventory-update.md",
+        "v2k-doctor-runtime-inventory-update.json"
       ]
     },
     {

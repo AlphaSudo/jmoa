@@ -1,0 +1,30 @@
+{
+  "metadataVersion": "v2k-doctor-image-rebuild-plan",
+  "status": "BLOCKED",
+  "requiredImageRoles": [
+    "config server",
+    "discovery server",
+    "database",
+    "Doctor base image",
+    "Doctor corrected D2 image",
+    "Doctor D2 + raw reducer candidate image"
+  ],
+  "candidateArtifactSha256": "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742",
+  "requiredProofBeforeSmoke": [
+    "image exists",
+    "image app JAR SHA-256 matches materialized D2R artifact",
+    "BOOT-INF/lib count is 184",
+    "sample BOOT-INF/lib hashes match reducer manifest",
+    "old non-reduced D2 artifact does not shadow D2R",
+    "D2R CDS archive hash is recorded if CDS path is selected",
+    "runtime command points at expected artifact/archive"
+  ],
+  "currentBlockers": [
+    "MISSING_IMAGE",
+    "MISSING_CONFIG",
+    "MISSING_DATABASE",
+    "D2R_CDS_NOT_TRAINED"
+  ],
+  "imageRebuildPerformed": false,
+  "claimBoundary": "Image rebuild plan only. No semantic, runtime, V2-C, V2-D, or memory claim is made."
+}

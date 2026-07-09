@@ -34,8 +34,8 @@
     "MISSING_IMAGE",
     "MISSING_CONFIG",
     "MISSING_DATABASE",
-    "CDS_POLICY_UNDECIDED",
+    "D2R_CDS_NOT_TRAINED",
     "BLOCKED_PRIVATE_STACK"
   ],
-  "claimBoundary": "Doctor is not failed and not confirmed. It is blocked until private runtime stack and CDS/no-CDS policy are resolved."
+  "claimBoundary": "Doctor is not failed and not confirmed. It is blocked until private runtime stack is restored and a fresh D2R CDS archive is trained for the raw-reduced artifact."
 }

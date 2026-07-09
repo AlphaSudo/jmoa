@@ -12,7 +12,8 @@
     "private config repo is required by existing compose",
     "private Doctor database init SQL is required by existing compose",
     "existing D2 CDS archive targets the non-reduced D2 artifact",
-    "D2R raw-reduced CDS archive has not been trained"
+    "D2R raw-reduced CDS archive has not been trained",
+    "inventory script verdict still reports BLOCKED_PRIVATE_STACK"
   ],
   "requiredUnblockWork": [
     "restore/build HMS runtime images",

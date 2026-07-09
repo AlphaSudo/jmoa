@@ -15,7 +15,9 @@ remains blocked.
 Create and maintain:
 
 ```text
+scripts/doctor-runtime-inventory.ps1
 v2k-doctor-runtime-inventory.md/json
+v2k-doctor-runtime-inventory-update.md/json
 ```
 
 Verdict categories:
@@ -25,7 +27,7 @@ READY
 MISSING_IMAGE
 MISSING_CONFIG
 MISSING_DATABASE
-CDS_POLICY_UNDECIDED
+D2R_CDS_NOT_TRAINED
 BLOCKED_PRIVATE_STACK
 ```
 
