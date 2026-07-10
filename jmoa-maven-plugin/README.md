@@ -167,5 +167,72 @@ by removing only `LocalVariableTable` and `LocalVariableTypeTable`; the
 normalized byte streams must match exactly. Any non-target byte drift hard-fails
 the reducer.
 
+V2-L closes as the second public runtime confirmation for the raw engine. Its
+official closure type is `CLOSED_CONFIRMED`; the descriptive phase label is
+`CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME`. The visits-service claim remains
+baseline vs baseline plus raw reducer under its documented exploded-Boot/no-CDS
+protocol.
+
+## V2-M Reducer Recommendation Flags
+
+Reducer recommendation is disabled by default and never mutates bytecode.
+
+```text
+jmoa.recommendation.enabled=false
+jmoa.recommendation.mode=analyze
+jmoa.recommendation.inputDir=<reports-dir>
+jmoa.recommendation.outputDir=<output-dir>
+jmoa.recommendation.service=<service>
+jmoa.recommendation.launchMode=<mode>
+jmoa.recommendation.runtimePolicy=<policy>
+jmoa.recommendation.confirmationScope=UNKNOWN
+```
+
+The plugin module requires JDK 22 or newer. On Windows, quote each dotted
+Maven property so PowerShell passes it as one literal argument.
+
+Run analyze mode from a multi-module repository root with:
+
+```powershell
+mvn -N jmoa:recommend-reducer `
+  '-Djmoa.recommendation.enabled=true' `
+  '-Djmoa.recommendation.inputDir=<reports-dir>' `
+  '-Djmoa.recommendation.service=<service>' `
+  '-Djmoa.recommendation.launchMode=EXPLODED_BOOT_APP' `
+  '-Djmoa.recommendation.runtimePolicy=NO_CDS_LOW_DIRTY' `
+  '-Djmoa.recommendation.confirmationScope=PUBLIC'
+```
+
+The input directory may contain a normalized `reducer-admission-input.json` or
+the canonical reducer/audit/safety/semantic/V2-C/V2-D reports. Outputs:
+
+```text
+reducer-admission-input.json
+jmoa-reducer-recommendation.json
+jmoa-reducer-recommendation.md
+```
+
+Replay mode validates historical admission decisions and fails on mismatches by
+default:
+
+```powershell
+mvn -N jmoa:recommend-reducer `
+  '-Djmoa.recommendation.enabled=true' `
+  '-Djmoa.recommendation.mode=replay' `
+  '-Djmoa.recommendation.inputDir=../docs/v2-m' `
+  '-Djmoa.recommendation.replaySuite=../docs/v2-m/historical-recommendation-suite.json'
+```
+
+V2-M is report-only. `RECOMMEND_CONFIRMED` applies only to an exact confirmed
+service, launch mode, and runtime policy; it does not enable the reducer or
+transfer a runtime claim.
+
+See:
+
+- [V2-M Admission States](../docs/v2-m/v2m-admission-states.md)
+- [V2-M Recommendation Rules](../docs/v2-m/v2m-recommendation-rules.md)
+- [V2-M Historical Replay](../docs/v2-m/v2m-historical-recommendation-replay.md)
+- [V2-M Closure Report](../docs/v2-m/v2m-closure-report.md)
+
 See the repository-level docs for deployment materialization and measurement
 boundaries.

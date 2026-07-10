@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2L_PUBLIC_VISITS_RUNTIME_CONFIRMATION",
+  "status": "CURRENT_AFTER_V2M_REDUCER_RECOMMENDATION_ENGINE",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
@@ -59,6 +59,27 @@
       "medianPrivateDirtyDeltaKb": -1680,
       "medianMemoryCurrentDeltaBytes": -1712128,
       "claimBoundary": "Public visits-service baseline-plus-reducer confirmation only; no visits full-P2, startup, fat-JAR/CDS, all-PetClinic, or universal Spring Boot claim."
+    }
+  ],
+  "productCapabilities": [
+    {
+      "id": "v2m-reducer-recommendation-engine",
+      "claim": "V2-M provides a report-only reducer admission and recommendation Maven goal with exact-protocol scope enforcement.",
+      "mavenGoal": "jmoa:recommend-reducer",
+      "historicalReplay": "5/5 passed",
+      "decisions": [
+        "RECOMMEND_CONFIRMED",
+        "RECOMMEND_SCREEN_REQUIRED",
+        "ALLOW_ARTIFACT_ONLY",
+        "BLOCK_UNSAFE",
+        "BLOCK_SEMANTIC_FAILURE",
+        "BLOCK_NO_EVIDENCE",
+        "BLOCK_RUNTIME_PROMOTION",
+        "DIAGNOSTIC_ONLY",
+        "UNKNOWN"
+      ],
+      "mutationBehaviorChanged": false,
+      "newRuntimePerformanceClaim": false
     }
   ],
   "artifactOnlyClaims": [
@@ -140,6 +161,8 @@
     "Signature stripping",
     "BootstrapMethods rewriting or stripping",
     "CGLIB/JDK proxy rewriting",
-    "Spring AOT generated-class mutation"
+    "Spring AOT generated-class mutation",
+    "automatic reducer mutation from a V2-M recommendation",
+    "transfer of a recommendation to a different service, launch mode, or runtime policy"
   ]
 }

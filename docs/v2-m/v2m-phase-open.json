@@ -1,0 +1,10 @@
+{
+  "metadataVersion": "v2m-phase-open",
+  "status": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+  "goal": "Build a report-only admission and recommendation engine for the existing raw LVT/LVTT reducer.",
+  "mavenGoal": "jmoa:recommend-reducer",
+  "defaultEnabled": false,
+  "mutationBehaviorChanged": false,
+  "newReducerTypes": false,
+  "claimBoundary": "Recommendations remain scoped to the exact service, launch mode, and runtime policy represented by the evidence."
+}
