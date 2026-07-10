@@ -1,33 +1,17 @@
 {
   "metadataVersion": "v2k-closure-outcomes",
-  "currentState": "RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN",
-  "outcomes": [
-    {
-      "id": "CLOSED_CONFIRMED_DOCTOR",
-      "meaning": "Doctor passes smoke, screen, V2-C confirmation, and V2-D attribution",
-      "tagGuidance": "v0.9.0-v2k-doctor-runtime-confirmed"
-    },
-    {
-      "id": "CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME",
-      "meaning": "Doctor remains blocked but visits-service confirms publicly",
-      "tagGuidance": "v0.9.0-v2k-public-second-runtime-confirmed"
-    },
-    {
-      "id": "SCREEN_FAILED",
-      "meaning": "Doctor smoke passes but runtime screen fails",
-      "tagGuidance": "no runtime-generalization tag"
-    },
-    {
-      "id": "BLOCKED",
-      "meaning": "Doctor remains blocked and visits-service does not run",
-      "tagGuidance": "no runtime-generalization tag"
-    },
-    {
-      "id": "ARTIFACT_ONLY",
-      "meaning": "Doctor or visits only reach artifact/smoke evidence",
-      "tagGuidance": "optional portability-smoke tag only"
-    }
-  ],
-  "currentReason": "Doctor runtime stack recovery succeeded after the private config and DB init inputs were located locally, support images were rebuilt, a fresh D2R CDS archive was trained, and the D2R runtime passed health plus a secured endpoint smoke.",
-  "nextGate": "Doctor corrected D2 vs Doctor corrected D2R single-screen measurement"
+  "currentState": "CLOSED_CONFIRMED_DOCTOR",
+  "outcome": {
+    "meaning": "Doctor passes smoke, screen, V2-C confirmation, and V2-D attribution.",
+    "tagGuidance": "v0.9.0-v2k-doctor-runtime-confirmed"
+  },
+  "confirmation": {
+    "v2cVerdict": "CONFIRMED_WIN",
+    "validRuns": 6,
+    "pairedWins": "3/3",
+    "medianPssDeltaKb": -5156,
+    "medianPrivateDirtyDeltaKb": -5212,
+    "medianMemoryCurrentDeltaBytes": -6975488
+  },
+  "claimBoundary": "Private Doctor corrected D2 vs raw-reduced D2R under Spring Boot fat JAR with variant-specific CDS archives."
 }

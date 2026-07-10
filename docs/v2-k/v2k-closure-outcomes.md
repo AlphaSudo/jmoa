@@ -13,7 +13,7 @@ V2-K can close in one of these states:
 Current state:
 
 ```text
-RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN
+CLOSED_CONFIRMED_DOCTOR
 ```
 
 Reason:
@@ -22,10 +22,17 @@ Reason:
 Doctor runtime stack recovery succeeded after the private config and DB init
 inputs were located locally, support images were rebuilt, a fresh D2R CDS archive
 was trained, and the D2R runtime passed health plus a secured endpoint smoke.
+V2-K then ran D2 vs D2R single-screen measurement, 3-pair V2-C confirmation,
+and V2-D attribution.
 ```
 
-Next gate:
+Confirmed result:
 
 ```text
-Doctor corrected D2 vs Doctor corrected D2R single-screen measurement.
+V2-C verdict: CONFIRMED_WIN
+valid runs: 6/6
+paired wins: 3/3
+median PSS delta: -5,156 KB
+median Private_Dirty delta: -5,212 KB
+median memory.current delta: -6,975,488 bytes
 ```

@@ -1,0 +1,35 @@
+{
+  "metadataVersion": "v2k-doctor-d2r-candidate-smoke",
+  "status": "PASSED",
+  "variant": "D2R_CANDIDATE",
+  "runtimeScope": {
+    "launchMode": "SPRING_BOOT_FAT_JAR",
+    "runtimePolicy": "CDS",
+    "cdsMode": "ON",
+    "javaagentPresent": false,
+    "classLoadLoggingEnabled": false,
+    "jfrEnabled": false,
+    "nmtMode": "summary"
+  },
+  "freshD2rCdsArchive": {
+    "bytes": 126636032,
+    "sha256": "64A4331695D092148A105ADAA47FEEA0CA46CB0CC561C3289F0413D1A67B6ACC",
+    "mappedAtRuntime": true
+  },
+  "artifact": {
+    "sha256": "9D00877C0AF90E02B0C8D812F8BC659297CA67D6A939016CAF96D3D5CED79742"
+  },
+  "runs": 3,
+  "workload": {
+    "requestsPerRun": 36,
+    "totalErrors": 0,
+    "health": "UP"
+  },
+  "medianPostWorkloadMetrics": {
+    "pssKb": 321979,
+    "privateDirtyKb": 290448,
+    "memoryCurrentBytes": 426975232,
+    "startupSeconds": 34.1
+  },
+  "claimBoundary": "Candidate runtime smoke only. Runtime performance claim is made only by the V2-C confirmation."
+}

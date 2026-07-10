@@ -3,29 +3,21 @@
 Status:
 
 ```text
-NOT_ATTEMPTED
+EXECUTED_AND_PROMOTED
 ```
 
-Doctor runtime screen is blocked until semantic smoke passes.
+Doctor runtime screen ran after semantic smoke passed and fresh
+variant-specific CDS archives were available.
 
-Valid comparisons:
+Executed comparison:
 
 ```text
-D2 + corrected D2 CDS
+D2 + fresh current-runtime D2 CDS
 vs
 D2R + freshly trained D2R CDS
 ```
 
-or, if CDS retraining remains blocked and the diagnostic path is explicitly
-selected:
-
-```text
-D2 no-CDS
-vs
-D2R no-CDS
-```
-
-Forbidden comparisons:
+Forbidden comparisons that were avoided:
 
 ```text
 historical CDS D2 vs new no-CDS D2R
@@ -43,4 +35,13 @@ Private_Dirty not worse by > 1 MB
 memory.current not worse by > 1 MB
 ```
 
-No runtime screen means no V2-C confirmation and no V2-D attribution.
+Screen result:
+
+```text
+PSS delta: -1,689 KB
+Private_Dirty delta: -1,608 KB
+memory.current delta: -3,244,032 bytes
+workload errors: 0
+```
+
+The screen promoted Doctor to 3-pair V2-C confirmation and V2-D attribution.

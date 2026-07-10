@@ -1,0 +1,38 @@
+{
+  "metadataVersion": "v2k-doctor-v2d-attribution",
+  "status": "PASSED",
+  "evidenceVerdict": "CONFIRMED_WIN",
+  "v2cValid": true,
+  "categoryDeltas": {
+    "totalPssKb": -5156,
+    "privateDirtyKb": -5212,
+    "memoryCurrentBytes": -6975488,
+    "heapPssKb": 0,
+    "heapUsedKb": 190,
+    "classHistogramBytes": -2024,
+    "anonymousRwPssKb": -3460,
+    "mappedFilePssKb": -1642,
+    "nmtTotalCommittedKb": -2534,
+    "nmtMetaspaceCommittedKb": -843,
+    "nmtClassCommittedKb": -262
+  },
+  "smapsNmtReconciliation": {
+    "classification": "NMT_INVISIBLE_OR_PARTIAL",
+    "nmtToPssGapKb": -2622,
+    "reasons": [
+      "PSS/Private_Dirty movement is larger than NMT total committed movement.",
+      "anonymous_rw PSS moved by at least 1 MB."
+    ]
+  },
+  "causalHypotheses": [
+    {
+      "hypothesis": "CLASS_COUNT_SAVINGS",
+      "confidence": "MEDIUM"
+    },
+    {
+      "hypothesis": "ANONYMOUS_RW_ALLOCATOR_REDUCTION",
+      "confidence": "MEDIUM"
+    }
+  ],
+  "interpretation": "Doctor D2R win is mainly anonymous_rw/mapped-file/class-metadata movement, not retained heap-object reduction."
+}

@@ -1,0 +1,35 @@
+{
+  "metadataVersion": "v2k-doctor-d2-baseline-smoke",
+  "status": "PASSED",
+  "variant": "D2_BASELINE",
+  "runtimeScope": {
+    "launchMode": "SPRING_BOOT_FAT_JAR",
+    "runtimePolicy": "CDS",
+    "cdsMode": "ON",
+    "javaagentPresent": false,
+    "classLoadLoggingEnabled": false,
+    "jfrEnabled": false,
+    "nmtMode": "summary"
+  },
+  "freshD2CdsArchive": {
+    "bytes": 128237568,
+    "sha256": "6FE999095F8800D3B820B87D60239EDD2217E730B5E75F9328737670EF6B8E3B",
+    "mappedAtRuntime": true
+  },
+  "artifact": {
+    "sha256": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85"
+  },
+  "runs": 3,
+  "workload": {
+    "requestsPerRun": 36,
+    "totalErrors": 0,
+    "health": "UP"
+  },
+  "medianPostWorkloadMetrics": {
+    "pssKb": 327175,
+    "privateDirtyKb": 295732,
+    "memoryCurrentBytes": 434028544,
+    "startupSeconds": 35.6
+  },
+  "claimBoundary": "Baseline runtime smoke only. No reducer claim is made by this file."
+}

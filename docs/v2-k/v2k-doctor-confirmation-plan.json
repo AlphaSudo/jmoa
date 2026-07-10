@@ -1,24 +1,20 @@
 {
   "metadataVersion": "v2k-doctor-confirmation-plan",
-  "status": "NOT_ALLOWED",
-  "blockedBy": [
-    "SEMANTIC_SMOKE_NOT_RUN",
-    "RUNTIME_SCREEN_NOT_RUN"
-  ],
+  "status": "EXECUTED",
+  "comparison": "D2 + fresh current-runtime D2 CDS vs D2R + fresh D2R CDS",
   "pairOrder": [
     "D2-1 -> D2R-1",
     "D2-2 -> D2R-2",
     "D2-3 -> D2R-3"
   ],
-  "runtimeClaimGate": [
-    "valid runs = 6/6",
-    "paired wins >= 2/3",
-    "median PSS <= -1 MB",
-    "median Private_Dirty <= -1 MB",
-    "median memory.current <= -1 MB",
-    "workload errors = 0",
-    "V2-C verdict = CONFIRMED_WIN",
-    "V2-D attribution present"
-  ],
-  "claimBoundary": "Doctor confirmation is planned but not allowed until semantic smoke and screen pass."
+  "gateResult": {
+    "validRuns": "6/6",
+    "pairedWins": "3/3",
+    "medianPssDeltaKb": -5156,
+    "medianPrivateDirtyDeltaKb": -5212,
+    "medianMemoryCurrentDeltaBytes": -6975488,
+    "workloadErrors": 0,
+    "v2cVerdict": "CONFIRMED_WIN",
+    "v2dAttributionPresent": true
+  }
 }

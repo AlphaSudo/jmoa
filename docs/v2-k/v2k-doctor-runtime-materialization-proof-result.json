@@ -1,15 +1,28 @@
 {
   "metadataVersion": "v2k-doctor-runtime-materialization-proof-result",
-  "status": "NOT_ATTEMPTED_BLOCKED",
-  "runtimeImagesInspected": false,
-  "artifactLevelMaterialization": {
-    "bootInfLibEntriesReplaced": "184/184",
-    "runtimeProof": false
+  "status": "PASSED",
+  "runtimeScreenAttempted": true,
+  "comparison": "D2 + fresh current-runtime D2 CDS vs D2R + fresh D2R CDS",
+  "d2": {
+    "appJarSha256": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+    "cdsSha256": "6FE999095F8800D3B820B87D60239EDD2217E730B5E75F9328737670EF6B8E3B",
+    "cdsBytes": 128237568,
+    "cdsMappedInMeasuredRuns": true
   },
-  "blockedBy": [
-    "MISSING_IMAGE",
-    "MISSING_PRIVATE_INPUT",
-    "D2R_CDS_NOT_TRAINED"
-  ],
-  "claimBoundary": "No runtime image materialization proof exists. No Doctor semantic or runtime claim is made."
+  "d2r": {
+    "appJarSha256": "9D00877C0AF90E02B0C8D812F8BC659297CA67D6A939016CAF96D3D5CED79742",
+    "cdsSha256": "64A4331695D092148A105ADAA47FEEA0CA46CB0CC561C3289F0413D1A67B6ACC",
+    "cdsBytes": 126636032,
+    "cdsMappedInMeasuredRuns": true
+  },
+  "artifactMaterialization": {
+    "candidateBootInfLibEntriesReplaced": 184,
+    "candidateBootInfLibEntriesExpected": 184
+  },
+  "memoryPairPolicy": {
+    "classLoadLoggingEnabled": false,
+    "jfrEnabled": false,
+    "nmtMode": "summary"
+  },
+  "claimBoundary": "Runtime materialization proof supports the V2-K confirmation. It does not by itself make a memory claim."
 }
