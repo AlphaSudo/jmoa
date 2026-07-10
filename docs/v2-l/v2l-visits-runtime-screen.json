@@ -1,0 +1,29 @@
+{
+  "metadataVersion": "v2l-visits-runtime-screen",
+  "status": "PASSED_AND_SUPERSEDED_BY_CONFIRMATION",
+  "comparison": "visits baseline vs visits baseline plus raw reducer",
+  "baseline": {
+    "pssKb": 329516,
+    "privateDirtyKb": 307016,
+    "memoryCurrentBytes": 316874752,
+    "workloadErrors": 0,
+    "linkageErrors": 0
+  },
+  "candidate": {
+    "pssKb": 310132,
+    "privateDirtyKb": 287836,
+    "memoryCurrentBytes": 297132032,
+    "workloadErrors": 0,
+    "linkageErrors": 0
+  },
+  "delta": {
+    "pssKb": -19384,
+    "privateDirtyKb": -19180,
+    "memoryCurrentBytes": -19742720
+  },
+  "promotionGatesPassed": true,
+  "invalidPreflightAttempts": 1,
+  "invalidPreflightReason": "port ownership conflict before evidence capture",
+  "invalidPreflightIncludedInMetrics": false,
+  "startupClaim": false
+}

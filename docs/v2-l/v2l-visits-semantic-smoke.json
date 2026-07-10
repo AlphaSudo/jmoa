@@ -1,0 +1,31 @@
+{
+  "metadataVersion": "v2l-visits-semantic-smoke",
+  "status": "PASSED",
+  "variants": [
+    {
+      "variant": "baseline",
+      "health": "UP",
+      "readStatus": 200,
+      "createStatus": 201,
+      "linkageErrors": 0
+    },
+    {
+      "variant": "raw-reduced",
+      "health": "UP",
+      "readStatus": 200,
+      "createStatus": 201,
+      "linkageErrors": 0
+    }
+  ],
+  "confirmationRuns": 6,
+  "requestsPerRun": 18,
+  "workloadErrors": 0,
+  "linkageErrorPatterns": [
+    "VerifyError",
+    "ClassFormatError",
+    "NoSuchMethodError",
+    "NoClassDefFoundError",
+    "ExceptionInInitializerError"
+  ],
+  "startupClaim": false
+}

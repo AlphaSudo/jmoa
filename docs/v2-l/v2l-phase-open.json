@@ -1,0 +1,13 @@
+{
+  "metadataVersion": "v2l-phase-open",
+  "status": "CLOSED_CONFIRMED",
+  "goal": "Confirm or reject the raw LVT/LVTT reducer on a second public runtime target.",
+  "target": {
+    "service": "Spring PetClinic visits-service",
+    "sourceRepository": "https://github.com/spring-petclinic/spring-petclinic-microservices",
+    "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967"
+  },
+  "comparison": "visits baseline vs the same visits baseline plus the raw LVT/LVTT reducer",
+  "fullP2Available": false,
+  "claimBoundary": "V2-L is not an incremental full-P2 comparison and does not borrow the customers-service P2 profile."
+}

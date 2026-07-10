@@ -1,7 +1,7 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after the V2-K Doctor runtime
-confirmation.
+This is the source of truth for public V2 claims after the V2-L visits-service
+runtime confirmation.
 
 Closure terms follow:
 
@@ -111,6 +111,36 @@ JFR disabled
 This claim is not public-reproducible and is not transferred to all Doctor
 deployments, all fat-JAR services, all CDS/AppCDS modes, or startup performance.
 
+### 5. V2-L Visits Raw Reducer Runtime Win
+
+V2-L confirmed the productized raw reducer on a second public runtime target:
+
+```text
+comparison: public visits baseline vs the same baseline + raw LVT/LVTT reducer
+launch mode: EXPLODED_BOOT_APP / JarLauncher
+runtime policy: NO_CDS_LOW_DIRTY
+paired wins: 3/3
+median PSS delta: -2,012 KB
+median Private_Dirty delta: -1,680 KB
+median memory.current delta: -1,712,128 bytes
+```
+
+Scope:
+
+```text
+Spring PetClinic visits-service
+public source revision 305a1f13e4f961001d4e6cb50a9db51dc3fc5967
+MALLOC_ARENA_MAX=1
+no CDS/AppCDS/Leyden
+no runtime javaagent
+embedded HSQLDB standalone protocol
+jmoa.reducer.engine=raw
+```
+
+No visits-specific full-P2 artifact was available. This claim is baseline vs
+baseline plus reducer, not full P2 vs full P2 plus reducer. It is not transferred
+to all PetClinic/Spring Boot services, fat-JAR/CDS modes, or startup performance.
+
 ## Artifact-Only Claims
 
 ```text
@@ -149,6 +179,13 @@ V2-K Doctor raw materialization:
   BOOT-INF/lib entries replaced: 184/184
   materialized raw D2R fat-JAR SHA-256 recorded
   runtime claim: true under the V2-K Doctor scope above
+
+V2-L visits raw materialization:
+  materialized dependency jar byte delta: -3,515,600
+  BOOT-INF/lib entries replaced: 161/161
+  classes reduced and byte-audited: 29,701
+  failed byte-preservation audits: 0
+  runtime claim: true under the V2-L visits scope above
 ```
 
 ## Not Claimed
@@ -160,7 +197,9 @@ public Doctor reproducibility
 all Doctor deployments
 all fat-JAR services
 all CDS/AppCDS runtime modes
-public cross-service generalization
+universal public cross-service generalization
+all Spring PetClinic or Spring Boot services
+visits-service fat-JAR or CDS/AppCDS improvement
 all debug metadata stripping safety
 LineNumberTable stripping
 StackMapTable stripping

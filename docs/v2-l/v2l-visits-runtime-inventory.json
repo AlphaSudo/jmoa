@@ -1,0 +1,28 @@
+{
+  "metadataVersion": "v2l-visits-runtime-inventory",
+  "status": "READY_AND_EXECUTED",
+  "service": "spring-petclinic-visits-service",
+  "sourceRepository": "https://github.com/spring-petclinic/spring-petclinic-microservices",
+  "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+  "applicationVersion": "4.0.1",
+  "buildSucceeded": true,
+  "runtime": {
+    "launchMode": "EXPLODED_BOOT_APP",
+    "launcher": "org.springframework.boot.loader.launch.JarLauncher",
+    "javaVersion": "Java 17 container runtime",
+    "runtimePolicy": "NO_CDS_LOW_DIRTY",
+    "cdsMode": "OFF",
+    "mallocArenaMax": "1",
+    "javaagentPresent": false,
+    "database": "embedded HSQLDB",
+    "supportServicesRequired": false
+  },
+  "workload": {
+    "rounds": 3,
+    "requestsPerRound": 6,
+    "requestsPerRun": 18,
+    "healthEndpoint": "/actuator/health"
+  },
+  "fullP2Available": false,
+  "comparison": "baseline vs baseline plus raw reducer"
+}

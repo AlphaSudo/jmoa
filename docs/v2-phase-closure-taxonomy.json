@@ -90,8 +90,13 @@
     },
     {
       "milestone": "V2-K",
-      "closureType": "RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN",
-      "claimBoundary": "Doctor runtime stack recovered locally with fresh D2R CDS and semantic smoke; no memory claim yet."
+      "closureType": "CLOSED_CONFIRMED",
+      "claimBoundary": "Private Doctor corrected D2 vs raw-reduced D2R runtime-confirmed under Spring Boot fat-JAR/CDS; no public or universal claim."
+    },
+    {
+      "milestone": "V2-L",
+      "closureType": "CLOSED_CONFIRMED",
+      "claimBoundary": "Public Spring PetClinic visits-service baseline vs raw-reduced baseline runtime-confirmed under exploded-Boot/no-CDS; not a full-P2, startup, fat-JAR/CDS, or universal-service claim."
     }
   ],
   "rule": "Do not upgrade a closure type by wording alone. Runtime performance claims require fresh V2-C validation and V2-D attribution."

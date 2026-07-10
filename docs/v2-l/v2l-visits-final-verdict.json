@@ -1,0 +1,42 @@
+{
+  "metadataVersion": "v2l-visits-final-verdict",
+  "status": "CLOSED_CONFIRMED",
+  "confirmedClaim": "The productized raw LVT/LVTT reducer is a confirmed incremental runtime win over the same unreduced Spring PetClinic visits-service baseline under the documented public exploded-Boot no-CDS protocol.",
+  "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+  "comparison": "visits baseline vs visits baseline plus raw reducer",
+  "confirmation": {
+    "v2cVerdict": "CONFIRMED_WIN",
+    "validRuns": 6,
+    "pairedWins": "3/3",
+    "medianPssDeltaKb": -2012,
+    "medianPrivateDirtyDeltaKb": -1680,
+    "medianMemoryCurrentDeltaBytes": -1712128,
+    "dependencyLayerDeltaBytes": -3515600
+  },
+  "attribution": {
+    "primaryMovement": [
+      "anonymous_rw PSS reduction",
+      "NMT-visible metaspace committed reduction"
+    ],
+    "notPrimary": [
+      "retained-object reduction",
+      "class-count reduction",
+      "heap PSS reduction"
+    ]
+  },
+  "runtimeScope": "Public visits-service, EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1, no CDS/AppCDS/Leyden/javaagent, embedded HSQLDB",
+  "fullP2Applied": false,
+  "startupClaim": false,
+  "notClaimed": [
+    "all Spring PetClinic services",
+    "all Spring Boot services",
+    "fat-JAR or CDS/AppCDS improvement for visits-service",
+    "startup improvement",
+    "generated-class mutation",
+    "large-method splitting",
+    "constant-pool rewriting",
+    "BootstrapMethods rewriting or stripping",
+    "metadata stripping beyond LVT/LVTT"
+  ],
+  "suggestedReleaseTagAfterMerge": "v0.10.0-v2l-public-runtime-confirmed"
+}

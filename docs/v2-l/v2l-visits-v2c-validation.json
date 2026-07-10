@@ -1,0 +1,43 @@
+{
+  "metadataVersion": "v2l-visits-v2c-validation",
+  "status": "PASSED",
+  "validation": {
+    "runs": 6,
+    "validRuns": 6,
+    "invalidRuns": 0,
+    "runtimePolicy": "NO_CDS_LOW_DIRTY",
+    "cdsMode": "OFF",
+    "mallocArenaMax": "1",
+    "javaagentPresent": false,
+    "workloadErrors": 0,
+    "linkageErrors": 0,
+    "requiredCapturesPresent": true,
+    "artifactHashesMatchedExpected": true,
+    "runtimeVerificationGatePresent": true
+  },
+  "perturbation": {
+    "classLoadLoggingEnabled": false,
+    "jfrEnabled": false,
+    "nmtDetailEnabled": false,
+    "gcRunBeforeCapture": false,
+    "warnings": 0
+  },
+  "confirmation": {
+    "verdict": "CONFIRMED_WIN",
+    "pairs": 3,
+    "pairedWins": 3,
+    "medianPssDeltaKb": -2012,
+    "medianPrivateDirtyDeltaKb": -1680,
+    "medianMemoryCurrentDeltaBytes": -1712128,
+    "medianHeapPssDeltaKb": 1988,
+    "medianAnonymousRwDeltaKb": -5264
+  },
+  "variance": {
+    "categories": [
+      "UNKNOWN"
+    ],
+    "reasons": [
+      "no known variance pattern matched"
+    ]
+  }
+}

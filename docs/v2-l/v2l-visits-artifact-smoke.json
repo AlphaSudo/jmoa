@@ -1,0 +1,38 @@
+{
+  "metadataVersion": "v2l-visits-artifact-smoke",
+  "status": "PASSED",
+  "engine": "raw",
+  "profile": "release-low-footprint",
+  "jarsProcessed": 161,
+  "classesScanned": 54079,
+  "classesReducedAndAudited": 29701,
+  "failedBytePreservationAudits": 0,
+  "artifactsReduced": 139,
+  "safetySkips": {
+    "signedJars": 1,
+    "multiReleaseJarsDetected": 21,
+    "multiReleaseJarsSkipped": 20,
+    "sealedJars": 1
+  },
+  "bytes": {
+    "baselineDependencyJars": 92299443,
+    "reducedDependencyJars": 88783843,
+    "materializedCompressedDelta": -3515600,
+    "rawReducerClassEntryBytesRemoved": 3532027
+  },
+  "strippedAttributes": [
+    "LocalVariableTable",
+    "LocalVariableTypeTable"
+  ],
+  "preservedAttributes": [
+    "LineNumberTable",
+    "SourceFile",
+    "StackMapTable",
+    "RuntimeVisibleAnnotations",
+    "RuntimeInvisibleAnnotations",
+    "Signature",
+    "BootstrapMethods",
+    "module-info.class"
+  ],
+  "preservedNonTargetStructures": true
+}
