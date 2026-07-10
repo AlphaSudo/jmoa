@@ -29,7 +29,8 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | V2-H | `SCREEN_FAILED` | Hardened PetClinic screen failed promotion; no confirmation |
 | V2-I | `CLOSED_CONFIRMED` | PetClinic runtime-confirmed for explicit `jmoa.reducer.engine=raw` protocol |
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productized and Doctor artifact-smoked; no new runtime claim |
-| V2-K | `RECOVERED_SEMANTIC_SMOKE_READY_FOR_SCREEN` | Doctor runtime stack recovered locally with fresh D2R CDS and semantic smoke; no memory claim yet |
+| V2-K | `CLOSED_CONFIRMED` | Private Doctor corrected D2 vs raw-reduced D2R runtime confirmation under fat-JAR/CDS |
+| V2-L | `CLOSED_CONFIRMED` | Public visits-service baseline vs raw-reduced baseline confirmation under exploded-Boot/no-CDS |
 
 ## Rule
 

@@ -1,0 +1,35 @@
+{
+  "metadataVersion": "v2l-visits-v2d-attribution",
+  "status": "PASSED",
+  "evidenceVerdict": "CONFIRMED_WIN",
+  "v2cValid": true,
+  "categoryDeltas": {
+    "totalPssKb": -2012,
+    "privateDirtyKb": -1680,
+    "memoryCurrentBytes": -1712128,
+    "anonymousRwPssKb": -5264,
+    "nmtTotalCommittedKb": -1259,
+    "nmtMetaspaceCommittedKb": -2814,
+    "nmtClassCommittedKb": -29,
+    "mappedFilePssKb": -80,
+    "heapPssKb": 1988,
+    "heapUsedKb": -1631,
+    "classHistogramBytes": -46656
+  },
+  "smapsNmtReconciliation": {
+    "classification": "NMT_VISIBLE",
+    "nmtToPssGapKb": -753,
+    "reasons": [
+      "NMT total committed explains at least 60% of PSS movement.",
+      "anonymous_rw PSS moved by at least 1 MB."
+    ]
+  },
+  "causalHypotheses": [
+    {
+      "hypothesis": "ANONYMOUS_RW_ALLOCATOR_REDUCTION",
+      "confidence": "MEDIUM"
+    }
+  ],
+  "interpretation": "The total-memory win is dominated by anonymous_rw and NMT-visible metaspace reduction, not retained-object or class-count reduction.",
+  "allocatorPolicyChangedBetweenVariants": false
+}

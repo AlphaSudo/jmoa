@@ -309,8 +309,9 @@ replaced.
 
 V2-K later recovered the local Doctor runtime stack: support images were rebuilt,
 a fresh D2R CDS archive was trained for the raw-reduced artifact, and Doctor D2R
-passed health plus a secured endpoint smoke. This is still not a Doctor memory
-claim; the next gate is D2 vs D2R runtime screening with V2-C/V2-D.
+passed health plus a secured endpoint smoke. V2-K then completed three valid
+pairs and confirmed D2R over D2 at `-5,156 KB` median PSS under the documented
+private fat-JAR/CDS protocol.
 
 See:
 
@@ -319,6 +320,37 @@ See:
 - [V2-G Doctor Semantic Smoke Blocked](docs/v2-g/v2g-doctor-semantic-smoke-blocked.md)
 - [V2-G Final Verdict](docs/v2-g/v2g-final-verdict.md)
 - [V2-K Doctor Runtime Recovery Result](docs/v2-k/v2k-doctor-runtime-recovery-result.md)
+- [V2-K Doctor Runtime Confirmation](docs/v2-k/v2k-doctor-confirmation.md)
+
+## V2-L Public Visits-Service Confirmation
+
+V2-L runs the productized raw LVT/LVTT reducer on Spring PetClinic
+visits-service, a second public runtime target. Because no visits-specific
+full-P2 artifact was available, the measured comparison is visits baseline vs
+the same baseline plus the raw reducer.
+
+Under exploded Boot, `NO_CDS_LOW_DIRTY`, `MALLOC_ARENA_MAX=1`, no CDS/AppCDS,
+and no runtime javaagent, V2-C accepted all six runs:
+
+```text
+paired wins: 3/3
+median PSS delta: -2,012 KB
+median Private_Dirty delta: -1,680 KB
+median memory.current delta: -1,712,128 bytes
+dependency-layer byte delta: -3,515,600 bytes
+```
+
+V2-D attributes the result primarily to lower `anonymous_rw` PSS and
+NMT-visible metaspace movement, not retained heap objects or class-count
+reduction. No full-P2, startup, fat-JAR/CDS, all-PetClinic, or universal Spring
+Boot claim is made.
+
+See:
+
+- [V2-L Visits Confirmation](docs/v2-l/v2l-visits-confirmation.md)
+- [V2-L V2-C Validation](docs/v2-l/v2l-visits-v2c-validation.md)
+- [V2-L V2-D Attribution](docs/v2-l/v2l-visits-v2d-attribution.md)
+- [V2-L Final Verdict](docs/v2-l/v2l-visits-final-verdict.md)
 
 ## Safety
 

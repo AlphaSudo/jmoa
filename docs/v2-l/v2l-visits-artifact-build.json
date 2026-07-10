@@ -1,0 +1,16 @@
+{
+  "metadataVersion": "v2l-visits-artifact-build",
+  "status": "PASSED",
+  "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+  "buildCommand": "./mvnw.cmd -q -pl spring-petclinic-visits-service -am -DskipTests package",
+  "baselineFatJar": {
+    "bytes": 92543671,
+    "sha256": "80E92024541A3F681732E3EC8E1A0D825514DFA89AF69121A0028A1BCC8126F5"
+  },
+  "dependencyLayer": {
+    "jarCount": 161,
+    "compressedBytes": 92299443
+  },
+  "fullP2Applied": false,
+  "comparison": "baseline vs baseline plus raw-reduced dependency JARs"
+}

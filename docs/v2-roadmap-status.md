@@ -1,14 +1,14 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-K are closed or confirmed as the current V2 foundation.
-V2-K moved Doctor from blocked runtime recovery to a V2-C-confirmed and
-V2-D-attributed runtime win for raw-reduced D2R over corrected D2.
+Status: V2-A through V2-L are closed or confirmed as the current V2 foundation.
+V2-L adds a V2-C-confirmed and V2-D-attributed raw reducer result on Spring
+PetClinic visits-service, the second public runtime target.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
 V2-I raw reducer recovery confirmation, the V2-J raw engine productization
-work, the V2-K Doctor inventory/unblock gate, and the V2-K Doctor runtime
-confirmation.
+work, the V2-K Doctor inventory/unblock gate and runtime confirmation, and the
+V2-L public visits-service confirmation.
 
 ## Closure Taxonomy
 
@@ -35,6 +35,7 @@ claims.
 | V2-I | `CLOSED_CONFIRMED` | Reducer policy-diff recovery with an explicit raw engine and V2-C-confirmed PetClinic runtime win |
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
 | V2-K | `CLOSED_CONFIRMED_DOCTOR` | Doctor runtime recovery succeeded, D2/D2R semantic smoke passed, single-screen measurement promoted, and 3-pair V2-C/V2-D confirmation passed |
+| V2-L | `CLOSED_CONFIRMED` | Public visits-service baseline vs raw-reduced baseline passed artifact, materialization, semantic, screen, 3-pair V2-C, and V2-D gates |
 
 ## Current Foundation
 
@@ -50,15 +51,17 @@ V2-H = does the hardened reducer retain the PetClinic runtime win?
 V2-I = can a narrower raw engine recover runtime-positive behavior while preserving V2-F jar safety?
 V2-J = can the raw engine be made byte-auditable and portable at artifact level?
 V2-K = can the raw-reduced Doctor D2R artifact pass real private fat-JAR/CDS runtime confirmation?
+V2-L = can the productized raw reducer confirm on a second public runtime target?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
 first controlled post-v1 reducer, reducer productization, and a clear claim
 boundary between the earlier runtime-confirmed V2-E reducer, the safer
-V2-F-hardened reducer, the V2-I raw recovery engine, the V2-J productized
-raw engine, and the V2-K private Doctor runtime confirmation. Reducer behavior is
-still disabled by default and report-only by default unless explicit
-release-low-footprint reducer flags are enabled.
+V2-F-hardened reducer, the V2-I raw recovery engine, the V2-J productized raw
+engine, the V2-K private Doctor runtime confirmation, and the V2-L public
+visits-service confirmation. Reducer behavior is still disabled by default and
+report-only by default unless explicit release-low-footprint reducer flags are
+enabled.
 
 ## Still Blocked
 
@@ -88,7 +91,7 @@ PetClinic EXPLODED_BOOT_APP no-CDS runtime claim confirmed
 startup claim not made
 fat-JAR claim not made
 CDS/AppCDS claim not made
-public cross-service generalization not made
+V2-E claim not transferred beyond customers-service
 ```
 
 ## Latest V2-E Screen
@@ -375,6 +378,80 @@ See:
 - [V2-K Doctor Runtime Blocked](v2-k/v2k-doctor-runtime-blocked.md)
 - [V2-K Doctor Runtime Recovery Result](v2-k/v2k-doctor-runtime-recovery-result.md)
 
+## V2-L Public Visits-Service Runtime Confirmation
+
+V2-L selected Spring PetClinic visits-service as the second public runtime
+target. A visits-specific full-P2 artifact was unavailable, so the phase used
+the honest comparison:
+
+```text
+public visits-service baseline
+vs
+the same baseline + productized raw LVT/LVTT reducer
+```
+
+Artifact and safety result:
+
+```text
+dependency JARs processed: 161
+static classes scanned: 54,079
+classes reduced and byte-audited: 29,701
+failed audits: 0
+dependency-layer compressed-byte delta: -3,515,600 bytes
+BOOT-INF/lib outputs materialized: 161/161
+materialization hash mismatches: 0
+```
+
+Runtime protocol:
+
+```text
+EXPLODED_BOOT_APP / JarLauncher
+NO_CDS_LOW_DIRTY
+MALLOC_ARENA_MAX=1
+no CDS/AppCDS/Leyden
+no runtime javaagent
+embedded HSQLDB standalone profile
+```
+
+Confirmed result:
+
+```text
+V2-C verdict: CONFIRMED_WIN
+valid runs: 6/6
+paired wins: 3/3
+median PSS delta: -2,012 KB
+median Private_Dirty delta: -1,680 KB
+median memory.current delta: -1,712,128 bytes
+```
+
+V2-D attribution:
+
+```text
+anonymous_rw PSS median delta: -5,264 KB
+NMT metaspace committed median delta: -2,814 KB
+NMT total committed median delta: -1,259 KB
+heap PSS median delta: +1,988 KB
+primary hypothesis: ANONYMOUS_RW_ALLOCATOR_REDUCTION (MEDIUM)
+```
+
+The result is not attributed to retained-object or class-count reduction. It is
+also not a full-P2, startup, fat-JAR/CDS, all-PetClinic, or universal Spring Boot
+claim.
+
+See:
+
+- [V2-L Phase Boundary](v2-l/v2l-phase-open.md)
+- [V2-L Visits Runtime Inventory](v2-l/v2l-visits-runtime-inventory.md)
+- [V2-L Visits Artifact Build](v2-l/v2l-visits-artifact-build.md)
+- [V2-L Visits Artifact Smoke](v2-l/v2l-visits-artifact-smoke.md)
+- [V2-L Visits Materialization Proof](v2-l/v2l-visits-materialization-proof.md)
+- [V2-L Visits Semantic Smoke](v2-l/v2l-visits-semantic-smoke.md)
+- [V2-L Visits Runtime Screen](v2-l/v2l-visits-runtime-screen.md)
+- [V2-L Visits Confirmation](v2-l/v2l-visits-confirmation.md)
+- [V2-L Visits V2-C Validation](v2-l/v2l-visits-v2c-validation.md)
+- [V2-L Visits V2-D Attribution](v2-l/v2l-visits-v2d-attribution.md)
+- [V2-L Visits Final Verdict](v2-l/v2l-visits-final-verdict.md)
+
 ## V2-E Boundary
 
 V2-E does not reopen generated-class mutation. It also does not implement
@@ -401,3 +478,8 @@ D2R under a Spring Boot fat-JAR/CDS protocol with variant-specific CDS archives.
 That claim is not public-reproducible and is not transferred to all Doctor
 deployments, all fat-JAR services, all CDS/AppCDS modes, startup performance, or
 generated-class mutation.
+
+V2-L adds a second public runtime confirmation for visits-service baseline vs
+the same baseline plus the raw reducer. It is intentionally separate from the
+customers-service full-P2 comparisons and does not establish a full-P2,
+fat-JAR/CDS, startup, all-PetClinic, or universal Spring Boot claim.

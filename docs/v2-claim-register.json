@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2K_DOCTOR_RUNTIME_CONFIRMATION",
+  "status": "CURRENT_AFTER_V2L_PUBLIC_VISITS_RUNTIME_CONFIRMATION",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
@@ -46,6 +46,19 @@
       "medianPrivateDirtyDeltaKb": -5212,
       "medianMemoryCurrentDeltaBytes": -6975488,
       "claimBoundary": "Private Doctor runtime confirmation only; not public-reproducible and not transferable to all fat-JAR/CDS deployments or startup performance."
+    },
+    {
+      "id": "v2l-visits-raw-reducer",
+      "claim": "V2-L confirmed the productized raw LVT/LVTT reducer on a second public runtime target.",
+      "service": "Spring PetClinic visits-service",
+      "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+      "comparison": "public visits baseline vs the same baseline plus raw reducer",
+      "runtimeScope": "EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1, no CDS/AppCDS/Leyden/javaagent, embedded HSQLDB, jmoa.reducer.engine=raw",
+      "pairedWins": "3/3",
+      "medianPssDeltaKb": -2012,
+      "medianPrivateDirtyDeltaKb": -1680,
+      "medianMemoryCurrentDeltaBytes": -1712128,
+      "claimBoundary": "Public visits-service baseline-plus-reducer confirmation only; no visits full-P2, startup, fat-JAR/CDS, all-PetClinic, or universal Spring Boot claim."
     }
   ],
   "artifactOnlyClaims": [
@@ -99,6 +112,15 @@
       "bootInfLibEntriesReplaced": "184/184",
       "materializedSha256": "9d00877c0af90e02b0c8d812f8bc659297ca67d6a939016caf96d3d5ced79742",
       "runtimeClaim": true
+    },
+    {
+      "id": "v2l-visits-raw-materialization",
+      "claim": "V2-L materializes the productized raw reducer into the public visits-service exploded Boot dependency layer.",
+      "materializedDependencyJarDeltaBytes": -3515600,
+      "bootInfLibEntriesReplaced": "161/161",
+      "classesReducedAndAudited": 29701,
+      "failedRawBytePreservationAudits": 0,
+      "runtimeClaim": true
     }
   ],
   "notClaimed": [
@@ -108,7 +130,9 @@
     "all Doctor deployments",
     "all fat-JAR services",
     "all CDS/AppCDS runtime modes",
-    "public cross-service generalization",
+    "universal public cross-service generalization",
+    "all Spring PetClinic or Spring Boot services",
+    "visits-service fat-JAR or CDS/AppCDS improvement",
     "all debug metadata stripping safety",
     "LineNumberTable stripping",
     "StackMapTable stripping",

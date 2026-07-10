@@ -1,0 +1,20 @@
+{
+  "metadataVersion": "v2l-visits-materialization-proof",
+  "status": "PASSED",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "launcher": "org.springframework.boot.loader.launch.JarLauncher",
+  "baselineJarCount": 161,
+  "candidateJarCount": 161,
+  "manifestOutputJarCount": 161,
+  "missingCandidateJars": 0,
+  "candidateHashMismatches": 0,
+  "originalJarShadowing": false,
+  "baselineDependencyLayerSha256": "75BDF1F90B852E05FAF43D88A73855700E01BFEA8CEB403043284630E7D05375",
+  "candidateDependencyLayerSha256": "32E934BABA3B92BF7A264E709679A415DCAFF53AD82824B07FEB55E3102AE43E",
+  "baselineImageId": "4f48fece2bc63790418500e5a13f9c07e4c85de049f5512ec511ab9f6aee8a6a",
+  "candidateImageId": "db16e304947b2efcf6001f2c79e74e88efdce48f556086ea6de98229ffb9abe3",
+  "verificationMethod": "EXPLODED_IMAGE_LAYER_HASH_MANIFEST",
+  "dynamicOriginsVerified": true,
+  "optimizedOriginsVerified": true,
+  "classLoadLoggingUsedDuringMemoryPairs": false
+}

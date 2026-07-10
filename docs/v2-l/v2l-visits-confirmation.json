@@ -1,0 +1,54 @@
+{
+  "metadataVersion": "v2l-visits-confirmation",
+  "status": "CONFIRMED_WIN",
+  "service": "Spring PetClinic visits-service",
+  "comparison": "public visits baseline vs the same baseline plus raw LVT/LVTT reducer",
+  "runtimeScope": {
+    "launchMode": "EXPLODED_BOOT_APP",
+    "runtimePolicy": "NO_CDS_LOW_DIRTY",
+    "cdsMode": "OFF",
+    "mallocArenaMax": "1",
+    "javaagentPresent": false,
+    "javaVersion": "Java 17 container runtime",
+    "database": "embedded HSQLDB",
+    "requestsPerRun": 18
+  },
+  "v2c": {
+    "verdict": "CONFIRMED_WIN",
+    "validRuns": 6,
+    "invalidRuns": 0,
+    "pairs": 3,
+    "pairedWins": 3,
+    "medianPssDeltaKb": -2012,
+    "medianPrivateDirtyDeltaKb": -1680,
+    "medianMemoryCurrentDeltaBytes": -1712128
+  },
+  "pairs": [
+    {
+      "pair": 1,
+      "deltaPssKb": -2012,
+      "deltaPrivateDirtyKb": -1680,
+      "deltaMemoryCurrentBytes": -1712128,
+      "workloadErrors": 0
+    },
+    {
+      "pair": 2,
+      "deltaPssKb": -3172,
+      "deltaPrivateDirtyKb": -3676,
+      "deltaMemoryCurrentBytes": -3784704,
+      "workloadErrors": 0
+    },
+    {
+      "pair": 3,
+      "deltaPssKb": -1372,
+      "deltaPrivateDirtyKb": -1248,
+      "deltaMemoryCurrentBytes": -1298432,
+      "workloadErrors": 0
+    }
+  ],
+  "artifactDeltaBytes": -3515600,
+  "classesReducedAndAudited": 29701,
+  "failedAudits": 0,
+  "fullP2Applied": false,
+  "startupClaim": false
+}
