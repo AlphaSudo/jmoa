@@ -1,0 +1,16 @@
+{
+  "metadataVersion": "v2m-admission-states",
+  "states": [
+    {"id": "RECOMMEND_CONFIRMED", "runtimePromotionAllowed": true},
+    {"id": "RECOMMEND_SCREEN_REQUIRED", "runtimePromotionAllowed": false},
+    {"id": "ALLOW_ARTIFACT_ONLY", "runtimePromotionAllowed": false},
+    {"id": "BLOCK_UNSAFE", "runtimePromotionAllowed": false},
+    {"id": "BLOCK_SEMANTIC_FAILURE", "runtimePromotionAllowed": false},
+    {"id": "BLOCK_NO_EVIDENCE", "runtimePromotionAllowed": false},
+    {"id": "BLOCK_RUNTIME_PROMOTION", "runtimePromotionAllowed": false},
+    {"id": "DIAGNOSTIC_ONLY", "runtimePromotionAllowed": false},
+    {"id": "UNKNOWN", "runtimePromotionAllowed": false}
+  ],
+  "confirmationScopes": ["PUBLIC", "PRIVATE", "INTERNAL", "UNKNOWN"],
+  "scopeIsSeparateFromDecision": true
+}

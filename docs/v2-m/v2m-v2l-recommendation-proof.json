@@ -1,0 +1,18 @@
+{
+  "metadataVersion": "v2m-v2l-recommendation-proof",
+  "status": "PASSED",
+  "decision": "RECOMMEND_CONFIRMED",
+  "confirmationScope": "PUBLIC",
+  "protocolMatchesConfirmedScope": true,
+  "runtimePromotionAllowed": true,
+  "service": "Spring PetClinic visits-service",
+  "confirmedService": "spring-petclinic-visits-service",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "artifactBytesRemoved": 3532027,
+  "classesReduced": 29701,
+  "failedAudits": 0,
+  "semanticSmokePassed": true,
+  "v2cVerdict": "CONFIRMED_WIN",
+  "hasV2DAttribution": true
+}

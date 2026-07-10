@@ -1,0 +1,28 @@
+{
+  "metadataVersion": "v2m-evidence-inventory-model",
+  "normalizedOutput": "reducer-admission-input.json",
+  "canonicalReports": [
+    "reducer-build-report.json",
+    "raw-reducer-byte-preservation-report.json",
+    "v2f-jar-safety-report.json",
+    "jmoa-reducer-manifest-v2.json",
+    "jmoa-semantic-smoke.json",
+    "jmoa-runtime-screen.json",
+    "jmoa-paired-confirmation.json",
+    "jmoa-evidence-validation.json",
+    "jmoa-memory-attribution.json"
+  ],
+  "identityRules": {
+    "service": "case-insensitive alphanumeric normalization",
+    "launchMode": "exact normalized value",
+    "runtimePolicy": "exact normalized value"
+  },
+  "v2bSizingFields": [
+    "v2bAttributeReportPresent",
+    "v2bDebugAttributeBytes",
+    "v2bLocalVariableTableBytes"
+  ],
+  "v2bSizingIsRequiredForAdmission": false,
+  "explicitNormalizedInputTakesPrecedence": true,
+  "reportOnly": true
+}

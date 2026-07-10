@@ -1,0 +1,58 @@
+{
+  "metadataVersion": "v2m-historical-recommendation-replay",
+  "cases": 5,
+  "passedCases": 5,
+  "failedCases": 0,
+  "results": [
+    {
+      "id": "v2i-petclinic-customers-raw-confirmed",
+      "expectedDecision": "RECOMMEND_CONFIRMED",
+      "actualDecision": "RECOMMEND_CONFIRMED",
+      "expectedScope": "PUBLIC",
+      "actualScope": "PUBLIC",
+      "expectedProtocolMatch": true,
+      "actualProtocolMatch": true,
+      "passed": true
+    },
+    {
+      "id": "v2k-doctor-raw-confirmed-private",
+      "expectedDecision": "RECOMMEND_CONFIRMED",
+      "actualDecision": "RECOMMEND_CONFIRMED",
+      "expectedScope": "PRIVATE",
+      "actualScope": "PRIVATE",
+      "expectedProtocolMatch": true,
+      "actualProtocolMatch": true,
+      "passed": true
+    },
+    {
+      "id": "v2l-petclinic-visits-raw-confirmed",
+      "expectedDecision": "RECOMMEND_CONFIRMED",
+      "actualDecision": "RECOMMEND_CONFIRMED",
+      "expectedScope": "PUBLIC",
+      "actualScope": "PUBLIC",
+      "expectedProtocolMatch": true,
+      "actualProtocolMatch": true,
+      "passed": true
+    },
+    {
+      "id": "v2h-petclinic-hardened-asm-screen-failed",
+      "expectedDecision": "BLOCK_RUNTIME_PROMOTION",
+      "actualDecision": "BLOCK_RUNTIME_PROMOTION",
+      "expectedScope": "PUBLIC",
+      "actualScope": "PUBLIC",
+      "expectedProtocolMatch": false,
+      "actualProtocolMatch": false,
+      "passed": true
+    },
+    {
+      "id": "v2j-doctor-raw-artifact-only",
+      "expectedDecision": "ALLOW_ARTIFACT_ONLY",
+      "actualDecision": "ALLOW_ARTIFACT_ONLY",
+      "expectedScope": "PRIVATE",
+      "actualScope": "PRIVATE",
+      "expectedProtocolMatch": false,
+      "actualProtocolMatch": false,
+      "passed": true
+    }
+  ]
+}

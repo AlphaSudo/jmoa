@@ -96,7 +96,13 @@
     {
       "milestone": "V2-L",
       "closureType": "CLOSED_CONFIRMED",
+      "descriptiveStatus": "CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME",
       "claimBoundary": "Public Spring PetClinic visits-service baseline vs raw-reduced baseline runtime-confirmed under exploded-Boot/no-CDS; not a full-P2, startup, fat-JAR/CDS, or universal-service claim."
+    },
+    {
+      "milestone": "V2-M",
+      "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+      "claimBoundary": "Report-only reducer admission and recommendation engine proven by 5/5 historical replay; no mutation behavior or new runtime performance claim."
     }
   ],
   "rule": "Do not upgrade a closure type by wording alone. Runtime performance claims require fresh V2-C validation and V2-D attribution."

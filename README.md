@@ -352,6 +352,46 @@ See:
 - [V2-L V2-D Attribution](docs/v2-l/v2l-visits-v2d-attribution.md)
 - [V2-L Final Verdict](docs/v2-l/v2l-visits-final-verdict.md)
 
+## V2-M Reducer Recommendation Engine
+
+V2-M adds a report-only product decision layer for the raw LVT/LVTT reducer. It
+normalizes artifact, byte-audit, JAR safety, semantic smoke, V2-C, and V2-D
+evidence and returns one admission state:
+
+```text
+RECOMMEND_CONFIRMED
+RECOMMEND_SCREEN_REQUIRED
+ALLOW_ARTIFACT_ONLY
+BLOCK_UNSAFE
+BLOCK_SEMANTIC_FAILURE
+BLOCK_NO_EVIDENCE
+BLOCK_RUNTIME_PROMOTION
+DIAGNOSTIC_ONLY
+UNKNOWN
+```
+
+Example:
+
+```powershell
+mvn -N jmoa:recommend-reducer `
+  '-Djmoa.recommendation.enabled=true' `
+  '-Djmoa.recommendation.inputDir=<reports-dir>' `
+  '-Djmoa.recommendation.service=<service>' `
+  '-Djmoa.recommendation.launchMode=EXPLODED_BOOT_APP' `
+  '-Djmoa.recommendation.runtimePolicy=NO_CDS_LOW_DIRTY'
+```
+
+Historical replay passes 5/5 audited cases: V2-I, V2-K, and V2-L remain
+confirmed in their exact scopes; V2-H remains blocked; pre-runtime Doctor
+remains artifact-only. V2-M does not mutate bytecode or add a performance claim.
+
+See:
+
+- [V2-M Admission States](docs/v2-m/v2m-admission-states.md)
+- [V2-M Recommendation Rules](docs/v2-m/v2m-recommendation-rules.md)
+- [V2-M Historical Replay](docs/v2-m/v2m-historical-recommendation-replay.md)
+- [V2-M Closure Report](docs/v2-m/v2m-closure-report.md)
+
 ## Safety
 
 Before publishing or tagging a release, run:

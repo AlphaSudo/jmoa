@@ -1,14 +1,14 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-L are closed or confirmed as the current V2 foundation.
-V2-L adds a V2-C-confirmed and V2-D-attributed raw reducer result on Spring
-PetClinic visits-service, the second public runtime target.
+Status: V2-A through V2-M are closed or confirmed as the current V2 foundation.
+V2-M adds a replay-proven, report-only admission and recommendation engine for
+the existing raw reducer.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
 V2-I raw reducer recovery confirmation, the V2-J raw engine productization
 work, the V2-K Doctor inventory/unblock gate and runtime confirmation, and the
-V2-L public visits-service confirmation.
+V2-L public visits-service confirmation, and the V2-M recommendation engine.
 
 ## Closure Taxonomy
 
@@ -36,6 +36,7 @@ claims.
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
 | V2-K | `CLOSED_CONFIRMED_DOCTOR` | Doctor runtime recovery succeeded, D2/D2R semantic smoke passed, single-screen measurement promoted, and 3-pair V2-C/V2-D confirmation passed |
 | V2-L | `CLOSED_CONFIRMED` | Public visits-service baseline vs raw-reduced baseline passed artifact, materialization, semantic, screen, 3-pair V2-C, and V2-D gates |
+| V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only raw reducer admission engine, exact-protocol scoping, Maven goal, and 5/5 historical replay proof |
 
 ## Current Foundation
 
@@ -52,16 +53,17 @@ V2-I = can a narrower raw engine recover runtime-positive behavior while preserv
 V2-J = can the raw engine be made byte-auditable and portable at artifact level?
 V2-K = can the raw-reduced Doctor D2R artifact pass real private fat-JAR/CDS runtime confirmation?
 V2-L = can the productized raw reducer confirm on a second public runtime target?
+V2-M = when should JMOA recommend, screen, limit, or block the raw reducer?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
 first controlled post-v1 reducer, reducer productization, and a clear claim
 boundary between the earlier runtime-confirmed V2-E reducer, the safer
 V2-F-hardened reducer, the V2-I raw recovery engine, the V2-J productized raw
-engine, the V2-K private Doctor runtime confirmation, and the V2-L public
-visits-service confirmation. Reducer behavior is still disabled by default and
-report-only by default unless explicit release-low-footprint reducer flags are
-enabled.
+engine, the V2-K private Doctor runtime confirmation, the V2-L public
+visits-service confirmation, and the V2-M recommendation engine. Reducer
+behavior is still disabled by default and report-only by default unless explicit
+release-low-footprint reducer flags are enabled. V2-M never enables mutation.
 
 ## Still Blocked
 
@@ -452,6 +454,65 @@ See:
 - [V2-L Visits V2-D Attribution](v2-l/v2l-visits-v2d-attribution.md)
 - [V2-L Visits Final Verdict](v2-l/v2l-visits-final-verdict.md)
 
+V2-L's official closure type is `CLOSED_CONFIRMED`; its descriptive phase label
+is `CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME`.
+
+## V2-M Reducer Recommendation Engine
+
+V2-M converts the V2 artifact/runtime evidence into deterministic product
+admission decisions without invoking the reducer.
+
+Maven goal:
+
+```text
+jmoa:recommend-reducer
+```
+
+Inputs:
+
+```text
+normalized reducer-admission-input.json
+or canonical reducer/audit/safety/semantic/V2-C/V2-D reports
+```
+
+Decisions:
+
+```text
+RECOMMEND_CONFIRMED
+RECOMMEND_SCREEN_REQUIRED
+ALLOW_ARTIFACT_ONLY
+BLOCK_UNSAFE
+BLOCK_SEMANTIC_FAILURE
+BLOCK_NO_EVIDENCE
+BLOCK_RUNTIME_PROMOTION
+DIAGNOSTIC_ONLY
+UNKNOWN
+```
+
+Historical replay:
+
+```text
+V2-I customers raw: RECOMMEND_CONFIRMED / PUBLIC
+V2-K Doctor raw: RECOMMEND_CONFIRMED / PRIVATE
+V2-L visits raw: RECOMMEND_CONFIRMED / PUBLIC
+V2-H hardened ASM: BLOCK_RUNTIME_PROMOTION
+V2-J Doctor pre-runtime: ALLOW_ARTIFACT_ONLY
+passed: 5/5
+```
+
+The actual V2-L report bundle was also ingested through analyze mode and
+resolved to `RECOMMEND_CONFIRMED`, `PUBLIC`, with an exact protocol match.
+
+See:
+
+- [V2-M Phase Boundary](v2-m/v2m-phase-open.md)
+- [V2-M Evidence Inventory Model](v2-m/v2m-evidence-inventory-model.md)
+- [V2-M Admission States](v2-m/v2m-admission-states.md)
+- [V2-M Recommendation Rules](v2-m/v2m-recommendation-rules.md)
+- [V2-M Historical Replay](v2-m/v2m-historical-recommendation-replay.md)
+- [V2-M V2-L Recommendation Proof](v2-m/v2m-v2l-recommendation-proof.md)
+- [V2-M Closure Report](v2-m/v2m-closure-report.md)
+
 ## V2-E Boundary
 
 V2-E does not reopen generated-class mutation. It also does not implement
@@ -483,3 +544,7 @@ V2-L adds a second public runtime confirmation for visits-service baseline vs
 the same baseline plus the raw reducer. It is intentionally separate from the
 customers-service full-P2 comparisons and does not establish a full-P2,
 fat-JAR/CDS, startup, all-PetClinic, or universal Spring Boot claim.
+
+V2-M adds no runtime result and changes no reducer behavior. A confirmed
+recommendation is valid only for an exact evidence-backed service, launch mode,
+and runtime policy. Any different protocol returns to screen/confirmation gates.

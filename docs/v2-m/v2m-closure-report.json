@@ -1,0 +1,22 @@
+{
+  "metadataVersion": "v2m-closure-report",
+  "status": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+  "mavenGoal": "jmoa:recommend-reducer",
+  "modes": ["analyze", "replay"],
+  "outputs": [
+    "reducer-admission-input.json",
+    "jmoa-reducer-recommendation.json",
+    "jmoa-reducer-recommendation.md",
+    "jmoa-reducer-recommendation-replay.json",
+    "jmoa-reducer-recommendation-replay.md"
+  ],
+  "historicalReplay": {
+    "cases": 5,
+    "passed": 5,
+    "failed": 0
+  },
+  "actualV2LAnalyzeDecision": "RECOMMEND_CONFIRMED",
+  "mutationBehaviorChanged": false,
+  "newRuntimePerformanceClaim": false,
+  "suggestedReleaseTagAfterMerge": "v0.11.0-v2m-reducer-recommendation-engine"
+}

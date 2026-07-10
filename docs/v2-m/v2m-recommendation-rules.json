@@ -1,0 +1,27 @@
+{
+  "metadataVersion": "v2m-recommendation-rules",
+  "precedence": [
+    "BLOCK_UNSAFE",
+    "BLOCK_SEMANTIC_FAILURE",
+    "BLOCK_RUNTIME_PROMOTION_FOR_FAILED_SCREEN",
+    "DIAGNOSTIC_ONLY",
+    "UNKNOWN_FOR_NON_RAW_ENGINE",
+    "BLOCK_NO_EVIDENCE",
+    "BLOCK_RUNTIME_PROMOTION_FOR_NON_WINNING_V2C",
+    "BLOCK_NO_EVIDENCE_FOR_INCOMPLETE_CONFIRMATION",
+    "RECOMMEND_CONFIRMED_FOR_EXACT_PROTOCOL",
+    "RECOMMEND_SCREEN_REQUIRED_FOR_PROTOCOL_MISMATCH",
+    "RECOMMEND_SCREEN_REQUIRED_FOR_UNCONFIRMED_SEMANTIC_PASS",
+    "ALLOW_ARTIFACT_ONLY"
+  ],
+  "allowedStrippedAttributes": [
+    "LocalVariableTable",
+    "LocalVariableTypeTable"
+  ],
+  "exactProtocolFields": [
+    "service",
+    "launchMode",
+    "runtimePolicy"
+  ],
+  "mutationBehaviorChanged": false
+}

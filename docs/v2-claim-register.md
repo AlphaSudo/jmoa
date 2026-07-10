@@ -1,7 +1,7 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after the V2-L visits-service
-runtime confirmation.
+This is the source of truth for public V2 claims after the V2-M reducer
+recommendation engine.
 
 Closure terms follow:
 
@@ -141,6 +141,27 @@ No visits-specific full-P2 artifact was available. This claim is baseline vs
 baseline plus reducer, not full P2 vs full P2 plus reducer. It is not transferred
 to all PetClinic/Spring Boot services, fat-JAR/CDS modes, or startup performance.
 
+V2-L's official closure type is `CLOSED_CONFIRMED`. Its descriptive phase label
+is `CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME`.
+
+## Product Capability Claims
+
+### V2-M Reducer Recommendation Engine
+
+V2-M adds a report-only `jmoa:recommend-reducer` Maven goal that:
+
+```text
+normalizes reducer, audit, safety, semantic, V2-C, and V2-D evidence
+applies safety-first admission rules
+distinguishes public/private/internal confirmation scope
+requires an exact service, launch-mode, and runtime-policy match
+emits JSON and Markdown recommendations
+replays historical decisions with mismatch failure
+```
+
+Historical replay passed 5/5 cases. This is a tooling capability claim, not a
+new runtime performance claim. The goal does not enable or invoke mutation.
+
 ## Artifact-Only Claims
 
 ```text
@@ -208,6 +229,8 @@ Signature stripping
 BootstrapMethods rewriting or stripping
 CGLIB/JDK proxy rewriting
 Spring AOT generated-class mutation
+automatic reducer mutation from a V2-M recommendation
+transfer of a recommendation to a different service, launch mode, or runtime policy
 ```
 
 Any new runtime performance claim must pass V2-C validation and V2-D attribution.
