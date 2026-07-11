@@ -1,0 +1,12 @@
+{
+  "metadataVersion": "v2p-workflow-replay-summary",
+  "suite": "v2p-workflow-replay-suite.json",
+  "cases": 5,
+  "expected": "all state-machine cases match",
+  "latestReplay": {
+    "cases": 5,
+    "passedCases": 5,
+    "failedCases": 0
+  },
+  "newRuntimeEvidence": false
+}

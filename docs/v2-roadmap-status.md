@@ -1,8 +1,8 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-O are closed or confirmed as the current V2 foundation.
-V2-O adds report-only runtime-policy automation around the existing V2-N,
-V2-C, and V2-D gates.
+Status: V2-A through V2-P are closed or confirmed as the current V2 foundation.
+V2-P adds a report-only end-to-end workflow coordinator around the existing
+V2-M, V2-N, V2-O, V2-C, and V2-D gates.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
@@ -41,6 +41,7 @@ claims.
 | V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only raw reducer admission engine, exact-protocol scoping, Maven goal, and 5/5 historical replay proof |
 | V2-N | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only runtime-policy registry, CDS artifact/archive mismatch protection, Maven goal, and 7/7 historical replay proof |
 | V2-O | `CLOSED_CONFIRMED_INFRASTRUCTURE` | SHA-backed runtime preflight, explicit CDS training record, materialization proof, semantic smoke, V2-C-native paired capture, and V2-C/V2-D wrapper |
+| V2-P | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Script-first golden workflow, state machine, normalized workflow report, historical replay, and claim-register consistency guard |
 
 ## Current Foundation
 
@@ -60,6 +61,7 @@ V2-L = can the productized raw reducer confirm on a second public runtime target
 V2-M = when should JMOA recommend, screen, limit, or block the raw reducer?
 V2-N = which exact runtime policy is confirmed, screen-required, diagnostic-only, or blocked?
 V2-O = how do we prepare and capture evidence for that policy without bypassing V2-C/V2-D?
+V2-P = how do we coordinate the allowed workflow without flattening gates or declaring claims?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
@@ -75,6 +77,9 @@ V2-N never changes runtime configuration, trains CDS archives, or reuses an
 archive across artifact variants.
 V2-O does not select runtime policy, mutate artifacts, or create performance
 claims; it automates the prerequisite evidence workflow only.
+V2-P does not add a reducer, select policy, train CDS implicitly, or create a
+runtime claim. It records the ordered workflow and makes claim eligibility
+explicit for review.
 
 ## Still Blocked
 

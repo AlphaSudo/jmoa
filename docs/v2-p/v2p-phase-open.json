@@ -1,0 +1,7 @@
+{
+  "metadataVersion": "v2p-phase-open",
+  "phase": "V2-P",
+  "title": "End-to-End Runtime Workflow Productization",
+  "closureTarget": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+  "doesNot": ["add a reducer", "change runtime policy", "create a runtime claim"]
+}

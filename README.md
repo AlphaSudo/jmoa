@@ -459,6 +459,35 @@ See:
 - [V2-O Final Verdict](docs/v2-o/v2o-final-verdict.md)
 - [V2-O Closure Report](docs/v2-o/v2o-closure-report.md)
 
+## V2-P Runtime Workflow Productization
+
+V2-P joins the existing report-only and evidence gates into a single strict
+workflow record:
+
+```text
+recommend reducer -> recommend runtime -> preflight -> materialize -> smoke
+-> screen -> confirmation -> V2-C -> V2-D -> reviewed claim-register update
+```
+
+The script-first coordinator does not hide a screen as confirmation and does
+not declare claims. `CLAIM_ALLOWED` means that existing V2-C and V2-D records
+make a narrowly scoped claim eligible for human review.
+
+```powershell
+./scripts/run-jmoa-runtime-workflow.ps1 `
+  -Mode replay `
+  -ReplaySuite docs/v2-p/v2p-workflow-replay-suite.json `
+  -OutputDir target/v2p-workflow-replay
+```
+
+See:
+
+- [V2-P Golden Workflow](docs/v2-p/v2p-golden-workflow.md)
+- [V2-P State Machine](docs/v2-p/v2p-workflow-state-machine.md)
+- [V2-P Workflow Script](docs/v2-p/v2p-runtime-workflow-script.md)
+- [V2-P Claim Register Guard](docs/v2-p/v2p-claim-register-guard.md)
+- [V2-P Final Verdict](docs/v2-p/v2p-final-verdict.md)
+
 ## Safety
 
 Before publishing or tagging a release, run:

@@ -1,0 +1,12 @@
+{
+  "metadataVersion": "v2p-visits-workflow-dry-run",
+  "service": "spring-petclinic-visits-service",
+  "mode": "compatibility-dry-run",
+  "reducerEngine": "raw",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "workflowCompatibility": "PASSED",
+  "evidenceSource": "existing V2-L confirmed records",
+  "newRuntimeEvidence": false,
+  "claimBoundary": "This V2-P compatibility dry run does not rerun containers and does not create a new visits-service claim."
+}

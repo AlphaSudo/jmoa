@@ -199,6 +199,14 @@ It standardizes inputs and output folders but does not enable mutation, select
 a runtime policy, start a private stack implicitly, or produce a runtime claim.
 V2-C remains the verdict gate and V2-D remains the attribution gate.
 
+### V2-P Runtime Workflow Productization
+
+V2-P adds a script-first coordinator and claim-register consistency guard for
+the established V2-M, V2-N, V2-O, V2-C, and V2-D gates. It may report
+`CLAIM_ALLOWED` only as a human-review eligibility state after existing V2-C
+and V2-D evidence is supplied. It never updates this register automatically
+and creates no runtime performance claim.
+
 ## Artifact-Only Claims
 
 ```text

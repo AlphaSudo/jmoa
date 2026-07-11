@@ -337,5 +337,26 @@ capture, and V2-C/V2-D confirmation orchestration.
 
 See [V2-O Runtime Automation Guide](../docs/v2-o/v2o-runtime-automation-guide.md).
 
+## V2-P Runtime Workflow Coordinator
+
+V2-P is intentionally script-first. Use
+`../scripts/run-jmoa-runtime-workflow.ps1` to normalize existing V2-M, V2-N,
+V2-O, V2-C, and V2-D reports into one workflow state. The script can execute
+only explicitly configured existing V2-O steps; it does not add a Maven goal,
+mutate artifacts, or declare claims.
+
+Run the state-machine replay with:
+
+```powershell
+../scripts/run-jmoa-runtime-workflow.ps1 `
+  -Mode replay `
+  -ReplaySuite ../docs/v2-p/v2p-workflow-replay-suite.json `
+  -OutputDir target/v2p-workflow-replay
+```
+
+Use `../scripts/check-claim-register-consistency.ps1` after a reviewed workflow
+report. `CLAIM_ALLOWED` remains an eligibility result; the claim register is
+never edited automatically.
+
 See the repository-level docs for deployment materialization and measurement
 boundaries.

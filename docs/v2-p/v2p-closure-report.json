@@ -1,0 +1,6 @@
+{
+  "metadataVersion": "v2p-closure-report",
+  "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+  "components": ["V2-M", "V2-N", "V2-O", "V2-C", "V2-D"],
+  "doesNot": ["add reducer types", "broaden metadata stripping", "automatically train CDS", "automatically create runtime claims"]
+}
