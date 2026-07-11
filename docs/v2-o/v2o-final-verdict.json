@@ -1,0 +1,8 @@
+{
+  "metadataVersion": "v2o-final-verdict",
+  "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+  "runtimeAutomation": true,
+  "newReducer": false,
+  "newRuntimePerformanceClaim": false,
+  "requiredClaimGates": ["V2-C", "V2-D", "human claim review"]
+}

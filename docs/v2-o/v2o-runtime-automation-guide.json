@@ -1,0 +1,15 @@
+{
+  "metadataVersion": "v2o-runtime-automation-guide",
+  "workflow": [
+    "recommend-runtime",
+    "runtime-preflight",
+    "train-or-prove",
+    "semantic-smoke",
+    "paired-screen-capture",
+    "v2-c-validation",
+    "v2-d-attribution",
+    "human-claim-review"
+  ],
+  "screenCaptureContract": "bN/cN directories with V2-C-required files",
+  "runtimeClaimProducedByAutomation": false
+}

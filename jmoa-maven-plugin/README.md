@@ -308,5 +308,34 @@ See:
 - [V2-N Historical Replay](../docs/v2-n/v2n-runtime-replay.md)
 - [V2-N Closure Report](../docs/v2-n/v2n-closure-report.md)
 
+## V2-O Runtime Policy Automation
+
+V2-O adds the workflow helpers around V2-N. The new preflight goal calculates
+the supplied artifact and optional CDS archive SHA-256 values before it applies
+the existing policy rules:
+
+```powershell
+mvn -N jmoa:runtime-preflight `
+  '-Djmoa.runtimePreflight.enabled=true' `
+  '-Djmoa.runtimePreflight.inputDir=<reports-dir>' `
+  '-Djmoa.runtimePreflight.outputDir=<output-dir>' `
+  '-Djmoa.runtimePreflight.registry=../docs/v2-n/v2n-runtime-protocol-registry.json' `
+  '-Djmoa.runtimePreflight.artifact=<artifact-path>' `
+  '-Djmoa.runtimePreflight.service=<service>' `
+  '-Djmoa.runtimePreflight.launchMode=EXPLODED_BOOT_APP' `
+  '-Djmoa.runtimePreflight.runtimePolicy=NO_CDS_LOW_DIRTY' `
+  '-Djmoa.runtimePreflight.reducerEngine=raw'
+```
+
+For CDS, include `-Djmoa.runtimePreflight.cdsArchive=<fresh-archive-path>`.
+The report is a readiness gate only: it does not train CDS, alter a command, or
+make a runtime claim.
+
+The companion PowerShell helpers under `../scripts` standardize explicit CDS
+training records, materialization proof, semantic smoke, V2-C-native paired
+capture, and V2-C/V2-D confirmation orchestration.
+
+See [V2-O Runtime Automation Guide](../docs/v2-o/v2o-runtime-automation-guide.md).
+
 See the repository-level docs for deployment materialization and measurement
 boundaries.

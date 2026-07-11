@@ -1,15 +1,16 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-N are closed or confirmed as the current V2 foundation.
-V2-N adds a replay-proven, report-only runtime-policy recommendation engine for
-the existing raw reducer.
+Status: V2-A through V2-O are closed or confirmed as the current V2 foundation.
+V2-O adds report-only runtime-policy automation around the existing V2-N,
+V2-C, and V2-D gates.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
 V2-I raw reducer recovery confirmation, the V2-J raw engine productization
 work, the V2-K Doctor inventory/unblock gate and runtime confirmation, the
 V2-L public visits-service confirmation, the V2-M reducer admission engine,
-and the V2-N runtime-policy recommendation engine.
+and the V2-N runtime-policy recommendation engine, and the V2-O runtime-policy
+automation helpers.
 
 ## Closure Taxonomy
 
@@ -39,6 +40,7 @@ claims.
 | V2-L | `CLOSED_CONFIRMED` | Public visits-service baseline vs raw-reduced baseline passed artifact, materialization, semantic, screen, 3-pair V2-C, and V2-D gates |
 | V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only raw reducer admission engine, exact-protocol scoping, Maven goal, and 5/5 historical replay proof |
 | V2-N | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only runtime-policy registry, CDS artifact/archive mismatch protection, Maven goal, and 7/7 historical replay proof |
+| V2-O | `CLOSED_CONFIRMED_INFRASTRUCTURE` | SHA-backed runtime preflight, explicit CDS training record, materialization proof, semantic smoke, V2-C-native paired capture, and V2-C/V2-D wrapper |
 
 ## Current Foundation
 
@@ -57,6 +59,7 @@ V2-K = can the raw-reduced Doctor D2R artifact pass real private fat-JAR/CDS run
 V2-L = can the productized raw reducer confirm on a second public runtime target?
 V2-M = when should JMOA recommend, screen, limit, or block the raw reducer?
 V2-N = which exact runtime policy is confirmed, screen-required, diagnostic-only, or blocked?
+V2-O = how do we prepare and capture evidence for that policy without bypassing V2-C/V2-D?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
@@ -70,6 +73,8 @@ behavior is still disabled by default and report-only by default unless explicit
 release-low-footprint reducer flags are enabled. V2-M never enables mutation.
 V2-N never changes runtime configuration, trains CDS archives, or reuses an
 archive across artifact variants.
+V2-O does not select runtime policy, mutate artifacts, or create performance
+claims; it automates the prerequisite evidence workflow only.
 
 ## Still Blocked
 
@@ -549,6 +554,26 @@ See:
 - [V2-N Canonical Doctor Ingestion Proof](v2-n/v2n-doctor-canonical-ingestion-proof.md)
 - [V2-N Claim Boundary](v2-n/v2n-claim-boundary.md)
 - [V2-N Closure Report](v2-n/v2n-closure-report.md)
+
+## V2-O Runtime Policy Automation
+
+V2-O makes the V2-N runtime-policy decision actionable without changing its
+report-only boundary. It adds SHA-backed preflight, an explicit CDS training
+record helper, runtime materialization proof, semantic smoke, V2-C-native
+paired capture, and a wrapper that invokes V2-C and V2-D in order.
+
+V2-O does not choose a runtime policy, mutate an artifact, train CDS without an
+explicit caller command, or make a runtime performance claim. A ready
+preflight, passed smoke, or screen only admits the next evidence gate.
+
+See:
+
+- [V2-O Runtime Automation Guide](v2-o/v2o-runtime-automation-guide.md)
+- [V2-O Runtime Preflight](v2-o/v2o-preflight.md)
+- [V2-O Materialization Proof Helper](v2-o/v2o-materialization-proof-helper.md)
+- [V2-O Confirmation Wrapper](v2-o/v2o-confirmation-wrapper.md)
+- [V2-O Final Verdict](v2-o/v2o-final-verdict.md)
+- [V2-O Closure Report](v2-o/v2o-closure-report.md)
 
 ## V2-E Boundary
 

@@ -1,0 +1,8 @@
+{
+  "metadataVersion": "v2o-preflight-helper",
+  "mavenGoal": "jmoa:runtime-preflight",
+  "script": "scripts/runtime-preflight.ps1",
+  "requiredInputs": ["evidence-or-report directory", "artifact path", "service", "launch mode", "runtime policy"],
+  "cdsAdditionalInput": "fresh archive path",
+  "claimProduced": false
+}
