@@ -1,0 +1,112 @@
+{
+  "metadataVersion": "v2p-workflow-replay-suite",
+  "cases": [
+    {
+      "id": "v2i-customers-public-raw-confirmed",
+      "expectedWorkflowState": "CLAIM_ALLOWED",
+      "expectedClaimAllowed": true,
+      "input": {
+        "service": "spring-petclinic-customers-service",
+        "artifact": "full-p2-plus-raw",
+        "scope": "PUBLIC",
+        "reducerEngine": "raw",
+        "launchMode": "EXPLODED_BOOT_APP",
+        "runtimePolicy": "NO_CDS_LOW_DIRTY",
+        "reducerDecision": "RECOMMEND_CONFIRMED",
+        "runtimeDecision": "RECOMMEND_CONFIRMED_POLICY",
+        "preflightState": "READY_FOR_SCREEN",
+        "materializationPassed": true,
+        "baselineSemanticSmokePassed": true,
+        "candidateSemanticSmokePassed": true,
+        "screenStatus": "PASSED_AND_SUPERSEDED_BY_CONFIRMATION",
+        "confirmationVerdict": "CONFIRMED_WIN",
+        "attributionStatus": "ANALYZED",
+        "claimRegisterReference": "V2-I Raw Reducer PetClinic Win"
+      }
+    },
+    {
+      "id": "v2k-doctor-private-raw-cds-confirmed",
+      "expectedWorkflowState": "CLAIM_ALLOWED",
+      "expectedClaimAllowed": true,
+      "input": {
+        "service": "doctor-corrected-d2",
+        "artifact": "d2r-with-variant-specific-cds",
+        "scope": "PRIVATE",
+        "reducerEngine": "raw",
+        "launchMode": "SPRING_BOOT_FAT_JAR",
+        "runtimePolicy": "CDS",
+        "reducerDecision": "RECOMMEND_CONFIRMED",
+        "runtimeDecision": "RECOMMEND_CONFIRMED_POLICY",
+        "preflightState": "READY_FOR_SCREEN",
+        "materializationPassed": true,
+        "baselineSemanticSmokePassed": true,
+        "candidateSemanticSmokePassed": true,
+        "screenStatus": "PASSED_AND_SUPERSEDED_BY_CONFIRMATION",
+        "confirmationVerdict": "CONFIRMED_WIN",
+        "attributionStatus": "ANALYZED",
+        "claimRegisterReference": "V2-K Doctor Raw Reducer Runtime Win"
+      }
+    },
+    {
+      "id": "v2l-visits-public-raw-confirmed",
+      "expectedWorkflowState": "CLAIM_ALLOWED",
+      "expectedClaimAllowed": true,
+      "input": {
+        "service": "spring-petclinic-visits-service",
+        "artifact": "baseline-plus-raw",
+        "scope": "PUBLIC",
+        "reducerEngine": "raw",
+        "launchMode": "EXPLODED_BOOT_APP",
+        "runtimePolicy": "NO_CDS_LOW_DIRTY",
+        "reducerDecision": "RECOMMEND_CONFIRMED",
+        "runtimeDecision": "RECOMMEND_CONFIRMED_POLICY",
+        "preflightState": "READY_FOR_SCREEN",
+        "materializationPassed": true,
+        "baselineSemanticSmokePassed": true,
+        "candidateSemanticSmokePassed": true,
+        "screenStatus": "PASSED_AND_SUPERSEDED_BY_CONFIRMATION",
+        "confirmationVerdict": "CONFIRMED_WIN",
+        "attributionStatus": "ANALYZED",
+        "claimRegisterReference": "V2-L Visits Raw Reducer Runtime Win"
+      }
+    },
+    {
+      "id": "v2h-hardened-asm-screen-failed",
+      "expectedWorkflowState": "CLAIM_BLOCKED",
+      "expectedClaimAllowed": false,
+      "input": {
+        "service": "spring-petclinic-customers-service",
+        "artifact": "full-p2-plus-hardened-asm",
+        "scope": "PUBLIC",
+        "reducerEngine": "asm",
+        "launchMode": "EXPLODED_BOOT_APP",
+        "runtimePolicy": "NO_CDS_LOW_DIRTY",
+        "reducerDecision": "RECOMMEND_SCREEN_REQUIRED",
+        "runtimeDecision": "BLOCK_RUNTIME_PROMOTION",
+        "preflightState": "READY_FOR_SCREEN",
+        "materializationPassed": true,
+        "baselineSemanticSmokePassed": true,
+        "candidateSemanticSmokePassed": true,
+        "screenStatus": "DO_NOT_PROMOTE_TO_3PAIR_CONFIRMATION",
+        "confirmationVerdict": "NO_CLAIM",
+        "attributionStatus": "ANALYZED"
+      }
+    },
+    {
+      "id": "doctor-stale-cds-archive",
+      "expectedWorkflowState": "CLAIM_BLOCKED",
+      "expectedClaimAllowed": false,
+      "input": {
+        "service": "doctor-corrected-d2",
+        "artifact": "d2r-with-stale-d2-cds",
+        "scope": "PRIVATE",
+        "reducerEngine": "raw",
+        "launchMode": "SPRING_BOOT_FAT_JAR",
+        "runtimePolicy": "CDS",
+        "reducerDecision": "RECOMMEND_SCREEN_REQUIRED",
+        "runtimeDecision": "BLOCK_CDS_ARCHIVE_MISMATCH",
+        "preflightState": "BLOCK_CDS_ARCHIVE_MISMATCH"
+      }
+    }
+  ]
+}

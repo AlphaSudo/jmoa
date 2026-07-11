@@ -1,0 +1,5 @@
+{
+  "metadataVersion": "v2p-claim-register-guard",
+  "script": "scripts/check-claim-register-consistency.ps1",
+  "rules": ["workflow never declares claims", "claim-allowed requires V2-C confirmed win", "claim-allowed requires V2-D attribution", "claim-register reference must exist"]
+}

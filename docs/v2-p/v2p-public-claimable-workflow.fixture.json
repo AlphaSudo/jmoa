@@ -1,0 +1,18 @@
+{
+  "service": "spring-petclinic-visits-service",
+  "artifact": "baseline-plus-raw",
+  "scope": "PUBLIC",
+  "reducerEngine": "raw",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "reducerDecision": "RECOMMEND_CONFIRMED",
+  "runtimeDecision": "RECOMMEND_CONFIRMED_POLICY",
+  "preflightState": "READY_FOR_SCREEN",
+  "materializationPassed": true,
+  "baselineSemanticSmokePassed": true,
+  "candidateSemanticSmokePassed": true,
+  "screenStatus": "PASSED_AND_SUPERSEDED_BY_CONFIRMATION",
+  "confirmationVerdict": "CONFIRMED_WIN",
+  "attributionStatus": "ANALYZED",
+  "claimRegisterReference": "V2-L Visits Raw Reducer Runtime Win"
+}

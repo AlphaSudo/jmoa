@@ -1,0 +1,10 @@
+{
+  "metadataVersion": "v2p-golden-workflow",
+  "steps": [
+    "reducer recommendation", "runtime-policy recommendation", "preflight",
+    "materialization proof", "semantic smoke", "paired screen",
+    "three-pair confirmation", "V2-C validation", "V2-D attribution",
+    "reviewed claim-register update"
+  ],
+  "rule": "A later gate cannot bypass an earlier gate."
+}

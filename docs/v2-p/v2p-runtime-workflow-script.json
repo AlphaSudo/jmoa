@@ -1,0 +1,6 @@
+{
+  "metadataVersion": "v2p-runtime-workflow-script",
+  "script": "scripts/run-jmoa-runtime-workflow.ps1",
+  "modes": ["analyze", "execute", "replay"],
+  "executionRule": "Execute mode invokes only explicitly configured existing V2-O steps after recommendations pass."
+}
