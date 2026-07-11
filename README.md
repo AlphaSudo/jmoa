@@ -392,6 +392,37 @@ See:
 - [V2-M Historical Replay](docs/v2-m/v2m-historical-recommendation-replay.md)
 - [V2-M Closure Report](docs/v2-m/v2m-closure-report.md)
 
+## V2-N Runtime Policy Recommendation Engine
+
+V2-N adds a report-only runtime-policy decision layer. It registers confirmed
+raw-reducer protocols and tells the user whether a requested context is
+confirmed, needs a screen, is artifact-only, is diagnostic-only, or is blocked.
+It never changes the runtime command, image, artifact, or CDS archive.
+
+```powershell
+mvn -N jmoa:recommend-runtime `
+  '-Djmoa.runtimeRecommendation.enabled=true' `
+  '-Djmoa.runtimeRecommendation.mode=analyze' `
+  '-Djmoa.runtimeRecommendation.inputDir=<reports-dir>' `
+  '-Djmoa.runtimeRecommendation.registry=docs/v2-n/v2n-runtime-protocol-registry.json' `
+  '-Djmoa.runtimeRecommendation.service=<service>' `
+  '-Djmoa.runtimeRecommendation.launchMode=EXPLODED_BOOT_APP' `
+  '-Djmoa.runtimeRecommendation.runtimePolicy=NO_CDS_LOW_DIRTY' `
+  '-Djmoa.runtimeRecommendation.reducerEngine=raw'
+```
+
+For CDS, the engine requires the exact registered artifact/archive pair and
+runtime mapping proof. A no-CDS candidate compared against a CDS baseline is
+blocked as a policy mismatch.
+
+See:
+
+- [V2-N Runtime Protocol Registry](docs/v2-n/v2n-runtime-protocol-registry.md)
+- [V2-N Policy Rules](docs/v2-n/v2n-runtime-policy-rules.md)
+- [V2-N Historical Replay](docs/v2-n/v2n-runtime-replay.md)
+- [V2-N Claim Boundary](docs/v2-n/v2n-claim-boundary.md)
+- [V2-N Final Verdict](docs/v2-n/v2n-final-verdict.md)
+
 ## Safety
 
 Before publishing or tagging a release, run:

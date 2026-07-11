@@ -1,0 +1,11 @@
+{
+  "metadataVersion": "v2n-doctor-canonical-ingestion-proof",
+  "inputKind": "canonical-v2k-final-reports",
+  "selectedSemanticEvidence": "v2k-doctor-semantic-smoke-result.json",
+  "supersededSemanticPlanIgnored": "v2k-doctor-semantic-smoke.json",
+  "decision": "RECOMMEND_CONFIRMED_POLICY",
+  "scope": "PRIVATE",
+  "protocolMatchesRegistry": true,
+  "runtimePolicyPromotionAllowed": true,
+  "matchedProtocolId": "doctor-corrected-d2r-raw-cds"
+}

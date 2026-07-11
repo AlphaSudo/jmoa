@@ -1,0 +1,16 @@
+{
+  "metadataVersion": "v2n-runtime-replay",
+  "suite": "historical-runtime-policy-suite.json",
+  "cases": 7,
+  "passedCases": 7,
+  "failedCases": 0,
+  "results": [
+    { "id": "v2i-petclinic-customers-raw-no-cds", "decision": "RECOMMEND_CONFIRMED_POLICY", "scope": "PUBLIC" },
+    { "id": "v2l-petclinic-visits-raw-no-cds", "decision": "RECOMMEND_CONFIRMED_POLICY", "scope": "PUBLIC" },
+    { "id": "v2k-doctor-d2r-raw-cds", "decision": "RECOMMEND_CONFIRMED_POLICY", "scope": "PRIVATE" },
+    { "id": "doctor-d2r-with-old-d2-cds", "decision": "BLOCK_CDS_ARCHIVE_MISMATCH", "scope": "PRIVATE" },
+    { "id": "doctor-no-cds-versus-cds-baseline", "decision": "BLOCK_POLICY_MISMATCH", "scope": "PRIVATE" },
+    { "id": "v2h-hardened-asm-screen-failed", "decision": "BLOCK_RUNTIME_PROMOTION", "scope": "PUBLIC" },
+    { "id": "preflight-no-cds-without-fingerprint", "decision": "RECOMMEND_SCREEN_REQUIRED", "scope": "PUBLIC" }
+  ]
+}

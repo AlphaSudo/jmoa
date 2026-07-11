@@ -1,0 +1,25 @@
+{
+  "metadataVersion": "v2n-runtime-policy-rules",
+  "decisions": [
+    "RECOMMEND_CONFIRMED_POLICY",
+    "RECOMMEND_SCREEN_REQUIRED",
+    "ALLOW_DIAGNOSTIC_ONLY",
+    "ALLOW_ARTIFACT_ONLY",
+    "BLOCK_POLICY_MISMATCH",
+    "BLOCK_CDS_ARCHIVE_MISMATCH",
+    "BLOCK_RUNTIME_STACK_MISSING",
+    "BLOCK_NO_SEMANTIC_SMOKE",
+    "BLOCK_NO_V2C_CONFIRMATION",
+    "BLOCK_RUNTIME_PROMOTION",
+    "UNKNOWN"
+  ],
+  "cdsRules": [
+    "Artifact changes require a fresh variant-specific CDS archive.",
+    "CDS evidence requires artifact hash, archive hash, semantic smoke, V2-C, V2-D, and runtime mapping proof.",
+    "CDS and no-CDS evidence cannot be compared as one policy."
+  ],
+  "noCdsRules": [
+    "CDS, AppCDS, Leyden, and runtime javaagents must be disabled.",
+    "Preflight requires an artifact or deployment-layer fingerprint before relying on historical scope."
+  ]
+}

@@ -32,6 +32,7 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | V2-K | `CLOSED_CONFIRMED` | Private Doctor corrected D2 vs raw-reduced D2R runtime confirmation under fat-JAR/CDS |
 | V2-L | `CLOSED_CONFIRMED` | Public visits-service baseline vs raw-reduced baseline confirmation under exploded-Boot/no-CDS |
 | V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only reducer admission/recommendation engine proven by historical replay; no mutation or new runtime claim |
+| V2-N | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only runtime-policy recommendation engine proven by historical replay; no deployment change, CDS archive reuse, or new runtime claim |
 
 V2-L also uses the descriptive phase label
 `CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME`. The official closure type remains

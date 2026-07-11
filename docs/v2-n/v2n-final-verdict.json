@@ -1,0 +1,16 @@
+{
+  "metadataVersion": "v2n-final-verdict",
+  "status": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+  "historicalReplay": {
+    "cases": 7,
+    "passedCases": 7,
+    "failedCases": 0
+  },
+  "canonicalIngestion": {
+    "decision": "RECOMMEND_CONFIRMED_POLICY",
+    "scope": "PRIVATE"
+  },
+  "mutationBehaviorChanged": false,
+  "newRuntimePerformanceClaim": false,
+  "suggestedReleaseTagAfterMerge": "v0.12.0-v2n-runtime-policy-recommendation"
+}

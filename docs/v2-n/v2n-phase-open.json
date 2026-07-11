@@ -1,0 +1,13 @@
+{
+  "metadataVersion": "v2n-phase-open",
+  "status": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+  "mavenGoal": "jmoa:recommend-runtime",
+  "reportOnly": true,
+  "forbiddenActions": [
+    "bytecode mutation",
+    "automatic deployment changes",
+    "automatic CDS training",
+    "automatic CDS archive reuse",
+    "new runtime performance claims"
+  ]
+}
