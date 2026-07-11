@@ -1,7 +1,7 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after the V2-N runtime-policy
-recommendation engine.
+This is the source of truth for public V2 claims after the V2-O runtime-policy
+automation release.
 
 Closure terms follow:
 
@@ -181,6 +181,24 @@ mismatch rejection, and the V2-H failed-screen block. This is a tooling
 capability claim, not a new runtime performance claim. The goal does not train
 or reuse CDS archives and does not alter runtime configuration.
 
+### V2-O Runtime Policy Automation
+
+V2-O adds a report-only runtime workflow around the existing policy and evidence
+engines:
+
+```text
+SHA-backed preflight
+explicit CDS training records
+materialization proof
+semantic smoke
+V2-C-native pair capture
+V2-C/V2-D confirmation wrapper
+```
+
+It standardizes inputs and output folders but does not enable mutation, select
+a runtime policy, start a private stack implicitly, or produce a runtime claim.
+V2-C remains the verdict gate and V2-D remains the attribution gate.
+
 ## Artifact-Only Claims
 
 ```text
@@ -253,6 +271,7 @@ transfer of a recommendation to a different service, launch mode, or runtime pol
 automatic runtime policy application from a V2-N recommendation
 CDS archive reuse across artifact variants
 transfer of CDS evidence to no-CDS or no-CDS evidence to CDS
+automatic runtime performance claim from V2-O preflight, training, smoke, or screen output
 ```
 
 Any new runtime performance claim must pass V2-C validation and V2-D attribution.

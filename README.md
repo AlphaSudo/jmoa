@@ -423,6 +423,42 @@ See:
 - [V2-N Claim Boundary](docs/v2-n/v2n-claim-boundary.md)
 - [V2-N Final Verdict](docs/v2-n/v2n-final-verdict.md)
 
+## V2-O Runtime Policy Automation
+
+V2-O turns the existing V2-N/V2-C/V2-D gates into explicit report-only
+workflow helpers. It does not choose a policy, change a runtime command, or
+make a performance claim. It standardizes the evidence path:
+
+```text
+preflight -> train/prove -> semantic smoke -> paired capture -> V2-C -> V2-D
+```
+
+The new `jmoa:runtime-preflight` goal computes SHA-256 for the supplied
+artifact and optional CDS archive, then reports whether the next allowed gate
+is smoke, screen, confirmation, or an explicit block.
+
+```powershell
+mvn -N jmoa:runtime-preflight `
+  '-Djmoa.runtimePreflight.enabled=true' `
+  '-Djmoa.runtimePreflight.inputDir=<reports-dir>' `
+  '-Djmoa.runtimePreflight.artifact=<artifact-path>' `
+  '-Djmoa.runtimePreflight.service=<service>' `
+  '-Djmoa.runtimePreflight.launchMode=EXPLODED_BOOT_APP' `
+  '-Djmoa.runtimePreflight.runtimePolicy=NO_CDS_LOW_DIRTY'
+```
+
+PowerShell helpers cover explicit CDS training records, container
+materialization proof, semantic smoke, V2-C-native paired captures, and a
+V2-C/V2-D confirmation wrapper. They do not run a memory claim by themselves.
+
+See:
+
+- [V2-O Runtime Automation Guide](docs/v2-o/v2o-runtime-automation-guide.md)
+- [V2-O Runtime Preflight](docs/v2-o/v2o-preflight.md)
+- [V2-O Materialization Proof Helper](docs/v2-o/v2o-materialization-proof-helper.md)
+- [V2-O Final Verdict](docs/v2-o/v2o-final-verdict.md)
+- [V2-O Closure Report](docs/v2-o/v2o-closure-report.md)
+
 ## Safety
 
 Before publishing or tagging a release, run:

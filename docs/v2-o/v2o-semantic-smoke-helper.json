@@ -1,0 +1,7 @@
+{
+  "metadataVersion": "v2o-semantic-smoke-helper",
+  "script": "scripts/runtime-semantic-smoke.ps1",
+  "output": "jmoa-semantic-smoke.json",
+  "requiredSuccess": ["health UP", "zero workload errors", "no forbidden JVM/linkage log patterns"],
+  "claimProduced": false
+}

@@ -1,0 +1,9 @@
+{
+  "metadataVersion": "v2o-automation-replay",
+  "scenarios": [
+    {"id": "v2i-customers", "runtimePolicy": "NO_CDS_LOW_DIRTY", "compatible": true, "runtimeClaim": false},
+    {"id": "v2k-doctor", "runtimePolicy": "CDS", "compatible": true, "requiresVariantSpecificCds": true, "runtimeClaim": false},
+    {"id": "v2l-visits", "runtimePolicy": "NO_CDS_LOW_DIRTY", "compatible": true, "runtimeClaim": false}
+  ],
+  "blockedPatterns": ["CDS archive reuse across artifact variants", "mixed CDS/no-CDS comparison", "memory screen before semantic smoke"]
+}

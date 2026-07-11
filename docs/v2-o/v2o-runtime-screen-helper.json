@@ -1,0 +1,7 @@
+{
+  "metadataVersion": "v2o-runtime-screen-helper",
+  "script": "scripts/runtime-screen-pair.ps1",
+  "layout": ["bN", "cN"],
+  "captures": ["smaps_rollup", "smaps", "memory.current", "NMT summary", "heap info", "class histogram", "workload JSON", "run manifest"],
+  "runtimeClaimProduced": false
+}

@@ -1,0 +1,6 @@
+{
+  "metadataVersion": "v2o-materialization-proof-helper",
+  "script": "scripts/prove-runtime-materialization.ps1",
+  "checks": ["artifact hash", "dependency-layer fingerprint", "container identity", "CDS hash and mapping when applicable"],
+  "claimProduced": false
+}

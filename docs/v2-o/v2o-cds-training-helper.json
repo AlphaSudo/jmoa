@@ -1,0 +1,7 @@
+{
+  "metadataVersion": "v2o-cds-training-helper",
+  "script": "scripts/train-cds-policy.ps1",
+  "archiveReuseAcrossArtifactVariants": false,
+  "successStatus": "TRAINED_NOT_MEASURED",
+  "claimProduced": false
+}

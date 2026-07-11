@@ -1,0 +1,10 @@
+{
+  "metadataVersion": "v2o-phase-open",
+  "phase": "V2-O",
+  "title": "Runtime Policy Automation",
+  "closureTarget": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+  "mutation": false,
+  "runtimeClaim": false,
+  "scope": "public automation helpers plus private-compatible contracts",
+  "requiredDownstreamGates": ["V2-C validation", "V2-D attribution"]
+}

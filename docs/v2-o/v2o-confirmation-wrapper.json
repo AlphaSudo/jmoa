@@ -1,0 +1,9 @@
+{
+  "metadataVersion": "v2o-confirmation-wrapper",
+  "script": "scripts/run-v2-confirmation.ps1",
+  "minimumPairs": 3,
+  "requires": ["passed baseline smoke", "passed candidate smoke", "passed baseline materialization proof", "passed candidate materialization proof"],
+  "delegatesVerdictTo": "V2-C",
+  "delegatesAttributionTo": "V2-D",
+  "claimProduced": false
+}
