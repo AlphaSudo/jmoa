@@ -1,14 +1,15 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-M are closed or confirmed as the current V2 foundation.
-V2-M adds a replay-proven, report-only admission and recommendation engine for
+Status: V2-A through V2-N are closed or confirmed as the current V2 foundation.
+V2-N adds a replay-proven, report-only runtime-policy recommendation engine for
 the existing raw reducer.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
 V2-I raw reducer recovery confirmation, the V2-J raw engine productization
-work, the V2-K Doctor inventory/unblock gate and runtime confirmation, and the
-V2-L public visits-service confirmation, and the V2-M recommendation engine.
+work, the V2-K Doctor inventory/unblock gate and runtime confirmation, the
+V2-L public visits-service confirmation, the V2-M reducer admission engine,
+and the V2-N runtime-policy recommendation engine.
 
 ## Closure Taxonomy
 
@@ -37,6 +38,7 @@ claims.
 | V2-K | `CLOSED_CONFIRMED_DOCTOR` | Doctor runtime recovery succeeded, D2/D2R semantic smoke passed, single-screen measurement promoted, and 3-pair V2-C/V2-D confirmation passed |
 | V2-L | `CLOSED_CONFIRMED` | Public visits-service baseline vs raw-reduced baseline passed artifact, materialization, semantic, screen, 3-pair V2-C, and V2-D gates |
 | V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only raw reducer admission engine, exact-protocol scoping, Maven goal, and 5/5 historical replay proof |
+| V2-N | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only runtime-policy registry, CDS artifact/archive mismatch protection, Maven goal, and 7/7 historical replay proof |
 
 ## Current Foundation
 
@@ -54,6 +56,7 @@ V2-J = can the raw engine be made byte-auditable and portable at artifact level?
 V2-K = can the raw-reduced Doctor D2R artifact pass real private fat-JAR/CDS runtime confirmation?
 V2-L = can the productized raw reducer confirm on a second public runtime target?
 V2-M = when should JMOA recommend, screen, limit, or block the raw reducer?
+V2-N = which exact runtime policy is confirmed, screen-required, diagnostic-only, or blocked?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
@@ -61,9 +64,12 @@ first controlled post-v1 reducer, reducer productization, and a clear claim
 boundary between the earlier runtime-confirmed V2-E reducer, the safer
 V2-F-hardened reducer, the V2-I raw recovery engine, the V2-J productized raw
 engine, the V2-K private Doctor runtime confirmation, the V2-L public
-visits-service confirmation, and the V2-M recommendation engine. Reducer
+visits-service confirmation, the V2-M recommendation engine, and the V2-N
+runtime-policy recommendation engine. Reducer
 behavior is still disabled by default and report-only by default unless explicit
 release-low-footprint reducer flags are enabled. V2-M never enables mutation.
+V2-N never changes runtime configuration, trains CDS archives, or reuses an
+archive across artifact variants.
 
 ## Still Blocked
 
@@ -512,6 +518,37 @@ See:
 - [V2-M Historical Replay](v2-m/v2m-historical-recommendation-replay.md)
 - [V2-M V2-L Recommendation Proof](v2-m/v2m-v2l-recommendation-proof.md)
 - [V2-M Closure Report](v2-m/v2m-closure-report.md)
+
+## V2-N Runtime Policy Recommendation Engine
+
+V2-N turns the confirmed runtime protocols into a report-only policy registry
+and decision engine. It does not enable the reducer, change deployment, train
+CDS, or reuse an archive.
+
+```text
+V2-I customers raw no-CDS: RECOMMEND_CONFIRMED_POLICY / PUBLIC
+V2-L visits raw no-CDS: RECOMMEND_CONFIRMED_POLICY / PUBLIC
+V2-K Doctor D2R raw CDS: RECOMMEND_CONFIRMED_POLICY / PRIVATE
+D2R with old D2 CDS: BLOCK_CDS_ARCHIVE_MISMATCH
+Doctor no-CDS against CDS baseline: BLOCK_POLICY_MISMATCH
+V2-H hardened ASM: BLOCK_RUNTIME_PROMOTION
+historical replay: 7/7 passed
+```
+
+The canonical V2-K final report bundle was also ingested directly and resolved
+to `RECOMMEND_CONFIRMED_POLICY / PRIVATE`. When both a superseded plan and final
+result are available, V2-N prefers the final `-result` evidence record.
+
+See:
+
+- [V2-N Phase Boundary](v2-n/v2n-phase-open.md)
+- [V2-N Runtime Protocol Registry](v2-n/v2n-runtime-protocol-registry.md)
+- [V2-N Policy Rules](v2-n/v2n-runtime-policy-rules.md)
+- [V2-N Runtime Preflight](v2-n/v2n-runtime-preflight.md)
+- [V2-N Historical Replay](v2-n/v2n-runtime-replay.md)
+- [V2-N Canonical Doctor Ingestion Proof](v2-n/v2n-doctor-canonical-ingestion-proof.md)
+- [V2-N Claim Boundary](v2-n/v2n-claim-boundary.md)
+- [V2-N Closure Report](v2-n/v2n-closure-report.md)
 
 ## V2-E Boundary
 

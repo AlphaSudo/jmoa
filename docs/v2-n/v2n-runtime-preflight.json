@@ -1,0 +1,19 @@
+{
+  "metadataVersion": "v2n-runtime-preflight",
+  "modes": ["preflight", "analyze"],
+  "cdsRequiredGates": [
+    "artifactSha256",
+    "cdsArchiveSha256",
+    "semanticSmoke",
+    "runtimeMaterializationProof",
+    "cdsMappedAtRuntime",
+    "v2cConfirmation",
+    "v2dAttribution"
+  ],
+  "noCdsRequiredState": {
+    "cdsEnabled": false,
+    "appCdsEnabled": false,
+    "leydenEnabled": false,
+    "javaagentPresent": false
+  }
+}

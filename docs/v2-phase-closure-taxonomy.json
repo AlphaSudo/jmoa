@@ -103,6 +103,11 @@
       "milestone": "V2-M",
       "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
       "claimBoundary": "Report-only reducer admission and recommendation engine proven by 5/5 historical replay; no mutation behavior or new runtime performance claim."
+    },
+    {
+      "milestone": "V2-N",
+      "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+      "claimBoundary": "Report-only runtime-policy recommendation engine proven by 7/7 historical replay; no deployment changes, CDS archive training, archive reuse, or new runtime performance claim."
     }
   ],
   "rule": "Do not upgrade a closure type by wording alone. Runtime performance claims require fresh V2-C validation and V2-D attribution."

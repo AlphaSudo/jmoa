@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2M_REDUCER_RECOMMENDATION_ENGINE",
+  "status": "CURRENT_AFTER_V2N_RUNTIME_POLICY_RECOMMENDATION",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
@@ -76,6 +76,27 @@
         "BLOCK_NO_EVIDENCE",
         "BLOCK_RUNTIME_PROMOTION",
         "DIAGNOSTIC_ONLY",
+        "UNKNOWN"
+      ],
+      "mutationBehaviorChanged": false,
+      "newRuntimePerformanceClaim": false
+    },
+    {
+      "id": "v2n-runtime-policy-recommendation-engine",
+      "claim": "V2-N provides a report-only runtime-policy recommendation Maven goal with exact registry matching and CDS artifact/archive mismatch protection.",
+      "mavenGoal": "jmoa:recommend-runtime",
+      "historicalReplay": "7/7 passed",
+      "decisions": [
+        "RECOMMEND_CONFIRMED_POLICY",
+        "RECOMMEND_SCREEN_REQUIRED",
+        "ALLOW_DIAGNOSTIC_ONLY",
+        "ALLOW_ARTIFACT_ONLY",
+        "BLOCK_POLICY_MISMATCH",
+        "BLOCK_CDS_ARCHIVE_MISMATCH",
+        "BLOCK_RUNTIME_STACK_MISSING",
+        "BLOCK_NO_SEMANTIC_SMOKE",
+        "BLOCK_NO_V2C_CONFIRMATION",
+        "BLOCK_RUNTIME_PROMOTION",
         "UNKNOWN"
       ],
       "mutationBehaviorChanged": false,
@@ -163,6 +184,9 @@
     "CGLIB/JDK proxy rewriting",
     "Spring AOT generated-class mutation",
     "automatic reducer mutation from a V2-M recommendation",
-    "transfer of a recommendation to a different service, launch mode, or runtime policy"
+    "transfer of a recommendation to a different service, launch mode, or runtime policy",
+    "automatic runtime policy application from a V2-N recommendation",
+    "CDS archive reuse across artifact variants",
+    "transfer of CDS evidence to no-CDS or no-CDS evidence to CDS"
   ]
 }

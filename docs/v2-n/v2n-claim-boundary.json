@@ -1,0 +1,14 @@
+{
+  "metadataVersion": "v2n-claim-boundary",
+  "newRuntimePerformanceClaim": false,
+  "mutationBehaviorChanged": false,
+  "automaticRuntimePolicyApplication": false,
+  "allowedClaim": "Report-only runtime-policy recommendation using exact evidence-backed scope.",
+  "forbiddenClaims": [
+    "automatic CDS reuse",
+    "automatic runtime deployment changes",
+    "cross-service policy transfer",
+    "CDS/no-CDS comparison transfer",
+    "new runtime memory improvement"
+  ]
+}

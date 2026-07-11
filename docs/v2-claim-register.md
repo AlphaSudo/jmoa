@@ -1,6 +1,6 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after the V2-M reducer
+This is the source of truth for public V2 claims after the V2-N runtime-policy
 recommendation engine.
 
 Closure terms follow:
@@ -162,6 +162,25 @@ replays historical decisions with mismatch failure
 Historical replay passed 5/5 cases. This is a tooling capability claim, not a
 new runtime performance claim. The goal does not enable or invoke mutation.
 
+### V2-N Runtime Policy Recommendation Engine
+
+V2-N adds a report-only `jmoa:recommend-runtime` Maven goal that:
+
+```text
+matches exact service, launch mode, runtime policy, and reducer-engine scope
+registers public and private confirmed runtime protocols
+requires fresh artifact/archive pairing and mapped-archive proof for CDS
+blocks CDS/no-CDS mixed comparisons
+reports preflight gaps without changing deployment
+replays historical policy decisions with mismatch failure
+```
+
+Historical replay passed 7/7 cases, including the V2-I and V2-L public no-CDS
+policies, the V2-K private D2R CDS policy, stale-archive rejection, policy
+mismatch rejection, and the V2-H failed-screen block. This is a tooling
+capability claim, not a new runtime performance claim. The goal does not train
+or reuse CDS archives and does not alter runtime configuration.
+
 ## Artifact-Only Claims
 
 ```text
@@ -231,6 +250,9 @@ CGLIB/JDK proxy rewriting
 Spring AOT generated-class mutation
 automatic reducer mutation from a V2-M recommendation
 transfer of a recommendation to a different service, launch mode, or runtime policy
+automatic runtime policy application from a V2-N recommendation
+CDS archive reuse across artifact variants
+transfer of CDS evidence to no-CDS or no-CDS evidence to CDS
 ```
 
 Any new runtime performance claim must pass V2-C validation and V2-D attribution.

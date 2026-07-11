@@ -234,5 +234,79 @@ See:
 - [V2-M Historical Replay](../docs/v2-m/v2m-historical-recommendation-replay.md)
 - [V2-M Closure Report](../docs/v2-m/v2m-closure-report.md)
 
+## V2-N Runtime Policy Recommendation Flags
+
+Runtime-policy recommendation is disabled by default and never changes
+deployment configuration, bytecode, or CDS archives.
+
+```text
+jmoa.runtimeRecommendation.enabled=false
+jmoa.runtimeRecommendation.mode=analyze
+jmoa.runtimeRecommendation.inputDir=<reports-dir>
+jmoa.runtimeRecommendation.outputDir=<output-dir>
+jmoa.runtimeRecommendation.registry=<runtime-protocol-registry.json>
+jmoa.runtimeRecommendation.service=<service>
+jmoa.runtimeRecommendation.launchMode=<mode>
+jmoa.runtimeRecommendation.runtimePolicy=<policy>
+jmoa.runtimeRecommendation.reducerEngine=raw
+jmoa.runtimeRecommendation.artifactSha256=<sha optional for no-CDS analysis>
+jmoa.runtimeRecommendation.cdsArchiveSha256=<sha required for CDS>
+jmoa.runtimeRecommendation.scope=UNKNOWN
+```
+
+The plugin module requires JDK 22 or newer. On Windows, quote each dotted
+Maven property so PowerShell passes it as one literal argument.
+
+Analyze a known policy with:
+
+```powershell
+mvn -N jmoa:recommend-runtime `
+  '-Djmoa.runtimeRecommendation.enabled=true' `
+  '-Djmoa.runtimeRecommendation.mode=analyze' `
+  '-Djmoa.runtimeRecommendation.inputDir=<reports-dir>' `
+  '-Djmoa.runtimeRecommendation.registry=../docs/v2-n/v2n-runtime-protocol-registry.json' `
+  '-Djmoa.runtimeRecommendation.service=<service>' `
+  '-Djmoa.runtimeRecommendation.launchMode=EXPLODED_BOOT_APP' `
+  '-Djmoa.runtimeRecommendation.runtimePolicy=NO_CDS_LOW_DIRTY' `
+  '-Djmoa.runtimeRecommendation.reducerEngine=raw'
+```
+
+Preflight exposes missing gates without changing deployment:
+
+```powershell
+mvn -N jmoa:recommend-runtime `
+  '-Djmoa.runtimeRecommendation.enabled=true' `
+  '-Djmoa.runtimeRecommendation.mode=preflight' `
+  '-Djmoa.runtimeRecommendation.inputDir=<reports-dir>' `
+  '-Djmoa.runtimeRecommendation.registry=../docs/v2-n/v2n-runtime-protocol-registry.json'
+```
+
+Replay mode validates the policy history and fails on mismatches by default:
+
+```powershell
+mvn -N jmoa:recommend-runtime `
+  '-Djmoa.runtimeRecommendation.enabled=true' `
+  '-Djmoa.runtimeRecommendation.mode=replay' `
+  '-Djmoa.runtimeRecommendation.inputDir=../docs/v2-n' `
+  '-Djmoa.runtimeRecommendation.registry=../docs/v2-n/v2n-runtime-protocol-registry.json' `
+  '-Djmoa.runtimeRecommendation.replaySuite=../docs/v2-n/historical-runtime-policy-suite.json'
+```
+
+Outputs:
+
+```text
+runtime-policy-admission-input.json
+jmoa-runtime-recommendation.json
+jmoa-runtime-recommendation.md
+```
+
+See:
+
+- [V2-N Runtime Protocol Registry](../docs/v2-n/v2n-runtime-protocol-registry.md)
+- [V2-N Policy Rules](../docs/v2-n/v2n-runtime-policy-rules.md)
+- [V2-N Runtime Preflight](../docs/v2-n/v2n-runtime-preflight.md)
+- [V2-N Historical Replay](../docs/v2-n/v2n-runtime-replay.md)
+- [V2-N Closure Report](../docs/v2-n/v2n-closure-report.md)
+
 See the repository-level docs for deployment materialization and measurement
 boundaries.

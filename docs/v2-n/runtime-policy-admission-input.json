@@ -1,0 +1,33 @@
+{
+  "metadataVersion": "v2n-runtime-policy-admission-input",
+  "service": "doctor-corrected-d2",
+  "launchMode": "SPRING_BOOT_FAT_JAR",
+  "runtimePolicy": "CDS",
+  "reducerEngine": "raw",
+  "artifactSha256": "9D00877C0AF90E02B0C8D812F8BC659297CA67D6A939016CAF96D3D5CED79742",
+  "cdsArchiveSha256": "64A4331695D092148A105ADAA47FEEA0CA46CB0CC561C3289F0413D1A67B6ACC",
+  "comparisonRuntimePolicy": "CDS",
+  "cdsEnabled": true,
+  "appCdsEnabled": false,
+  "leydenEnabled": false,
+  "javaagentPresent": false,
+  "artifactEvidencePresent": true,
+  "runtimeStackAvailable": true,
+  "semanticSmokePassed": true,
+  "runtimeMaterializationProofPresent": true,
+  "cdsMappedAtRuntime": true,
+  "hasV2CConfirmation": true,
+  "v2cVerdict": "CONFIRMED_WIN",
+  "hasV2DAttribution": true,
+  "screenVerdict": "PASSED_AND_SUPERSEDED_BY_CONFIRMATION",
+  "diagnosticOnly": false,
+  "preflight": false,
+  "scope": "PRIVATE",
+  "sourceReports": [
+    "v2k-doctor-confirmation.json",
+    "v2k-doctor-v2c-validation.json",
+    "v2k-doctor-v2d-attribution.json",
+    "v2k-doctor-semantic-smoke.json",
+    "v2k-doctor-runtime-materialization-proof-result.json"
+  ]
+}
