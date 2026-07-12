@@ -1,0 +1,8 @@
+{
+  "comparisonMode": "evidence-readiness-not-runtime-generalization",
+  "services": [
+    {"service":"customers","staticInventory":true,"matchedLifecycleCapture":false,"result":"PARTIAL_DIAGNOSTIC_ONLY"},
+    {"service":"visits","staticInventory":false,"matchedLifecycleCapture":false,"result":"NO_GENERATED_FAMILY_CONCLUSION"},
+    {"service":"doctor-d2r","staticInventory":true,"matchedLifecycleCapture":false,"result":"STATIC_ONLY"}
+  ]
+}

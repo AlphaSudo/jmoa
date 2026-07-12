@@ -1,0 +1,6 @@
+{
+  "customers": {"status":"ARTIFACT_FINGERPRINT_MISSING","startupCapture":false,"warmupCapture":false,"workloadCapture":true,"prototypeAdmitted":false},
+  "doctor": {"status":"ARTIFACT_FINGERPRINT_MISSING","startupCapture":false,"warmupCapture":false,"workloadCapture":false,"prototypeAdmitted":false},
+  "visits": {"status":"STATIC_INVENTORY_MISSING","prototypeAdmitted":false},
+  "joinRule":"Static and diagnostic runtime data may be reconciled only with equal non-empty artifact SHA-256 values."
+}

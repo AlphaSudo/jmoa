@@ -1,0 +1,9 @@
+{
+  "phase": "V2-T",
+  "status": "PARTIAL_INFRASTRUCTURE",
+  "mode": "REPORT_ONLY",
+  "mutationEnabled": false,
+  "runtimeClaimAdded": false,
+  "requiredEvidence": ["static artifact SHA-256", "capture artifact SHA-256", "startup capture", "warmup capture", "workload capture"],
+  "fixtureBoundary": "The V2-S bounded-safe prototype candidate is a deterministic engine fixture, not an empirical family admission."
+}

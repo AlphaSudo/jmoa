@@ -1,6 +1,6 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after the V2-S
+This is the source of truth for public V2 claims after the V2-T
 generated-family runtime relevance release.
 
 Closure terms follow:
@@ -191,6 +191,17 @@ class-load events, and histogram objects, and keeps CGLIB, JDK proxy,
 ByteBuddy, Hibernate proxy, and Spring AOT families mutation-blocked by
 default. The V2-S analysis did not admit a family prototype and adds no
 generated-class runtime claim.
+
+### V2-T Generated-Family Matched Evidence
+
+V2-T adds a report-only `jmoa:analyze-generated-evidence` goal. It produces an
+exclusive primary-family census and only reconciles static inventory with
+diagnostic startup/warmup/workload captures when non-empty artifact SHA-256
+values match. Current recovered customers and Doctor reports are deliberately
+classified as incomplete because that exact evidence contract is not satisfied.
+V2-T admits no family prototype, changes no mutation behavior, and adds no
+runtime performance claim. The V2-S bounded-safe candidate remains a test
+fixture, not a real family admission.
 
 ### V2-N Runtime Policy Recommendation Engine
 

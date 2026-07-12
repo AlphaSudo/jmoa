@@ -1,0 +1,10 @@
+{
+  "rankingPurpose": "diagnostic-capture-prioritization-only",
+  "prototypeAdmitted": false,
+  "items": [
+    {"family":"LAMBDA_METAFATORY_SITE","status":"EXISTING_V1_DOMAIN_REPORT_ONLY"},
+    {"family":"SPRING_DATA_GENERATED","status":"MISSING_MATCHED_RUNTIME_EVIDENCE"},
+    {"family":"SPRING_AOT_BEAN_DEFINITIONS","status":"MISSING_MATCHED_RUNTIME_AND_SEMANTIC_EVIDENCE"},
+    {"family":"PROXY_FAMILIES","status":"MUTATION_BLOCKED"}
+  ]
+}

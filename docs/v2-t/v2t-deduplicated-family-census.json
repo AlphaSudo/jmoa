@@ -1,0 +1,8 @@
+{
+  "countingModel": "exclusive-primary-family",
+  "overlapModel": "synthetic/bridge/lambda signals are non-additive",
+  "services": [
+    {"service":"Spring PetClinic customers-service","uniqueGeneratedClasses":12152,"uniqueGeneratedClassfileBytes":81625377,"overlappingClassificationClasses":8805},
+    {"service":"Private Doctor corrected D2R","uniqueGeneratedClasses":14469,"uniqueGeneratedClassfileBytes":96525651,"overlappingClassificationClasses":10144}
+  ]
+}

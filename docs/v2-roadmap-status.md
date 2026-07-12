@@ -1,11 +1,13 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-S are closed, confirmed, or explicitly blocked within
+Status: V2-A through V2-T are closed, confirmed, or explicitly bounded within
 their declared closure types. V2-P adds a report-only end-to-end workflow
 coordinator around the existing V2-M, V2-N, V2-O, V2-C, and V2-D gates; V2-Q
 adds application-class admission with runtime promotion blocked by confirmation;
 V2-R adds report-only application/generated ROI discovery; V2-S reconciles
-generated-family static inventory with diagnostic runtime relevance evidence.
+generated-family static inventory with diagnostic runtime relevance evidence;
+V2-T adds SHA-gated lifecycle reconciliation and records missing evidence as
+partial infrastructure rather than a prototype admission.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
@@ -14,7 +16,8 @@ work, the V2-K Doctor inventory/unblock gate and runtime confirmation, the
 V2-L public visits-service confirmation, the V2-M reducer admission engine,
 the V2-N runtime-policy recommendation engine, the V2-O runtime-policy
 automation helpers, the V2-P workflow spine, the V2-Q application admission
-result, V2-R ROI discovery, and V2-S generated-family runtime relevance.
+result, V2-R ROI discovery, V2-S generated-family runtime relevance, and V2-T
+generated-family matched-evidence completion.
 
 ## Closure Taxonomy
 
@@ -49,6 +52,7 @@ claims.
 | V2-Q | `CONFIRMATION_FAILED` | Application-class raw metadata admission passed artifact/semantic gates, but paired confirmation blocked runtime promotion |
 | V2-R | `CLOSED_INFRASTRUCTURE` | Application/generated ROI discovery, runtime-relevance taxonomy, candidate ranking, and report-only recommendation classifications |
 | V2-S | `CLOSED_INFRASTRUCTURE` | Generated-family registry, static/runtime reconciliation, safety matrix, ROI scoring, and recommendation replay; no family mutation admitted |
+| V2-T | `PARTIAL_INFRASTRUCTURE` | SHA-gated generated-family evidence join, exclusive census, lifecycle model, and recommendation ingestion; no complete matched capture or family admission |
 
 ## Current Foundation
 
@@ -72,6 +76,7 @@ V2-P = how do we coordinate the allowed workflow without flattening gates or dec
 V2-Q = can packaged application classes be admitted safely, and do they survive confirmation?
 V2-R = where is the next meaningful application/generated ROI surface, before mutation?
 V2-S = which generated family is actually runtime-relevant and safe enough to deserve a future prototype?
+V2-T = do the static artifact and startup/warmup/workload diagnostics actually describe the same generated-family surface?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
@@ -96,6 +101,9 @@ V2-R does not enable application/generated mutation. It ranks future surfaces
 and extends recommendation classifications only.
 V2-S does not enable generated-class mutation or add a runtime claim. Its
 diagnostic evidence is intentionally separate from V2-C memory confirmation.
+V2-T does not enable generated-class mutation or add a runtime claim. A missing
+or mismatched artifact fingerprint is an explicit non-admission result, not a
+fallback to historical summaries.
 
 ## Still Blocked
 
@@ -673,6 +681,23 @@ See:
 - [V2-S Safety Matrix](v2-s/v2s-generated-family-safety-matrix.md)
 - [V2-S ROI Ranking](v2-s/v2s-generated-family-roi-ranking.md)
 - [V2-S Final Verdict](v2-s/v2s-final-verdict.md)
+
+## V2-T Generated-Family Matched Evidence
+
+V2-T adds `jmoa:analyze-generated-evidence`, which requires equal static and
+capture SHA-256 values before joining a generated-class inventory to diagnostic
+lifecycle captures. Recovered customers evidence has a workload capture but no
+hashes or startup/warmup captures; Doctor has a static inventory but no matching
+lifecycle capture; visits has no matching inventory/capture pair. V2-T closes as
+`PARTIAL_INFRASTRUCTURE`, with no family mutation or prototype admission.
+
+See:
+
+- [V2-T Phase Boundary](v2-t/v2t-phase-open.md)
+- [V2-T Deduplicated Census](v2-t/v2t-deduplicated-family-census.md)
+- [V2-T Reconciliation](v2-t/v2t-static-runtime-reconciliation.md)
+- [V2-T Prototype Admission](v2-t/v2t-prototype-admission.md)
+- [V2-T Final Verdict](v2-t/v2t-final-verdict.md)
 
 ## V2-E Boundary
 

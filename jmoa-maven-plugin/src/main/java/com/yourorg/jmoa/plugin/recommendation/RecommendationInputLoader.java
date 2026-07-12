@@ -115,7 +115,8 @@ public final class RecommendationInputLoader {
         }
 
         Optional<File> generatedDiscoveryReport = find(inputDirectory,
-            name -> name.equals("v2s-generated-family-roi-ranking.json")
+            name -> name.equals("v2t-generated-family-matched-evidence.json")
+                || name.equals("v2s-generated-family-roi-ranking.json")
                 || name.equals("v2r-application-surface-census.json")
                 || name.equals("v2r-candidate-ranking.json")
                 || name.equals("v2q-generated-inventory.json")
@@ -126,6 +127,7 @@ public final class RecommendationInputLoader {
             JsonNode summary = root.path("generatedCandidateSummary");
             JsonNode roi = root.path("roiRanking");
             generatedEstimatedBytes = firstLong(
+                root.path("uniqueGeneratedClassfileBytes"),
                 summary.path("estimatedBytes"),
                 root.path("generatedEstimatedBytes"),
                 root.path("generatedClassfileBytes"),
@@ -133,6 +135,7 @@ public final class RecommendationInputLoader {
                 roi.isArray() && !roi.isEmpty() ? roi.get(0).path("staticBytes") : null
             );
             generatedClassCount = firstInt(
+                root.path("uniqueGeneratedClasses"),
                 summary.path("generatedClassCount"),
                 root.path("generatedClassCount"),
                 root.path("generatedLikeClasses"),
@@ -142,7 +145,8 @@ public final class RecommendationInputLoader {
             generatedRuntimeRelevant = summary.path("runtimeRelevant").asBoolean(false)
                 || root.path("runtimeRelevantCandidates").asInt(0) > 0
                 || "RUNTIME_RELEVANT".equals(normalize(text(root, "runtimeRelevance", "")))
-                || roiHasRuntimeRelevant(roi);
+                || roiHasRuntimeRelevant(roi)
+                || lifecycleHasRuntimeRelevance(root.path("lifecycle"));
             generatedUnsafeFamilyPresent = summary.path("unsafeFamilyPresent").asBoolean(false)
                 || root.path("unsafeFamilyPresent").asBoolean(false)
                 || containsUnsafeFamily(root.path("blockedFamilies"))
@@ -461,6 +465,20 @@ public final class RecommendationInputLoader {
         }
         for (JsonNode item : roi) {
             if ("RUNTIME_RELEVANT".equals(normalize(text(item, "relevance", "")))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean lifecycleHasRuntimeRelevance(JsonNode lifecycle) {
+        if (!lifecycle.isArray()) {
+            return false;
+        }
+        for (JsonNode item : lifecycle) {
+            String classification = normalize(text(item, "classification", ""));
+            if ("RUNTIME_GENERATED_WORKLOAD".equals(classification)
+                || "PACKAGED_LOADED_WORKLOAD".equals(classification)) {
                 return true;
             }
         }
