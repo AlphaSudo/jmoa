@@ -1,0 +1,52 @@
+{
+  "metadataVersion": "v2r-candidate-ranking",
+  "mode": "report-only",
+  "candidates": [
+    {
+      "rank": 1,
+      "candidate": "Spring Data generated/helper family",
+      "estimatedBytes": 1379849,
+      "runtimeRelevance": "UNKNOWN",
+      "semanticRisk": "MEDIUM",
+      "recommendedDecision": "GENERATED_REPORT_ONLY",
+      "nextGate": "runtime relevance capture"
+    },
+    {
+      "rank": 2,
+      "candidate": "Spring AOT helper families",
+      "estimatedBytes": 1180498,
+      "runtimeRelevance": "UNKNOWN",
+      "semanticRisk": "MEDIUM_HIGH",
+      "recommendedDecision": "GENERATED_REPORT_ONLY",
+      "nextGate": "inventory and semantic model"
+    },
+    {
+      "rank": 3,
+      "candidate": "PetClinic visits application-class LVT/LVTT",
+      "estimatedBytes": 480,
+      "runtimeRelevance": "CONFIRMATION_FAILED",
+      "semanticRisk": "LOW",
+      "recommendedDecision": "APPLICATION_LOW_ROI_ARTIFACT_ONLY",
+      "nextGate": "do not pursue for visits"
+    },
+    {
+      "rank": 4,
+      "candidate": "CGLIB/JDK proxy/ByteBuddy/Hibernate proxy",
+      "estimatedBytes": null,
+      "runtimeRelevance": "POTENTIALLY_RUNTIME_RELEVANT",
+      "semanticRisk": "HIGH",
+      "recommendedDecision": "GENERATED_MUTATION_BLOCKED",
+      "nextGate": "report-only"
+    },
+    {
+      "rank": 5,
+      "candidate": "near-64KB dependency static initializers",
+      "estimatedBytes": null,
+      "runtimeRelevance": "STATIC_ONLY_IN_AVAILABLE_PETCLINIC_EVIDENCE",
+      "semanticRisk": "MEDIUM",
+      "recommendedDecision": "GENERATED_REPORT_ONLY",
+      "nextGate": "static risk report only"
+    }
+  ],
+  "mutationAdmitted": false
+}

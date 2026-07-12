@@ -8,6 +8,11 @@ separate scope. For example, both Doctor and visits can be
 | --- | --- |
 | `RECOMMEND_CONFIRMED` | All raw artifact, semantic, V2-C, V2-D, and exact-protocol gates passed |
 | `RECOMMEND_SCREEN_REQUIRED` | Artifact/semantic evidence is acceptable, but this protocol needs a fresh runtime screen or confirmation |
+| `APPLICATION_LOW_ROI_ARTIFACT_ONLY` | Application-class raw reduction is too small/noisy to justify runtime screening without explicit diagnostic intent |
+| `APPLICATION_SCREEN_REQUIRED` | Application-class raw reduction has plausible ROI and passed artifact/semantic gates, but still needs runtime evidence |
+| `GENERATED_REPORT_ONLY` | Generated/application discovery evidence exists, but it is not a mutation candidate |
+| `GENERATED_MUTATION_BLOCKED` | Generated/proxy-like families include semantic-risk classes that remain mutation-blocked |
+| `CANDIDATE_FOR_PROTOTYPE` | A high-ROI discovery surface may justify a future narrow prototype, but no mutation is enabled |
 | `ALLOW_ARTIFACT_ONLY` | Artifact and raw audit gates passed; semantic runtime evidence is unavailable |
 | `BLOCK_UNSAFE` | Raw audit drift or unsupported stripped/requested attributes were found |
 | `BLOCK_SEMANTIC_FAILURE` | The candidate failed semantic smoke |

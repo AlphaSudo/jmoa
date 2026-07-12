@@ -1,34 +1,24 @@
 # V2-M Historical Recommendation Replay
 
-Status:
+- Cases: `11`
+- Passed: `11`
+- Failed: `0`
 
-```text
-PASSED
-```
+| Case | Expected | Actual | Scope | Protocol match | Passed |
+| --- | --- | --- | --- | --- | --- |
+| `v2i-petclinic-customers-raw-confirmed` | `RECOMMEND_CONFIRMED` | `RECOMMEND_CONFIRMED` | `PUBLIC` | `true` | `true` |
+| `v2k-doctor-raw-confirmed-private` | `RECOMMEND_CONFIRMED` | `RECOMMEND_CONFIRMED` | `PRIVATE` | `true` | `true` |
+| `v2l-petclinic-visits-raw-confirmed` | `RECOMMEND_CONFIRMED` | `RECOMMEND_CONFIRMED` | `PUBLIC` | `true` | `true` |
+| `v2h-petclinic-hardened-asm-screen-failed` | `BLOCK_RUNTIME_PROMOTION` | `BLOCK_RUNTIME_PROMOTION` | `PUBLIC` | `false` | `true` |
+| `v2j-doctor-raw-artifact-only` | `ALLOW_ARTIFACT_ONLY` | `ALLOW_ARTIFACT_ONLY` | `PRIVATE` | `false` | `true` |
+| `v2q-visits-application-confirmation-failed` | `BLOCK_RUNTIME_PROMOTION` | `BLOCK_RUNTIME_PROMOTION` | `PUBLIC` | `false` | `true` |
+| `v2r-application-low-roi-artifact-only` | `APPLICATION_LOW_ROI_ARTIFACT_ONLY` | `APPLICATION_LOW_ROI_ARTIFACT_ONLY` | `PUBLIC` | `false` | `true` |
+| `v2r-application-medium-roi-screen-required` | `APPLICATION_SCREEN_REQUIRED` | `APPLICATION_SCREEN_REQUIRED` | `PUBLIC` | `false` | `true` |
+| `v2r-generated-surface-report-only` | `GENERATED_REPORT_ONLY` | `GENERATED_REPORT_ONLY` | `PUBLIC` | `false` | `true` |
+| `v2r-generated-high-roi-prototype-candidate` | `CANDIDATE_FOR_PROTOTYPE` | `CANDIDATE_FOR_PROTOTYPE` | `PUBLIC` | `false` | `true` |
+| `v2r-generated-unsafe-mutation-blocked` | `GENERATED_MUTATION_BLOCKED` | `GENERATED_MUTATION_BLOCKED` | `PUBLIC` | `false` | `true` |
 
-The replay ran through the `jmoa:recommend-reducer` Maven goal with mismatch
-failure enabled.
-
-```text
-cases: 6
-passed: 6
-failed: 0
-```
-
-| Case | Expected | Actual | Scope | Protocol match |
-| --- | --- | --- | --- | --- |
-| V2-I customers raw confirmed | `RECOMMEND_CONFIRMED` | `RECOMMEND_CONFIRMED` | `PUBLIC` | `true` |
-| V2-K Doctor raw confirmed | `RECOMMEND_CONFIRMED` | `RECOMMEND_CONFIRMED` | `PRIVATE` | `true` |
-| V2-L visits raw confirmed | `RECOMMEND_CONFIRMED` | `RECOMMEND_CONFIRMED` | `PUBLIC` | `true` |
-| V2-H hardened ASM screen failed | `BLOCK_RUNTIME_PROMOTION` | `BLOCK_RUNTIME_PROMOTION` | `PUBLIC` | `false` |
-| V2-J Doctor raw artifact-only | `ALLOW_ARTIFACT_ONLY` | `ALLOW_ARTIFACT_ONLY` | `PRIVATE` | `false` |
-| V2-Q visits application confirmation failed | `BLOCK_RUNTIME_PROMOTION` | `BLOCK_RUNTIME_PROMOTION` | `PUBLIC` | `false` |
-
-The replay demonstrates that the model does not bias toward promotion: a known
-failed screen stays blocked, a failed application-class confirmation stays
-blocked, and artifact-only evidence stays artifact-only.
-
-These are normalized regression fixtures, not substitutes for raw run archives
-or a reconstruction of phase chronology. In particular, the V2-I case combines
-its runtime confirmation with the V2-J productized raw-auditor gate now required
-by V2-M.
+The replay now covers the original raw reducer admission cases plus V2-R
+application/generated discovery states. `CANDIDATE_FOR_PROTOTYPE` is still
+report-only: it means a future phase may plan a narrow prototype, not that
+mutation or runtime promotion is enabled.

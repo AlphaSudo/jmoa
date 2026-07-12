@@ -80,7 +80,7 @@ class ReducerRecommendationEngineTest {
         input.applicationClassesReduced = 4;
         input.semanticSmokePassed = true;
 
-        assertEquals(AdmissionDecision.ALLOW_ARTIFACT_ONLY, engine.recommend(input.build()).decision());
+        assertEquals(AdmissionDecision.APPLICATION_LOW_ROI_ARTIFACT_ONLY, engine.recommend(input.build()).decision());
     }
 
     @Test
@@ -91,7 +91,44 @@ class ReducerRecommendationEngineTest {
         input.applicationClassesReduced = 4;
         input.semanticSmokePassed = true;
 
-        assertEquals(AdmissionDecision.RECOMMEND_SCREEN_REQUIRED, engine.recommend(input.build()).decision());
+        assertEquals(AdmissionDecision.APPLICATION_SCREEN_REQUIRED, engine.recommend(input.build()).decision());
+    }
+
+    @Test
+    void keepsGeneratedDiscoveryReportOnlyWhenRoiIsNotHigh() {
+        Fixture input = new Fixture();
+        input.generatedSurfaceEvidencePresent = true;
+        input.generatedEstimatedBytes = 40_000;
+        input.generatedClassCount = 20;
+        input.reducerEngine = "raw";
+
+        assertEquals(AdmissionDecision.GENERATED_REPORT_ONLY, engine.recommend(input.build()).decision());
+    }
+
+    @Test
+    void blocksGeneratedMutationWhenUnsafeFamiliesArePresent() {
+        Fixture input = new Fixture();
+        input.generatedSurfaceEvidencePresent = true;
+        input.generatedEstimatedBytes = 2_000_000;
+        input.generatedClassCount = 1000;
+        input.generatedUnsafeFamilyPresent = true;
+        input.reducerEngine = "raw";
+
+        assertEquals(AdmissionDecision.GENERATED_MUTATION_BLOCKED, engine.recommend(input.build()).decision());
+    }
+
+    @Test
+    void marksHighRoiGeneratedSurfaceAsPrototypeCandidateWithoutRuntimePromotion() {
+        Fixture input = new Fixture();
+        input.generatedSurfaceEvidencePresent = true;
+        input.generatedEstimatedBytes = 300_000;
+        input.generatedClassCount = 80;
+        input.reducerEngine = "raw";
+
+        var report = engine.recommend(input.build());
+
+        assertEquals(AdmissionDecision.CANDIDATE_FOR_PROTOTYPE, report.decision());
+        assertFalse(report.runtimePromotionAllowed());
     }
 
     @Test
@@ -203,6 +240,11 @@ class ReducerRecommendationEngineTest {
         boolean applicationClassEvidencePresent;
         long applicationBytesRemoved;
         int applicationClassesReduced;
+        boolean generatedSurfaceEvidencePresent;
+        long generatedEstimatedBytes;
+        int generatedClassCount;
+        boolean generatedRuntimeRelevant;
+        boolean generatedUnsafeFamilyPresent;
         boolean artifactEvidencePresent;
         boolean rawAuditPresent;
         int failedAudits;
@@ -234,6 +276,11 @@ class ReducerRecommendationEngineTest {
                 applicationClassEvidencePresent,
                 applicationBytesRemoved,
                 applicationClassesReduced,
+                generatedSurfaceEvidencePresent,
+                generatedEstimatedBytes,
+                generatedClassCount,
+                generatedRuntimeRelevant,
+                generatedUnsafeFamilyPresent,
                 artifactEvidencePresent,
                 rawAuditPresent,
                 failedAudits,
