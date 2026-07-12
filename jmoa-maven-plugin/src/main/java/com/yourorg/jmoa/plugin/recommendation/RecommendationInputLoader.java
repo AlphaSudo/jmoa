@@ -44,6 +44,11 @@ public final class RecommendationInputLoader {
         boolean applicationClassEvidencePresent = false;
         long applicationBytesRemoved = 0;
         int applicationClassesReduced = 0;
+        boolean generatedSurfaceEvidencePresent = false;
+        long generatedEstimatedBytes = 0;
+        int generatedClassCount = 0;
+        boolean generatedRuntimeRelevant = false;
+        boolean generatedUnsafeFamilyPresent = false;
         boolean artifactEvidencePresent = false;
         boolean rawAuditPresent = false;
         int failedAudits = 0;
@@ -106,6 +111,36 @@ public final class RecommendationInputLoader {
             applicationClassesReduced = root.path("classesReduced").asInt(0);
             int appFailedAudits = root.path("rawAuditsFailed").asInt(0);
             failedAudits = Math.max(failedAudits, appFailedAudits);
+        }
+
+        Optional<File> generatedDiscoveryReport = find(inputDirectory,
+            name -> name.equals("v2r-application-surface-census.json")
+                || name.equals("v2r-candidate-ranking.json")
+                || name.equals("v2q-generated-inventory.json")
+                || name.equals("generated-class-family-breakdown.json"));
+        if (generatedDiscoveryReport.isPresent()) {
+            JsonNode root = read(generatedDiscoveryReport.get(), sources);
+            generatedSurfaceEvidencePresent = true;
+            JsonNode summary = root.path("generatedCandidateSummary");
+            generatedEstimatedBytes = firstLong(
+                summary.path("estimatedBytes"),
+                root.path("generatedEstimatedBytes"),
+                root.path("generatedClassfileBytes"),
+                root.path("totals").path("generatedClassfileBytes")
+            );
+            generatedClassCount = firstInt(
+                summary.path("generatedClassCount"),
+                root.path("generatedClassCount"),
+                root.path("generatedLikeClasses"),
+                root.path("classesScanned")
+            );
+            generatedRuntimeRelevant = summary.path("runtimeRelevant").asBoolean(false)
+                || root.path("runtimeRelevantCandidates").asInt(0) > 0
+                || "RUNTIME_RELEVANT".equals(normalize(text(root, "runtimeRelevance", "")));
+            generatedUnsafeFamilyPresent = summary.path("unsafeFamilyPresent").asBoolean(false)
+                || root.path("unsafeFamilyPresent").asBoolean(false)
+                || containsUnsafeFamily(root.path("blockedFamilies"))
+                || containsUnsafeFamily(root.path("families"));
         }
 
         Optional<File> safetyReport = find(inputDirectory,
@@ -205,6 +240,11 @@ public final class RecommendationInputLoader {
             applicationClassEvidencePresent,
             applicationBytesRemoved,
             applicationClassesReduced,
+            generatedSurfaceEvidencePresent,
+            generatedEstimatedBytes,
+            generatedClassCount,
+            generatedRuntimeRelevant,
+            generatedUnsafeFamilyPresent,
             artifactEvidencePresent,
             rawAuditPresent,
             failedAudits,
@@ -255,6 +295,11 @@ public final class RecommendationInputLoader {
             input.applicationClassEvidencePresent(),
             input.applicationBytesRemoved(),
             input.applicationClassesReduced(),
+            input.generatedSurfaceEvidencePresent(),
+            input.generatedEstimatedBytes(),
+            input.generatedClassCount(),
+            input.generatedRuntimeRelevant(),
+            input.generatedUnsafeFamilyPresent(),
             input.artifactEvidencePresent(),
             input.rawAuditPresent(),
             input.failedAudits(),
@@ -352,6 +397,51 @@ public final class RecommendationInputLoader {
             total += item.path(field).asLong(0);
         }
         return total;
+    }
+
+    private static long firstLong(JsonNode... nodes) {
+        for (JsonNode node : nodes) {
+            if (node != null && node.isNumber() && node.asLong() > 0) {
+                return node.asLong();
+            }
+        }
+        return 0;
+    }
+
+    private static int firstInt(JsonNode... nodes) {
+        for (JsonNode node : nodes) {
+            if (node != null && node.isNumber() && node.asInt() > 0) {
+                return node.asInt();
+            }
+        }
+        return 0;
+    }
+
+    private static boolean containsUnsafeFamily(JsonNode node) {
+        if (node == null || node.isMissingNode()) {
+            return false;
+        }
+        if (node.isObject()) {
+            for (JsonNode value : node) {
+                if (containsUnsafeFamily(value)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        if (node.isArray()) {
+            for (JsonNode item : node) {
+                if (containsUnsafeFamily(item)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        String value = normalize(node.asText(""));
+        return value.contains("CGLIB")
+            || value.contains("PROXY")
+            || value.contains("BYTEBUDDY")
+            || value.contains("HIBERNATE");
     }
 
     private static String text(JsonNode root, String field, String fallback) {

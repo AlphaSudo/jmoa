@@ -27,6 +27,8 @@ public final class ReducerRecommendationEngine {
     );
     private static final long APPLICATION_MIN_REMOVED_BYTES = 32L * 1024L;
     private static final int APPLICATION_MIN_REDUCED_CLASSES = 50;
+    private static final long GENERATED_HIGH_ROI_BYTES = 256L * 1024L;
+    private static final int GENERATED_HIGH_ROI_CLASSES = 500;
 
     public ReducerRecommendation recommend(ReducerAdmissionInput input) {
         List<String> unsafeAttributes = unsafeAttributes(input);
@@ -60,6 +62,10 @@ public final class ReducerRecommendationEngine {
                 List.of(), List.of("Capture non-perturbing confirmation evidence before making a runtime claim."));
         }
 
+        if (input.generatedSurfaceEvidencePresent() && !input.artifactEvidencePresent()) {
+            return generatedDiscoveryResult(input);
+        }
+
         if (!"RAW".equals(normalize(input.reducerEngine()))) {
             return result(input, AdmissionDecision.UNKNOWN, false,
                 List.of("V2-M admission currently targets the productized raw reducer engine."),
@@ -77,7 +83,7 @@ public final class ReducerRecommendationEngine {
         if (input.applicationClassEvidencePresent()
             && !applicationRoiMeetsThreshold(input)
             && !hasApplicationRuntimeEvidence(input)) {
-            return result(input, AdmissionDecision.ALLOW_ARTIFACT_ONLY, false,
+            return result(input, AdmissionDecision.APPLICATION_LOW_ROI_ARTIFACT_ONLY, false,
                 List.of("Application-class raw reduction is below the initial ROI threshold."),
                 List.of("application removable metadata >= 32 KB or >= 50 reduced application classes",
                     "passing application-scope runtime screen"),
@@ -122,6 +128,12 @@ public final class ReducerRecommendationEngine {
         }
 
         if (Boolean.TRUE.equals(input.semanticSmokePassed())) {
+            if (input.applicationClassEvidencePresent() && applicationRoiMeetsThreshold(input)) {
+                return result(input, AdmissionDecision.APPLICATION_SCREEN_REQUIRED, false,
+                    List.of("Application-class raw reduction has plausible ROI and passed artifact/semantic gates."),
+                    List.of("application-scope V2-C confirmation", "application-scope V2-D attribution"),
+                    List.of("Run a single screen for this exact application surface before any runtime promotion."));
+            }
             return result(input, AdmissionDecision.RECOMMEND_SCREEN_REQUIRED, false,
                 List.of("Artifact and semantic gates passed, but no V2-C confirmation exists for this protocol."),
                 List.of("V2-C confirmation", "V2-D attribution"),
@@ -162,6 +174,25 @@ public final class ReducerRecommendationEngine {
             input,
             BOUNDARIES
         );
+    }
+
+    private ReducerRecommendation generatedDiscoveryResult(ReducerAdmissionInput input) {
+        if (input.generatedUnsafeFamilyPresent()) {
+            return result(input, AdmissionDecision.GENERATED_MUTATION_BLOCKED, false,
+                List.of("Generated/proxy-like families include semantic-risk runtime contract classes."),
+                List.of("family-specific semantic proof", "runtime-origin proof", "V2-C confirmation"),
+                List.of("Keep generated/proxy classes report-only; do not transfer raw reducer confidence."));
+        }
+        if (generatedHighRoi(input)) {
+            return result(input, AdmissionDecision.CANDIDATE_FOR_PROTOTYPE, false,
+                List.of("Generated/application discovery found a high-ROI surface worth prototype planning."),
+                List.of("semantic smoke", "single-screen runtime gate", "V2-C confirmation", "V2-D attribution"),
+                List.of("Open a narrow prototype phase for one family only; keep mutation disabled until gates are defined."));
+        }
+        return result(input, AdmissionDecision.GENERATED_REPORT_ONLY, false,
+            List.of("Generated/application discovery evidence is present, but it is not yet a mutation candidate."),
+            List.of("runtime relevance", "high-ROI byte/class threshold", "family-specific safety model"),
+            List.of("Continue inventory and runtime correlation before choosing a generated/application optimizer."));
     }
 
     private static List<String> artifactEvidenceGaps(ReducerAdmissionInput input) {
@@ -213,6 +244,12 @@ public final class ReducerRecommendationEngine {
     private static boolean applicationRoiMeetsThreshold(ReducerAdmissionInput input) {
         return input.applicationBytesRemoved() >= APPLICATION_MIN_REMOVED_BYTES
             || input.applicationClassesReduced() >= APPLICATION_MIN_REDUCED_CLASSES;
+    }
+
+    private static boolean generatedHighRoi(ReducerAdmissionInput input) {
+        return input.generatedRuntimeRelevant()
+            || input.generatedEstimatedBytes() >= GENERATED_HIGH_ROI_BYTES
+            || input.generatedClassCount() >= GENERATED_HIGH_ROI_CLASSES;
     }
 
     private static boolean hasApplicationRuntimeEvidence(ReducerAdmissionInput input) {

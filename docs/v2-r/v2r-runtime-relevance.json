@@ -1,0 +1,36 @@
+{
+  "metadataVersion": "v2r-runtime-relevance",
+  "mode": "report-only",
+  "classifications": [
+    {
+      "surface": "V2-Q visits application LVT/LVTT",
+      "staticSignal": "480 bytes / 4 classes",
+      "runtimeRelevance": "confirmation failed",
+      "classification": "LOW_ROI_ARTIFACT_ONLY"
+    },
+    {
+      "surface": "Spring Data generated dependency family",
+      "staticSignal": "about 1.38 MB classfile bytes",
+      "runtimeRelevance": "not proven by committed V2-R evidence",
+      "classification": "STATIC_ONLY"
+    },
+    {
+      "surface": "CGLIB/JDK proxy/ByteBuddy/Hibernate proxy",
+      "staticSignal": "present in generated-family reports",
+      "runtimeRelevance": "semantically risky if loaded",
+      "classification": "HIGH_RISK_RUNTIME_RELEVANT"
+    },
+    {
+      "surface": "near-64KB plain dependency methods",
+      "staticSignal": "57,198 and 49,478 byte static initializers",
+      "runtimeRelevance": "not observed loaded in available PetClinic evidence",
+      "classification": "STATIC_ONLY_RISK"
+    }
+  ],
+  "runtimePromotionRequires": [
+    "semantic smoke",
+    "single-screen gate",
+    "3-pair V2-C confirmation",
+    "V2-D attribution"
+  ]
+}

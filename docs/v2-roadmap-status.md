@@ -1,9 +1,10 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-Q are closed, confirmed, or explicitly blocked within
+Status: V2-A through V2-R are closed, confirmed, or explicitly blocked within
 their declared closure types. V2-P adds a report-only end-to-end workflow
 coordinator around the existing V2-M, V2-N, V2-O, V2-C, and V2-D gates; V2-Q
-adds application-class admission with runtime promotion blocked by confirmation.
+adds application-class admission with runtime promotion blocked by confirmation;
+V2-R adds report-only application/generated ROI discovery.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
@@ -11,8 +12,8 @@ V2-I raw reducer recovery confirmation, the V2-J raw engine productization
 work, the V2-K Doctor inventory/unblock gate and runtime confirmation, the
 V2-L public visits-service confirmation, the V2-M reducer admission engine,
 the V2-N runtime-policy recommendation engine, the V2-O runtime-policy
-automation helpers, the V2-P workflow spine, and the V2-Q application
-admission result.
+automation helpers, the V2-P workflow spine, the V2-Q application admission
+result, and V2-R ROI discovery.
 
 ## Closure Taxonomy
 
@@ -40,10 +41,12 @@ claims.
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
 | V2-K | `CLOSED_CONFIRMED_DOCTOR` | Doctor runtime recovery succeeded, D2/D2R semantic smoke passed, single-screen measurement promoted, and 3-pair V2-C/V2-D confirmation passed |
 | V2-L | `CLOSED_CONFIRMED` | Public visits-service baseline vs raw-reduced baseline passed artifact, materialization, semantic, screen, 3-pair V2-C, and V2-D gates |
-| V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only raw reducer admission engine, exact-protocol scoping, Maven goal, and 6/6 historical replay proof |
+| V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only raw reducer admission engine, exact-protocol scoping, Maven goal, and 11/11 historical replay proof |
 | V2-N | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only runtime-policy registry, CDS artifact/archive mismatch protection, Maven goal, and 7/7 historical replay proof |
 | V2-O | `CLOSED_CONFIRMED_INFRASTRUCTURE` | SHA-backed runtime preflight, explicit CDS training record, materialization proof, semantic smoke, V2-C-native paired capture, and V2-C/V2-D wrapper |
 | V2-P | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Script-first golden workflow, state machine, normalized workflow report, historical replay, and claim-register consistency guard |
+| V2-Q | `CONFIRMATION_FAILED` | Application-class raw metadata admission passed artifact/semantic gates, but paired confirmation blocked runtime promotion |
+| V2-R | `CLOSED_INFRASTRUCTURE` | Application/generated ROI discovery, runtime-relevance taxonomy, candidate ranking, and report-only recommendation classifications |
 
 ## Current Foundation
 
@@ -64,6 +67,8 @@ V2-M = when should JMOA recommend, screen, limit, or block the raw reducer?
 V2-N = which exact runtime policy is confirmed, screen-required, diagnostic-only, or blocked?
 V2-O = how do we prepare and capture evidence for that policy without bypassing V2-C/V2-D?
 V2-P = how do we coordinate the allowed workflow without flattening gates or declaring claims?
+V2-Q = can packaged application classes be admitted safely, and do they survive confirmation?
+V2-R = where is the next meaningful application/generated ROI surface, before mutation?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
@@ -82,6 +87,10 @@ claims; it automates the prerequisite evidence workflow only.
 V2-P does not add a reducer, select policy, train CDS implicitly, or create a
 runtime claim. It records the ordered workflow and makes claim eligibility
 explicit for review.
+V2-Q does not create an application-class runtime claim. Its paired
+confirmation failed.
+V2-R does not enable application/generated mutation. It ranks future surfaces
+and extends recommendation classifications only.
 
 ## Still Blocked
 
@@ -498,6 +507,11 @@ Decisions:
 ```text
 RECOMMEND_CONFIRMED
 RECOMMEND_SCREEN_REQUIRED
+APPLICATION_LOW_ROI_ARTIFACT_ONLY
+APPLICATION_SCREEN_REQUIRED
+GENERATED_REPORT_ONLY
+GENERATED_MUTATION_BLOCKED
+CANDIDATE_FOR_PROTOTYPE
 ALLOW_ARTIFACT_ONLY
 BLOCK_UNSAFE
 BLOCK_SEMANTIC_FAILURE
@@ -516,7 +530,12 @@ V2-L visits raw: RECOMMEND_CONFIRMED / PUBLIC
 V2-H hardened ASM: BLOCK_RUNTIME_PROMOTION
 V2-J Doctor pre-runtime: ALLOW_ARTIFACT_ONLY
 V2-Q visits application confirmation failed: BLOCK_RUNTIME_PROMOTION
-passed: 6/6
+V2-R low ROI application: APPLICATION_LOW_ROI_ARTIFACT_ONLY
+V2-R plausible application ROI: APPLICATION_SCREEN_REQUIRED
+V2-R generated report-only: GENERATED_REPORT_ONLY
+V2-R generated prototype candidate: CANDIDATE_FOR_PROTOTYPE
+V2-R generated unsafe: GENERATED_MUTATION_BLOCKED
+passed: 11/11
 ```
 
 The actual V2-L report bundle was also ingested through analyze mode and
@@ -601,6 +620,34 @@ bytes `memory.current`.
 Closure: `CONFIRMATION_FAILED`. No generated/application runtime-memory claim
 exists. Application-class raw reduction remains artifact/semantic-only unless a
 future target crosses the ROI threshold or earns its own runtime confirmation.
+
+## V2-R Application / Generated ROI Discovery
+
+V2-R closes the immediate lesson from V2-Q: application/generated mutation
+should not continue by rerunning a low-ROI failed candidate. V2-R is report-only
+and adds explicit discovery states to the reducer recommendation model:
+
+```text
+APPLICATION_LOW_ROI_ARTIFACT_ONLY
+APPLICATION_SCREEN_REQUIRED
+GENERATED_REPORT_ONLY
+GENERATED_MUTATION_BLOCKED
+CANDIDATE_FOR_PROTOTYPE
+```
+
+V2-R classifies the public visits application reducer result as low ROI
+(`480` bytes, four classes, confirmation failed). It also identifies larger
+generated-family surfaces such as Spring Data generated helpers as discovery
+signals, not mutation admissions, because runtime relevance is not yet proven.
+
+See:
+
+- [V2-R Phase Boundary](v2-r/v2r-phase-open.md)
+- [V2-R Application Surface Census](v2-r/v2r-application-surface-census.md)
+- [V2-R Runtime Relevance](v2-r/v2r-runtime-relevance.md)
+- [V2-R ROI Thresholds](v2-r/v2r-application-roi-thresholds.md)
+- [V2-R Candidate Ranking](v2-r/v2r-candidate-ranking.md)
+- [V2-R Final Verdict](v2-r/v2r-final-verdict.md)
 
 ## V2-E Boundary
 

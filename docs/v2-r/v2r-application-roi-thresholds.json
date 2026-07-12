@@ -1,0 +1,20 @@
+{
+  "metadataVersion": "v2r-application-roi-thresholds",
+  "lowRoi": {
+    "maxBytesExclusive": 32768,
+    "maxReducedClassesExclusive": 50,
+    "decision": "APPLICATION_LOW_ROI_ARTIFACT_ONLY"
+  },
+  "mediumRoi": {
+    "minBytesInclusive": 32768,
+    "orMinReducedClassesInclusive": 50,
+    "decision": "APPLICATION_SCREEN_REQUIRED"
+  },
+  "highRoi": {
+    "minBytesInclusive": 262144,
+    "orMinGeneratedClassesInclusive": 500,
+    "orRuntimeRelevantGeneratedFamily": true,
+    "decision": "CANDIDATE_FOR_PROTOTYPE"
+  },
+  "claimBoundary": "Thresholds admit investigation only; they do not create runtime claims."
+}

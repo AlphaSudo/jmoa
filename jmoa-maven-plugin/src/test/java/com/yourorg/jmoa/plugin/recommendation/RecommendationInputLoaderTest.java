@@ -41,6 +41,16 @@ class RecommendationInputLoaderTest {
         Files.writeString(tempDir.resolve("v2q-application-byte-preservation-report.json"), """
             {"classesReduced":4,"bytesRemoved":480,"rawAuditsFailed":0}
             """);
+        Files.writeString(tempDir.resolve("v2r-application-surface-census.json"), """
+            {
+              "generatedCandidateSummary": {
+                "generatedClassCount": 290,
+                "estimatedBytes": 1379849,
+                "runtimeRelevant": false,
+                "unsafeFamilyPresent": false
+              }
+            }
+            """);
         Files.writeString(tempDir.resolve("v2f-jar-safety-report.json"), """
             {"signedJarsSkipped":1,"multiReleaseJarsSkipped":2,"sealedJarsSkipped":3}
             """);
@@ -89,6 +99,9 @@ class RecommendationInputLoaderTest {
         assertTrue(input.applicationClassEvidencePresent());
         assertEquals(480, input.applicationBytesRemoved());
         assertEquals(4, input.applicationClassesReduced());
+        assertTrue(input.generatedSurfaceEvidencePresent());
+        assertEquals(1_379_849, input.generatedEstimatedBytes());
+        assertEquals(290, input.generatedClassCount());
         assertTrue(input.v2bAttributeReportPresent());
         assertEquals(300, input.v2bDebugAttributeBytes());
         assertEquals(150, input.v2bLocalVariableTableBytes());
@@ -102,7 +115,7 @@ class RecommendationInputLoaderTest {
         assertTrue(input.hasV2DAttribution());
         assertEquals("visits-service", input.confirmedService());
         assertEquals(ConfirmationScope.PUBLIC, input.confirmationScope());
-        assertEquals(11, input.sourceReports().size());
+        assertEquals(12, input.sourceReports().size());
     }
 
     @Test

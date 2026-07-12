@@ -1,0 +1,15 @@
+{
+  "metadataVersion": "v2r-phase-open",
+  "phase": "V2-R",
+  "name": "Application / Generated Surface ROI Discovery",
+  "mode": "report-only",
+  "mutationEnabled": false,
+  "runtimeClaim": false,
+  "openedAfter": "v0.14.1-v2q-application-roi-policy",
+  "boundaries": [
+    "Do not rerun V2-Q as a runtime claim.",
+    "Do not mutate generated/proxy/AOT families.",
+    "Do not transfer dependency raw-reducer confidence to application classes.",
+    "Use V2-R only to rank future candidate surfaces."
+  ]
+}

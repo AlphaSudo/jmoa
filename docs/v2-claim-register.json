@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2Q_APPLICATION_ADMISSION_CONFIRMATION_FAILED",
+  "status": "CURRENT_AFTER_V2R_APPLICATION_GENERATED_ROI_DISCOVERY",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
@@ -66,10 +66,15 @@
       "id": "v2m-reducer-recommendation-engine",
       "claim": "V2-M provides a report-only reducer admission and recommendation Maven goal with exact-protocol scope enforcement.",
       "mavenGoal": "jmoa:recommend-reducer",
-      "historicalReplay": "6/6 passed",
+      "historicalReplay": "11/11 passed",
       "decisions": [
         "RECOMMEND_CONFIRMED",
         "RECOMMEND_SCREEN_REQUIRED",
+        "APPLICATION_LOW_ROI_ARTIFACT_ONLY",
+        "APPLICATION_SCREEN_REQUIRED",
+        "GENERATED_REPORT_ONLY",
+        "GENERATED_MUTATION_BLOCKED",
+        "CANDIDATE_FOR_PROTOTYPE",
         "ALLOW_ARTIFACT_ONLY",
         "BLOCK_UNSAFE",
         "BLOCK_SEMANTIC_FAILURE",
@@ -123,6 +128,20 @@
         "decision": "LOW_ROI"
       },
       "newRuntimePerformanceClaim": false
+    },
+    {
+      "id": "v2r-application-generated-roi-discovery",
+      "claim": "V2-R provides report-only application/generated surface ROI discovery and recommendation classifications.",
+      "decisionsAdded": [
+        "APPLICATION_LOW_ROI_ARTIFACT_ONLY",
+        "APPLICATION_SCREEN_REQUIRED",
+        "GENERATED_REPORT_ONLY",
+        "GENERATED_MUTATION_BLOCKED",
+        "CANDIDATE_FOR_PROTOTYPE"
+      ],
+      "mutationBehaviorChanged": false,
+      "newRuntimePerformanceClaim": false,
+      "claimBoundary": "Discovery and candidate ranking only; no generated/application mutation is enabled."
     }
   ],
   "artifactOnlyClaims": [
@@ -210,6 +229,8 @@
     "automatic runtime policy application from a V2-N recommendation",
     "CDS archive reuse across artifact variants",
     "transfer of CDS evidence to no-CDS or no-CDS evidence to CDS",
-    "V2-Q application-class runtime improvement"
+    "V2-Q application-class runtime improvement",
+    "V2-R generated/application runtime improvement",
+    "V2-R generated/application mutation"
   ]
 }

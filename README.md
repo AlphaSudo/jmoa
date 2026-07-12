@@ -361,6 +361,11 @@ evidence and returns one admission state:
 ```text
 RECOMMEND_CONFIRMED
 RECOMMEND_SCREEN_REQUIRED
+APPLICATION_LOW_ROI_ARTIFACT_ONLY
+APPLICATION_SCREEN_REQUIRED
+GENERATED_REPORT_ONLY
+GENERATED_MUTATION_BLOCKED
+CANDIDATE_FOR_PROTOTYPE
 ALLOW_ARTIFACT_ONLY
 BLOCK_UNSAFE
 BLOCK_SEMANTIC_FAILURE
@@ -381,10 +386,11 @@ mvn -N jmoa:recommend-reducer `
   '-Djmoa.recommendation.runtimePolicy=NO_CDS_LOW_DIRTY'
 ```
 
-Historical replay passes 6/6 audited cases: V2-I, V2-K, and V2-L remain
+Historical replay passes 11/11 audited cases: V2-I, V2-K, and V2-L remain
 confirmed in their exact scopes; V2-H remains blocked; pre-runtime Doctor
-remains artifact-only; V2-Q application confirmation failure remains blocked.
-V2-M does not mutate bytecode or add a performance claim.
+remains artifact-only; V2-Q application confirmation failure remains blocked;
+V2-R application/generated discovery decisions remain report-only. V2-M/V2-R
+does not mutate bytecode or add a performance claim.
 
 See:
 
@@ -500,6 +506,29 @@ claim. Application-class reduction remains artifact/semantic-only unless a
 future target crosses the ROI policy or earns its own confirmation.
 
 See [the V2-Q final verdict](docs/v2-q/v2q-final-verdict.md).
+
+## V2-R Application / Generated ROI Discovery
+
+V2-R is a report-only discovery phase after the V2-Q confirmation failure. It
+does not rerun V2-Q and does not enable application/generated mutation. It
+formalizes ROI thresholds for application-class raw reduction, ranks generated
+and synthetic surfaces, and extends `jmoa:recommend-reducer` with
+application/generated classifications.
+
+Current conclusion:
+
+```text
+V2-Q visits application reduction: low ROI, confirmation failed
+Spring Data / AOT generated families: discovery signals, runtime relevance not proven
+proxy/CGLIB/ByteBuddy/Hibernate families: mutation blocked
+```
+
+See:
+
+- [V2-R Phase Boundary](docs/v2-r/v2r-phase-open.md)
+- [V2-R Application Surface Census](docs/v2-r/v2r-application-surface-census.md)
+- [V2-R Candidate Ranking](docs/v2-r/v2r-candidate-ranking.md)
+- [V2-R Final Verdict](docs/v2-r/v2r-final-verdict.md)
 
 ## Safety
 

@@ -1,68 +1,118 @@
 {
-  "metadataVersion": "v2m-historical-recommendation-replay",
-  "cases": 6,
-  "passedCases": 6,
-  "failedCases": 0,
-  "results": [
-    {
-      "id": "v2i-petclinic-customers-raw-confirmed",
-      "expectedDecision": "RECOMMEND_CONFIRMED",
-      "actualDecision": "RECOMMEND_CONFIRMED",
-      "expectedScope": "PUBLIC",
-      "actualScope": "PUBLIC",
-      "expectedProtocolMatch": true,
-      "actualProtocolMatch": true,
-      "passed": true
-    },
-    {
-      "id": "v2k-doctor-raw-confirmed-private",
-      "expectedDecision": "RECOMMEND_CONFIRMED",
-      "actualDecision": "RECOMMEND_CONFIRMED",
-      "expectedScope": "PRIVATE",
-      "actualScope": "PRIVATE",
-      "expectedProtocolMatch": true,
-      "actualProtocolMatch": true,
-      "passed": true
-    },
-    {
-      "id": "v2l-petclinic-visits-raw-confirmed",
-      "expectedDecision": "RECOMMEND_CONFIRMED",
-      "actualDecision": "RECOMMEND_CONFIRMED",
-      "expectedScope": "PUBLIC",
-      "actualScope": "PUBLIC",
-      "expectedProtocolMatch": true,
-      "actualProtocolMatch": true,
-      "passed": true
-    },
-    {
-      "id": "v2h-petclinic-hardened-asm-screen-failed",
-      "expectedDecision": "BLOCK_RUNTIME_PROMOTION",
-      "actualDecision": "BLOCK_RUNTIME_PROMOTION",
-      "expectedScope": "PUBLIC",
-      "actualScope": "PUBLIC",
-      "expectedProtocolMatch": false,
-      "actualProtocolMatch": false,
-      "passed": true
-    },
-    {
-      "id": "v2j-doctor-raw-artifact-only",
-      "expectedDecision": "ALLOW_ARTIFACT_ONLY",
-      "actualDecision": "ALLOW_ARTIFACT_ONLY",
-      "expectedScope": "PRIVATE",
-      "actualScope": "PRIVATE",
-      "expectedProtocolMatch": false,
-      "actualProtocolMatch": false,
-      "passed": true
-    },
-    {
-      "id": "v2q-visits-application-confirmation-failed",
-      "expectedDecision": "BLOCK_RUNTIME_PROMOTION",
-      "actualDecision": "BLOCK_RUNTIME_PROMOTION",
-      "expectedScope": "PUBLIC",
-      "actualScope": "PUBLIC",
-      "expectedProtocolMatch": false,
-      "actualProtocolMatch": false,
-      "passed": true
-    }
-  ]
+  "metadataVersion" : "v2m-historical-recommendation-replay",
+  "generatedAt" : "2026-07-12T14:40:40.964096200Z",
+  "cases" : 11,
+  "passedCases" : 11,
+  "failedCases" : 0,
+  "results" : [ {
+    "id" : "v2i-petclinic-customers-raw-confirmed",
+    "expectedDecision" : "RECOMMEND_CONFIRMED",
+    "actualDecision" : "RECOMMEND_CONFIRMED",
+    "expectedScope" : "PUBLIC",
+    "actualScope" : "PUBLIC",
+    "expectedProtocolMatch" : true,
+    "actualProtocolMatch" : true,
+    "passed" : true,
+    "reasons" : [ "Raw byte-preservation audits passed.", "Semantic smoke passed.", "V2-C confirmed a runtime win.", "V2-D attribution is present.", "The requested service, launch mode, and runtime policy match the confirmed scope." ]
+  }, {
+    "id" : "v2k-doctor-raw-confirmed-private",
+    "expectedDecision" : "RECOMMEND_CONFIRMED",
+    "actualDecision" : "RECOMMEND_CONFIRMED",
+    "expectedScope" : "PRIVATE",
+    "actualScope" : "PRIVATE",
+    "expectedProtocolMatch" : true,
+    "actualProtocolMatch" : true,
+    "passed" : true,
+    "reasons" : [ "Raw byte-preservation audits passed.", "Semantic smoke passed.", "V2-C confirmed a runtime win.", "V2-D attribution is present.", "The requested service, launch mode, and runtime policy match the confirmed scope." ]
+  }, {
+    "id" : "v2l-petclinic-visits-raw-confirmed",
+    "expectedDecision" : "RECOMMEND_CONFIRMED",
+    "actualDecision" : "RECOMMEND_CONFIRMED",
+    "expectedScope" : "PUBLIC",
+    "actualScope" : "PUBLIC",
+    "expectedProtocolMatch" : true,
+    "actualProtocolMatch" : true,
+    "passed" : true,
+    "reasons" : [ "Raw byte-preservation audits passed.", "Semantic smoke passed.", "V2-C confirmed a runtime win.", "V2-D attribution is present.", "The requested service, launch mode, and runtime policy match the confirmed scope." ]
+  }, {
+    "id" : "v2h-petclinic-hardened-asm-screen-failed",
+    "expectedDecision" : "BLOCK_RUNTIME_PROMOTION",
+    "actualDecision" : "BLOCK_RUNTIME_PROMOTION",
+    "expectedScope" : "PUBLIC",
+    "actualScope" : "PUBLIC",
+    "expectedProtocolMatch" : false,
+    "actualProtocolMatch" : false,
+    "passed" : true,
+    "reasons" : [ "The runtime screen failed its promotion gate." ]
+  }, {
+    "id" : "v2j-doctor-raw-artifact-only",
+    "expectedDecision" : "ALLOW_ARTIFACT_ONLY",
+    "actualDecision" : "ALLOW_ARTIFACT_ONLY",
+    "expectedScope" : "PRIVATE",
+    "actualScope" : "PRIVATE",
+    "expectedProtocolMatch" : false,
+    "actualProtocolMatch" : false,
+    "passed" : true,
+    "reasons" : [ "Artifact reduction and byte-preservation auditing passed, but semantic runtime evidence is unavailable." ]
+  }, {
+    "id" : "v2q-visits-application-confirmation-failed",
+    "expectedDecision" : "BLOCK_RUNTIME_PROMOTION",
+    "actualDecision" : "BLOCK_RUNTIME_PROMOTION",
+    "expectedScope" : "PUBLIC",
+    "actualScope" : "PUBLIC",
+    "expectedProtocolMatch" : false,
+    "actualProtocolMatch" : false,
+    "passed" : true,
+    "reasons" : [ "The runtime screen failed its promotion gate." ]
+  }, {
+    "id" : "v2r-application-low-roi-artifact-only",
+    "expectedDecision" : "APPLICATION_LOW_ROI_ARTIFACT_ONLY",
+    "actualDecision" : "APPLICATION_LOW_ROI_ARTIFACT_ONLY",
+    "expectedScope" : "PUBLIC",
+    "actualScope" : "PUBLIC",
+    "expectedProtocolMatch" : false,
+    "actualProtocolMatch" : false,
+    "passed" : true,
+    "reasons" : [ "Application-class raw reduction is below the initial ROI threshold." ]
+  }, {
+    "id" : "v2r-application-medium-roi-screen-required",
+    "expectedDecision" : "APPLICATION_SCREEN_REQUIRED",
+    "actualDecision" : "APPLICATION_SCREEN_REQUIRED",
+    "expectedScope" : "PUBLIC",
+    "actualScope" : "PUBLIC",
+    "expectedProtocolMatch" : false,
+    "actualProtocolMatch" : false,
+    "passed" : true,
+    "reasons" : [ "Application-class raw reduction has plausible ROI and passed artifact/semantic gates." ]
+  }, {
+    "id" : "v2r-generated-surface-report-only",
+    "expectedDecision" : "GENERATED_REPORT_ONLY",
+    "actualDecision" : "GENERATED_REPORT_ONLY",
+    "expectedScope" : "PUBLIC",
+    "actualScope" : "PUBLIC",
+    "expectedProtocolMatch" : false,
+    "actualProtocolMatch" : false,
+    "passed" : true,
+    "reasons" : [ "Generated/application discovery evidence is present, but it is not yet a mutation candidate." ]
+  }, {
+    "id" : "v2r-generated-high-roi-prototype-candidate",
+    "expectedDecision" : "CANDIDATE_FOR_PROTOTYPE",
+    "actualDecision" : "CANDIDATE_FOR_PROTOTYPE",
+    "expectedScope" : "PUBLIC",
+    "actualScope" : "PUBLIC",
+    "expectedProtocolMatch" : false,
+    "actualProtocolMatch" : false,
+    "passed" : true,
+    "reasons" : [ "Generated/application discovery found a high-ROI surface worth prototype planning." ]
+  }, {
+    "id" : "v2r-generated-unsafe-mutation-blocked",
+    "expectedDecision" : "GENERATED_MUTATION_BLOCKED",
+    "actualDecision" : "GENERATED_MUTATION_BLOCKED",
+    "expectedScope" : "PUBLIC",
+    "actualScope" : "PUBLIC",
+    "expectedProtocolMatch" : false,
+    "actualProtocolMatch" : false,
+    "passed" : true,
+    "reasons" : [ "Generated/proxy-like families include semantic-risk runtime contract classes." ]
+  } ]
 }

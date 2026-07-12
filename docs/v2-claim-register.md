@@ -1,7 +1,7 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after the V2-O runtime-policy
-automation release.
+This is the source of truth for public V2 claims after the V2-R
+application/generated ROI discovery release.
 
 Closure terms follow:
 
@@ -159,9 +159,29 @@ emits JSON and Markdown recommendations
 replays historical decisions with mismatch failure
 ```
 
-Historical replay passed 6/6 cases, including the V2-Q failed application-class
-confirmation. This is a tooling capability claim, not a
-new runtime performance claim. The goal does not enable or invoke mutation.
+Historical replay passed 11/11 cases, including the V2-Q failed
+application-class confirmation and V2-R application/generated discovery
+classifications. This is a tooling capability claim, not a new runtime
+performance claim. The goal does not enable or invoke mutation.
+
+### V2-R Application / Generated ROI Discovery
+
+V2-R adds report-only application/generated ROI classifications to
+`jmoa:recommend-reducer`:
+
+```text
+APPLICATION_LOW_ROI_ARTIFACT_ONLY
+APPLICATION_SCREEN_REQUIRED
+GENERATED_REPORT_ONLY
+GENERATED_MUTATION_BLOCKED
+CANDIDATE_FOR_PROTOTYPE
+```
+
+It classifies the V2-Q visits application result as low ROI and
+confirmation-failed, and it treats larger generated-family surfaces as discovery
+signals until runtime relevance and family-specific safety are proven. V2-R
+does not enable generated/application mutation and creates no runtime
+performance claim.
 
 ### V2-N Runtime Policy Recommendation Engine
 
@@ -281,6 +301,8 @@ automatic runtime policy application from a V2-N recommendation
 CDS archive reuse across artifact variants
 transfer of CDS evidence to no-CDS or no-CDS evidence to CDS
 automatic runtime performance claim from V2-O preflight, training, smoke, or screen output
+V2-R generated/application runtime improvement
+V2-R generated/application mutation
 ```
 
 Any new runtime performance claim must pass V2-C validation and V2-D attribution.

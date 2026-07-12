@@ -32,11 +32,12 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productized and Doctor artifact-smoked; no new runtime claim |
 | V2-K | `CLOSED_CONFIRMED` | Private Doctor corrected D2 vs raw-reduced D2R runtime confirmation under fat-JAR/CDS |
 | V2-L | `CLOSED_CONFIRMED` | Public visits-service baseline vs raw-reduced baseline confirmation under exploded-Boot/no-CDS |
-| V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only reducer admission/recommendation engine proven by 6/6 historical replay; no mutation or new runtime claim |
+| V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only reducer admission/recommendation engine proven by 11/11 historical replay; no mutation or new runtime claim |
 | V2-N | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only runtime-policy recommendation engine proven by historical replay; no deployment change, CDS archive reuse, or new runtime claim |
 | V2-O | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Runtime preflight and capture automation; no policy selection or new runtime claim |
 | V2-P | `CLOSED_CONFIRMED_INFRASTRUCTURE` | End-to-end workflow state machine and claim-register guard; no new reducer or claim |
 | V2-Q | `CONFIRMATION_FAILED` | Ordinary packaged application classes admitted safely for raw LVT/LVTT reduction; public visits confirmation blocked runtime promotion |
+| V2-R | `CLOSED_INFRASTRUCTURE` | Application/generated ROI discovery and recommendation classifications only; no mutation or runtime claim |
 
 V2-L also uses the descriptive phase label
 `CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME`. The official closure type remains

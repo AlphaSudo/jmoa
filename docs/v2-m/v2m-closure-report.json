@@ -11,9 +11,20 @@
     "jmoa-reducer-recommendation-replay.md"
   ],
   "historicalReplay": {
-    "cases": 6,
-    "passed": 6,
+    "cases": 11,
+    "passed": 11,
     "failed": 0
+  },
+  "v2rExtension": {
+    "decisionsAdded": [
+      "APPLICATION_LOW_ROI_ARTIFACT_ONLY",
+      "APPLICATION_SCREEN_REQUIRED",
+      "GENERATED_REPORT_ONLY",
+      "GENERATED_MUTATION_BLOCKED",
+      "CANDIDATE_FOR_PROTOTYPE"
+    ],
+    "mutationBehaviorChanged": false,
+    "newRuntimePerformanceClaim": false
   },
   "actualV2LAnalyzeDecision": "RECOMMEND_CONFIRMED",
   "mutationBehaviorChanged": false,

@@ -1,0 +1,44 @@
+{
+  "metadataVersion": "v2r-application-surface-census",
+  "mode": "report-only",
+  "mutationEnabled": false,
+  "targets": [
+    {
+      "service": "Spring PetClinic visits-service",
+      "surface": "packaged application classes",
+      "source": "docs/v2-q/v2q-application-byte-preservation-report.json",
+      "classesScanned": 7,
+      "applicationClassesReduced": 4,
+      "bytesRemoved": 480,
+      "roiBucket": "LOW_ROI",
+      "runtimeOutcome": "CONFIRMATION_FAILED"
+    },
+    {
+      "service": "Spring PetClinic customers-service",
+      "surface": "dependency/generated static context",
+      "source": "docs/v2-b/v2b-petclinic-bytecode-size-analysis.json",
+      "classesScanned": 54326,
+      "classfileBytes": 200152982,
+      "springDataGeneratedBytes": 1379849,
+      "applicationLayerSeparated": false,
+      "claimBoundary": "context-only"
+    },
+    {
+      "service": "doctor-service",
+      "surface": "dependency/generated static context",
+      "source": "docs/v2-b/v2b-doctor-bytecode-size-analysis.json",
+      "classesScanned": 59424,
+      "classfileBytes": 219457652,
+      "springDataGeneratedBytes": 1387124,
+      "springAotGeneratedBytes": 1180498,
+      "applicationLayerSeparated": false,
+      "claimBoundary": "private-context-only"
+    }
+  ],
+  "generatedCandidateSummary": {
+    "generatedClassCount": 290,
+    "estimatedBytes": 1379849,
+    "runtimeRelevant": false,
+    "unsafeFamilyPresent": false
+  }
+}

@@ -107,7 +107,7 @@
     {
       "milestone": "V2-M",
       "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
-      "claimBoundary": "Report-only reducer admission and recommendation engine proven by 6/6 historical replay; no mutation behavior or new runtime performance claim."
+      "claimBoundary": "Report-only reducer admission and recommendation engine proven by 11/11 historical replay; no mutation behavior or new runtime performance claim."
     },
     {
       "milestone": "V2-N",
@@ -128,6 +128,11 @@
       "milestone": "V2-Q",
       "closureType": "CONFIRMATION_FAILED",
       "claimBoundary": "Ordinary packaged application classes admitted safely for raw LVT/LVTT reduction; public visits confirmation blocked runtime promotion."
+    },
+    {
+      "milestone": "V2-R",
+      "closureType": "CLOSED_INFRASTRUCTURE",
+      "claimBoundary": "Application/generated ROI discovery and recommendation classifications only; no mutation or runtime claim."
     }
   ],
   "rule": "Do not upgrade a closure type by wording alone. Runtime performance claims require fresh V2-C validation and V2-D attribution."
