@@ -1,0 +1,10 @@
+{
+  "metadataVersion": "v2s-runtime-generated-family-capture",
+  "diagnosticOnly": true,
+  "captures": [
+    {"service": "Spring PetClinic customers-service", "status": "AVAILABLE", "lambdaRuntimeOnlyLoaded": 8, "lambdaHistogramBytes": 813664, "springDataRuntimeLoaded": 0, "springDataHistogramBytes": 5128},
+    {"service": "Private Doctor corrected D2", "status": "NOT_RECOVERED", "reason": "matching V2-A class-load capture unavailable"},
+    {"service": "Spring PetClinic visits-service", "status": "PARTIAL", "reason": "matching full generated-family inventory/capture pair unavailable"}
+  ],
+  "claimableMemoryEvidence": false
+}

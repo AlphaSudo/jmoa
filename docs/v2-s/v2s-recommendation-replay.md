@@ -1,7 +1,7 @@
-# V2-M Historical Recommendation Replay
+# V2-S Recommendation Replay
 
-- Cases: `11`
-- Passed: `11`
+- Cases: `14`
+- Passed: `14`
 - Failed: `0`
 
 | Case | Expected | Actual | Scope | Protocol match | Passed |
@@ -17,8 +17,6 @@
 | `v2r-generated-surface-report-only` | `GENERATED_REPORT_ONLY` | `GENERATED_REPORT_ONLY` | `PUBLIC` | `false` | `true` |
 | `v2r-generated-high-roi-prototype-candidate` | `CANDIDATE_FOR_PROTOTYPE` | `CANDIDATE_FOR_PROTOTYPE` | `PUBLIC` | `false` | `true` |
 | `v2r-generated-unsafe-mutation-blocked` | `GENERATED_MUTATION_BLOCKED` | `GENERATED_MUTATION_BLOCKED` | `PUBLIC` | `false` | `true` |
-
-The replay now covers the original raw reducer admission cases plus V2-R/V2-S
-application/generated discovery states. `CANDIDATE_FOR_PROTOTYPE` is still
-report-only: it means a future phase may plan a narrow prototype, not that
-mutation or runtime promotion is enabled.
+| `v2s-static-large-family-report-only` | `GENERATED_REPORT_ONLY` | `GENERATED_REPORT_ONLY` | `PUBLIC` | `false` | `true` |
+| `v2s-runtime-relevant-unsafe-family-blocked` | `GENERATED_MUTATION_BLOCKED` | `GENERATED_MUTATION_BLOCKED` | `PUBLIC` | `false` | `true` |
+| `v2s-bounded-safe-prototype-candidate` | `CANDIDATE_FOR_PROTOTYPE` | `CANDIDATE_FOR_PROTOTYPE` | `PUBLIC` | `false` | `true` |

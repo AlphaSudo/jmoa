@@ -1,7 +1,7 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after the V2-R
-application/generated ROI discovery release.
+This is the source of truth for public V2 claims after the V2-S
+generated-family runtime relevance release.
 
 Closure terms follow:
 
@@ -159,9 +159,9 @@ emits JSON and Markdown recommendations
 replays historical decisions with mismatch failure
 ```
 
-Historical replay passed 11/11 cases, including the V2-Q failed
+Historical replay passed 14/14 cases, including the V2-Q failed
 application-class confirmation and V2-R application/generated discovery
-classifications. This is a tooling capability claim, not a new runtime
+classifications plus V2-S generated-family safety/relevance states. This is a tooling capability claim, not a new runtime
 performance claim. The goal does not enable or invoke mutation.
 
 ### V2-R Application / Generated ROI Discovery
@@ -182,6 +182,15 @@ confirmation-failed, and it treats larger generated-family surfaces as discovery
 signals until runtime relevance and family-specific safety are proven. V2-R
 does not enable generated/application mutation and creates no runtime
 performance claim.
+
+### V2-S Generated-Family Runtime Relevance
+
+V2-S adds a report-only `jmoa:analyze-generated-relevance` goal and a stable
+family registry. It distinguishes static packaged classes, diagnostic
+class-load events, and histogram objects, and keeps CGLIB, JDK proxy,
+ByteBuddy, Hibernate proxy, and Spring AOT families mutation-blocked by
+default. The V2-S analysis did not admit a family prototype and adds no
+generated-class runtime claim.
 
 ### V2-N Runtime Policy Recommendation Engine
 

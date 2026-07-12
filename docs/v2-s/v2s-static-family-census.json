@@ -1,0 +1,9 @@
+{
+  "metadataVersion": "v2s-static-family-census-summary",
+  "services": [
+    {"service": "Spring PetClinic customers-service", "inventory": "COMPLETE_LOCAL_V2A", "springDataStaticClasses": 290, "springDataClassfileBytes": 1379849, "lambdaStaticClasses": 3446, "syntheticBridgeStaticClasses": 8393},
+    {"service": "Private Doctor corrected D2", "inventory": "COMPLETE_LOCAL_V2A", "springDataStaticClasses": 293, "springDataClassfileBytes": 1387124, "springAotBeanDefinitionsStaticClasses": 322, "lambdaStaticClasses": 4001, "syntheticBridgeStaticClasses": 9816},
+    {"service": "Spring PetClinic visits-service", "inventory": "PARTIAL_APPLICATION_ONLY", "reason": "no matching full generated-family static inventory recovered"}
+  ],
+  "mutationEnabled": false
+}

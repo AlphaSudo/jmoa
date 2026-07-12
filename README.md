@@ -111,6 +111,26 @@ See:
 - [Spring AOT Generated-Class Optimization](docs/spring-aot-generated-class-optimization.md)
 - [Proxy Optimization Non-Goals](docs/proxy-optimization-non-goals.md)
 
+## V2-S Generated-Family Runtime Relevance
+
+V2-S makes the V2-A generated-family inventory actionable without allowing
+generated-class mutation. `jmoa:analyze-generated-relevance` reconciles a
+static V2-A inventory with a separate diagnostic class-load/histogram capture,
+publishes family safety and ROI components, and feeds the result into the
+report-only recommendation engine.
+
+```powershell
+mvn -N jmoa:analyze-generated-relevance `
+  '-Djmoa.generatedRelevance.enabled=true' `
+  '-Djmoa.generatedRelevance.inputDir=<v2-a-report-dir>' `
+  '-Djmoa.generatedRelevance.outputDir=<output-dir>' `
+  '-Djmoa.generatedRelevance.service=<service>'
+```
+
+Class-load logging and histograms are diagnostic-only inputs; they are never
+mixed into a claimable V2-C memory pair. V2-S closed without admitting a
+generated-family mutation prototype. See [the final verdict](docs/v2-s/v2s-final-verdict.md).
+
 ## V2-B Bytecode Size Profiler
 
 V2-B adds report-only classfile and method-size profiling. It reports large
@@ -386,10 +406,10 @@ mvn -N jmoa:recommend-reducer `
   '-Djmoa.recommendation.runtimePolicy=NO_CDS_LOW_DIRTY'
 ```
 
-Historical replay passes 11/11 audited cases: V2-I, V2-K, and V2-L remain
+Historical replay passes 14/14 audited cases: V2-I, V2-K, and V2-L remain
 confirmed in their exact scopes; V2-H remains blocked; pre-runtime Doctor
 remains artifact-only; V2-Q application confirmation failure remains blocked;
-V2-R application/generated discovery decisions remain report-only. V2-M/V2-R
+V2-R/V2-S application/generated discovery decisions remain report-only. V2-M/V2-R/V2-S
 does not mutate bytecode or add a performance claim.
 
 See:

@@ -49,6 +49,7 @@ public final class RecommendationInputLoader {
         int generatedClassCount = 0;
         boolean generatedRuntimeRelevant = false;
         boolean generatedUnsafeFamilyPresent = false;
+        boolean generatedPrototypeAdmissionEvidencePresent = false;
         boolean artifactEvidencePresent = false;
         boolean rawAuditPresent = false;
         int failedAudits = 0;
@@ -114,7 +115,8 @@ public final class RecommendationInputLoader {
         }
 
         Optional<File> generatedDiscoveryReport = find(inputDirectory,
-            name -> name.equals("v2r-application-surface-census.json")
+            name -> name.equals("v2s-generated-family-roi-ranking.json")
+                || name.equals("v2r-application-surface-census.json")
                 || name.equals("v2r-candidate-ranking.json")
                 || name.equals("v2q-generated-inventory.json")
                 || name.equals("generated-class-family-breakdown.json"));
@@ -122,25 +124,32 @@ public final class RecommendationInputLoader {
             JsonNode root = read(generatedDiscoveryReport.get(), sources);
             generatedSurfaceEvidencePresent = true;
             JsonNode summary = root.path("generatedCandidateSummary");
+            JsonNode roi = root.path("roiRanking");
             generatedEstimatedBytes = firstLong(
                 summary.path("estimatedBytes"),
                 root.path("generatedEstimatedBytes"),
                 root.path("generatedClassfileBytes"),
-                root.path("totals").path("generatedClassfileBytes")
+                root.path("totals").path("generatedClassfileBytes"),
+                roi.isArray() && !roi.isEmpty() ? roi.get(0).path("staticBytes") : null
             );
             generatedClassCount = firstInt(
                 summary.path("generatedClassCount"),
                 root.path("generatedClassCount"),
                 root.path("generatedLikeClasses"),
-                root.path("classesScanned")
+                root.path("classesScanned"),
+                roi.isArray() && !roi.isEmpty() ? roi.get(0).path("staticClasses") : null
             );
             generatedRuntimeRelevant = summary.path("runtimeRelevant").asBoolean(false)
                 || root.path("runtimeRelevantCandidates").asInt(0) > 0
-                || "RUNTIME_RELEVANT".equals(normalize(text(root, "runtimeRelevance", "")));
+                || "RUNTIME_RELEVANT".equals(normalize(text(root, "runtimeRelevance", "")))
+                || roiHasRuntimeRelevant(roi);
             generatedUnsafeFamilyPresent = summary.path("unsafeFamilyPresent").asBoolean(false)
                 || root.path("unsafeFamilyPresent").asBoolean(false)
                 || containsUnsafeFamily(root.path("blockedFamilies"))
-                || containsUnsafeFamily(root.path("families"));
+                || containsUnsafeFamily(root.path("families"))
+                || roiHasBlockedFamily(roi);
+            generatedPrototypeAdmissionEvidencePresent = root.path("prototypeAdmitted").asBoolean(false)
+                || summary.path("prototypeAdmissionEvidencePresent").asBoolean(false);
         }
 
         Optional<File> safetyReport = find(inputDirectory,
@@ -245,6 +254,7 @@ public final class RecommendationInputLoader {
             generatedClassCount,
             generatedRuntimeRelevant,
             generatedUnsafeFamilyPresent,
+            generatedPrototypeAdmissionEvidencePresent,
             artifactEvidencePresent,
             rawAuditPresent,
             failedAudits,
@@ -300,6 +310,7 @@ public final class RecommendationInputLoader {
             input.generatedClassCount(),
             input.generatedRuntimeRelevant(),
             input.generatedUnsafeFamilyPresent(),
+            input.generatedPrototypeAdmissionEvidencePresent(),
             input.artifactEvidencePresent(),
             input.rawAuditPresent(),
             input.failedAudits(),
@@ -442,6 +453,30 @@ public final class RecommendationInputLoader {
             || value.contains("PROXY")
             || value.contains("BYTEBUDDY")
             || value.contains("HIBERNATE");
+    }
+
+    private static boolean roiHasRuntimeRelevant(JsonNode roi) {
+        if (!roi.isArray()) {
+            return false;
+        }
+        for (JsonNode item : roi) {
+            if ("RUNTIME_RELEVANT".equals(normalize(text(item, "relevance", "")))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean roiHasBlockedFamily(JsonNode roi) {
+        if (!roi.isArray()) {
+            return false;
+        }
+        for (JsonNode item : roi) {
+            if ("GENERATED_MUTATION_BLOCKED".equals(normalize(text(item, "recommendation", "")))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static String text(JsonNode root, String field, String fallback) {

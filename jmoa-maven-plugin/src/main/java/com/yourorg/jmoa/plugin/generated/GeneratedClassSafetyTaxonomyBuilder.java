@@ -72,11 +72,12 @@ public final class GeneratedClassSafetyTaxonomyBuilder {
                 List.of("REPORT_ONLY", "RUNTIME_ORIGIN_VERIFY"),
                 List.of("DELETE", "CONSOLIDATE", "REPLACE_WITH_SHARED_ADAPTER")
             );
-            case SYNTHETIC_BRIDGE_METHODS, COMPILER_SYNTHETIC_HELPER -> new GeneratedClassTransformEligibility(
+            case SYNTHETIC_BRIDGE_METHODS, COMPILER_SYNTHETIC_HELPER, KOTLIN_SYNTHETIC,
+                ANONYMOUS_INNER_CLASS, NESTMATE_GENERATED, UNKNOWN_GENERATED -> new GeneratedClassTransformEligibility(
                 record.className(),
                 record.family(),
                 GeneratedClassSafetyCategory.UNKNOWN,
-                List.of("Compiler synthetic/bridge/accessor methods may be required for generic dispatch or private access."),
+                List.of("Synthetic/compiler/nestmate helper shape may be required for dispatch, private access, or language runtime behavior."),
                 List.of("REPORT_ONLY"),
                 List.of("DELETE", "CONSOLIDATE", "REPLACE_WITH_SHARED_ADAPTER")
             );

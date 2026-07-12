@@ -1,0 +1,6 @@
+{
+  "metadataVersion": "v2s-static-runtime-reconciliation-summary",
+  "customers": {"lambda": "RUNTIME_GENERATED", "springData": "STATIC_ONLY", "syntheticBridge": "STATIC_ONLY", "cglib": "RUNTIME_RELEVANCE_UNKNOWN", "jdkProxy": "RUNTIME_RELEVANCE_UNKNOWN"},
+  "doctor": {"allCapturedFamilies": "RUNTIME_RELEVANCE_UNKNOWN", "reason": "no matching diagnostic class-load capture"},
+  "visits": {"status": "PARTIAL_INFRASTRUCTURE", "reason": "no matching full inventory/capture pair"}
+}

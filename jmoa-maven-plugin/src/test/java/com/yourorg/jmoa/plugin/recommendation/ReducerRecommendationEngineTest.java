@@ -123,6 +123,7 @@ class ReducerRecommendationEngineTest {
         input.generatedSurfaceEvidencePresent = true;
         input.generatedEstimatedBytes = 300_000;
         input.generatedClassCount = 80;
+        input.generatedPrototypeAdmissionEvidencePresent = true;
         input.reducerEngine = "raw";
 
         var report = engine.recommend(input.build());
@@ -245,6 +246,7 @@ class ReducerRecommendationEngineTest {
         int generatedClassCount;
         boolean generatedRuntimeRelevant;
         boolean generatedUnsafeFamilyPresent;
+        boolean generatedPrototypeAdmissionEvidencePresent;
         boolean artifactEvidencePresent;
         boolean rawAuditPresent;
         int failedAudits;
@@ -281,6 +283,7 @@ class ReducerRecommendationEngineTest {
                 generatedClassCount,
                 generatedRuntimeRelevant,
                 generatedUnsafeFamilyPresent,
+                generatedPrototypeAdmissionEvidencePresent,
                 artifactEvidencePresent,
                 rawAuditPresent,
                 failedAudits,

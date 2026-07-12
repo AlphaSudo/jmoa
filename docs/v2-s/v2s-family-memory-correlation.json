@@ -1,0 +1,9 @@
+{
+  "metadataVersion": "v2s-family-memory-correlation",
+  "correlationIsCausality": false,
+  "families": [
+    {"family": "LAMBDA_METAFATORY_SITE", "service": "customers", "classification": "WEAK_RUNTIME_CORRELATION", "reason": "runtime-only class/histogram evidence; no generated-family mutation experiment"},
+    {"family": "SPRING_DATA_GENERATED", "service": "customers", "classification": "NO_OBSERVED_RUNTIME_CORRELATION", "reason": "static footprint present, no class-load match in capture"},
+    {"family": "SPRING_DATA_GENERATED", "service": "doctor", "classification": "UNEXPLAINED", "reason": "diagnostic capture missing"}
+  ]
+}
