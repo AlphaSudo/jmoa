@@ -194,7 +194,7 @@ recommendation engine therefore treats low-ROI application-class evidence as
 artifact/semantic-only unless removable metadata reaches `32 KB`, at least `50`
 application classes are reduced, or a service-specific runtime screen passes.
 
-V2-R extends this as report-only ROI discovery for application/generated
+V2-R/V2-S extend this as report-only ROI discovery and generated-family runtime relevance for application/generated
 surfaces. The recommendation goal may now emit:
 
 ```text
@@ -259,7 +259,7 @@ mvn -N jmoa:recommend-reducer `
   '-Djmoa.recommendation.replaySuite=../docs/v2-m/historical-recommendation-suite.json'
 ```
 
-V2-M/V2-R recommendation is report-only. `RECOMMEND_CONFIRMED` applies only to
+V2-M/V2-R/V2-S recommendation is report-only. `RECOMMEND_CONFIRMED` applies only to
 an exact confirmed service, launch mode, and runtime policy; discovery decisions
 such as `CANDIDATE_FOR_PROTOTYPE` still require a future phase with semantic,
 V2-C, and V2-D gates before mutation or runtime promotion.

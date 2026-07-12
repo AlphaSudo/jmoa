@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2R_APPLICATION_GENERATED_ROI_DISCOVERY",
+  "status": "CURRENT_AFTER_V2S_GENERATED_RUNTIME_RELEVANCE",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
@@ -142,6 +142,16 @@
       "mutationBehaviorChanged": false,
       "newRuntimePerformanceClaim": false,
       "claimBoundary": "Discovery and candidate ranking only; no generated/application mutation is enabled."
+    },
+    {
+      "id": "v2s-generated-family-runtime-relevance",
+      "claim": "V2-S provides report-only generated-family static/runtime reconciliation, safety, ROI scoring, and recommendation ingestion.",
+      "mavenGoal": "jmoa:analyze-generated-relevance",
+      "historicalReplay": "14/14 passed",
+      "prototypeAdmitted": false,
+      "mutationBehaviorChanged": false,
+      "newRuntimePerformanceClaim": false,
+      "claimBoundary": "Diagnostic class-load and histogram evidence is not claimable V2-C memory-pair evidence; no generated-family mutation is admitted."
     }
   ],
   "artifactOnlyClaims": [
@@ -231,6 +241,8 @@
     "transfer of CDS evidence to no-CDS or no-CDS evidence to CDS",
     "V2-Q application-class runtime improvement",
     "V2-R generated/application runtime improvement",
-    "V2-R generated/application mutation"
+    "V2-R generated/application mutation",
+    "V2-S generated-family runtime improvement",
+    "V2-S generated-family mutation"
   ]
 }

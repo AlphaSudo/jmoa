@@ -38,6 +38,7 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | V2-P | `CLOSED_CONFIRMED_INFRASTRUCTURE` | End-to-end workflow state machine and claim-register guard; no new reducer or claim |
 | V2-Q | `CONFIRMATION_FAILED` | Ordinary packaged application classes admitted safely for raw LVT/LVTT reduction; public visits confirmation blocked runtime promotion |
 | V2-R | `CLOSED_INFRASTRUCTURE` | Application/generated ROI discovery and recommendation classifications only; no mutation or runtime claim |
+| V2-S | `CLOSED_INFRASTRUCTURE` | Generated-family runtime relevance/safety/ROI discovery only; no family prototype admitted, mutation, or runtime claim |
 
 V2-L also uses the descriptive phase label
 `CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME`. The official closure type remains

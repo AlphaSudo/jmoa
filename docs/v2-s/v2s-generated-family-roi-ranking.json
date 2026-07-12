@@ -1,0 +1,11 @@
+{
+  "metadataVersion": "v2s-generated-family-roi-ranking-summary",
+  "rankedFamilies": [
+    {"family": "LAMBDA_METAFATORY_SITE", "customersStaticBytes": 39086800, "customersRuntimeRelevance": "RUNTIME_GENERATED", "recommendation": "GENERATED_REPORT_ONLY"},
+    {"family": "SPRING_DATA_GENERATED", "customersStaticBytes": 1379849, "doctorStaticBytes": 1387124, "runtimeRelevance": "INSUFFICIENT", "recommendation": "GENERATED_REPORT_ONLY"},
+    {"family": "SYNTHETIC_BRIDGE_METHODS", "customersStaticBytes": 40931868, "doctorStaticBytes": 49514163, "runtimeRelevance": "INSUFFICIENT", "recommendation": "GENERATED_REPORT_ONLY"},
+    {"family": "SPRING_CGLIB/JDK_PROXY/BYTEBUDDY/HIBERNATE_PROXY/SPRING_AOT", "recommendation": "GENERATED_MUTATION_BLOCKED"}
+  ],
+  "prototypeAdmitted": false,
+  "runtimeClaim": false
+}

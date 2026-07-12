@@ -1,0 +1,6 @@
+{
+  "metadataVersion": "v2s-generated-family-taxonomy",
+  "defaultBlockedFamilies": ["SPRING_CGLIB", "JDK_PROXY", "BYTEBUDDY", "HIBERNATE_PROXY", "SPRING_AOT_BEAN_DEFINITIONS", "SPRING_AOT_REGISTRATION"],
+  "discoveryOnlyFamilies": ["LAMBDA_METAFATORY_SITE", "SPRING_DATA_GENERATED", "SYNTHETIC_BRIDGE_METHODS", "COMPILER_SYNTHETIC_HELPER"],
+  "prototypeRequirements": ["diagnostic runtime relevance capture", "family-specific semantic test plan", "bounded mutation concept", "V2-C confirmation plan", "V2-D attribution plan"]
+}

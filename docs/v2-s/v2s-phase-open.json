@@ -1,0 +1,8 @@
+{
+  "phase": "V2-S",
+  "status": "OPEN_REPORT_ONLY",
+  "objective": "generated-family runtime relevance and prototype admission discovery",
+  "mutationEnabled": false,
+  "runtimeClaim": false,
+  "closureTarget": "CLOSED_INFRASTRUCTURE"
+}

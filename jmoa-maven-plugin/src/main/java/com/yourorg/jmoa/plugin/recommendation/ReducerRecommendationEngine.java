@@ -56,14 +56,14 @@ public final class ReducerRecommendationEngine {
                 List.of(), List.of("Keep the result artifact-only or investigate with V2-D before rerunning."));
         }
 
+        if (input.generatedSurfaceEvidencePresent() && !input.artifactEvidencePresent()) {
+            return generatedDiscoveryResult(input);
+        }
+
         if (input.diagnosticOnly()) {
             return result(input, AdmissionDecision.DIAGNOSTIC_ONLY, false,
                 List.of("The supplied runtime evidence is explicitly diagnostic-only."),
                 List.of(), List.of("Capture non-perturbing confirmation evidence before making a runtime claim."));
-        }
-
-        if (input.generatedSurfaceEvidencePresent() && !input.artifactEvidencePresent()) {
-            return generatedDiscoveryResult(input);
         }
 
         if (!"RAW".equals(normalize(input.reducerEngine()))) {
@@ -183,15 +183,15 @@ public final class ReducerRecommendationEngine {
                 List.of("family-specific semantic proof", "runtime-origin proof", "V2-C confirmation"),
                 List.of("Keep generated/proxy classes report-only; do not transfer raw reducer confidence."));
         }
-        if (generatedHighRoi(input)) {
+        if (generatedHighRoi(input) && input.generatedPrototypeAdmissionEvidencePresent()) {
             return result(input, AdmissionDecision.CANDIDATE_FOR_PROTOTYPE, false,
-                List.of("Generated/application discovery found a high-ROI surface worth prototype planning."),
+                List.of("Generated-family evidence is meaningful, runtime-relevant, bounded, and has a family-specific semantic test plan."),
                 List.of("semantic smoke", "single-screen runtime gate", "V2-C confirmation", "V2-D attribution"),
                 List.of("Open a narrow prototype phase for one family only; keep mutation disabled until gates are defined."));
         }
         return result(input, AdmissionDecision.GENERATED_REPORT_ONLY, false,
             List.of("Generated/application discovery evidence is present, but it is not yet a mutation candidate."),
-            List.of("runtime relevance", "high-ROI byte/class threshold", "family-specific safety model"),
+            List.of("runtime relevance", "high-ROI byte/class threshold", "family-specific safety model", "semantic test plan", "bounded mutation concept", "target service"),
             List.of("Continue inventory and runtime correlation before choosing a generated/application optimizer."));
     }
 

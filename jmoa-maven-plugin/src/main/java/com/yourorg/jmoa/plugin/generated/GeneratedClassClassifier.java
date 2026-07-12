@@ -84,6 +84,22 @@ public final class GeneratedClassClassifier {
             return new GeneratedClassClassification(GeneratedClassFamily.COMPILER_SYNTHETIC_HELPER, indicators, true);
         }
 
+        if (isKotlinSynthetic(name)) {
+            indicators.add("kotlin-synthetic-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.KOTLIN_SYNTHETIC, indicators, true);
+        }
+
+        if (isAnonymousInnerClass(name)) {
+            indicators.add("anonymous-inner-class-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.ANONYMOUS_INNER_CLASS, indicators, true);
+        }
+
+        if ((classNode.access & Opcodes.ACC_SYNTHETIC) != 0
+            && (classNode.nestHostClass != null || (classNode.nestMembers != null && !classNode.nestMembers.isEmpty()))) {
+            indicators.add("nestmate-metadata-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.NESTMATE_GENERATED, indicators, true);
+        }
+
         return new GeneratedClassClassification(GeneratedClassFamily.PLAIN, List.of(), false);
     }
 
@@ -132,6 +148,14 @@ public final class GeneratedClassClassifier {
         if (containsAny(normalized, "$$Lambda")) {
             indicators.add("lambda-hidden-runtime-name-pattern");
             return new GeneratedClassClassification(GeneratedClassFamily.LAMBDA_METAFATORY_SITE, indicators, true);
+        }
+        if (isKotlinSynthetic(normalized.replace('.', '/'))) {
+            indicators.add("kotlin-synthetic-runtime-name-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.KOTLIN_SYNTHETIC, indicators, true);
+        }
+        if (isAnonymousInnerClass(normalized.replace('.', '/'))) {
+            indicators.add("anonymous-inner-runtime-name-pattern");
+            return new GeneratedClassClassification(GeneratedClassFamily.ANONYMOUS_INNER_CLASS, indicators, true);
         }
         return new GeneratedClassClassification(GeneratedClassFamily.PLAIN, indicators, false);
     }
@@ -211,6 +235,17 @@ public final class GeneratedClassClassifier {
             "__RepositoryMetadata"
         ) || dottedName.contains("springframework.data")
             && containsAny(internalName, "__", "Accessor", "Instantiator", "Repository");
+    }
+
+    private static boolean isKotlinSynthetic(String internalName) {
+        return internalName.contains("$DefaultImpls")
+            || internalName.contains("$WhenMappings")
+            || internalName.startsWith("kotlin/") && internalName.contains("$");
+    }
+
+    private static boolean isAnonymousInnerClass(String internalName) {
+        String simple = simpleName(internalName);
+        return simple.matches(".*\\$[0-9]+(?:\\$.*)?");
     }
 
     private static String simpleName(String internalName) {

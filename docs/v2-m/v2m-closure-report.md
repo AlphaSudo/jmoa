@@ -26,8 +26,8 @@ Validation:
 direct state/rule tests: passed
 canonical report loader test: passed
 Maven goal integration test: passed
-historical replay: 11/11 passed
-V2-R application/generated discovery classifications: passed
+historical replay: 14/14 passed
+V2-R/V2-S application/generated discovery classifications: passed
 actual V2-L report bundle: RECOMMEND_CONFIRMED / PUBLIC / protocol match
 ```
 
@@ -38,7 +38,7 @@ report-only by default, and opt-in for mutation through the existing
 No new runtime performance result is claimed. V2-M is a decision and admission
 capability built on the already-audited V2 evidence.
 
-V2-R extends the recommendation engine with application/generated discovery
+V2-R/V2-S extend the recommendation engine with application/generated discovery
 decisions. These decisions remain report-only and do not enable mutation.
 
 Release tag after merge:

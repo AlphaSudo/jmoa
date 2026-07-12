@@ -1,0 +1,6 @@
+{
+  "metadataVersion": "v2s-generated-family-safety-matrix-summary",
+  "blocked": ["JDK_PROXY", "SPRING_CGLIB", "BYTEBUDDY", "HIBERNATE_PROXY", "SPRING_AOT_BEAN_DEFINITIONS", "SPRING_AOT_REGISTRATION"],
+  "reportOnly": ["LAMBDA_METAFATORY_SITE", "SPRING_DATA_GENERATED", "SYNTHETIC_BRIDGE_METHODS", "COMPILER_SYNTHETIC_HELPER"],
+  "automaticMutationAllowed": false
+}

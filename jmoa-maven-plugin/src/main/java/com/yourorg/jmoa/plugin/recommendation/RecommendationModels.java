@@ -60,6 +60,7 @@ public final class RecommendationModels {
         int generatedClassCount,
         boolean generatedRuntimeRelevant,
         boolean generatedUnsafeFamilyPresent,
+        boolean generatedPrototypeAdmissionEvidencePresent,
         boolean artifactEvidencePresent,
         boolean rawAuditPresent,
         int failedAudits,

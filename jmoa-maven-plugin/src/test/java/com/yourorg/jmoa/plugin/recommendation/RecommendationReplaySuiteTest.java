@@ -43,6 +43,7 @@ class RecommendationReplaySuiteTest {
             0,
             false,
             false,
+            false,
             true,
             true,
             0,
