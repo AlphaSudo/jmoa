@@ -1,0 +1,6 @@
+{
+  "required": ["staticArtifactSha256", "startup capture", "warmup capture", "workload capture"],
+  "joinRule": "all non-empty capture artifact SHA-256 values must equal the static artifact SHA-256",
+  "diagnosticOnly": true,
+  "v2cMemoryPair": false
+}

@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2S_GENERATED_RUNTIME_RELEVANCE",
+  "status": "CURRENT_AFTER_V2T_GENERATED_MATCHED_EVIDENCE",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
@@ -152,6 +152,15 @@
       "mutationBehaviorChanged": false,
       "newRuntimePerformanceClaim": false,
       "claimBoundary": "Diagnostic class-load and histogram evidence is not claimable V2-C memory-pair evidence; no generated-family mutation is admitted."
+    },
+    {
+      "id": "v2t-generated-family-matched-evidence",
+      "claim": "V2-T provides a report-only SHA-gated generated-family evidence join with exclusive primary-family census and lifecycle classification.",
+      "mavenGoal": "jmoa:analyze-generated-evidence",
+      "prototypeAdmitted": false,
+      "mutationBehaviorChanged": false,
+      "newRuntimePerformanceClaim": false,
+      "claimBoundary": "Recovered service reports remain incomplete without equal artifact fingerprints and all startup/warmup/workload captures. The V2-S bounded-safe candidate is a test fixture, not an empirical family admission."
     }
   ],
   "artifactOnlyClaims": [
@@ -243,6 +252,9 @@
     "V2-R generated/application runtime improvement",
     "V2-R generated/application mutation",
     "V2-S generated-family runtime improvement",
-    "V2-S generated-family mutation"
+    "V2-S generated-family mutation",
+    "V2-T generated-family runtime improvement",
+    "V2-T generated-family mutation",
+    "V2-T generated-family prototype admission"
   ]
 }

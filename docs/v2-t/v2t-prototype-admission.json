@@ -1,0 +1,5 @@
+{
+  "prototypeAdmitted": false,
+  "reason": "No service has a complete fingerprint-matched startup/warmup/workload generated-family capture.",
+  "gate": ["matching artifact SHA-256", "complete lifecycle capture", "runtime relevance", "allowed safety category", "family semantic proof", "measurable ROI"]
+}

@@ -8,6 +8,7 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | Closure type | Meaning | Allowed claim |
 | --- | --- | --- |
 | `CLOSED_INFRASTRUCTURE` | Report-only or visibility infrastructure is implemented and validated. | Tooling/analysis capability only |
+| `PARTIAL_INFRASTRUCTURE` | The report-only implementation is validated, but required real evidence coverage remains incomplete. | Tooling capability and explicit evidence gap only |
 | `CLOSED_CONFIRMED` | Runtime behavior is confirmed by V2-C evidence gates and explained by V2-D attribution where relevant. | Narrow runtime claim within the measured protocol |
 | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Infrastructure is implemented and proven against replay/historical evidence. | Evidence/attribution capability only |
 | `CLOSED_ARTIFACT_ONLY` | Artifact mutation/materialization passed artifact gates but runtime behavior was not confirmed. | Artifact footprint or materialization only |
@@ -39,6 +40,7 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | V2-Q | `CONFIRMATION_FAILED` | Ordinary packaged application classes admitted safely for raw LVT/LVTT reduction; public visits confirmation blocked runtime promotion |
 | V2-R | `CLOSED_INFRASTRUCTURE` | Application/generated ROI discovery and recommendation classifications only; no mutation or runtime claim |
 | V2-S | `CLOSED_INFRASTRUCTURE` | Generated-family runtime relevance/safety/ROI discovery only; no family prototype admitted, mutation, or runtime claim |
+| V2-T | `PARTIAL_INFRASTRUCTURE` | SHA-gated static/runtime reconciliation and lifecycle evidence model; no complete matched service capture or family admission |
 
 V2-L also uses the descriptive phase label
 `CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME`. The official closure type remains

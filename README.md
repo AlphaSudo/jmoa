@@ -131,6 +131,31 @@ Class-load logging and histograms are diagnostic-only inputs; they are never
 mixed into a claimable V2-C memory pair. V2-S closed without admitting a
 generated-family mutation prototype. See [the final verdict](docs/v2-s/v2s-final-verdict.md).
 
+## V2-T Generated-Family Matched Evidence
+
+V2-T tightens the diagnostic contract before any future generated-family
+prototype can be considered. `jmoa:analyze-generated-evidence` builds an
+exclusive primary-family census and joins a static V2-A inventory to lifecycle
+captures only when their artifact SHA-256 values match. A missing fingerprint,
+missing startup/warmup/workload capture, or mismatched artifact remains a
+report-only non-admission result.
+
+```powershell
+mvn -N jmoa:analyze-generated-evidence `
+  '-Djmoa.generatedEvidence.enabled=true' `
+  '-Djmoa.generatedEvidence.inventory=<generated-class-inventory.json>' `
+  '-Djmoa.generatedEvidence.startupCapture=<startup-runtime-attribution.json>' `
+  '-Djmoa.generatedEvidence.warmupCapture=<warmup-runtime-attribution.json>' `
+  '-Djmoa.generatedEvidence.workloadCapture=<workload-runtime-attribution.json>' `
+  '-Djmoa.generatedEvidence.staticArtifactSha256=<sha256>' `
+  '-Djmoa.generatedEvidence.captureArtifactSha256=<sha256>' `
+  '-Djmoa.generatedEvidence.outputDir=<output-dir>'
+```
+
+V2-T is diagnostic-only and does not rewrite generated classes, create a
+runtime claim, or treat the V2-S bounded-safe fixture as an empirical family
+admission. See [the V2-T verdict](docs/v2-t/v2t-final-verdict.md).
+
 ## V2-B Bytecode Size Profiler
 
 V2-B adds report-only classfile and method-size profiling. It reports large

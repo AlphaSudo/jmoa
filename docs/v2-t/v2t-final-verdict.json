@@ -1,0 +1,8 @@
+{
+  "closureType": "PARTIAL_INFRASTRUCTURE",
+  "implementation": "complete",
+  "empiricalGeneratedFamilyAdmission": false,
+  "mutationEnabled": false,
+  "runtimeClaimAdded": false,
+  "nextAllowedAction": "Collect fingerprint-matched startup, warmup, and workload generated-family diagnostics for one service."
+}
