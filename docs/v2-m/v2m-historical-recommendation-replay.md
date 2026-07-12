@@ -10,8 +10,8 @@ The replay ran through the `jmoa:recommend-reducer` Maven goal with mismatch
 failure enabled.
 
 ```text
-cases: 5
-passed: 5
+cases: 6
+passed: 6
 failed: 0
 ```
 
@@ -22,9 +22,11 @@ failed: 0
 | V2-L visits raw confirmed | `RECOMMEND_CONFIRMED` | `RECOMMEND_CONFIRMED` | `PUBLIC` | `true` |
 | V2-H hardened ASM screen failed | `BLOCK_RUNTIME_PROMOTION` | `BLOCK_RUNTIME_PROMOTION` | `PUBLIC` | `false` |
 | V2-J Doctor raw artifact-only | `ALLOW_ARTIFACT_ONLY` | `ALLOW_ARTIFACT_ONLY` | `PRIVATE` | `false` |
+| V2-Q visits application confirmation failed | `BLOCK_RUNTIME_PROMOTION` | `BLOCK_RUNTIME_PROMOTION` | `PUBLIC` | `false` |
 
 The replay demonstrates that the model does not bias toward promotion: a known
-failed screen stays blocked, and artifact-only evidence stays artifact-only.
+failed screen stays blocked, a failed application-class confirmation stays
+blocked, and artifact-only evidence stays artifact-only.
 
 These are normalized regression fixtures, not substitutes for raw run archives
 or a reconstruction of phase chronology. In particular, the V2-I case combines

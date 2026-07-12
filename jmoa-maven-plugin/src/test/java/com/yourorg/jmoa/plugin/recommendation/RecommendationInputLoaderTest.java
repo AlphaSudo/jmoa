@@ -38,6 +38,9 @@ class RecommendationInputLoaderTest {
         Files.writeString(tempDir.resolve("raw-reducer-byte-preservation-report.json"), """
             {"engine":"raw","auditedClassCount":10,"failedAuditCount":0}
             """);
+        Files.writeString(tempDir.resolve("v2q-application-byte-preservation-report.json"), """
+            {"classesReduced":4,"bytesRemoved":480,"rawAuditsFailed":0}
+            """);
         Files.writeString(tempDir.resolve("v2f-jar-safety-report.json"), """
             {"signedJarsSkipped":1,"multiReleaseJarsSkipped":2,"sealedJarsSkipped":3}
             """);
@@ -83,6 +86,9 @@ class RecommendationInputLoaderTest {
 
         assertEquals(1000, input.artifactBytesRemoved());
         assertEquals(10, input.classesReduced());
+        assertTrue(input.applicationClassEvidencePresent());
+        assertEquals(480, input.applicationBytesRemoved());
+        assertEquals(4, input.applicationClassesReduced());
         assertTrue(input.v2bAttributeReportPresent());
         assertEquals(300, input.v2bDebugAttributeBytes());
         assertEquals(150, input.v2bLocalVariableTableBytes());
@@ -96,7 +102,7 @@ class RecommendationInputLoaderTest {
         assertTrue(input.hasV2DAttribution());
         assertEquals("visits-service", input.confirmedService());
         assertEquals(ConfirmationScope.PUBLIC, input.confirmationScope());
-        assertEquals(10, input.sourceReports().size());
+        assertEquals(11, input.sourceReports().size());
     }
 
     @Test

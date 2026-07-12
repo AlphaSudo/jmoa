@@ -1,0 +1,22 @@
+{
+  "metadataVersion": "v2q-visits-application-runtime-screen-rerun",
+  "status": "PASSED_DIAGNOSTIC_SCREEN",
+  "comparison": "dependency-raw-only versus dependency-raw-plus-admitted-application-raw",
+  "pair": 2,
+  "workloadErrors": 0,
+  "linkageErrors": 0,
+  "delta": {
+    "pssKb": -6852,
+    "privateDirtyKb": -7064,
+    "memoryCurrentBytes": -57921536,
+    "startupSeconds": -6.3
+  },
+  "gate": {
+    "pssNotWorseByMoreThan1Mb": true,
+    "privateDirtyNotWorseByMoreThan1Mb": true,
+    "memoryCurrentNotWorseByMoreThan1Mb": true
+  },
+  "decision": "PROMOTE_TO_FRESH_3_PAIR_CONFIRMATION",
+  "runtimeClaim": false,
+  "claimBoundary": "A single diagnostic rerun passed and allowed confirmation to run; it is not a standalone runtime claim."
+}

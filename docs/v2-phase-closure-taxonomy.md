@@ -12,6 +12,7 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Infrastructure is implemented and proven against replay/historical evidence. | Evidence/attribution capability only |
 | `CLOSED_ARTIFACT_ONLY` | Artifact mutation/materialization passed artifact gates but runtime behavior was not confirmed. | Artifact footprint or materialization only |
 | `SCREEN_FAILED` | A single-screen runtime gate ran and blocked confirmation. | Negative or blocked screen result only |
+| `CONFIRMATION_FAILED` | A screen allowed confirmation, but paired confirmation blocked runtime promotion. | Negative or blocked confirmation result only |
 | `BLOCKED` | Work cannot proceed because required artifacts, runtime stack, credentials, or policy decisions are unavailable. | No claim beyond blocked status |
 | `OPEN_BACKLOG` | Planned work exists but is not implemented. | No implementation claim |
 
@@ -31,11 +32,11 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productized and Doctor artifact-smoked; no new runtime claim |
 | V2-K | `CLOSED_CONFIRMED` | Private Doctor corrected D2 vs raw-reduced D2R runtime confirmation under fat-JAR/CDS |
 | V2-L | `CLOSED_CONFIRMED` | Public visits-service baseline vs raw-reduced baseline confirmation under exploded-Boot/no-CDS |
-| V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only reducer admission/recommendation engine proven by historical replay; no mutation or new runtime claim |
+| V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only reducer admission/recommendation engine proven by 6/6 historical replay; no mutation or new runtime claim |
 | V2-N | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only runtime-policy recommendation engine proven by historical replay; no deployment change, CDS archive reuse, or new runtime claim |
 | V2-O | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Runtime preflight and capture automation; no policy selection or new runtime claim |
 | V2-P | `CLOSED_CONFIRMED_INFRASTRUCTURE` | End-to-end workflow state machine and claim-register guard; no new reducer or claim |
-| V2-Q | `SCREEN_FAILED` | Ordinary packaged application classes admitted safely for raw LVT/LVTT reduction; public visits incremental screen blocked runtime promotion |
+| V2-Q | `CONFIRMATION_FAILED` | Ordinary packaged application classes admitted safely for raw LVT/LVTT reduction; public visits confirmation blocked runtime promotion |
 
 V2-L also uses the descriptive phase label
 `CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME`. The official closure type remains

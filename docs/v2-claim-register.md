@@ -159,7 +159,8 @@ emits JSON and Markdown recommendations
 replays historical decisions with mismatch failure
 ```
 
-Historical replay passed 5/5 cases. This is a tooling capability claim, not a
+Historical replay passed 6/6 cases, including the V2-Q failed application-class
+confirmation. This is a tooling capability claim, not a
 new runtime performance claim. The goal does not enable or invoke mutation.
 
 ### V2-N Runtime Policy Recommendation Engine
@@ -290,6 +291,7 @@ V2-Q admits only ordinary packaged application classes to opt-in raw LVT/LVTT
 reduction. On public visits-service, four ordinary classes were reduced by
 `480` bytes with four successful raw preservation audits; two
 `JAVAC_SYNTHETIC` classes remained report-only. Materialization and semantic
-smoke passed, but the incremental screen regressed (`+1,432 KB` PSS,
-`+1,892 KB` Private_Dirty), so V2-Q runs no confirmation, V2-C, or V2-D and
-makes no runtime claim.
+smoke passed. The first screen failed, one diagnostic rerun passed, and the
+fresh 3-pair confirmation failed with `1/3` paired wins and median deltas of
+`+5,732 KB` PSS, `+5,760 KB` Private_Dirty, and `+5,922,816` bytes
+`memory.current`. V2-Q makes no runtime claim.

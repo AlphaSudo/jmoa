@@ -13,5 +13,6 @@ Both variants completed the 18-request workload with zero linkage errors.
 | memory.current | `+1,851,392 bytes` |
 
 All three memory gates were worse than the allowed `+1 MB` screen tolerance.
-V2-Q therefore stops before confirmation, V2-C validation, and V2-D
-attribution. This is not a runtime performance claim.
+This first screen did not allow a claim. It was later followed by one clean
+diagnostic rerun and then a fresh 3-pair confirmation, which failed. This file
+is retained as the first-screen evidence, not as the final V2-Q verdict.

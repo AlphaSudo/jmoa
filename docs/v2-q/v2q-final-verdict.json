@@ -1,14 +1,32 @@
 {
   "metadataVersion": "v2q-final-verdict",
-  "status": "CLOSED_ARTIFACT_AND_SEMANTIC_ONLY_RUNTIME_PROMOTION_BLOCKED",
+  "status": "CLOSED_ARTIFACT_SEMANTIC_ONLY_CONFIRMATION_FAILED",
   "artifactGate": "PASSED",
   "semanticGate": "PASSED",
-  "screenStatus": "FAILED_PROMOTION_GATE",
-  "screenDelta": {
+  "initialScreenStatus": "FAILED_PROMOTION_GATE",
+  "initialScreenDelta": {
     "pssKb": 1432,
     "privateDirtyKb": 1892,
     "memoryCurrentBytes": 1851392
   },
+  "diagnosticRerunStatus": "PASSED_DIAGNOSTIC_SCREEN",
+  "diagnosticRerunDelta": {
+    "pssKb": -6852,
+    "privateDirtyKb": -7064,
+    "memoryCurrentBytes": -57921536
+  },
+  "confirmation": {
+    "verdict": "CONFIRMATION_FAILED",
+    "pairedWins": "1/3",
+    "medianPssDeltaKb": 5732,
+    "medianPrivateDirtyDeltaKb": 5760,
+    "medianMemoryCurrentDeltaBytes": 5922816
+  },
+  "applicationRoi": {
+    "applicationBytesRemoved": 480,
+    "applicationClassesReduced": 4,
+    "roiDecision": "LOW_ROI"
+  },
   "runtimeClaim": false,
-  "claimBoundary": "No generated/application runtime claim exists. The V2-Q screen regressed, so confirmation and V2-C/V2-D attribution were not run."
+  "claimBoundary": "No generated/application runtime claim exists. The V2-Q confirmation failed after a diagnostic rerun promoted it to 3-pair testing; V2-C/V2-D attribution were not run as a claim pipeline."
 }

@@ -1,0 +1,62 @@
+{
+  "metadataVersion": "v2q-visits-application-confirmation",
+  "status": "CONFIRMATION_FAILED",
+  "service": "Spring PetClinic visits-service",
+  "comparison": "dependency-raw-only versus dependency-raw-plus-admitted-application-raw",
+  "runtimeScope": {
+    "launchMode": "EXPLODED_BOOT_APP",
+    "runtimePolicy": "NO_CDS_LOW_DIRTY",
+    "cdsMode": "OFF",
+    "mallocArenaMax": "1",
+    "javaagentPresent": false,
+    "requestsPerRun": 18
+  },
+  "artifactGate": {
+    "applicationClassesScanned": 7,
+    "applicationClassesReduced": 4,
+    "applicationBytesRemoved": 480,
+    "rawAuditsPassed": 4,
+    "rawAuditsFailed": 0
+  },
+  "semanticGate": {
+    "materialization": "PASSED",
+    "semanticSmoke": "PASSED",
+    "confirmationWorkloadErrors": 0,
+    "confirmationLinkageErrors": 0
+  },
+  "confirmation": {
+    "pairs": 3,
+    "pairedWins": 1,
+    "medianPssDeltaKb": 5732,
+    "medianPrivateDirtyDeltaKb": 5760,
+    "medianMemoryCurrentDeltaBytes": 5922816,
+    "verdict": "CONFIRMATION_FAILED"
+  },
+  "pairs": [
+    {
+      "pair": 1,
+      "deltaPssKb": -7096,
+      "deltaPrivateDirtyKb": -6692,
+      "deltaMemoryCurrentBytes": -6893568,
+      "pass": true
+    },
+    {
+      "pair": 2,
+      "deltaPssKb": 5732,
+      "deltaPrivateDirtyKb": 5760,
+      "deltaMemoryCurrentBytes": 5922816,
+      "pass": false
+    },
+    {
+      "pair": 3,
+      "deltaPssKb": 6460,
+      "deltaPrivateDirtyKb": 6212,
+      "deltaMemoryCurrentBytes": 6340608,
+      "pass": false
+    }
+  ],
+  "v2cRun": false,
+  "v2dRun": false,
+  "runtimeClaim": false,
+  "claimBoundary": "V2-Q application-class admission remains artifact/semantic only. The 3-pair confirmation failed, so no V2-C/V2-D runtime claim is allowed."
+}

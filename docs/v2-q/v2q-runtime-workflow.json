@@ -8,8 +8,8 @@
   "gates": [
     {"name": "materialization", "status": "PASSED"},
     {"name": "semanticSmoke", "status": "PASSED"},
-    {"name": "screen", "status": "FAILED_PROMOTION_GATE"},
-    {"name": "confirmation", "status": "NOT_RUN"},
+    {"name": "screen", "status": "PASSED_DIAGNOSTIC_RERUN_AFTER_INITIAL_FAILURE"},
+    {"name": "confirmation", "status": "FAILED"},
     {"name": "attribution", "status": "NOT_RUN"}
   ]
 }

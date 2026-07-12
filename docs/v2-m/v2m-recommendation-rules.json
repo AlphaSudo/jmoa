@@ -7,6 +7,7 @@
     "DIAGNOSTIC_ONLY",
     "UNKNOWN_FOR_NON_RAW_ENGINE",
     "BLOCK_NO_EVIDENCE",
+    "ALLOW_ARTIFACT_ONLY_FOR_LOW_ROI_APPLICATION_CLASSES",
     "BLOCK_RUNTIME_PROMOTION_FOR_NON_WINNING_V2C",
     "BLOCK_NO_EVIDENCE_FOR_INCOMPLETE_CONFIRMATION",
     "RECOMMEND_CONFIRMED_FOR_EXACT_PROTOCOL",
@@ -23,5 +24,10 @@
     "launchMode",
     "runtimePolicy"
   ],
+  "applicationRoiPolicy": {
+    "minimumApplicationBytesRemoved": 32768,
+    "minimumApplicationClassesReduced": 50,
+    "alternativeGate": "passing application-scope runtime screen"
+  },
   "mutationBehaviorChanged": false
 }

@@ -187,6 +187,13 @@ families are copied unchanged or blocked. Application output is written in a
 parallel `application-classes` tree and must be materialized into
 `BOOT-INF/classes`, never an exploded layer root.
 
+Application-class reduction is not promoted like dependency-jar reduction by
+default. V2-Q's public visits run removed only `480` application-class bytes;
+after one diagnostic screen rerun, the fresh 3-pair confirmation failed. The
+recommendation engine therefore treats low-ROI application-class evidence as
+artifact/semantic-only unless removable metadata reaches `32 KB`, at least `50`
+application classes are reduced, or a service-specific runtime screen passes.
+
 ## V2-M Reducer Recommendation Flags
 
 Reducer recommendation is disabled by default and never mutates bytecode.

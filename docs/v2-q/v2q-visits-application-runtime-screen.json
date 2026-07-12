@@ -5,7 +5,8 @@
   "workloadErrors": 0,
   "linkageErrors": 0,
   "delta": {"pssKb": 1432, "privateDirtyKb": 1892, "memoryCurrentBytes": 1851392},
-  "confirmationRun": false,
+  "confirmationRun": true,
+  "confirmationVerdict": "CONFIRMATION_FAILED",
   "v2cRun": false,
   "v2dRun": false,
   "runtimeClaim": false
