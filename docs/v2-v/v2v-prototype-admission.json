@@ -1,0 +1,8 @@
+{
+  "metadataVersion": "v2v-prototype-admission",
+  "prototypeAdmitted": false,
+  "candidateFamily": null,
+  "maxCandidates": 1,
+  "requiredGates": ["MATCHED_DIAGNOSTIC_EVIDENCE", "completeLifecycle", "meaningfulFootprint", "runtimeRelevance", "acceptableSafety", "boundedMutation", "semanticPlan", "rollbackPlan", "v2cPlan", "v2dPlan"],
+  "currentReason": "No target currently has a complete fresh matched lifecycle bundle."
+}

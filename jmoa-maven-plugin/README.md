@@ -18,6 +18,8 @@ Current responsibilities:
 - write V2-D memory attribution reports for V2-C-valid evidence
 - write V2-U matched generated-family lifecycle diagnostics when explicitly
   enabled
+- write V2-V raw lifecycle attribution and matched-campaign reports when
+  explicitly enabled
 
 The plugin is intentionally not a runtime javaagent. Optimized artifacts are
 produced at build time and then verified in the target deployment shape.
@@ -33,6 +35,7 @@ produced at build time and then verified in the target deployment shape.
 - `jmoa:reduce-bytecode`
 - `jmoa:analyze-generated-relevance`
 - `jmoa:analyze-generated-evidence`
+- `jmoa:analyze-generated-runtime`
 
 ## V2-A Generated-Class Flags
 
@@ -257,6 +260,25 @@ The analyzer reports explicit non-admission statuses such as
 `SERVICE_MISMATCH`, `REGISTRY_VERSION_MISMATCH`, and
 `LIFECYCLE_CAPTURE_INCOMPLETE`. V2-U emits both V2-U and legacy V2-T report
 filenames for compatibility, but generated-family mutation remains disabled.
+
+## V2-V Generated-Family Campaign Goals
+
+`jmoa:analyze-generated-runtime` converts one lifecycle stage's raw
+`class-load.log` and `class-histogram.txt` into a
+`generated-class-runtime-attribution.json` report. It is intentionally strict:
+missing stage inputs fail the goal.
+
+```text
+jmoa.generatedRuntime.enabled=false
+jmoa.generatedRuntime.inventory=<generated-class-inventory.json>
+jmoa.generatedRuntime.classLoadLog=<class-load.log>
+jmoa.generatedRuntime.classHistogram=<class-histogram.txt>
+jmoa.generatedRuntime.outputDir=<stage-output-dir>
+```
+
+The PowerShell campaign scripts then run V2-U matched-evidence analysis and
+aggregate only `MATCHED_DIAGNOSTIC_EVIDENCE` bundles. V2-V is diagnostic-only;
+it does not mutate generated classes or add runtime performance claims.
 
 ## V2-M Reducer Recommendation Flags
 

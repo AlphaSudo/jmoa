@@ -1,0 +1,21 @@
+{
+  "metadataVersion": "v2v-phase-open",
+  "phase": "V2-V",
+  "title": "Fresh Matched Generated-Family Capture Campaign",
+  "closureTarget": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+  "fallbackClosure": "PARTIAL_INFRASTRUCTURE",
+  "targets": ["customers", "visits", "doctor-d2r"],
+  "diagnosticOnly": true,
+  "mutationEnabled": false,
+  "runtimeClaimAdded": false,
+  "requiredStages": ["startup", "warmup", "workload"],
+  "requiredIdentity": [
+    "artifactSha256",
+    "service",
+    "launchMode",
+    "runtimePolicy",
+    "reducerEngine",
+    "familyRegistryVersion",
+    "scannerVersion"
+  ]
+}

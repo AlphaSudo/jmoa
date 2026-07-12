@@ -189,6 +189,22 @@
       "mutationBehaviorChanged": false,
       "newRuntimePerformanceClaim": false,
       "claimBoundary": "Current customers, visits, and Doctor D2R evidence remains incomplete under the matched lifecycle contract; no generated-family prototype is admitted."
+    },
+    {
+      "id": "v2v-fresh-matched-generated-family-capture-campaign",
+      "claim": "V2-V provides executable preflight, raw lifecycle attribution, strict bundle validation, lifecycle/cross-service matrices, matched-only ROI ranking, and a one-candidate admission gate.",
+      "mavenGoal": "jmoa:analyze-generated-runtime plus jmoa:analyze-generated-evidence",
+      "scripts": [
+        "scripts/capture-generated-lifecycle.ps1",
+        "scripts/run-generated-lifecycle-attribution.ps1",
+        "scripts/validate-generated-capture-bundles.ps1"
+      ],
+      "closureType": "PARTIAL_INFRASTRUCTURE",
+      "completeMatchedBundles": 0,
+      "prototypeAdmitted": false,
+      "mutationBehaviorChanged": false,
+      "newRuntimePerformanceClaim": false,
+      "claimBoundary": "Fresh customers, visits, and Doctor D2R bundles remain outstanding; incomplete bundles cannot enter cross-service ranking or prototype admission."
     }
   ],
   "artifactOnlyClaims": [
@@ -287,6 +303,10 @@
     "V2-U generated-family runtime improvement",
     "V2-U generated-family mutation",
     "V2-U generated-family prototype admission",
-    "V2-U cross-service generated-family runtime generalization"
+    "V2-U cross-service generated-family runtime generalization",
+    "V2-V generated-family runtime improvement",
+    "V2-V generated-family mutation",
+    "V2-V generated-family prototype admission",
+    "V2-V cross-service generated-family runtime generalization"
   ]
 }

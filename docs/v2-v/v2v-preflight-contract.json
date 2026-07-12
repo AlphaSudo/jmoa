@@ -1,0 +1,13 @@
+{
+  "metadataVersion": "v2v-generated-capture-preflight",
+  "states": [
+    "READY",
+    "BLOCK_ARTIFACT_MISSING",
+    "BLOCK_IDENTITY_INCOMPLETE",
+    "BLOCK_ARTIFACT_FINGERPRINT_MISMATCH",
+    "BLOCK_OUTPUT_NOT_CLEAN",
+    "BLOCK_ARTIFACT_ORIGIN_UNPROVEN"
+  ],
+  "requiredIdentity": ["service", "launchMode", "runtimePolicy", "reducerEngine", "familyRegistryVersion", "scannerVersion"],
+  "diagnosticOnly": true
+}

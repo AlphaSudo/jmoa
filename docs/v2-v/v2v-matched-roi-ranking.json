@@ -1,0 +1,7 @@
+{
+  "metadataVersion": "v2v-matched-roi-ranking",
+  "matchedBundlesOnly": true,
+  "requiredSignals": ["deduplicatedStaticBytes", "loadedRatio", "workloadSpecificLoadedRatio", "runtimeGeneratedCount", "histogramPersistence", "crossServiceCoverage", "multiProtocolCoverage", "semanticRisk", "mutationComplexity", "verificationBurden", "rollbackBurden"],
+  "currentStatus": "NO_MATCHED_BUNDLES",
+  "springDataPreselected": false
+}

@@ -1,0 +1,9 @@
+{
+  "metadataVersion": "v2v-visits-capture",
+  "target": "visits",
+  "artifactUniverse": "MUST_BE_EXPLICITLY_SELECTED",
+  "requiredStages": ["startup", "warmup", "workload"],
+  "currentStatus": "EVIDENCE_INCOMPLETE",
+  "v2lMemoryEvidenceSubstitute": false,
+  "prototypeAdmitted": false
+}

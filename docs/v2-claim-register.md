@@ -233,6 +233,25 @@ evidence remains incomplete under this stricter contract, so V2-U admits no
 generated-family prototype, changes no mutation behavior, and adds no runtime
 performance claim.
 
+### V2-V Fresh Matched Generated-Family Capture Campaign
+
+V2-V adds the executable campaign layer around V2-U:
+
+```text
+preflight
+raw startup/warmup/workload attribution
+strict bundle validation
+lifecycle matrix
+cross-service family matrix
+matched-only ROI ranking
+one-candidate admission gate
+```
+
+The campaign remains `PARTIAL_INFRASTRUCTURE` until fresh customers, visits,
+and Doctor D2R bundles each return `MATCHED_DIAGNOSTIC_EVIDENCE`. V2-V admits
+no prototype, changes no mutation behavior, and adds no runtime performance
+claim.
+
 ### V2-N Runtime Policy Recommendation Engine
 
 V2-N adds a report-only `jmoa:recommend-runtime` Maven goal that:

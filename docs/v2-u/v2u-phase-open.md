@@ -1,5 +1,8 @@
 # V2-U Matched Generated-Family Evidence Campaign
 
+> Historical phase-open document. Final V2-U closure is
+> `PARTIAL_INFRASTRUCTURE`; see [V2-U Final Verdict](v2u-final-verdict.md).
+
 Status: open as a fresh diagnostic evidence campaign.
 
 V2-U does not reopen the V2-T result. V2-T closed as `PARTIAL_INFRASTRUCTURE`
@@ -45,6 +48,8 @@ workload
 - V2-U diagnostic class-load logging is separate from V2-C memory pairs.
 - V2-U may admit at most one generated-family prototype, and only if every
   evidence, safety, semantic, rollback, and confirmation gate is satisfied.
+- Final V2-U result: no prototype admitted, no mutation enabled, and no runtime
+  claim added.
 
 ## Closure Target
 
