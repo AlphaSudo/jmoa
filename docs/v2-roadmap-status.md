@@ -580,6 +580,22 @@ See:
 - [V2-O Final Verdict](v2-o/v2o-final-verdict.md)
 - [V2-O Closure Report](v2-o/v2o-closure-report.md)
 
+## V2-Q Generated And Application Metadata Admission
+
+V2-Q extends the raw reducer only to an explicit packaged application-class
+directory. Ordinary application classes are eligible for LVT/LVTT-only
+reduction; generated, proxy, lambda, Kotlin synthetic, javac synthetic, and
+unknown families remain report-only or blocked.
+
+Public visits-service artifact and semantic gates passed: four ordinary classes
+were reduced and byte-audited (`480` bytes), two javac-synthetic classes were
+preserved, and four endpoint requests completed with zero errors. The clean
+incremental screen, dependency raw only versus dependency raw plus application
+raw, regressed by `+1,432 KB` PSS, `+1,892 KB` Private_Dirty, and `+1,851,392`
+bytes `memory.current`. V2-Q stops before confirmation, V2-C, and V2-D.
+
+Closure: `SCREEN_FAILED`. No generated/application runtime-memory claim exists.
+
 ## V2-E Boundary
 
 V2-E does not reopen generated-class mutation. It also does not implement

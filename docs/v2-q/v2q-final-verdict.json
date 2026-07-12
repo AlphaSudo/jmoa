@@ -1,0 +1,14 @@
+{
+  "metadataVersion": "v2q-final-verdict",
+  "status": "CLOSED_ARTIFACT_AND_SEMANTIC_ONLY_RUNTIME_PROMOTION_BLOCKED",
+  "artifactGate": "PASSED",
+  "semanticGate": "PASSED",
+  "screenStatus": "FAILED_PROMOTION_GATE",
+  "screenDelta": {
+    "pssKb": 1432,
+    "privateDirtyKb": 1892,
+    "memoryCurrentBytes": 1851392
+  },
+  "runtimeClaim": false,
+  "claimBoundary": "No generated/application runtime claim exists. The V2-Q screen regressed, so confirmation and V2-C/V2-D attribution were not run."
+}

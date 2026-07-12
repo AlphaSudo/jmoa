@@ -35,6 +35,7 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | V2-N | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only runtime-policy recommendation engine proven by historical replay; no deployment change, CDS archive reuse, or new runtime claim |
 | V2-O | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Runtime preflight and capture automation; no policy selection or new runtime claim |
 | V2-P | `CLOSED_CONFIRMED_INFRASTRUCTURE` | End-to-end workflow state machine and claim-register guard; no new reducer or claim |
+| V2-Q | `SCREEN_FAILED` | Ordinary packaged application classes admitted safely for raw LVT/LVTT reduction; public visits incremental screen blocked runtime promotion |
 
 V2-L also uses the descriptive phase label
 `CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME`. The official closure type remains

@@ -283,3 +283,13 @@ automatic runtime performance claim from V2-O preflight, training, smoke, or scr
 ```
 
 Any new runtime performance claim must pass V2-C validation and V2-D attribution.
+
+## V2-Q Application Metadata Admission
+
+V2-Q admits only ordinary packaged application classes to opt-in raw LVT/LVTT
+reduction. On public visits-service, four ordinary classes were reduced by
+`480` bytes with four successful raw preservation audits; two
+`JAVAC_SYNTHETIC` classes remained report-only. Materialization and semantic
+smoke passed, but the incremental screen regressed (`+1,432 KB` PSS,
+`+1,892 KB` Private_Dirty), so V2-Q runs no confirmation, V2-C, or V2-D and
+makes no runtime claim.

@@ -1,0 +1,8 @@
+{
+  "metadataVersion": "v2q-application-reducer",
+  "mavenGoal": "jmoa:reduce-bytecode",
+  "applicationOutput": "application-classes",
+  "engine": "raw",
+  "generatedFamilies": "report-only",
+  "inputIsMutatedInPlace": false
+}

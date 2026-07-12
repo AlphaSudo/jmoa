@@ -488,6 +488,16 @@ See:
 - [V2-P Claim Register Guard](docs/v2-p/v2p-claim-register-guard.md)
 - [V2-P Final Verdict](docs/v2-p/v2p-final-verdict.md)
 
+## V2-Q Application Metadata Admission
+
+V2-Q adds an opt-in application-class path to the raw LVT/LVTT reducer. Only
+ordinary packaged application classes are eligible; generated, proxy, lambda,
+and unknown families remain report-only or blocked. Public visits artifact and
+semantic gates passed, but the one-pair incremental runtime screen regressed,
+so V2-Q makes no runtime-memory claim and does not proceed to confirmation.
+
+See [the V2-Q final verdict](docs/v2-q/v2q-final-verdict.md).
+
 ## Safety
 
 Before publishing or tagging a release, run:

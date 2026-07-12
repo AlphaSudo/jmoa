@@ -1,0 +1,7 @@
+{
+  "metadataVersion": "v2q-application-materialization-summary",
+  "status": "PASSED",
+  "overlayTarget": "BOOT-INF/classes",
+  "overlayFiles": 14,
+  "hashMismatches": 0
+}

@@ -24,11 +24,11 @@ public final class DebugMetadataSavingsEstimator {
         for (File jar : jarFiles(config.inputDir())) {
             jars.add(estimateJar(jar));
         }
-        return report(false, jars);
+        return report(false, jars, List.of(), new ApplicationClassReducer(config).reduceOrEstimate());
     }
 
     ReducerReport report(boolean mutationEnabled, List<JarReductionRecord> jars) {
-        return report(mutationEnabled, jars, List.of());
+        return report(mutationEnabled, jars, List.of(), ApplicationReductionReport.disabled());
     }
 
     ReducerReport report(
@@ -36,26 +36,37 @@ public final class DebugMetadataSavingsEstimator {
         List<JarReductionRecord> jars,
         List<RawReducerClassAuditRecord> rawClassAudits
     ) {
+        return report(mutationEnabled, jars, rawClassAudits, ApplicationReductionReport.disabled());
+    }
+
+    ReducerReport report(
+        boolean mutationEnabled,
+        List<JarReductionRecord> jars,
+        List<RawReducerClassAuditRecord> rawClassAudits,
+        ApplicationReductionReport application
+    ) {
         return new ReducerReport(
-            "v2-e-debug-metadata-reducer",
+            "v2q-debug-metadata-reducer",
             Instant.now().toString(),
             mutationEnabled,
             config.reportOnly(),
             config.profile(),
             config.parsedEngine().propertyValue(),
             jars.size(),
-            jars.stream().mapToInt(JarReductionRecord::classCount).sum(),
+            jars.stream().mapToInt(JarReductionRecord::classCount).sum() + application.classCount(),
             jars.stream().mapToLong(JarReductionRecord::originalBytes).sum(),
             jars.stream().mapToLong(JarReductionRecord::reducedBytes).sum(),
-            jars.stream().mapToLong(JarReductionRecord::estimatedRemovableBytes).sum(),
-            jars.stream().mapToLong(JarReductionRecord::removedBytes).sum(),
+            jars.stream().mapToLong(JarReductionRecord::estimatedRemovableBytes).sum() + application.estimatedRemovableBytes(),
+            jars.stream().mapToLong(JarReductionRecord::removedBytes).sum() + application.removedBytes(),
             new ReducerSafetyPolicy().taxonomy(),
             jars,
             rawClassAudits,
+            application,
             List.of(
                 "V2-E only allows LocalVariableTable and LocalVariableTypeTable stripping.",
                 "LineNumberTable, StackMapTable, annotations, signatures, and BootstrapMethods are preserved.",
                 "The default asm engine skips BootstrapMethods-bearing classes during mutation; the opt-in raw engine preserves BootstrapMethods while rewriting only Code attribute debug tables.",
+                "V2-Q application-class reduction is raw-engine-only and admits only ORDINARY_APPLICATION classes; generated/proxy families remain report-only or blocked.",
                 "Performance claims require V2-C confirmation and V2-D attribution."
             )
         );

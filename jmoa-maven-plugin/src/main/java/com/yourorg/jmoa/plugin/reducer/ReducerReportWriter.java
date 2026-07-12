@@ -26,11 +26,19 @@ public final class ReducerReportWriter {
         mapper.writeValue(new File(outputDir, "jmoa-reducer-manifest.json"), reducerManifest(report));
         mapper.writeValue(new File(outputDir, "raw-reducer-byte-preservation-report.json"), rawBytePreservation(report));
         mapper.writeValue(new File(outputDir, "jmoa-reducer-manifest-v2.json"), reducerManifestV2(report));
+        mapper.writeValue(new File(outputDir, "application-raw-reducer-report.json"), report.application());
+        mapper.writeValue(new File(outputDir, "v2q-generated-inventory.json"), generatedInventory(report.application()));
+        mapper.writeValue(new File(outputDir, "v2q-generated-admission-policy.json"), generatedAdmissionPolicy(report.application()));
+        mapper.writeValue(new File(outputDir, "v2q-application-byte-preservation-report.json"), applicationBytePreservation(report.application()));
         writeReducerMarkdown(new File(outputDir, "reducer-build-report.md"), report);
         writeSavingsMarkdown(new File(outputDir, "debug-metadata-savings-estimate.md"), report);
         writeTaxonomyMarkdown(new File(outputDir, "bytecode-reducer-safety-taxonomy.md"), report.safetyTaxonomy());
         writeJarSafetyMarkdown(new File(outputDir, "v2f-jar-safety-report.md"), report);
         writeRawBytePreservationMarkdown(new File(outputDir, "raw-reducer-byte-preservation-report.md"), report);
+        writeApplicationReducerMarkdown(new File(outputDir, "application-raw-reducer-report.md"), report.application());
+        writeGeneratedInventoryMarkdown(new File(outputDir, "v2q-generated-inventory.md"), report.application());
+        writeGeneratedAdmissionMarkdown(new File(outputDir, "v2q-generated-admission-policy.md"), report.application());
+        writeApplicationAuditMarkdown(new File(outputDir, "v2q-application-byte-preservation-report.md"), report.application());
     }
 
     private static Map<String, Object> savings(ReducerReport report) {
@@ -141,6 +149,38 @@ public final class ReducerReportWriter {
         root.put("metadataVersion", "v2j-jmoa-reducer-manifest-v2");
         root.put("rawBytePreservationAuditedClasses", report.rawClassAudits().size());
         root.put("rawClassAudits", report.rawClassAudits());
+        return root;
+    }
+
+    private static Map<String, Object> generatedInventory(ApplicationReductionReport application) {
+        Map<String, Object> root = new LinkedHashMap<>();
+        root.put("metadataVersion", "v2q-generated-inventory");
+        root.put("requested", application.requested());
+        root.put("classCount", application.classCount());
+        root.put("familyCounts", application.classes().stream().collect(java.util.stream.Collectors.groupingBy(
+            ApplicationClassReductionRecord::family, LinkedHashMap::new, java.util.stream.Collectors.counting())));
+        root.put("classes", application.classes());
+        return root;
+    }
+
+    private static Map<String, Object> generatedAdmissionPolicy(ApplicationReductionReport application) {
+        Map<String, Object> root = new LinkedHashMap<>();
+        root.put("metadataVersion", "v2q-generated-admission-policy");
+        root.put("generatedFamiliesMode", "report-only");
+        root.put("familyTaxonomy", application.familyTaxonomy());
+        root.put("rule", "Only ALLOW_METADATA_ONLY classes can receive raw LocalVariableTable/LocalVariableTypeTable reduction.");
+        return root;
+    }
+
+    private static Map<String, Object> applicationBytePreservation(ApplicationReductionReport application) {
+        Map<String, Object> root = new LinkedHashMap<>();
+        root.put("metadataVersion", "v2q-application-byte-preservation-report");
+        root.put("engine", "raw");
+        root.put("auditedClassCount", application.auditedClassCount());
+        root.put("failedAuditCount", application.failedAuditCount());
+        root.put("preservedNonTargetStructures", application.rawClassAudits().stream()
+            .allMatch(RawReducerClassAuditRecord::preservedNonTargetStructures));
+        root.put("records", application.rawClassAudits());
         return root;
     }
 
@@ -258,6 +298,47 @@ public final class ReducerReportWriter {
                 .append(String.join(",", audit.removedAttributes())).append("` | `")
                 .append(audit.status()).append("` |\n");
         }
+        Files.writeString(file.toPath(), md.toString(), StandardCharsets.UTF_8);
+    }
+
+    private static void writeApplicationReducerMarkdown(File file, ApplicationReductionReport application) throws IOException {
+        StringBuilder md = new StringBuilder("# V2-Q Application Raw Reducer Report\n\n");
+        md.append("- Requested: `").append(application.requested()).append("`\n");
+        md.append("- Classes scanned: `").append(application.classCount()).append("`\n");
+        md.append("- Classes reduced: `").append(application.reducedClassCount()).append("`\n");
+        md.append("- Estimated removable bytes: `").append(application.estimatedRemovableBytes()).append("`\n");
+        md.append("- Removed bytes: `").append(application.removedBytes()).append("`\n");
+        md.append("- Raw audits: `").append(application.auditedClassCount()).append("`\n\n");
+        md.append("Only `ORDINARY_APPLICATION` classes are admitted. Generated and proxy families are copied unchanged.\n");
+        Files.writeString(file.toPath(), md.toString(), StandardCharsets.UTF_8);
+    }
+
+    private static void writeGeneratedInventoryMarkdown(File file, ApplicationReductionReport application) throws IOException {
+        StringBuilder md = new StringBuilder("# V2-Q Generated Application Inventory\n\n");
+        md.append("| Family | Count |\n| --- | ---: |\n");
+        application.classes().stream().collect(java.util.stream.Collectors.groupingBy(
+            ApplicationClassReductionRecord::family, LinkedHashMap::new, java.util.stream.Collectors.counting()))
+            .forEach((family, count) -> md.append("| `").append(family).append("` | ").append(count).append(" |\n"));
+        Files.writeString(file.toPath(), md.toString(), StandardCharsets.UTF_8);
+    }
+
+    private static void writeGeneratedAdmissionMarkdown(File file, ApplicationReductionReport application) throws IOException {
+        StringBuilder md = new StringBuilder("# V2-Q Generated Family Admission Policy\n\n");
+        md.append("| Family | Admission | Reason |\n| --- | --- | --- |\n");
+        for (GeneratedFamilyAssessment assessment : application.familyTaxonomy()) {
+            md.append("| `").append(assessment.family()).append("` | `")
+                .append(assessment.admission()).append("` | ").append(assessment.reason()).append(" |\n");
+        }
+        md.append("\nOnly `ALLOW_METADATA_ONLY` is eligible, and it removes LVT/LVTT only with the raw engine.\n");
+        Files.writeString(file.toPath(), md.toString(), StandardCharsets.UTF_8);
+    }
+
+    private static void writeApplicationAuditMarkdown(File file, ApplicationReductionReport application) throws IOException {
+        StringBuilder md = new StringBuilder("# V2-Q Application Byte Preservation Report\n\n");
+        md.append("- Audited application classes: `").append(application.auditedClassCount()).append("`\n");
+        md.append("- Failed audits: `").append(application.failedAuditCount()).append("`\n");
+        md.append("- Non-target structures preserved: `").append(application.rawClassAudits().stream()
+            .allMatch(RawReducerClassAuditRecord::preservedNonTargetStructures)).append("`\n");
         Files.writeString(file.toPath(), md.toString(), StandardCharsets.UTF_8);
     }
 

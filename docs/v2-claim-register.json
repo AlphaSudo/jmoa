@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2N_RUNTIME_POLICY_RECOMMENDATION",
+  "status": "CURRENT_AFTER_V2Q_APPLICATION_ADMISSION_SCREEN",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
@@ -101,6 +101,15 @@
       ],
       "mutationBehaviorChanged": false,
       "newRuntimePerformanceClaim": false
+    },
+    {
+      "id": "v2q-application-metadata-admission",
+      "claim": "V2-Q admits only ordinary packaged application classes to opt-in raw LVT/LVTT reduction with generated/proxy families blocked or report-only.",
+      "rawAuditsPassed": 4,
+      "rawAuditsFailed": 0,
+      "semanticSmoke": "PASSED on public PetClinic visits-service",
+      "screen": "FAILED_PROMOTION_GATE",
+      "newRuntimePerformanceClaim": false
     }
   ],
   "artifactOnlyClaims": [
@@ -187,6 +196,7 @@
     "transfer of a recommendation to a different service, launch mode, or runtime policy",
     "automatic runtime policy application from a V2-N recommendation",
     "CDS archive reuse across artifact variants",
-    "transfer of CDS evidence to no-CDS or no-CDS evidence to CDS"
+    "transfer of CDS evidence to no-CDS or no-CDS evidence to CDS",
+    "V2-Q application-class runtime improvement"
   ]
 }

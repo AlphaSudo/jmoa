@@ -1,0 +1,12 @@
+{
+  "metadataVersion": "v2q-visits-application-runtime-screen",
+  "status": "FAILED_PROMOTION_GATE",
+  "comparison": "dependency-raw-only versus dependency-raw-plus-admitted-application-raw",
+  "workloadErrors": 0,
+  "linkageErrors": 0,
+  "delta": {"pssKb": 1432, "privateDirtyKb": 1892, "memoryCurrentBytes": 1851392},
+  "confirmationRun": false,
+  "v2cRun": false,
+  "v2dRun": false,
+  "runtimeClaim": false
+}

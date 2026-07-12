@@ -40,6 +40,20 @@ public final class ReducerSafetyPolicy {
         if (config.optimize() && (!config.stripLocalVariableTable() || !config.stripLocalVariableTypeTable())) {
             throw new IllegalArgumentException("Reducer mutation requires both stripLocalVariableTable and stripLocalVariableTypeTable.");
         }
+        if (config.includeApplicationClasses()) {
+            if (config.applicationInputDir() == null || !config.applicationInputDir().isDirectory()) {
+                throw new IllegalArgumentException("jmoa.reducer.applicationInputDir must point to a packaged application class directory.");
+            }
+            if (config.parsedEngine() != ReducerEngine.RAW) {
+                throw new IllegalArgumentException("V2-Q application classes require jmoa.reducer.engine=raw.");
+            }
+            if (!"report-only".equalsIgnoreCase(config.generatedFamilies())) {
+                throw new IllegalArgumentException("V2-Q only supports jmoa.reducer.generatedFamilies=report-only.");
+            }
+            if (!config.reportOnly() && !config.mutationEnabled()) {
+                throw new IllegalArgumentException("V2-Q application classes require explicit release-low-footprint raw mutation flags.");
+            }
+        }
     }
 
     public ReducerSafetyTaxonomy taxonomy() {

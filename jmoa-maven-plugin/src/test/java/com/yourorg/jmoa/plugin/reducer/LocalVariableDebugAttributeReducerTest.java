@@ -379,6 +379,42 @@ class LocalVariableDebugAttributeReducerTest {
         assertTrue(output.resolve("jmoa-reducer-manifest-v2.json").toFile().isFile());
     }
 
+    @Test
+    void rawApplicationReducerAdmitsOnlyOrdinaryPackagedClasses() throws Exception {
+        Path dependencies = tempDir.resolve("dependencies");
+        Path application = tempDir.resolve("application");
+        Path output = tempDir.resolve("out-application");
+        Files.createDirectories(dependencies);
+        Files.createDirectories(application.resolve("com/example"));
+        Files.write(application.resolve("com/example/App.class"), localVariableFixtureWithoutBootstrap());
+        Files.write(application.resolve("com/example/Service$$SpringCGLIB$$0.class"),
+            localVariableFixtureFor("com/example/Service$$SpringCGLIB$$0"));
+
+        ReducerConfig config = new ReducerConfig(
+            false, true, "release-low-footprint", dependencies.toFile(), output.toFile(),
+            true, true, false, false, false, false, false, false,
+            "raw", true, application.toFile(), "report-only"
+        );
+        new ReducerSafetyPolicy().validate(config);
+        ReducerReport report = new JarReducer(config).reduce();
+
+        ApplicationReductionReport applicationReport = report.application();
+        assertTrue(applicationReport.requested());
+        assertEquals(2, applicationReport.classCount());
+        assertEquals(1, applicationReport.reducedClassCount());
+        assertEquals(1, applicationReport.auditedClassCount());
+        assertEquals(0, applicationReport.failedAuditCount());
+        assertTrue(output.resolve("application-classes/com/example/App.class").toFile().isFile());
+        assertTrue(output.resolve("application-classes/com/example/Service$$SpringCGLIB$$0.class").toFile().isFile());
+        assertTrue(applicationReport.classes().stream().anyMatch(record ->
+            record.family().equals("SPRING_CGLIB")
+                && record.admission() == GeneratedFamilyAdmission.BLOCK_SEMANTIC_RISK));
+        new ReducerReportWriter().write(output.toFile(), report);
+        assertTrue(output.resolve("application-raw-reducer-report.json").toFile().isFile());
+        assertTrue(output.resolve("v2q-generated-admission-policy.json").toFile().isFile());
+        assertTrue(output.resolve("v2q-application-byte-preservation-report.json").toFile().isFile());
+    }
+
     private static byte[] localVariableFixture() {
         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
         writer.visit(
@@ -458,6 +494,25 @@ class LocalVariableDebugAttributeReducerTest {
         method.visitLocalVariable("items", "Ljava/util/List;", "Ljava/util/List<Ljava/lang/String;>;", start, end, 1);
         method.visitMaxs(1, 2);
         method.visitEnd();
+        writer.visitEnd();
+        return writer.toByteArray();
+    }
+
+    private static byte[] localVariableFixtureFor(String internalName) {
+        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+        writer.visit(Opcodes.V17, Opcodes.ACC_PUBLIC, internalName, null, "java/lang/Object", null);
+        MethodVisitor init = writer.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
+        init.visitCode();
+        Label start = new Label();
+        Label end = new Label();
+        init.visitLabel(start);
+        init.visitVarInsn(Opcodes.ALOAD, 0);
+        init.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+        init.visitLabel(end);
+        init.visitInsn(Opcodes.RETURN);
+        init.visitLocalVariable("this", "L" + internalName + ";", null, start, end, 0);
+        init.visitMaxs(1, 1);
+        init.visitEnd();
         writer.visitEnd();
         return writer.toByteArray();
     }

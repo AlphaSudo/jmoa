@@ -1,0 +1,15 @@
+{
+  "metadataVersion": "v2p-runtime-workflow-report",
+  "service": "Spring PetClinic visits-service",
+  "workflowState": "CLAIM_BLOCKED",
+  "claimAllowed": false,
+  "claimDeclared": false,
+  "claimRegisterReference": "V2-Q Application Metadata Admission",
+  "gates": [
+    {"name": "materialization", "status": "PASSED"},
+    {"name": "semanticSmoke", "status": "PASSED"},
+    {"name": "screen", "status": "FAILED_PROMOTION_GATE"},
+    {"name": "confirmation", "status": "NOT_RUN"},
+    {"name": "attribution", "status": "NOT_RUN"}
+  ]
+}

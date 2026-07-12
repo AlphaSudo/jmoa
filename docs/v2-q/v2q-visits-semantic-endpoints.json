@@ -1,0 +1,8 @@
+{
+  "endpoints": [
+    {"method": "GET", "path": "/actuator/health", "expectedStatus": 200},
+    {"method": "GET", "path": "/owners/1/pets/1/visits", "expectedStatus": 200},
+    {"method": "GET", "path": "/owners/2/pets/2/visits", "expectedStatus": 200},
+    {"method": "GET", "path": "/pets/visits?petId=1&petId=2&petId=3", "expectedStatus": 200}
+  ]
+}

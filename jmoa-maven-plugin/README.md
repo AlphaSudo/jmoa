@@ -173,6 +173,20 @@ official closure type is `CLOSED_CONFIRMED`; the descriptive phase label is
 baseline vs baseline plus raw reducer under its documented exploded-Boot/no-CDS
 protocol.
 
+V2-Q adds an explicit application-class admission path:
+
+```text
+jmoa.reducer.includeApplicationClasses=true
+jmoa.reducer.applicationInputDir=<packaged-classes-directory>
+jmoa.reducer.generatedFamilies=report-only
+```
+
+It is raw-engine-only and requires the existing explicit mutation flags. Only
+ordinary packaged application classes can be reduced; generated/proxy/lambda
+families are copied unchanged or blocked. Application output is written in a
+parallel `application-classes` tree and must be materialized into
+`BOOT-INF/classes`, never an exploded layer root.
+
 ## V2-M Reducer Recommendation Flags
 
 Reducer recommendation is disabled by default and never mutates bytecode.

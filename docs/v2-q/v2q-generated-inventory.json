@@ -1,0 +1,7 @@
+{
+  "metadataVersion": "v2q-generated-inventory-summary",
+  "target": "public-petclinic-visits-application-classes",
+  "classesScanned": 7,
+  "familyCounts": {"ORDINARY_APPLICATION": 5, "JAVAC_SYNTHETIC": 2},
+  "generatedMutation": false
+}

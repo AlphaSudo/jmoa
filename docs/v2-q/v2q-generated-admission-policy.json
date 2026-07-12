@@ -1,0 +1,8 @@
+{
+  "metadataVersion": "v2q-generated-admission-policy",
+  "generatedFamiliesMode": "report-only",
+  "onlyMutationAdmission": "ORDINARY_APPLICATION",
+  "engine": "raw",
+  "strippedAttributes": ["LocalVariableTable", "LocalVariableTypeTable"],
+  "blockedFamilies": ["SPRING_CGLIB", "BYTE_BUDDY", "HIBERNATE_PROXY", "JDK_PROXY", "LAMBDA", "UNKNOWN_GENERATED"]
+}
