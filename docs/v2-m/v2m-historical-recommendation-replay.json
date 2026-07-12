@@ -1,7 +1,7 @@
 {
   "metadataVersion": "v2m-historical-recommendation-replay",
-  "cases": 5,
-  "passedCases": 5,
+  "cases": 6,
+  "passedCases": 6,
   "failedCases": 0,
   "results": [
     {
@@ -50,6 +50,16 @@
       "actualDecision": "ALLOW_ARTIFACT_ONLY",
       "expectedScope": "PRIVATE",
       "actualScope": "PRIVATE",
+      "expectedProtocolMatch": false,
+      "actualProtocolMatch": false,
+      "passed": true
+    },
+    {
+      "id": "v2q-visits-application-confirmation-failed",
+      "expectedDecision": "BLOCK_RUNTIME_PROMOTION",
+      "actualDecision": "BLOCK_RUNTIME_PROMOTION",
+      "expectedScope": "PUBLIC",
+      "actualScope": "PUBLIC",
       "expectedProtocolMatch": false,
       "actualProtocolMatch": false,
       "passed": true

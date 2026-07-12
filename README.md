@@ -381,9 +381,10 @@ mvn -N jmoa:recommend-reducer `
   '-Djmoa.recommendation.runtimePolicy=NO_CDS_LOW_DIRTY'
 ```
 
-Historical replay passes 5/5 audited cases: V2-I, V2-K, and V2-L remain
+Historical replay passes 6/6 audited cases: V2-I, V2-K, and V2-L remain
 confirmed in their exact scopes; V2-H remains blocked; pre-runtime Doctor
-remains artifact-only. V2-M does not mutate bytecode or add a performance claim.
+remains artifact-only; V2-Q application confirmation failure remains blocked.
+V2-M does not mutate bytecode or add a performance claim.
 
 See:
 
@@ -487,6 +488,18 @@ See:
 - [V2-P Workflow Script](docs/v2-p/v2p-runtime-workflow-script.md)
 - [V2-P Claim Register Guard](docs/v2-p/v2p-claim-register-guard.md)
 - [V2-P Final Verdict](docs/v2-p/v2p-final-verdict.md)
+
+## V2-Q Application Metadata Admission
+
+V2-Q adds an opt-in application-class path to the raw LVT/LVTT reducer. Only
+ordinary packaged application classes are eligible; generated, proxy, lambda,
+and unknown families remain report-only or blocked. Public visits artifact and
+semantic gates passed. The first screen failed, one diagnostic rerun passed,
+and the fresh 3-pair confirmation failed, so V2-Q makes no runtime-memory
+claim. Application-class reduction remains artifact/semantic-only unless a
+future target crosses the ROI policy or earns its own confirmation.
+
+See [the V2-Q final verdict](docs/v2-q/v2q-final-verdict.md).
 
 ## Safety
 

@@ -27,6 +27,11 @@
       "allowedClaim": "Negative or blocked screen result only."
     },
     {
+      "id": "CONFIRMATION_FAILED",
+      "meaning": "A screen allowed confirmation, but paired confirmation blocked runtime promotion.",
+      "allowedClaim": "Negative or blocked confirmation result only."
+    },
+    {
       "id": "BLOCKED",
       "meaning": "Work cannot proceed because required artifacts, runtime stack, credentials, or policy decisions are unavailable.",
       "allowedClaim": "No claim beyond blocked status."
@@ -102,12 +107,27 @@
     {
       "milestone": "V2-M",
       "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
-      "claimBoundary": "Report-only reducer admission and recommendation engine proven by 5/5 historical replay; no mutation behavior or new runtime performance claim."
+      "claimBoundary": "Report-only reducer admission and recommendation engine proven by 6/6 historical replay; no mutation behavior or new runtime performance claim."
     },
     {
       "milestone": "V2-N",
       "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
       "claimBoundary": "Report-only runtime-policy recommendation engine proven by 7/7 historical replay; no deployment changes, CDS archive training, archive reuse, or new runtime performance claim."
+    },
+    {
+      "milestone": "V2-O",
+      "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+      "claimBoundary": "Runtime preflight and capture automation; no policy selection or new runtime claim."
+    },
+    {
+      "milestone": "V2-P",
+      "closureType": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+      "claimBoundary": "End-to-end workflow state machine and claim-register guard; no new reducer or claim."
+    },
+    {
+      "milestone": "V2-Q",
+      "closureType": "CONFIRMATION_FAILED",
+      "claimBoundary": "Ordinary packaged application classes admitted safely for raw LVT/LVTT reduction; public visits confirmation blocked runtime promotion."
     }
   ],
   "rule": "Do not upgrade a closure type by wording alone. Runtime performance claims require fresh V2-C validation and V2-D attribution."

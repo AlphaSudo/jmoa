@@ -179,6 +179,43 @@
         "confirmationScope": "PRIVATE",
         "sourceReports": ["V2-J"]
       }
+    },
+    {
+      "id": "v2q-visits-application-confirmation-failed",
+      "expectedDecision": "BLOCK_RUNTIME_PROMOTION",
+      "expectedScope": "PUBLIC",
+      "expectedProtocolMatch": false,
+      "input": {
+        "metadataVersion": "v2m-reducer-admission-input",
+        "service": "Spring PetClinic visits-service",
+        "launchMode": "EXPLODED_BOOT_APP",
+        "runtimePolicy": "NO_CDS_LOW_DIRTY",
+        "v2bAttributeReportPresent": false,
+        "v2bDebugAttributeBytes": 0,
+        "v2bLocalVariableTableBytes": 0,
+        "artifactBytesRemoved": 3532507,
+        "classesReduced": 29701,
+        "applicationClassEvidencePresent": true,
+        "applicationBytesRemoved": 480,
+        "applicationClassesReduced": 4,
+        "artifactEvidencePresent": true,
+        "rawAuditPresent": true,
+        "failedAudits": 0,
+        "signedJarsSkipped": 1,
+        "multiReleaseJarsSkipped": 20,
+        "sealedJarsSkipped": 1,
+        "semanticSmokePassed": true,
+        "screenVerdict": "CONFIRMATION_FAILED",
+        "hasV2CConfirmation": false,
+        "v2cVerdict": "NO_CLAIM",
+        "hasV2DAttribution": false,
+        "diagnosticOnly": false,
+        "reducerEngine": "raw",
+        "strippedAttributes": ["LocalVariableTable", "LocalVariableTypeTable"],
+        "unsafeAttributesRequested": [],
+        "confirmationScope": "PUBLIC",
+        "sourceReports": ["V2-Q application confirmation"]
+      }
     }
   ]
 }

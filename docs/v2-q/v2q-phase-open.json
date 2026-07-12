@@ -1,0 +1,6 @@
+{
+  "metadataVersion": "v2q-phase-open",
+  "phase": "V2-Q",
+  "title": "Generated and Application Metadata Admission",
+  "doesNot": ["rewrite proxy bodies", "touch runtime-generated classes", "strip non-LVT/LVTT attributes", "create a runtime claim"]
+}

@@ -26,7 +26,7 @@ Validation:
 direct state/rule tests: passed
 canonical report loader test: passed
 Maven goal integration test: passed
-historical replay: 5/5 passed
+historical replay: 6/6 passed
 actual V2-L report bundle: RECOMMEND_CONFIRMED / PUBLIC / protocol match
 ```
 

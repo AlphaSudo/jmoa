@@ -38,7 +38,10 @@ public final class JarReducer {
         for (File jar : DebugMetadataSavingsEstimator.jarFiles(config.inputDir())) {
             jars.add(reduceJar(jar));
         }
-        return new DebugMetadataSavingsEstimator(config).report(true, jars, rawClassAudits);
+        ApplicationReductionReport application = new ApplicationClassReducer(config).reduceOrEstimate();
+        List<RawReducerClassAuditRecord> allAudits = new ArrayList<>(rawClassAudits);
+        allAudits.addAll(application.rawClassAudits());
+        return new DebugMetadataSavingsEstimator(config).report(true, jars, allAudits, application);
     }
 
     private JarReductionRecord reduceJar(File jar) throws IOException {

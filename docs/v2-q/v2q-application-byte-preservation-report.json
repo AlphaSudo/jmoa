@@ -1,0 +1,8 @@
+{
+  "metadataVersion": "v2q-application-byte-preservation-summary",
+  "classesReduced": 4,
+  "bytesRemoved": 480,
+  "rawAuditsPassed": 4,
+  "rawAuditsFailed": 0,
+  "preserved": ["LineNumberTable", "SourceFile", "StackMapTable", "annotations", "Signature", "BootstrapMethods"]
+}

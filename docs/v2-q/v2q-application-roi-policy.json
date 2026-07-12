@@ -1,0 +1,21 @@
+{
+  "metadataVersion": "v2q-application-roi-policy",
+  "policy": "Application-class raw LVT/LVTT admission remains artifact/semantic-only unless ROI is plausible or runtime evidence exists.",
+  "thresholds": {
+    "minimumApplicationBytesRemoved": 32768,
+    "minimumApplicationClassesReduced": 50,
+    "orCondition": "service-specific runtime screen passed"
+  },
+  "visitsServiceAssessment": {
+    "applicationBytesRemoved": 480,
+    "applicationClassesReduced": 4,
+    "roiDecision": "LOW_ROI",
+    "recommendationDecision": "ALLOW_ARTIFACT_ONLY_OR_SCREEN_REQUIRED_BY_EXPLICIT_DIAGNOSTIC",
+    "runtimePromotion": false
+  },
+  "recommendationEngineBehavior": {
+    "lowRoiApplicationSemanticPass": "ALLOW_ARTIFACT_ONLY",
+    "plausibleRoiApplicationSemanticPass": "RECOMMEND_SCREEN_REQUIRED",
+    "failedScreenOrConfirmation": "BLOCK_RUNTIME_PROMOTION"
+  }
+}

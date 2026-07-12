@@ -1,0 +1,10 @@
+{
+  "metadataVersion": "v2q-visits-application-semantic-smoke",
+  "status": "PASSED",
+  "requiredBeforeScreen": ["materialization proof", "baseline semantic smoke", "candidate semantic smoke"],
+  "health": "UP",
+  "requests": 4,
+  "workloadErrors": 0,
+  "forbiddenLinkageMatches": [],
+  "runtimeClaim": false
+}

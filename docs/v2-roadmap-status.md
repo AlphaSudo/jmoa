@@ -1,16 +1,18 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-P are closed or confirmed as the current V2 foundation.
-V2-P adds a report-only end-to-end workflow coordinator around the existing
-V2-M, V2-N, V2-O, V2-C, and V2-D gates.
+Status: V2-A through V2-Q are closed, confirmed, or explicitly blocked within
+their declared closure types. V2-P adds a report-only end-to-end workflow
+coordinator around the existing V2-M, V2-N, V2-O, V2-C, and V2-D gates; V2-Q
+adds application-class admission with runtime promotion blocked by confirmation.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
 V2-I raw reducer recovery confirmation, the V2-J raw engine productization
 work, the V2-K Doctor inventory/unblock gate and runtime confirmation, the
 V2-L public visits-service confirmation, the V2-M reducer admission engine,
-and the V2-N runtime-policy recommendation engine, and the V2-O runtime-policy
-automation helpers.
+the V2-N runtime-policy recommendation engine, the V2-O runtime-policy
+automation helpers, the V2-P workflow spine, and the V2-Q application
+admission result.
 
 ## Closure Taxonomy
 
@@ -38,7 +40,7 @@ claims.
 | V2-J | `CLOSED_ARTIFACT_ONLY` | Raw engine productization with byte-preservation auditor, manifest v2, verifier tests, Doctor raw artifact smoke, and runtime unblock plan |
 | V2-K | `CLOSED_CONFIRMED_DOCTOR` | Doctor runtime recovery succeeded, D2/D2R semantic smoke passed, single-screen measurement promoted, and 3-pair V2-C/V2-D confirmation passed |
 | V2-L | `CLOSED_CONFIRMED` | Public visits-service baseline vs raw-reduced baseline passed artifact, materialization, semantic, screen, 3-pair V2-C, and V2-D gates |
-| V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only raw reducer admission engine, exact-protocol scoping, Maven goal, and 5/5 historical replay proof |
+| V2-M | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only raw reducer admission engine, exact-protocol scoping, Maven goal, and 6/6 historical replay proof |
 | V2-N | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Report-only runtime-policy registry, CDS artifact/archive mismatch protection, Maven goal, and 7/7 historical replay proof |
 | V2-O | `CLOSED_CONFIRMED_INFRASTRUCTURE` | SHA-backed runtime preflight, explicit CDS training record, materialization proof, semantic smoke, V2-C-native paired capture, and V2-C/V2-D wrapper |
 | V2-P | `CLOSED_CONFIRMED_INFRASTRUCTURE` | Script-first golden workflow, state machine, normalized workflow report, historical replay, and claim-register consistency guard |
@@ -513,7 +515,8 @@ V2-K Doctor raw: RECOMMEND_CONFIRMED / PRIVATE
 V2-L visits raw: RECOMMEND_CONFIRMED / PUBLIC
 V2-H hardened ASM: BLOCK_RUNTIME_PROMOTION
 V2-J Doctor pre-runtime: ALLOW_ARTIFACT_ONLY
-passed: 5/5
+V2-Q visits application confirmation failed: BLOCK_RUNTIME_PROMOTION
+passed: 6/6
 ```
 
 The actual V2-L report bundle was also ingested through analyze mode and
@@ -579,6 +582,25 @@ See:
 - [V2-O Confirmation Wrapper](v2-o/v2o-confirmation-wrapper.md)
 - [V2-O Final Verdict](v2-o/v2o-final-verdict.md)
 - [V2-O Closure Report](v2-o/v2o-closure-report.md)
+
+## V2-Q Generated And Application Metadata Admission
+
+V2-Q extends the raw reducer only to an explicit packaged application-class
+directory. Ordinary application classes are eligible for LVT/LVTT-only
+reduction; generated, proxy, lambda, Kotlin synthetic, javac synthetic, and
+unknown families remain report-only or blocked.
+
+Public visits-service artifact and semantic gates passed: four ordinary classes
+were reduced and byte-audited (`480` bytes), two javac-synthetic classes were
+preserved, and four endpoint requests completed with zero errors. The first
+incremental screen failed, a clean diagnostic rerun passed, and V2-Q therefore
+ran a fresh 3-pair confirmation. Confirmation failed with `1/3` paired wins and
+median deltas of `+5,732 KB` PSS, `+5,760 KB` Private_Dirty, and `+5,922,816`
+bytes `memory.current`.
+
+Closure: `CONFIRMATION_FAILED`. No generated/application runtime-memory claim
+exists. Application-class raw reduction remains artifact/semantic-only unless a
+future target crosses the ROI threshold or earns its own runtime confirmation.
 
 ## V2-E Boundary
 

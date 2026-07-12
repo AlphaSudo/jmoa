@@ -41,6 +41,9 @@ public final class RecommendationInputLoader {
         long v2bLocalVariableTableBytes = 0;
         long artifactBytesRemoved = 0;
         int classesReduced = 0;
+        boolean applicationClassEvidencePresent = false;
+        long applicationBytesRemoved = 0;
+        int applicationClassesReduced = 0;
         boolean artifactEvidencePresent = false;
         boolean rawAuditPresent = false;
         int failedAudits = 0;
@@ -92,6 +95,17 @@ public final class RecommendationInputLoader {
             }
             classesReduced = root.path("auditedClassCount").asInt(classesReduced);
             reducerEngine = text(root, "engine", reducerEngine);
+        }
+
+        Optional<File> applicationAuditReport = find(inputDirectory,
+            name -> name.equals("v2q-application-byte-preservation-report.json"));
+        if (applicationAuditReport.isPresent()) {
+            JsonNode root = read(applicationAuditReport.get(), sources);
+            applicationClassEvidencePresent = true;
+            applicationBytesRemoved = root.path("bytesRemoved").asLong(0);
+            applicationClassesReduced = root.path("classesReduced").asInt(0);
+            int appFailedAudits = root.path("rawAuditsFailed").asInt(0);
+            failedAudits = Math.max(failedAudits, appFailedAudits);
         }
 
         Optional<File> safetyReport = find(inputDirectory,
@@ -188,6 +202,9 @@ public final class RecommendationInputLoader {
             v2bLocalVariableTableBytes,
             artifactBytesRemoved,
             classesReduced,
+            applicationClassEvidencePresent,
+            applicationBytesRemoved,
+            applicationClassesReduced,
             artifactEvidencePresent,
             rawAuditPresent,
             failedAudits,
@@ -235,6 +252,9 @@ public final class RecommendationInputLoader {
             input.v2bLocalVariableTableBytes(),
             input.artifactBytesRemoved(),
             input.classesReduced(),
+            input.applicationClassEvidencePresent(),
+            input.applicationBytesRemoved(),
+            input.applicationClassesReduced(),
             input.artifactEvidencePresent(),
             input.rawAuditPresent(),
             input.failedAudits(),

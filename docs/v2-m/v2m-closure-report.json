@@ -11,8 +11,8 @@
     "jmoa-reducer-recommendation-replay.md"
   ],
   "historicalReplay": {
-    "cases": 5,
-    "passed": 5,
+    "cases": 6,
+    "passed": 6,
     "failed": 0
   },
   "actualV2LAnalyzeDecision": "RECOMMEND_CONFIRMED",

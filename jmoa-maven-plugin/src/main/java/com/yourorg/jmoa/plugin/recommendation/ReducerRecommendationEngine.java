@@ -22,8 +22,11 @@ public final class ReducerRecommendationEngine {
         "The recommendation engine is report-only and never mutates bytecode.",
         "A confirmed recommendation applies only to the exact service, launch mode, and runtime policy in the evidence.",
         "Only LocalVariableTable and LocalVariableTypeTable removal is admitted.",
+        "Application-class raw reduction is artifact/semantic-only unless its ROI threshold is met or runtime evidence exists for that exact application scope.",
         "New protocols still require semantic smoke, V2-C confirmation, and V2-D attribution."
     );
+    private static final long APPLICATION_MIN_REMOVED_BYTES = 32L * 1024L;
+    private static final int APPLICATION_MIN_REDUCED_CLASSES = 50;
 
     public ReducerRecommendation recommend(ReducerAdmissionInput input) {
         List<String> unsafeAttributes = unsafeAttributes(input);
@@ -69,6 +72,19 @@ public final class ReducerRecommendationEngine {
             return result(input, AdmissionDecision.BLOCK_NO_EVIDENCE, false,
                 List.of("Required raw reducer artifact evidence is incomplete."), artifactGaps,
                 List.of("Produce a reduced artifact, manifest v2, and zero-failure raw audit report."));
+        }
+
+        if (input.applicationClassEvidencePresent()
+            && !applicationRoiMeetsThreshold(input)
+            && !hasApplicationRuntimeEvidence(input)) {
+            return result(input, AdmissionDecision.ALLOW_ARTIFACT_ONLY, false,
+                List.of("Application-class raw reduction is below the initial ROI threshold."),
+                List.of("application removable metadata >= 32 KB or >= 50 reduced application classes",
+                    "passing application-scope runtime screen"),
+                List.of(
+                    "Keep application-class raw reduction artifact/semantic-only for this service.",
+                    "Run a screen only for application surfaces with plausible ROI or explicit diagnostic intent."
+                ));
         }
 
         if (input.hasV2CConfirmation()) {
@@ -194,6 +210,21 @@ public final class ReducerRecommendationEngine {
             && sameNormalized(input.runtimePolicy(), input.confirmedRuntimePolicy());
     }
 
+    private static boolean applicationRoiMeetsThreshold(ReducerAdmissionInput input) {
+        return input.applicationBytesRemoved() >= APPLICATION_MIN_REMOVED_BYTES
+            || input.applicationClassesReduced() >= APPLICATION_MIN_REDUCED_CLASSES;
+    }
+
+    private static boolean hasApplicationRuntimeEvidence(ReducerAdmissionInput input) {
+        if (isPassedScreen(input.screenVerdict())) {
+            return true;
+        }
+        return input.hasV2CConfirmation() && input.sourceReports().stream()
+            .map(ReducerRecommendationEngine::normalize)
+            .anyMatch(name -> name.contains("V2Q") && name.contains("APPLICATION")
+                && (name.contains("CONFIRMATION") || name.contains("RUNTIME_SCREEN")));
+    }
+
     private static List<String> unsafeAttributes(ReducerAdmissionInput input) {
         Set<String> unsafe = new HashSet<>();
         for (String attribute : input.strippedAttributes()) {
@@ -208,6 +239,11 @@ public final class ReducerRecommendationEngine {
     private static boolean isFailedScreen(String value) {
         String normalized = normalize(value);
         return normalized.contains("FAILED") || normalized.contains("REGRESSION") || normalized.contains("BLOCKED");
+    }
+
+    private static boolean isPassedScreen(String value) {
+        String normalized = normalize(value);
+        return normalized.contains("PASSED") || normalized.contains("CONFIRMED_WIN");
     }
 
     private static boolean sameService(String left, String right) {

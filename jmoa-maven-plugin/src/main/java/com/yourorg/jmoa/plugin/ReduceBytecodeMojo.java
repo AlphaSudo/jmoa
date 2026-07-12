@@ -71,6 +71,15 @@ public class ReduceBytecodeMojo extends AbstractMojo {
     @Parameter(property = "jmoa.reducer.stripBootstrapMethods", defaultValue = "false")
     private boolean stripBootstrapMethods;
 
+    @Parameter(property = "jmoa.reducer.includeApplicationClasses", defaultValue = "false")
+    private boolean includeApplicationClasses;
+
+    @Parameter(property = "jmoa.reducer.applicationInputDir")
+    private File applicationInputDir;
+
+    @Parameter(property = "jmoa.reducer.generatedFamilies", defaultValue = "report-only")
+    private String generatedFamilies;
+
     @Override
     public void execute() throws MojoExecutionException {
         if (skip || !reducerEnabled) {
@@ -91,7 +100,10 @@ public class ReduceBytecodeMojo extends AbstractMojo {
             stripAnnotations,
             stripSignature,
             stripBootstrapMethods,
-            engine
+            engine,
+            includeApplicationClasses,
+            applicationInputDir,
+            generatedFamilies
         );
         try {
             new ReducerSafetyPolicy().validate(config);

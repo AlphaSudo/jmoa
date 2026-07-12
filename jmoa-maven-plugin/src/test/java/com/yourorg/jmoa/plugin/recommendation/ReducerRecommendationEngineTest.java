@@ -73,6 +73,28 @@ class ReducerRecommendationEngineTest {
     }
 
     @Test
+    void keepsLowRoiApplicationClassesArtifactOnlyEvenAfterSemanticSmoke() {
+        Fixture input = artifactOnly();
+        input.applicationClassEvidencePresent = true;
+        input.applicationBytesRemoved = 480;
+        input.applicationClassesReduced = 4;
+        input.semanticSmokePassed = true;
+
+        assertEquals(AdmissionDecision.ALLOW_ARTIFACT_ONLY, engine.recommend(input.build()).decision());
+    }
+
+    @Test
+    void requiresScreenForApplicationClassesWhenRoiThresholdIsPlausible() {
+        Fixture input = artifactOnly();
+        input.applicationClassEvidencePresent = true;
+        input.applicationBytesRemoved = 40_000;
+        input.applicationClassesReduced = 4;
+        input.semanticSmokePassed = true;
+
+        assertEquals(AdmissionDecision.RECOMMEND_SCREEN_REQUIRED, engine.recommend(input.build()).decision());
+    }
+
+    @Test
     void blocksFailedRawAuditBeforeHistoricalConfirmation() {
         Fixture input = confirmed("visits-service", "EXPLODED_BOOT_APP", "NO_CDS_LOW_DIRTY");
         input.failedAudits = 1;
@@ -178,6 +200,9 @@ class ReducerRecommendationEngineTest {
         String runtimePolicy = "NO_CDS_LOW_DIRTY";
         long artifactBytesRemoved;
         int classesReduced;
+        boolean applicationClassEvidencePresent;
+        long applicationBytesRemoved;
+        int applicationClassesReduced;
         boolean artifactEvidencePresent;
         boolean rawAuditPresent;
         int failedAudits;
@@ -206,6 +231,9 @@ class ReducerRecommendationEngineTest {
                 0,
                 artifactBytesRemoved,
                 classesReduced,
+                applicationClassEvidencePresent,
+                applicationBytesRemoved,
+                applicationClassesReduced,
                 artifactEvidencePresent,
                 rawAuditPresent,
                 failedAudits,

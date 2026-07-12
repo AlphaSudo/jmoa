@@ -1,0 +1,15 @@
+{
+  "metadataVersion": "v2q-visits-application-artifact-smoke",
+  "status": "PASSED",
+  "target": "spring-petclinic-visits-service",
+  "comparison": "dependency raw only versus dependency raw plus application raw",
+  "applicationClassesScanned": 7,
+  "ordinaryClassesReduced": 4,
+  "generatedClassesReportOnly": 2,
+  "applicationBytesRemoved": 480,
+  "rawAuditsPassed": 4,
+  "rawAuditsFailed": 0,
+  "materializationOverlayFiles": 14,
+  "materializationHashMismatches": 0,
+  "runtimeClaim": false
+}

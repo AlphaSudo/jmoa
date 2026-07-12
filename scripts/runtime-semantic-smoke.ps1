@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory)][string]$HealthUrl,
     [Parameter(Mandatory)][string]$EndpointsFile,
+    [string]$EndpointBaseUrl = "",
     [string]$HeadersFile = "",
     [string]$ContainerName = "",
     [string]$ContainerCli = "podman",
@@ -27,6 +28,7 @@ if (-not [string]::IsNullOrWhiteSpace($HeadersFile)) {
 }
 
 $health = Wait-JmoaHttpHealth -HealthUrl $HealthUrl -TimeoutSeconds $HealthTimeoutSeconds -ExpectedStatus $ExpectedHealthStatus
+$endpointBase = if ([string]::IsNullOrWhiteSpace($EndpointBaseUrl)) { $HealthUrl } else { $EndpointBaseUrl }
 $results = @()
 $errors = 0
 foreach ($endpoint in $endpoints) {
@@ -37,7 +39,7 @@ foreach ($endpoint in $endpoints) {
     $endpointPath = if ($endpoint.PSObject.Properties['path']) { [string]$endpoint.path } else { '' }
     $endpointMethod = if ($endpoint.PSObject.Properties['method']) { [string]$endpoint.method } else { '' }
     $endpointExpectedStatus = if ($endpoint.PSObject.Properties['expectedStatus']) { [int]$endpoint.expectedStatus } else { 0 }
-    $uri = if (-not [string]::IsNullOrWhiteSpace($endpointUrl)) { $endpointUrl } else { $HealthUrl.TrimEnd('/') + '/' + $endpointPath.TrimStart('/') }
+    $uri = if (-not [string]::IsNullOrWhiteSpace($endpointUrl)) { $endpointUrl } else { $endpointBase.TrimEnd('/') + '/' + $endpointPath.TrimStart('/') }
     $method = if (-not [string]::IsNullOrWhiteSpace($endpointMethod)) { $endpointMethod } else { 'GET' }
     $expected = if ($endpointExpectedStatus -gt 0) { $endpointExpectedStatus } else { 200 }
     $actual = 0
@@ -72,6 +74,7 @@ $report = [ordered]@{
     status = $status
     health = if ($health.passed) { 'UP' } else { 'DOWN' }
     healthStatusCode = $health.statusCode
+    endpointBaseUrl = $endpointBase
     workloadErrors = $errors
     requests = $results.Count
     endpointResults = $results
