@@ -1,0 +1,25 @@
+{
+  "requiredFields": [
+    "artifactSha256",
+    "service",
+    "launchMode",
+    "runtimePolicy",
+    "reducerEngine",
+    "familyRegistryVersion",
+    "scannerVersion"
+  ],
+  "statuses": [
+    "MATCHED_DIAGNOSTIC_EVIDENCE",
+    "ARTIFACT_FINGERPRINT_MISSING",
+    "ARTIFACT_FINGERPRINT_MISMATCH",
+    "IDENTITY_FIELD_MISSING",
+    "SERVICE_MISMATCH",
+    "RUNTIME_SCOPE_MISMATCH",
+    "REDUCER_ENGINE_MISMATCH",
+    "REGISTRY_VERSION_MISMATCH",
+    "SCANNER_VERSION_MISMATCH",
+    "LIFECYCLE_CAPTURE_INCOMPLETE"
+  ],
+  "matchedEvidenceIsClaimableMemoryEvidence": false,
+  "matchedEvidenceAdmitsMutationAutomatically": false
+}

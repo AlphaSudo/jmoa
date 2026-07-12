@@ -7,6 +7,11 @@
       "allowedClaim": "Tooling or analysis capability only."
     },
     {
+      "id": "PARTIAL_INFRASTRUCTURE",
+      "meaning": "The report-only implementation is validated, but required real evidence coverage remains incomplete.",
+      "allowedClaim": "Tooling capability and explicit evidence gap only."
+    },
+    {
       "id": "CLOSED_CONFIRMED",
       "meaning": "Runtime behavior is confirmed by V2-C evidence gates and explained by V2-D attribution where relevant.",
       "allowedClaim": "Narrow runtime claim within the measured protocol."
@@ -133,6 +138,21 @@
       "milestone": "V2-R",
       "closureType": "CLOSED_INFRASTRUCTURE",
       "claimBoundary": "Application/generated ROI discovery and recommendation classifications only; no mutation or runtime claim."
+    },
+    {
+      "milestone": "V2-S",
+      "closureType": "CLOSED_INFRASTRUCTURE",
+      "claimBoundary": "Generated-family runtime relevance, safety, and ROI discovery only; no family prototype admitted, mutation, or runtime claim."
+    },
+    {
+      "milestone": "V2-T",
+      "closureType": "PARTIAL_INFRASTRUCTURE",
+      "claimBoundary": "SHA-gated static/runtime reconciliation and lifecycle evidence model; no complete matched service capture or family admission."
+    },
+    {
+      "milestone": "V2-U",
+      "closureType": "PARTIAL_INFRASTRUCTURE",
+      "claimBoundary": "Generated lifecycle capture harness and full identity tuple enforcement; current services still lack complete matched bundles, so no prototype admission or runtime claim."
     }
   ],
   "rule": "Do not upgrade a closure type by wording alone. Runtime performance claims require fresh V2-C validation and V2-D attribution."

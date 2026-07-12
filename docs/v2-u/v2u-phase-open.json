@@ -1,0 +1,34 @@
+{
+  "phase": "V2-U",
+  "title": "Matched Generated-Family Evidence Campaign",
+  "status": "OPEN",
+  "targetClosureIfComplete": "CLOSED_CONFIRMED_INFRASTRUCTURE",
+  "fallbackClosure": "PARTIAL_INFRASTRUCTURE",
+  "reportOnly": true,
+  "mutationEnabled": false,
+  "runtimeClaimAdded": false,
+  "targets": [
+    "Spring PetClinic customers-service",
+    "Spring PetClinic visits-service",
+    "Doctor D2R"
+  ],
+  "requiredIdentityFields": [
+    "artifactSha256",
+    "service",
+    "launchMode",
+    "runtimePolicy",
+    "reducerEngine",
+    "familyRegistryVersion",
+    "scannerVersion"
+  ],
+  "requiredLifecycleStages": [
+    "startup",
+    "warmup",
+    "workload"
+  ],
+  "boundaries": [
+    "No generated-class mutation.",
+    "No runtime-memory claim.",
+    "Diagnostic captures are separate from V2-C memory pairs."
+  ]
+}

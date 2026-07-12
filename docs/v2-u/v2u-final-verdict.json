@@ -1,0 +1,24 @@
+{
+  "phase": "V2-U",
+  "closureType": "PARTIAL_INFRASTRUCTURE",
+  "implemented": [
+    "generated lifecycle capture harness",
+    "full identity tuple enforcement",
+    "manifest-aware generated evidence analysis",
+    "V2-U JSON and Markdown outputs",
+    "recommendation ingestion guarded by matched evidence",
+    "lifecycle reconciliation vocabulary",
+    "cross-service generated-family matrix",
+    "matched-family ROI ranking",
+    "prototype admission decision"
+  ],
+  "serviceBundlesComplete": {
+    "customers": false,
+    "visits": false,
+    "doctorD2r": false
+  },
+  "prototypeAdmitted": false,
+  "mutationEnabled": false,
+  "runtimeClaimAdded": false,
+  "suggestedTag": "v0.16.2-v2u-generated-evidence-partial"
+}

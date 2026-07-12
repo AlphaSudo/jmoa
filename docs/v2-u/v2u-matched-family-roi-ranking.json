@@ -1,0 +1,50 @@
+{
+  "status": "PARTIAL_INFRASTRUCTURE",
+  "rankingRules": [
+    {
+      "condition": "No matched runtime evidence",
+      "maximumDecision": "GENERATED_REPORT_ONLY"
+    },
+    {
+      "condition": "Matched runtime evidence plus safety blocker",
+      "decision": "GENERATED_MUTATION_BLOCKED"
+    },
+    {
+      "condition": "Matched runtime evidence plus meaningful ROI plus bounded semantics",
+      "decision": "CANDIDATE_FOR_PROTOTYPE"
+    }
+  ],
+  "rankings": [
+    {
+      "rank": 1,
+      "family": "LAMBDA_METAFATORY_SITE",
+      "matchedRuntimeEvidence": false,
+      "decision": "GENERATED_REPORT_ONLY"
+    },
+    {
+      "rank": 2,
+      "family": "SPRING_DATA_GENERATED",
+      "matchedRuntimeEvidence": false,
+      "decision": "GENERATED_REPORT_ONLY"
+    },
+    {
+      "rank": 3,
+      "family": "SYNTHETIC_BRIDGE_METHODS",
+      "matchedRuntimeEvidence": false,
+      "decision": "GENERATED_REPORT_ONLY"
+    },
+    {
+      "rank": 4,
+      "family": "SPRING_AOT_BEAN_DEFINITIONS",
+      "matchedRuntimeEvidence": false,
+      "decision": "GENERATED_MUTATION_BLOCKED"
+    },
+    {
+      "rank": 5,
+      "family": "PROXY_CGLIB_BYTEBUDDY_HIBERNATE",
+      "matchedRuntimeEvidence": false,
+      "decision": "GENERATED_MUTATION_BLOCKED"
+    }
+  ],
+  "prototypeAdmitted": false
+}

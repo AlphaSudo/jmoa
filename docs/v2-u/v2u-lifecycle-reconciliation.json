@@ -1,0 +1,41 @@
+{
+  "status": "PARTIAL_INFRASTRUCTURE",
+  "classifications": [
+    "PACKAGED_NEVER_OBSERVED_IN_CAPTURE",
+    "PACKAGED_STARTUP_LOADED",
+    "PACKAGED_WARMUP_LOADED",
+    "PACKAGED_WORKLOAD_LOADED",
+    "RUNTIME_GENERATED_STARTUP",
+    "RUNTIME_GENERATED_WARMUP",
+    "RUNTIME_GENERATED_WORKLOAD",
+    "HISTOGRAM_PERSISTENT",
+    "RUNTIME_RELEVANCE_UNKNOWN"
+  ],
+  "services": [
+    {
+      "service": "customers-service",
+      "startupCapture": false,
+      "warmupCapture": false,
+      "workloadCapture": true,
+      "fingerprintMatched": false,
+      "classification": "ARTIFACT_FINGERPRINT_MISSING"
+    },
+    {
+      "service": "visits-service",
+      "startupCapture": false,
+      "warmupCapture": false,
+      "workloadCapture": false,
+      "fingerprintMatched": false,
+      "classification": "EVIDENCE_INCOMPLETE"
+    },
+    {
+      "service": "Doctor D2R",
+      "startupCapture": false,
+      "warmupCapture": false,
+      "workloadCapture": false,
+      "fingerprintMatched": false,
+      "classification": "LIFECYCLE_CAPTURE_INCOMPLETE"
+    }
+  ],
+  "prototypeAdmitted": false
+}

@@ -1,0 +1,19 @@
+{
+  "service": "Doctor D2R",
+  "status": "PARTIAL_INFRASTRUCTURE",
+  "evidenceStatus": "LIFECYCLE_CAPTURE_INCOMPLETE",
+  "uniqueGeneratedClasses": 14469,
+  "uniqueGeneratedClassfileBytes": 96525651,
+  "missing": [
+    "startup attribution capture",
+    "warmup attribution capture",
+    "workload attribution capture",
+    "capture artifact SHA-256",
+    "CDS archive SHA-256 in generated lifecycle manifest",
+    "CDS mapping proof attached to diagnostic bundle",
+    "full V2-U identity tuple"
+  ],
+  "prototypeAdmitted": false,
+  "runtimeClaimAdded": false,
+  "mutationEnabled": false
+}
