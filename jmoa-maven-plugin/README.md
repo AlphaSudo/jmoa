@@ -16,6 +16,8 @@ Current responsibilities:
 - write V2-B bytecode/classfile size reports when explicitly enabled
 - write V2-C evidence validation reports for already-captured measurements
 - write V2-D memory attribution reports for V2-C-valid evidence
+- write V2-U matched generated-family lifecycle diagnostics when explicitly
+  enabled
 
 The plugin is intentionally not a runtime javaagent. Optimized artifacts are
 produced at build time and then verified in the target deployment shape.
@@ -29,6 +31,8 @@ produced at build time and then verified in the target deployment shape.
 - `jmoa:evidence`
 - `jmoa:attribution`
 - `jmoa:reduce-bytecode`
+- `jmoa:analyze-generated-relevance`
+- `jmoa:analyze-generated-evidence`
 
 ## V2-A Generated-Class Flags
 
@@ -194,8 +198,10 @@ recommendation engine therefore treats low-ROI application-class evidence as
 artifact/semantic-only unless removable metadata reaches `32 KB`, at least `50`
 application classes are reduced, or a service-specific runtime screen passes.
 
-V2-R/V2-S/V2-T extend this as report-only ROI discovery, generated-family runtime relevance, and SHA-gated static/runtime reconciliation for application/generated
-surfaces. The recommendation goal may now emit:
+V2-R/V2-S/V2-T/V2-U extend this as report-only ROI discovery,
+generated-family runtime relevance, SHA-gated static/runtime reconciliation, and
+matched lifecycle evidence campaign support for application/generated surfaces.
+The recommendation goal may now emit:
 
 ```text
 APPLICATION_LOW_ROI_ARTIFACT_ONLY
@@ -208,6 +214,49 @@ CANDIDATE_FOR_PROTOTYPE
 These decisions classify candidate surfaces only. They do not enable
 generated-class mutation, proxy mutation, application-class mutation, or a
 runtime claim.
+
+## V2-U Generated-Family Evidence Flags
+
+Generated-family matched-evidence analysis is disabled by default and is
+diagnostic-only. It reconciles a V2-A generated-class inventory with
+startup/warmup/workload runtime-attribution reports only when the static and
+capture evidence share a complete identity tuple.
+
+```text
+jmoa.generatedEvidence.enabled=false
+jmoa.generatedEvidence.inventory=<generated-class-inventory.json>
+jmoa.generatedEvidence.lifecycleManifest=<generated-lifecycle-manifest.json>
+jmoa.generatedEvidence.staticIdentity=<optional-static-identity.json>
+jmoa.generatedEvidence.outputDir=<output-dir>
+```
+
+Identity fields can be supplied through the lifecycle manifest, an optional
+static identity file, or explicit Maven properties:
+
+```text
+jmoa.generatedEvidence.staticArtifactSha256=<sha256>
+jmoa.generatedEvidence.captureArtifactSha256=<sha256>
+jmoa.generatedEvidence.service=<service>
+jmoa.generatedEvidence.launchMode=<launch-mode>
+jmoa.generatedEvidence.runtimePolicy=<runtime-policy>
+jmoa.generatedEvidence.reducerEngine=<engine>
+jmoa.generatedEvidence.familyRegistryVersion=<version>
+jmoa.generatedEvidence.scannerVersion=<version>
+```
+
+When `lifecycleManifest` is provided, the goal discovers stage reports from:
+
+```text
+startup/generated-class-runtime-attribution.json
+warmup/generated-class-runtime-attribution.json
+workload/generated-class-runtime-attribution.json
+```
+
+The analyzer reports explicit non-admission statuses such as
+`ARTIFACT_FINGERPRINT_MISSING`, `ARTIFACT_FINGERPRINT_MISMATCH`,
+`SERVICE_MISMATCH`, `REGISTRY_VERSION_MISMATCH`, and
+`LIFECYCLE_CAPTURE_INCOMPLETE`. V2-U emits both V2-U and legacy V2-T report
+filenames for compatibility, but generated-family mutation remains disabled.
 
 ## V2-M Reducer Recommendation Flags
 
@@ -259,10 +308,11 @@ mvn -N jmoa:recommend-reducer `
   '-Djmoa.recommendation.replaySuite=../docs/v2-m/historical-recommendation-suite.json'
 ```
 
-V2-M/V2-R/V2-S/V2-T recommendation is report-only. `RECOMMEND_CONFIRMED` applies only to
-an exact confirmed service, launch mode, and runtime policy; discovery decisions
-such as `CANDIDATE_FOR_PROTOTYPE` still require a future phase with semantic,
-V2-C, and V2-D gates before mutation or runtime promotion.
+V2-M/V2-R/V2-S/V2-T/V2-U recommendation and generated-family discovery remain
+report-only. `RECOMMEND_CONFIRMED` applies only to an exact confirmed service,
+launch mode, and runtime policy; discovery decisions such as
+`CANDIDATE_FOR_PROTOTYPE` still require a future phase with semantic, V2-C, and
+V2-D gates before mutation or runtime promotion.
 
 See:
 

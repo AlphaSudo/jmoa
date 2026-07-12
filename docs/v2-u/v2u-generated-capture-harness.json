@@ -1,0 +1,23 @@
+{
+  "script": "scripts/capture-generated-lifecycle.ps1",
+  "metadataVersion": "v2u-generated-lifecycle-manifest",
+  "diagnosticOnly": true,
+  "v2cMemoryPair": false,
+  "stages": [
+    "startup",
+    "warmup",
+    "workload"
+  ],
+  "stageFiles": [
+    "class-load.log",
+    "class-histogram.txt",
+    "nmt-summary.txt",
+    "classloader-stats.txt",
+    "vm-command-line.txt",
+    "vm-flags.txt",
+    "vm-metaspace.txt",
+    "memory.current",
+    "timestamp.txt"
+  ],
+  "reservedAttributionOutput": "generated-class-runtime-attribution.json"
+}

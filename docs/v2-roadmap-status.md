@@ -1,13 +1,15 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-T are closed, confirmed, or explicitly bounded within
+Status: V2-A through V2-U are closed, confirmed, or explicitly bounded within
 their declared closure types. V2-P adds a report-only end-to-end workflow
 coordinator around the existing V2-M, V2-N, V2-O, V2-C, and V2-D gates; V2-Q
 adds application-class admission with runtime promotion blocked by confirmation;
 V2-R adds report-only application/generated ROI discovery; V2-S reconciles
 generated-family static inventory with diagnostic runtime relevance evidence;
 V2-T adds SHA-gated lifecycle reconciliation and records missing evidence as
-partial infrastructure rather than a prototype admission.
+partial infrastructure rather than a prototype admission; V2-U adds the matched
+startup/warmup/workload capture campaign contract and records the currently
+available evidence as still incomplete.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
@@ -16,8 +18,9 @@ work, the V2-K Doctor inventory/unblock gate and runtime confirmation, the
 V2-L public visits-service confirmation, the V2-M reducer admission engine,
 the V2-N runtime-policy recommendation engine, the V2-O runtime-policy
 automation helpers, the V2-P workflow spine, the V2-Q application admission
-result, V2-R ROI discovery, V2-S generated-family runtime relevance, and V2-T
-generated-family matched-evidence completion.
+result, V2-R ROI discovery, V2-S generated-family runtime relevance, V2-T
+generated-family matched-evidence completion, and V2-U matched lifecycle
+campaign completion.
 
 ## Closure Taxonomy
 
@@ -53,6 +56,7 @@ claims.
 | V2-R | `CLOSED_INFRASTRUCTURE` | Application/generated ROI discovery, runtime-relevance taxonomy, candidate ranking, and report-only recommendation classifications |
 | V2-S | `CLOSED_INFRASTRUCTURE` | Generated-family registry, static/runtime reconciliation, safety matrix, ROI scoring, and recommendation replay; no family mutation admitted |
 | V2-T | `PARTIAL_INFRASTRUCTURE` | SHA-gated generated-family evidence join, exclusive census, lifecycle model, and recommendation ingestion; no complete matched capture or family admission |
+| V2-U | `PARTIAL_INFRASTRUCTURE` | Matched generated-family lifecycle capture harness, full identity tuple enforcement, per-service evidence-gap reports, cross-service matrix, and no family admission |
 
 ## Current Foundation
 
@@ -77,6 +81,7 @@ V2-Q = can packaged application classes be admitted safely, and do they survive 
 V2-R = where is the next meaningful application/generated ROI surface, before mutation?
 V2-S = which generated family is actually runtime-relevant and safe enough to deserve a future prototype?
 V2-T = do the static artifact and startup/warmup/workload diagnostics actually describe the same generated-family surface?
+V2-U = can fresh matched lifecycle bundles satisfy that evidence contract across customers, visits, and Doctor?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
@@ -104,6 +109,10 @@ diagnostic evidence is intentionally separate from V2-C memory confirmation.
 V2-T does not enable generated-class mutation or add a runtime claim. A missing
 or mismatched artifact fingerprint is an explicit non-admission result, not a
 fallback to historical summaries.
+V2-U does not enable generated-class mutation or add a runtime claim. It adds
+the capture harness and strict identity tuple, then closes the available
+customers/visits/Doctor evidence as still incomplete rather than admitting a
+prototype from unmatched captures.
 
 ## Still Blocked
 
@@ -698,6 +707,41 @@ See:
 - [V2-T Reconciliation](v2-t/v2t-static-runtime-reconciliation.md)
 - [V2-T Prototype Admission](v2-t/v2t-prototype-admission.md)
 - [V2-T Final Verdict](v2-t/v2t-final-verdict.md)
+
+## V2-U Matched Generated-Family Evidence Campaign
+
+V2-U keeps the generated-family track in evidence-campaign mode. It adds
+`scripts/capture-generated-lifecycle.ps1` for startup, warmup, and workload
+diagnostic captures and extends `jmoa:analyze-generated-evidence` to require a
+full identity tuple:
+
+```text
+artifactSha256
+service
+launchMode
+runtimePolicy
+reducerEngine
+familyRegistryVersion
+scannerVersion
+```
+
+The currently available local evidence still does not satisfy the full matched
+bundle contract. Customers has useful historical runtime-only lambda and
+histogram signal but no complete fingerprinted startup/warmup/workload bundle.
+Visits has reducer/runtime evidence but no matching generated-family inventory
+and lifecycle capture. Doctor has static generated-family inventory but no
+fresh D2R matched lifecycle bundle. V2-U therefore closes as
+`PARTIAL_INFRASTRUCTURE`, with no generated-family prototype admitted.
+
+See:
+
+- [V2-U Phase Boundary](v2-u/v2u-phase-open.md)
+- [V2-U Capture Harness](v2-u/v2u-generated-capture-harness.md)
+- [V2-U Customers Evidence](v2-u/v2u-customers-matched-evidence.md)
+- [V2-U Visits Evidence](v2-u/v2u-visits-matched-evidence.md)
+- [V2-U Doctor D2R Evidence](v2-u/v2u-doctor-d2r-matched-evidence.md)
+- [V2-U Lifecycle Reconciliation](v2-u/v2u-lifecycle-reconciliation.md)
+- [V2-U Final Verdict](v2-u/v2u-final-verdict.md)
 
 ## V2-E Boundary
 

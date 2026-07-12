@@ -1,0 +1,20 @@
+{
+  "service": "Spring PetClinic customers-service",
+  "status": "PARTIAL_INFRASTRUCTURE",
+  "evidenceStatus": "ARTIFACT_FINGERPRINT_MISSING",
+  "uniqueGeneratedClasses": 12152,
+  "uniqueGeneratedClassfileBytes": 81625377,
+  "observedRuntimeOnlyLambdaImplementations": 8,
+  "observedHistogramBytes": 813664,
+  "missing": [
+    "static artifact SHA-256",
+    "capture artifact SHA-256",
+    "startup attribution capture",
+    "warmup attribution capture",
+    "full V2-U identity tuple",
+    "generated-lifecycle-manifest.json"
+  ],
+  "prototypeAdmitted": false,
+  "runtimeClaimAdded": false,
+  "mutationEnabled": false
+}

@@ -1,0 +1,13 @@
+{
+  "service": "Spring PetClinic visits-service",
+  "status": "PARTIAL_INFRASTRUCTURE",
+  "evidenceStatus": "EVIDENCE_INCOMPLETE",
+  "rawReducerRuntimeEvidencePresent": true,
+  "matchingGeneratedInventoryPresent": false,
+  "startupGeneratedCapturePresent": false,
+  "warmupGeneratedCapturePresent": false,
+  "workloadGeneratedCapturePresent": false,
+  "prototypeAdmitted": false,
+  "runtimeClaimAdded": false,
+  "mutationEnabled": false
+}

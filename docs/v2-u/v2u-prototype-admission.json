@@ -1,0 +1,16 @@
+{
+  "prototypeAdmitted": false,
+  "admissionDecision": "GENERATED_REPORT_ONLY",
+  "failedGates": [
+    "matched artifact/capture fingerprints",
+    "complete lifecycle evidence",
+    "runtime relevance",
+    "bounded mutation proposal",
+    "family-specific semantic test plan",
+    "rollback plan",
+    "screen and confirmation protocol"
+  ],
+  "bestFutureDiagnosticLead": "SPRING_DATA_GENERATED",
+  "mutationEnabled": false,
+  "runtimeClaimAdded": false
+}

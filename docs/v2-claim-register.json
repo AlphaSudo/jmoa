@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2T_GENERATED_MATCHED_EVIDENCE",
+  "status": "CURRENT_AFTER_V2U_MATCHED_GENERATED_EVIDENCE_CAMPAIGN",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "confirmedRuntimeClaims": [
     {
@@ -66,7 +66,7 @@
       "id": "v2m-reducer-recommendation-engine",
       "claim": "V2-M provides a report-only reducer admission and recommendation Maven goal with exact-protocol scope enforcement.",
       "mavenGoal": "jmoa:recommend-reducer",
-      "historicalReplay": "11/11 passed",
+      "historicalReplay": "14/14 passed",
       "decisions": [
         "RECOMMEND_CONFIRMED",
         "RECOMMEND_SCREEN_REQUIRED",
@@ -161,6 +161,34 @@
       "mutationBehaviorChanged": false,
       "newRuntimePerformanceClaim": false,
       "claimBoundary": "Recovered service reports remain incomplete without equal artifact fingerprints and all startup/warmup/workload captures. The V2-S bounded-safe candidate is a test fixture, not an empirical family admission."
+    },
+    {
+      "id": "v2u-matched-generated-family-evidence-campaign",
+      "claim": "V2-U provides a report-only matched generated-family lifecycle capture campaign with full static/capture identity tuple enforcement.",
+      "mavenGoal": "jmoa:analyze-generated-evidence",
+      "captureScript": "scripts/capture-generated-lifecycle.ps1",
+      "closureType": "PARTIAL_INFRASTRUCTURE",
+      "requiredIdentityTuple": [
+        "artifactSha256",
+        "service",
+        "launchMode",
+        "runtimePolicy",
+        "reducerEngine",
+        "familyRegistryVersion",
+        "scannerVersion"
+      ],
+      "nonAdmissionStatuses": [
+        "ARTIFACT_FINGERPRINT_MISSING",
+        "ARTIFACT_FINGERPRINT_MISMATCH",
+        "SERVICE_MISMATCH",
+        "REGISTRY_VERSION_MISMATCH",
+        "SCANNER_VERSION_MISMATCH",
+        "LIFECYCLE_CAPTURE_INCOMPLETE"
+      ],
+      "prototypeAdmitted": false,
+      "mutationBehaviorChanged": false,
+      "newRuntimePerformanceClaim": false,
+      "claimBoundary": "Current customers, visits, and Doctor D2R evidence remains incomplete under the matched lifecycle contract; no generated-family prototype is admitted."
     }
   ],
   "artifactOnlyClaims": [
@@ -255,6 +283,10 @@
     "V2-S generated-family mutation",
     "V2-T generated-family runtime improvement",
     "V2-T generated-family mutation",
-    "V2-T generated-family prototype admission"
+    "V2-T generated-family prototype admission",
+    "V2-U generated-family runtime improvement",
+    "V2-U generated-family mutation",
+    "V2-U generated-family prototype admission",
+    "V2-U cross-service generated-family runtime generalization"
   ]
 }

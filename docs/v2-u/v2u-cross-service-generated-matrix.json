@@ -1,0 +1,41 @@
+{
+  "status": "PARTIAL_INFRASTRUCTURE",
+  "families": [
+    {
+      "family": "LAMBDA_METAFATORY_SITE",
+      "customers": "runtime-only workload signal observed, not matched",
+      "visits": "EVIDENCE_INCOMPLETE",
+      "doctorD2r": "EVIDENCE_INCOMPLETE",
+      "classification": "EVIDENCE_INCOMPLETE"
+    },
+    {
+      "family": "SPRING_DATA_GENERATED",
+      "customers": "static surface present",
+      "visits": "inventory missing",
+      "doctorD2r": "static surface present",
+      "classification": "STATIC_ONLY_IN_AVAILABLE_CAPTURES"
+    },
+    {
+      "family": "SPRING_AOT_BEAN_DEFINITIONS",
+      "customers": "report-only where present",
+      "visits": "EVIDENCE_INCOMPLETE",
+      "doctorD2r": "report-only where present",
+      "classification": "GENERATED_MUTATION_BLOCKED"
+    },
+    {
+      "family": "PROXY_CGLIB_BYTEBUDDY_HIBERNATE",
+      "customers": "unsafe/report-only",
+      "visits": "EVIDENCE_INCOMPLETE",
+      "doctorD2r": "unsafe/report-only",
+      "classification": "GENERATED_MUTATION_BLOCKED"
+    },
+    {
+      "family": "SYNTHETIC_BRIDGE_METHODS",
+      "customers": "static overlap signal",
+      "visits": "inventory missing",
+      "doctorD2r": "static overlap signal",
+      "classification": "EVIDENCE_INCOMPLETE"
+    }
+  ],
+  "multiServiceRuntimeRelevantFamilies": 0
+}

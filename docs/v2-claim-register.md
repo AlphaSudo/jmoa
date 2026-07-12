@@ -1,7 +1,7 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after the V2-T
-generated-family runtime relevance release.
+This is the source of truth for public V2 claims after the V2-U matched
+generated-family evidence campaign release.
 
 Closure terms follow:
 
@@ -203,6 +203,36 @@ V2-T admits no family prototype, changes no mutation behavior, and adds no
 runtime performance claim. The V2-S bounded-safe candidate remains a test
 fixture, not a real family admission.
 
+### V2-U Matched Generated-Family Evidence Campaign
+
+V2-U keeps `jmoa:analyze-generated-evidence` report-only and adds a reusable
+startup/warmup/workload diagnostic capture harness:
+
+```text
+scripts/capture-generated-lifecycle.ps1
+```
+
+The analyzer now requires the full static/capture identity tuple before any
+matched generated-family lifecycle result can be treated as evidence:
+
+```text
+artifactSha256
+service
+launchMode
+runtimePolicy
+reducerEngine
+familyRegistryVersion
+scannerVersion
+```
+
+It emits explicit non-admission statuses for missing or mismatched identity,
+including `ARTIFACT_FINGERPRINT_MISSING`, `ARTIFACT_FINGERPRINT_MISMATCH`,
+`SERVICE_MISMATCH`, `REGISTRY_VERSION_MISMATCH`, and
+`LIFECYCLE_CAPTURE_INCOMPLETE`. Current customers, visits, and Doctor D2R
+evidence remains incomplete under this stricter contract, so V2-U admits no
+generated-family prototype, changes no mutation behavior, and adds no runtime
+performance claim.
+
 ### V2-N Runtime Policy Recommendation Engine
 
 V2-N adds a report-only `jmoa:recommend-runtime` Maven goal that:
@@ -323,6 +353,15 @@ transfer of CDS evidence to no-CDS or no-CDS evidence to CDS
 automatic runtime performance claim from V2-O preflight, training, smoke, or screen output
 V2-R generated/application runtime improvement
 V2-R generated/application mutation
+V2-S generated-family runtime improvement
+V2-S generated-family mutation
+V2-T generated-family runtime improvement
+V2-T generated-family mutation
+V2-T generated-family prototype admission
+V2-U generated-family runtime improvement
+V2-U generated-family mutation
+V2-U generated-family prototype admission
+V2-U cross-service generated-family runtime generalization
 ```
 
 Any new runtime performance claim must pass V2-C validation and V2-D attribution.

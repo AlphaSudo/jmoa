@@ -57,6 +57,29 @@ class GeneratedFamilyMatchedEvidenceAnalyzerTest {
     }
 
     @Test
+    void strictV2uIdentityRequiresTheFullTuple() {
+        var report = new GeneratedFamilyMatchedEvidenceAnalyzer().analyze(
+            identity("service", "same-sha", "EXPLODED_BOOT_APP", "NO_CDS_LOW_DIRTY", "raw", "registry-v1", "scanner-v1"),
+            identity("service", "same-sha", "EXPLODED_BOOT_APP", "NO_CDS_LOW_DIRTY", "raw", "registry-v1", ""),
+            inventory(), runtime(), runtime(), runtime());
+
+        assertEquals("IDENTITY_FIELD_MISSING", report.evidenceStatus());
+        assertFalse(report.identityTupleMatch());
+    }
+
+    @Test
+    void strictV2uIdentityRejectsServiceMismatchBeforeLifecycleAdmission() {
+        var report = new GeneratedFamilyMatchedEvidenceAnalyzer().analyze(
+            identity("customers", "same-sha", "EXPLODED_BOOT_APP", "NO_CDS_LOW_DIRTY", "raw", "registry-v1", "scanner-v1"),
+            identity("visits", "same-sha", "EXPLODED_BOOT_APP", "NO_CDS_LOW_DIRTY", "raw", "registry-v1", "scanner-v1"),
+            inventory(), runtime(), runtime(), runtime());
+
+        assertEquals("SERVICE_MISMATCH", report.evidenceStatus());
+        assertFalse(report.identityTupleMatch());
+        assertFalse(report.prototypeAdmitted());
+    }
+
+    @Test
     void writesJsonAndMarkdownAuditCompanions() throws Exception {
         var report = new GeneratedFamilyMatchedEvidenceAnalyzer().analyze(
             "service", "same-sha", "same-sha", inventory(), runtime(), runtime(), runtime());
@@ -64,6 +87,7 @@ class GeneratedFamilyMatchedEvidenceAnalyzerTest {
         new GeneratedFamilyMatchedEvidenceReportWriter().write(temporaryDirectory, report);
 
         assertTrue(Files.isRegularFile(temporaryDirectory.resolve("v2t-generated-family-matched-evidence.json")));
+        assertTrue(Files.isRegularFile(temporaryDirectory.resolve("v2u-generated-family-matched-evidence.json")));
         assertTrue(Files.readString(temporaryDirectory.resolve("v2t-generated-family-matched-evidence.md"))
             .contains("MATCHED_DIAGNOSTIC_EVIDENCE"));
     }
@@ -85,5 +109,18 @@ class GeneratedFamilyMatchedEvidenceAnalyzerTest {
             "SURVIVES_WORKLOAD", "HIGH", List.of(record));
         return new GeneratedClassRuntimeAttribution(
             "test", "now", "class-load.log", "histogram.txt", 1, 1, 0, 256, List.of(family), List.of(record));
+    }
+
+    private static GeneratedFamilyMatchedEvidenceAnalyzer.EvidenceIdentity identity(
+        String service,
+        String artifactSha,
+        String launchMode,
+        String runtimePolicy,
+        String reducerEngine,
+        String registry,
+        String scanner
+    ) {
+        return new GeneratedFamilyMatchedEvidenceAnalyzer.EvidenceIdentity(
+            service, artifactSha, launchMode, runtimePolicy, reducerEngine, registry, scanner);
     }
 }

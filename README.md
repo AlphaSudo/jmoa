@@ -149,12 +149,75 @@ mvn -N jmoa:analyze-generated-evidence `
   '-Djmoa.generatedEvidence.workloadCapture=<workload-runtime-attribution.json>' `
   '-Djmoa.generatedEvidence.staticArtifactSha256=<sha256>' `
   '-Djmoa.generatedEvidence.captureArtifactSha256=<sha256>' `
+  '-Djmoa.generatedEvidence.service=<service>' `
+  '-Djmoa.generatedEvidence.launchMode=<launch-mode>' `
+  '-Djmoa.generatedEvidence.runtimePolicy=<runtime-policy>' `
+  '-Djmoa.generatedEvidence.reducerEngine=<engine>' `
+  '-Djmoa.generatedEvidence.familyRegistryVersion=<family-registry-version>' `
+  '-Djmoa.generatedEvidence.scannerVersion=<scanner-version>' `
   '-Djmoa.generatedEvidence.outputDir=<output-dir>'
 ```
 
 V2-T is diagnostic-only and does not rewrite generated classes, create a
 runtime claim, or treat the V2-S bounded-safe fixture as an empirical family
 admission. See [the V2-T verdict](docs/v2-t/v2t-final-verdict.md).
+
+## V2-U Matched Generated-Family Evidence Campaign
+
+V2-U turns the V2-T contract into a reusable capture campaign. It adds a
+diagnostic lifecycle capture helper and extends `jmoa:analyze-generated-evidence`
+so static inventory and runtime captures must share the same identity tuple:
+
+```text
+artifactSha256
+service
+launchMode
+runtimePolicy
+reducerEngine
+familyRegistryVersion
+scannerVersion
+```
+
+The capture helper records startup, warmup, and workload diagnostics without
+mixing them into claimable V2-C memory pairs:
+
+```powershell
+./scripts/capture-generated-lifecycle.ps1 `
+  -Service '<service>' `
+  -ArtifactPath '<artifact-or-fat-jar>' `
+  -OutputDir '<diagnostic-output-dir>' `
+  -LaunchMode '<launch-mode>' `
+  -RuntimePolicy '<runtime-policy>' `
+  -ReducerEngine '<engine>' `
+  -FamilyRegistryVersion '<family-registry-version>' `
+  -ScannerVersion '<scanner-version>' `
+  -PidFile '<pid-file>' `
+  -WarmupCommand '<warmup-command>' `
+  -WorkloadCommand '<workload-command>'
+```
+
+The analyzer can consume that manifest directly:
+
+```powershell
+mvn -N jmoa:analyze-generated-evidence `
+  '-Djmoa.generatedEvidence.enabled=true' `
+  '-Djmoa.generatedEvidence.inventory=<generated-class-inventory.json>' `
+  '-Djmoa.generatedEvidence.lifecycleManifest=<generated-lifecycle-manifest.json>' `
+  '-Djmoa.generatedEvidence.staticArtifactSha256=<sha256>' `
+  '-Djmoa.generatedEvidence.service=<service>' `
+  '-Djmoa.generatedEvidence.launchMode=<launch-mode>' `
+  '-Djmoa.generatedEvidence.runtimePolicy=<runtime-policy>' `
+  '-Djmoa.generatedEvidence.reducerEngine=<engine>' `
+  '-Djmoa.generatedEvidence.familyRegistryVersion=<family-registry-version>' `
+  '-Djmoa.generatedEvidence.scannerVersion=<scanner-version>' `
+  '-Djmoa.generatedEvidence.outputDir=<output-dir>'
+```
+
+V2-U closes as partial infrastructure for the currently available local
+evidence: customers, visits, and Doctor still lack complete fresh matched
+lifecycle bundles. The phase admits no generated-family prototype, enables no
+generated-class mutation, and adds no runtime performance claim. See
+[the V2-U verdict](docs/v2-u/v2u-final-verdict.md).
 
 ## V2-B Bytecode Size Profiler
 
@@ -434,8 +497,9 @@ mvn -N jmoa:recommend-reducer `
 Historical replay passes 14/14 audited cases: V2-I, V2-K, and V2-L remain
 confirmed in their exact scopes; V2-H remains blocked; pre-runtime Doctor
 remains artifact-only; V2-Q application confirmation failure remains blocked;
-V2-R/V2-S application/generated discovery decisions remain report-only. V2-M/V2-R/V2-S
-does not mutate bytecode or add a performance claim.
+V2-R/V2-S/V2-T/V2-U application/generated discovery decisions remain
+report-only. V2-M/V2-R/V2-S/V2-T/V2-U do not mutate bytecode or add a
+performance claim.
 
 See:
 
@@ -574,6 +638,21 @@ See:
 - [V2-R Application Surface Census](docs/v2-r/v2r-application-surface-census.md)
 - [V2-R Candidate Ranking](docs/v2-r/v2r-candidate-ranking.md)
 - [V2-R Final Verdict](docs/v2-r/v2r-final-verdict.md)
+
+## V2-U Matched Generated-Family Campaign
+
+V2-U keeps generated-family optimization in evidence-gathering mode. It adds
+the startup/warmup/workload lifecycle capture harness, requires the full
+artifact/service/runtime/reducer/family/scanner identity tuple, and records the
+current customers, visits, and Doctor gaps without admitting a prototype.
+
+See:
+
+- [V2-U Phase Boundary](docs/v2-u/v2u-phase-open.md)
+- [V2-U Capture Harness](docs/v2-u/v2u-generated-capture-harness.md)
+- [V2-U Lifecycle Reconciliation](docs/v2-u/v2u-lifecycle-reconciliation.md)
+- [V2-U Prototype Admission](docs/v2-u/v2u-prototype-admission.md)
+- [V2-U Final Verdict](docs/v2-u/v2u-final-verdict.md)
 
 ## Safety
 
