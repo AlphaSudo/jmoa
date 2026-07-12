@@ -1,0 +1,11 @@
+{
+  "metadataVersion": "v2v-final-verdict",
+  "closureType": "PARTIAL_INFRASTRUCTURE",
+  "completeBundles": 0,
+  "targetBundles": 3,
+  "prototypeAdmitted": false,
+  "candidateFamily": null,
+  "mutationEnabled": false,
+  "runtimeClaimAdded": false,
+  "nextPhase": "V2-W only if exactly one bounded generated-family candidate is admitted; otherwise V2-X closure."
+}

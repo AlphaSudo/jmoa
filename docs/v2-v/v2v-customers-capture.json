@@ -1,0 +1,9 @@
+{
+  "metadataVersion": "v2v-customers-capture",
+  "target": "customers",
+  "historicalLead": {"runtimeOnlyLambdaImplementations": 8, "histogramBytes": 813664},
+  "requiredStages": ["startup", "warmup", "workload"],
+  "currentStatus": "EVIDENCE_INCOMPLETE",
+  "prototypeAdmitted": false,
+  "runtimeClaimAdded": false
+}

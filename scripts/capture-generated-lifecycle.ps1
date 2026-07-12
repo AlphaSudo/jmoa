@@ -12,12 +12,12 @@ param(
     [string]$RuntimePolicy = "DIAGNOSTIC",
     [string]$ReducerEngine = "none",
     [string]$FamilyRegistryVersion = "generated-family-registry-v2u",
-    [string]$ScannerVersion = "v2u-generated-lifecycle-capture",
+    [string]$ScannerVersion = "v2v-generated-lifecycle-capture",
 
     [string]$LaunchCommand = "",
     [string]$WarmupCommand = "",
     [string]$WorkloadCommand = "",
-    [int]$Pid = 0,
+    [int]$TargetPid = 0,
     [string]$PidFile = "",
     [string]$ImageId = "",
     [string]$ContainerId = "",
@@ -25,7 +25,12 @@ param(
     [string]$CgroupMemoryCurrentPath = "",
     [string]$JcmdPath = "jcmd",
     [int]$StartupDelaySeconds = 10,
-    [int]$PidWaitSeconds = 60
+    [int]$PidWaitSeconds = 60,
+    [string]$ExpectedArtifactSha256 = "",
+    [string]$ArtifactOriginPath = "",
+    [switch]$PreflightOnly,
+    [switch]$ReuseOutput,
+    [switch]$RequireArtifactOriginProof
 )
 
 $ErrorActionPreference = "Stop"
@@ -36,6 +41,99 @@ function Get-JmoaSha256 {
         throw "Artifact path does not exist: $Path"
     }
     return (Get-FileHash -Algorithm SHA256 -LiteralPath $Path).Hash.ToUpperInvariant()
+}
+
+function Write-JmoaPreflight {
+    param([Parameter(Mandatory)][string]$Status, [Parameter(Mandatory)][array]$Checks)
+    $record = [ordered]@{
+        metadataVersion = 'v2v-generated-capture-preflight'
+        generatedAt = (Get-Date).ToUniversalTime().ToString('o')
+        status = $Status
+        service = $Service
+        artifactPath = if (Test-Path -LiteralPath $ArtifactPath -PathType Leaf) { (Resolve-Path -LiteralPath $ArtifactPath).Path } else { $ArtifactPath }
+        artifactSha256 = if (Test-Path -LiteralPath $ArtifactPath -PathType Leaf) { Get-JmoaSha256 -Path $ArtifactPath } else { '' }
+        expectedArtifactSha256 = $ExpectedArtifactSha256
+        launchMode = $LaunchMode
+        runtimePolicy = $RuntimePolicy
+        reducerEngine = $ReducerEngine
+        familyRegistryVersion = $FamilyRegistryVersion
+        scannerVersion = $ScannerVersion
+        outputDir = $OutputDir
+        outputReuse = [bool]$ReuseOutput
+        checks = $Checks
+        diagnosticOnly = $true
+        boundaries = @(
+            'Preflight does not prove runtime class origin until a PID/container is available.',
+            'A READY preflight permits diagnostic capture only; it does not create V2-C memory evidence.'
+        )
+    }
+    $record | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath (Join-Path $OutputDir 'generated-capture-preflight.json') -Encoding utf8
+    $markdown = @"
+# V2-V Generated Capture Preflight
+
+- Status: ``$Status``
+- Service: ``$Service``
+- Artifact SHA-256: ``$($record.artifactSha256)``
+- Launch mode: ``$LaunchMode``
+- Runtime policy: ``$RuntimePolicy``
+- Reducer engine: ``$ReducerEngine``
+- Output reuse: ``$($record.outputReuse)``
+
+| Check | Status | Detail |
+| --- | --- | --- |
+$(($Checks | ForEach-Object { "| $($_.name) | ``$($_.status)`` | $($_.detail) |" }) -join "`n")
+
+This record gates V2-V diagnostic capture. It is not a performance claim.
+"@
+    $markdown | Set-Content -LiteralPath (Join-Path $OutputDir 'generated-capture-preflight.md') -Encoding utf8
+    return $record
+}
+
+function Get-JmoaPreflightChecks {
+    $checks = @()
+    $artifactExists = Test-Path -LiteralPath $ArtifactPath -PathType Leaf
+    $checks += [ordered]@{ name = 'artifact'; status = if ($artifactExists) { 'PASS' } else { 'BLOCK_ARTIFACT_MISSING' }; detail = $ArtifactPath }
+    $identityFields = @{
+        service = $Service
+        launchMode = $LaunchMode
+        runtimePolicy = $RuntimePolicy
+        reducerEngine = $ReducerEngine
+        familyRegistryVersion = $FamilyRegistryVersion
+        scannerVersion = $ScannerVersion
+    }
+    foreach ($field in $identityFields.Keys) {
+        $value = [string]$identityFields[$field]
+        $checks += [ordered]@{ name = $field; status = if (-not [string]::IsNullOrWhiteSpace($value) -and $value -ne 'UNKNOWN') { 'PASS' } else { 'BLOCK_IDENTITY_INCOMPLETE' }; detail = if ($value) { $value } else { 'missing' } }
+    }
+    if ($artifactExists -and -not [string]::IsNullOrWhiteSpace($ExpectedArtifactSha256)) {
+        $actual = Get-JmoaSha256 -Path $ArtifactPath
+        $checks += [ordered]@{ name = 'artifactSha256'; status = if ($actual -eq $ExpectedArtifactSha256.ToUpperInvariant()) { 'PASS' } else { 'BLOCK_ARTIFACT_FINGERPRINT_MISMATCH' }; detail = $actual }
+    } else {
+        $checks += [ordered]@{ name = 'artifactSha256'; status = if ($artifactExists) { 'PASS_COMPUTED' } else { 'BLOCK_ARTIFACT_MISSING' }; detail = 'computed after artifact check' }
+    }
+    $outputExists = Test-Path -LiteralPath $OutputDir
+    $outputEntries = if ($outputExists) { @(Get-ChildItem -LiteralPath $OutputDir -Force -ErrorAction SilentlyContinue) } else { @() }
+    $checks += [ordered]@{ name = 'outputDir'; status = if (-not $outputExists -or $ReuseOutput -or $outputEntries.Count -eq 0) { 'PASS' } else { 'BLOCK_OUTPUT_NOT_CLEAN' }; detail = "$($outputEntries.Count) existing entries" }
+    return $checks
+}
+
+function Get-JmoaArtifactOriginEvidence {
+    param([int]$TargetPid)
+    if (-not [string]::IsNullOrWhiteSpace($ContainerId)) {
+        return [ordered]@{ status = if (-not [string]::IsNullOrWhiteSpace($ImageId)) { 'CONTAINER_IMAGE_DECLARED' } else { 'CONTAINER_ORIGIN_UNPROVEN' }; detail = "container=$ContainerId image=$ImageId" }
+    }
+    if ($TargetPid -le 0) {
+        return [ordered]@{ status = 'ORIGIN_UNPROVEN'; detail = 'No target PID was available.' }
+    }
+    try {
+        $process = Get-CimInstance Win32_Process -Filter "ProcessId=$TargetPid" -ErrorAction Stop
+        $commandLine = [string]$process.CommandLine
+        $expected = @($ArtifactPath, $ArtifactOriginPath, (Split-Path -Leaf $ArtifactPath)) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+        $matched = $expected | Where-Object { $commandLine.IndexOf($_, [System.StringComparison]::OrdinalIgnoreCase) -ge 0 }
+        return [ordered]@{ status = if ($matched) { 'VERIFIED' } else { 'ORIGIN_UNPROVEN' }; detail = $commandLine }
+    } catch {
+        return [ordered]@{ status = 'ORIGIN_UNPROVEN'; detail = $_.Exception.Message }
+    }
 }
 
 function Invoke-JmoaShellCommand {
@@ -67,11 +165,11 @@ function Invoke-JmoaShellCommand {
 }
 
 function Wait-JmoaPid {
-    if ($Pid -gt 0) {
-        return $Pid
+    if ($TargetPid -gt 0) {
+        return $TargetPid
     }
     if ([string]::IsNullOrWhiteSpace($PidFile)) {
-        throw "Provide -Pid or -PidFile. The harness needs the target JVM PID for jcmd captures."
+        throw "Provide -TargetPid or -PidFile. The harness needs the target JVM PID for jcmd captures."
     }
     $deadline = (Get-Date).AddSeconds($PidWaitSeconds)
     while ((Get-Date) -lt $deadline) {
@@ -163,7 +261,21 @@ function Capture-JmoaStage {
     }
 }
 
-New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
+if (-not (Test-Path -LiteralPath $OutputDir)) {
+    New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
+}
+$preflightChecks = Get-JmoaPreflightChecks
+$preflightBlocked = @($preflightChecks | Where-Object { $_.status -like 'BLOCK_*' }).Count -gt 0
+$preflightStatus = if ($preflightBlocked) { 'BLOCKED' } else { 'READY' }
+$preflight = Write-JmoaPreflight -Status $preflightStatus -Checks $preflightChecks
+if ($PreflightOnly) {
+    if ($preflightBlocked) { exit 2 }
+    Write-Host "V2-V generated capture preflight passed: $OutputDir"
+    exit 0
+}
+if ($preflightBlocked) {
+    throw "V2-V capture preflight blocked. See $(Join-Path $OutputDir 'generated-capture-preflight.md')."
+}
 $artifactSha = Get-JmoaSha256 -Path $ArtifactPath
 $launchRecord = Invoke-JmoaShellCommand -Command $LaunchCommand `
     -StdoutPath (Join-Path $OutputDir "launch.stdout.txt") `
@@ -172,6 +284,10 @@ if (-not [string]::IsNullOrWhiteSpace($LaunchCommand)) {
     Start-Sleep -Seconds $StartupDelaySeconds
 }
 $targetPid = Wait-JmoaPid
+$originEvidence = Get-JmoaArtifactOriginEvidence -TargetPid $targetPid
+if ($RequireArtifactOriginProof -and $originEvidence.status -notin @('VERIFIED', 'CONTAINER_IMAGE_DECLARED')) {
+    throw "V2-V artifact origin proof failed: $($originEvidence.detail)"
+}
 
 $startupStage = Capture-JmoaStage -TargetPid $targetPid -Stage "startup" -BeforeCapture $null
 $warmupRecord = $null
@@ -188,7 +304,7 @@ $workloadStage = Capture-JmoaStage -TargetPid $targetPid -Stage "workload" -Befo
 }
 
 $manifest = [ordered]@{
-    metadataVersion = "v2u-generated-lifecycle-manifest"
+    metadataVersion = "v2v-generated-lifecycle-manifest"
     generatedAt = (Get-Date).ToUniversalTime().ToString("o")
     service = $Service
     artifactPath = (Resolve-Path -LiteralPath $ArtifactPath).Path
@@ -196,6 +312,7 @@ $manifest = [ordered]@{
     imageId = $ImageId
     containerId = $ContainerId
     pid = $targetPid
+    artifactOrigin = $originEvidence
     launchMode = $LaunchMode
     runtimePolicy = $RuntimePolicy
     reducerEngine = $ReducerEngine

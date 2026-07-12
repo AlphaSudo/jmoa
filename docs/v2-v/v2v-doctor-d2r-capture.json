@@ -1,0 +1,11 @@
+{
+  "metadataVersion": "v2v-doctor-d2r-capture",
+  "target": "doctor-d2r",
+  "launchMode": "SPRING_BOOT_FAT_JAR",
+  "runtimePolicy": "CDS",
+  "requiredIdentityExtensions": ["cdsArchiveSha256", "imageId", "cdsMappingProof"],
+  "requiredStages": ["startup", "warmup", "workload"],
+  "currentStatus": "EVIDENCE_INCOMPLETE",
+  "v2kMemoryPairsSubstitute": false,
+  "prototypeAdmitted": false
+}

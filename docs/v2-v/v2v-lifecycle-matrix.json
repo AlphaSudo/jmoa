@@ -1,0 +1,6 @@
+{
+  "metadataVersion": "v2v-lifecycle-matrix",
+  "matchedBundlesOnly": true,
+  "columns": ["packagedClasses", "startupLoaded", "warmupNew", "workloadNew", "runtimeGeneratedStartup", "runtimeGeneratedWarmup", "runtimeGeneratedWorkload", "histogramPersistentClasses", "histogramPersistentBytes"],
+  "currentStatus": "WAITING_FOR_MATCHED_BUNDLES"
+}

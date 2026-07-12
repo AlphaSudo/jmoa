@@ -654,6 +654,33 @@ See:
 - [V2-U Prototype Admission](docs/v2-u/v2u-prototype-admission.md)
 - [V2-U Final Verdict](docs/v2-u/v2u-final-verdict.md)
 
+## V2-V Fresh Matched Generated-Family Capture Campaign
+
+V2-V makes the V2-U campaign executable. It adds capture preflight, a
+standalone raw-stage attribution goal, strict bundle validation, lifecycle and
+cross-service family matrices, matched-only ROI ranking, and a one-candidate
+admission gate.
+
+```powershell
+./scripts/capture-generated-lifecycle.ps1 `
+  -Service '<service>' -ArtifactPath '<artifact>' -OutputDir '<diagnostic-dir>' `
+  -LaunchMode '<launch-mode>' -RuntimePolicy '<runtime-policy>' `
+  -ReducerEngine '<engine>' -PidFile '<pid-file>' `
+  -WarmupCommand '<warmup>' -WorkloadCommand '<workload>'
+
+./scripts/run-generated-lifecycle-attribution.ps1 `
+  -LifecycleManifest '<diagnostic-dir>/generated-lifecycle-manifest.json' `
+  -StaticInventory '<generated-class-inventory.json>'
+
+./scripts/validate-generated-capture-bundles.ps1 `
+  -CampaignManifest 'docs/v2-v/v2v-campaign-manifest.example.json'
+```
+
+The current V2-V closure is `PARTIAL_INFRASTRUCTURE`: no complete fresh
+customers, visits, and Doctor D2R bundle is claimed, no generated-family
+prototype is admitted, and no runtime claim is added. See the
+[V2-V final verdict](docs/v2-v/v2v-final-verdict.md).
+
 ## Safety
 
 Before publishing or tagging a release, run:

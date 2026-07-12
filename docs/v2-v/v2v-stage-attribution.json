@@ -1,0 +1,8 @@
+{
+  "metadataVersion": "v2v-generated-lifecycle-attribution",
+  "requiredStages": ["startup", "warmup", "workload"],
+  "requiredInputs": ["class-load.log", "class-histogram.txt"],
+  "goal": "jmoa:analyze-generated-runtime",
+  "failureStatus": "BLOCKED_INPUT_MISSING",
+  "diagnosticOnly": true
+}

@@ -1,6 +1,6 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-U are closed, confirmed, or explicitly bounded within
+Status: V2-A through V2-V are closed, confirmed, or explicitly bounded within
 their declared closure types. V2-P adds a report-only end-to-end workflow
 coordinator around the existing V2-M, V2-N, V2-O, V2-C, and V2-D gates; V2-Q
 adds application-class admission with runtime promotion blocked by confirmation;
@@ -19,8 +19,8 @@ V2-L public visits-service confirmation, the V2-M reducer admission engine,
 the V2-N runtime-policy recommendation engine, the V2-O runtime-policy
 automation helpers, the V2-P workflow spine, the V2-Q application admission
 result, V2-R ROI discovery, V2-S generated-family runtime relevance, V2-T
-generated-family matched-evidence completion, and V2-U matched lifecycle
-campaign completion.
+generated-family matched-evidence completion, V2-U matched lifecycle
+campaign infrastructure, and V2-V fresh matched-capture execution tooling.
 
 ## Closure Taxonomy
 
@@ -57,6 +57,7 @@ claims.
 | V2-S | `CLOSED_INFRASTRUCTURE` | Generated-family registry, static/runtime reconciliation, safety matrix, ROI scoring, and recommendation replay; no family mutation admitted |
 | V2-T | `PARTIAL_INFRASTRUCTURE` | SHA-gated generated-family evidence join, exclusive census, lifecycle model, and recommendation ingestion; no complete matched capture or family admission |
 | V2-U | `PARTIAL_INFRASTRUCTURE` | Matched generated-family lifecycle capture harness, full identity tuple enforcement, per-service evidence-gap reports, cross-service matrix, and no family admission |
+| V2-V | `PARTIAL_INFRASTRUCTURE` | Fresh matched generated-family campaign execution: preflight, automatic stage attribution, bundle validation, lifecycle/ROI reports, and no family admission; fresh complete bundles remain outstanding |
 
 ## Current Foundation
 
@@ -78,6 +79,7 @@ V2-N = which exact runtime policy is confirmed, screen-required, diagnostic-only
 V2-O = how do we prepare and capture evidence for that policy without bypassing V2-C/V2-D?
 V2-P = how do we coordinate the allowed workflow without flattening gates or declaring claims?
 V2-Q = can packaged application classes be admitted safely, and do they survive confirmation?
+V2-V = can the V2-U harness execute and validate fresh matched generated-family bundles across customers, visits, and Doctor?
 V2-R = where is the next meaningful application/generated ROI surface, before mutation?
 V2-S = which generated family is actually runtime-relevant and safe enough to deserve a future prototype?
 V2-T = do the static artifact and startup/warmup/workload diagnostics actually describe the same generated-family surface?

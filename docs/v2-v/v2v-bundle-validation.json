@@ -1,0 +1,8 @@
+{
+  "metadataVersion": "v2v-bundle-validation",
+  "requiredOutcome": "MATCHED_DIAGNOSTIC_EVIDENCE",
+  "currentOutcome": "EVIDENCE_INCOMPLETE",
+  "targets": ["customers", "visits", "doctor-d2r"],
+  "prototypeAdmitted": false,
+  "runtimeClaimAdded": false
+}

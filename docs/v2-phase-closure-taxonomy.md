@@ -42,6 +42,7 @@ runtime-confirmed milestones from being described as the same kind of closure.
 | V2-S | `CLOSED_INFRASTRUCTURE` | Generated-family runtime relevance/safety/ROI discovery only; no family prototype admitted, mutation, or runtime claim |
 | V2-T | `PARTIAL_INFRASTRUCTURE` | SHA-gated static/runtime reconciliation and lifecycle evidence model; no complete matched service capture or family admission |
 | V2-U | `PARTIAL_INFRASTRUCTURE` | Generated lifecycle capture harness and full identity tuple enforcement; current services still lack complete matched bundles, so no prototype admission or runtime claim |
+| V2-V | `PARTIAL_INFRASTRUCTURE` | Fresh matched-capture execution tooling, preflight, automatic stage attribution, bundle validation, lifecycle/ROI/admission reports; no complete fresh bundle or family admission yet |
 
 V2-L also uses the descriptive phase label
 `CLOSED_CONFIRMED_PUBLIC_SECOND_RUNTIME`. The official closure type remains

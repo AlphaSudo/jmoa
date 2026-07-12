@@ -1,0 +1,37 @@
+{
+  "metadataVersion": "v2v-campaign-manifest",
+  "campaign": "fresh-matched-generated-family-capture",
+  "diagnosticOnly": true,
+  "targets": [
+    {
+      "name": "customers",
+      "service": "Spring PetClinic customers-service",
+      "launchMode": "EXPLODED_BOOT_APP",
+      "runtimePolicy": "NO_CDS_LOW_DIRTY",
+      "reducerEngine": "raw",
+      "staticInventory": "target/v2v-campaign/customers/generated-class-inventory.json",
+      "lifecycleManifest": "target/v2v-campaign/customers/generated-lifecycle-manifest.json",
+      "matchedReport": "target/v2v-campaign/customers/v2u-generated-family-matched-evidence.json"
+    },
+    {
+      "name": "visits",
+      "service": "Spring PetClinic visits-service",
+      "launchMode": "EXPLODED_BOOT_APP",
+      "runtimePolicy": "NO_CDS_LOW_DIRTY",
+      "reducerEngine": "raw",
+      "staticInventory": "target/v2v-campaign/visits/generated-class-inventory.json",
+      "lifecycleManifest": "target/v2v-campaign/visits/generated-lifecycle-manifest.json",
+      "matchedReport": "target/v2v-campaign/visits/v2u-generated-family-matched-evidence.json"
+    },
+    {
+      "name": "doctor-d2r",
+      "service": "Doctor D2R",
+      "launchMode": "SPRING_BOOT_FAT_JAR",
+      "runtimePolicy": "CDS",
+      "reducerEngine": "raw",
+      "staticInventory": "target/v2v-campaign/doctor-d2r/generated-class-inventory.json",
+      "lifecycleManifest": "target/v2v-campaign/doctor-d2r/generated-lifecycle-manifest.json",
+      "matchedReport": "target/v2v-campaign/doctor-d2r/v2u-generated-family-matched-evidence.json"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "metadataVersion": "v2v-cross-service-family-matrix",
+  "matchedBundlesOnly": true,
+  "classifications": ["SINGLE_SERVICE_RUNTIME_RELEVANT", "MULTI_SERVICE_RUNTIME_RELEVANT", "MULTI_PROTOCOL_RUNTIME_RELEVANT", "STATIC_ONLY_IN_MATCHED_CAPTURES", "SAFETY_BLOCKED_RUNTIME_RELEVANT", "EVIDENCE_INCOMPLETE"],
+  "currentStatus": "EVIDENCE_INCOMPLETE",
+  "prototypeAdmitted": false
+}
