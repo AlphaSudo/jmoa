@@ -381,6 +381,9 @@ V2-U generated-family runtime improvement
 V2-U generated-family mutation
 V2-U generated-family prototype admission
 V2-U cross-service generated-family runtime generalization
+V2-W generated-family runtime improvement
+V2-W generated-family mutation
+V2-W generated-family prototype admission
 ```
 
 Any new runtime performance claim must pass V2-C validation and V2-D attribution.

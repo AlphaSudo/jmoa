@@ -22,6 +22,7 @@ param(
     [string]$ImageId = "",
     [string]$ContainerId = "",
     [string]$ClassLoadLogPath = "",
+    [string]$ContainerClassLoadLogPath = "",
     [string]$CgroupMemoryCurrentPath = "",
     [string]$JcmdPath = "jcmd",
     [int]$StartupDelaySeconds = 10,
@@ -192,7 +193,12 @@ function Invoke-JcmdCapture {
     )
     $errorPath = "$OutputPath.err"
     try {
-        & $JcmdPath $TargetPid $Command *> $OutputPath
+        if (-not [string]::IsNullOrWhiteSpace($ContainerId)) {
+            $arguments = @($TargetPid) + @($Command -split '\s+')
+            & podman exec -e JAVA_TOOL_OPTIONS= $ContainerId $JcmdPath @arguments *> $OutputPath
+        } else {
+            & $JcmdPath $TargetPid $Command *> $OutputPath
+        }
         return @{ command = $Command; output = $OutputPath; error = ""; exitCode = $LASTEXITCODE }
     } catch {
         Set-Content -LiteralPath $errorPath -Value $_.Exception.Message -Encoding UTF8
@@ -202,6 +208,16 @@ function Invoke-JcmdCapture {
 
 function Copy-JmoaClassLoadLog {
     param([string]$TargetPath)
+    if (-not [string]::IsNullOrWhiteSpace($ContainerId) -and
+        -not [string]::IsNullOrWhiteSpace($ContainerClassLoadLogPath)) {
+        try {
+            & podman exec $ContainerId sh -c "cat '$ContainerClassLoadLogPath'" *> $TargetPath
+            return $LASTEXITCODE -eq 0
+        } catch {
+            Set-Content -LiteralPath $TargetPath -Value "" -Encoding UTF8
+            return $false
+        }
+    }
     if ([string]::IsNullOrWhiteSpace($ClassLoadLogPath) -or -not (Test-Path -LiteralPath $ClassLoadLogPath -PathType Leaf)) {
         Set-Content -LiteralPath $TargetPath -Value "" -Encoding UTF8
         return $false
@@ -212,6 +228,20 @@ function Copy-JmoaClassLoadLog {
 
 function Read-JmoaMemoryCurrent {
     param([string]$TargetPath)
+    if (-not [string]::IsNullOrWhiteSpace($ContainerId)) {
+        try {
+            $fullId = (& podman inspect $ContainerId --format "{{.Id}}" 2>$null | Select-Object -First 1).Trim()
+            $path = (& podman machine ssh "find /sys/fs/cgroup -path '*$fullId*' -type f -name memory.current 2>/dev/null | head -n1" 2>$null | Select-Object -First 1).Trim()
+            if (-not [string]::IsNullOrWhiteSpace($path)) {
+                $value = (& podman machine ssh "cat '$path'" 2>$null | Select-Object -First 1).Trim()
+                Set-Content -LiteralPath $TargetPath -Value $value -Encoding ASCII
+                return $true
+            }
+        } catch {
+        }
+        Set-Content -LiteralPath $TargetPath -Value "" -Encoding UTF8
+        return $false
+    }
     if ([string]::IsNullOrWhiteSpace($CgroupMemoryCurrentPath) -or -not (Test-Path -LiteralPath $CgroupMemoryCurrentPath -PathType Leaf)) {
         Set-Content -LiteralPath $TargetPath -Value "" -Encoding UTF8
         return $false

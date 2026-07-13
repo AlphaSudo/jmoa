@@ -780,3 +780,15 @@ fat-JAR/CDS, startup, all-PetClinic, or universal Spring Boot claim.
 V2-M adds no runtime result and changes no reducer behavior. A confirmed
 recommendation is valid only for an exact evidence-backed service, launch mode,
 and runtime policy. Any different protocol returns to screen/confirmation gates.
+
+## V2-W Matched Capture Execution
+
+V2-W executed the frozen generated-family campaign against exact Customers,
+Visits, and Doctor D2R artifacts. All three startup/warmup/workload bundles
+reached `MATCHED_DIAGNOSTIC_EVIDENCE`, spanning exploded Boot/no-CDS and
+fat-JAR/CDS. No generated-family prototype was admitted: lambda is the existing
+v1 domain, Spring Data and compiler-generated surfaces lack a bounded safe
+transform, and AOT/proxy families remain safety blocked. The generated mutation
+track is `CLOSED_DISCOVERY_ONLY_FOR_V2`.
+
+See [V2-W Final Verdict](v2-w/v2w-final-verdict.md).

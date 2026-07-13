@@ -1,0 +1,27 @@
+{
+  "metadataVersion": "v2w-static-inventory-summary",
+  "scannerVersion": "v2-a1-inventory",
+  "targets": [
+    {
+      "name": "customers",
+      "classesScanned": 54310,
+      "generatedLikeClasses": 16426,
+      "classfileBytes": 189387514,
+      "familyCount": 7
+    },
+    {
+      "name": "visits",
+      "classesScanned": 54184,
+      "generatedLikeClasses": 16438,
+      "classfileBytes": 189200297,
+      "familyCount": 7
+    },
+    {
+      "name": "doctor-d2r",
+      "classesScanned": 59424,
+      "generatedLikeClasses": 19036,
+      "classfileBytes": 208019748,
+      "familyCount": 11
+    }
+  ]
+}

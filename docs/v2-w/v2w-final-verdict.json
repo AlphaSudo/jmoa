@@ -1,0 +1,12 @@
+{
+  "metadataVersion": "v2w-final-verdict",
+  "closureType": "GENERATED_EVIDENCE_COMPLETE",
+  "completeBundles": 3,
+  "targetBundles": 3,
+  "prototypeAdmitted": false,
+  "candidateFamily": null,
+  "generatedMutationTrack": "CLOSED_DISCOVERY_ONLY_FOR_V2",
+  "runtimeClaimAdded": false,
+  "mutationEnabled": false,
+  "recommendedTag": "v0.17.0-v2w-generated-evidence-complete"
+}

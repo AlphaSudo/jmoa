@@ -1,0 +1,27 @@
+{
+  "metadataVersion": "v2w-lifecycle-results",
+  "matchedBundles": 3,
+  "targetBundles": 3,
+  "targets": [
+    {
+      "name": "customers",
+      "status": "MATCHED_DIAGNOSTIC_EVIDENCE",
+      "identityTupleMatch": true
+    },
+    {
+      "name": "visits",
+      "status": "MATCHED_DIAGNOSTIC_EVIDENCE",
+      "identityTupleMatch": true
+    },
+    {
+      "name": "doctor-d2r",
+      "status": "MATCHED_DIAGNOSTIC_EVIDENCE",
+      "identityTupleMatch": true
+    }
+  ],
+  "conclusions": [
+    "Lambda runtime generation reproduced across all three services and remains the existing v1 domain.",
+    "Spring Data generated helpers are runtime relevant across services and protocols but have no bounded safe transform.",
+    "Spring AOT and proxy families are runtime relevant but safety blocked."
+  ]
+}

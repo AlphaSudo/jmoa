@@ -1,0 +1,12 @@
+{
+  "metadataVersion": "v2w-phase-open",
+  "objective": "Execute real matched generated-family lifecycle captures and close the V2 generated-mutation track.",
+  "targets": [
+    "customers",
+    "visits",
+    "doctor-d2r"
+  ],
+  "contractsFrozen": true,
+  "mutationEnabled": false,
+  "runtimeClaimAdded": false
+}
