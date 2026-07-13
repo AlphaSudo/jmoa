@@ -1,11 +1,30 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after the V2-U matched
-generated-family evidence campaign release.
+This is the source of truth for public V2 claims after V2-W and the V2 final
+release audit.
 
 Closure terms follow:
 
 - [V2 Phase Closure Taxonomy](v2-phase-closure-taxonomy.md)
+
+## Final Product Gate
+
+The final direct public `B0 -> V2` customers-service gate is not confirmed.
+
+```text
+comparison: B0 baseline vs final V2 product artifact
+valid runs: 6/6
+paired wins: 1/3
+median PSS delta: +274 KB
+median Private_Dirty delta: +464 KB
+median memory.current delta: +225,280 bytes
+decision: RELEASE_PERFORMANCE_GATE_FAILED
+```
+
+The register therefore does not allow a broad final V2-over-baseline public
+performance headline. Historical `B0 -> V1` and incremental `V1 -> V2` claims
+remain valid within their exact protocols, but they are not additive proof of
+the final direct `B0 -> V2` product result.
 
 ## Confirmed Runtime Claims
 
@@ -384,6 +403,9 @@ V2-U cross-service generated-family runtime generalization
 V2-W generated-family runtime improvement
 V2-W generated-family mutation
 V2-W generated-family prototype admission
+final V2 public B0 -> V2 performance win
+substantial final V2 public baseline-over-product win
+addition of B0 -> V1 and V1 -> V2 medians as a final V2 claim
 ```
 
 Any new runtime performance claim must pass V2-C validation and V2-D attribution.

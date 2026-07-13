@@ -1,0 +1,14 @@
+{
+  "metadataVersion": "v2-final-claim-matrix",
+  "claims": [
+    {"claim": "JMOA V2 includes a raw LVT/LVTT reducer", "status": "ALLOWED"},
+    {"claim": "V2 raw reducer improves customers over full-P2", "status": "ALLOWED_NARROW"},
+    {"claim": "V2 raw reducer improves visits baseline", "status": "ALLOWED_NARROW"},
+    {"claim": "V2 raw reducer improves Doctor D2", "status": "ALLOWED_PRIVATE_NARROW"},
+    {"claim": "Final V2 product substantially beats customers baseline", "status": "BLOCKED", "blocker": "FINAL_PUBLIC_B0_V2_NOT_CONFIRMED"},
+    {"claim": "V2 improves all Spring Boot services", "status": "FORBIDDEN"},
+    {"claim": "V2 optimizes generated/proxy classes", "status": "FORBIDDEN"},
+    {"claim": "V2 improves startup", "status": "FORBIDDEN"}
+  ]
+}
+

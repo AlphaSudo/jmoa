@@ -1,0 +1,31 @@
+{
+  "metadataVersion": "v2-final-release-scope",
+  "status": "SCOPE_FROZEN",
+  "inScope": [
+    "V1/full-P2 lambda and adapter optimization",
+    "raw LVT/LVTT dependency reducer",
+    "raw byte-preservation auditor and reducer manifest v2",
+    "V2-C evidence validation and paired confirmation",
+    "V2-D memory attribution",
+    "reducer recommendation",
+    "runtime-policy recommendation",
+    "runtime preflight and workflow helpers",
+    "generated-family discovery and safety infrastructure"
+  ],
+  "outOfScope": [
+    "generated-family mutation",
+    "proxy rewriting",
+    "Spring AOT rewriting",
+    "large-method splitting",
+    "constant-pool reduction",
+    "BootstrapMethods reduction",
+    "annotation stripping",
+    "StackMapTable stripping",
+    "LineNumberTable stripping",
+    "universal Spring Boot memory-win claims",
+    "startup-win claims",
+    "automatic runtime policy mutation"
+  ],
+  "scopeRule": "No new V2 optimizer/research phases before v2.0.0-rc1; fix release blockers only."
+}
+

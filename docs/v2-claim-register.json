@@ -1,7 +1,20 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2U_MATCHED_GENERATED_EVIDENCE_CAMPAIGN",
+  "status": "CURRENT_AFTER_V2W_AND_FINAL_AUDIT",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
+  "finalProductGate": {
+    "id": "final-public-b0-v2",
+    "comparison": "B0 baseline vs final V2 product artifact",
+    "service": "Spring PetClinic customers-service",
+    "validRuns": "6/6",
+    "pairedWins": "1/3",
+    "medianPssDeltaKb": 274,
+    "medianPrivateDirtyDeltaKb": 464,
+    "medianMemoryCurrentDeltaBytes": 225280,
+    "decision": "RELEASE_PERFORMANCE_GATE_FAILED",
+    "claimAllowed": false,
+    "claimBoundary": "Confirmed B0 -> V1 and V1 -> V2 results remain valid in scope but are not additive evidence for a final direct B0 -> V2 product claim."
+  },
   "confirmedRuntimeClaims": [
     {
       "id": "petclinic-full-p2-no-cds",
@@ -310,6 +323,9 @@
     "V2-V cross-service generated-family runtime generalization",
     "V2-W generated-family runtime improvement",
     "V2-W generated-family mutation",
-    "V2-W generated-family prototype admission"
+    "V2-W generated-family prototype admission",
+    "final V2 public B0 -> V2 performance win",
+    "substantial final V2 public baseline-over-product win",
+    "addition of B0 -> V1 and V1 -> V2 medians as a final V2 claim"
   ]
 }

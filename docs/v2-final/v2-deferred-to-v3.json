@@ -1,0 +1,18 @@
+{
+  "metadataVersion": "v2-final-deferred-to-v3",
+  "items": [
+    "generated-family mutation",
+    "Spring AOT helper rewriting",
+    "proxy rewriting",
+    "application-class runtime promotion",
+    "large-method splitting",
+    "constant-pool reduction",
+    "BootstrapMethods rewriting",
+    "metadata stripping beyond LVT/LVTT",
+    "full JFR/async-profiler/JOL attribution",
+    "broad AppCDS/Leyden/Kubernetes/FAST_STARTUP automation",
+    "dashboard",
+    "broad benchmark matrix"
+  ]
+}
+

@@ -158,6 +158,12 @@
       "milestone": "V2-V",
       "closureType": "PARTIAL_INFRASTRUCTURE",
       "claimBoundary": "Fresh matched generated-family capture execution, stage attribution, lifecycle/ROI/admission reporting; current bundles remain incomplete, so no prototype or runtime claim."
+    },
+    {
+      "milestone": "V2-W",
+      "closureType": "CLOSED_INFRASTRUCTURE",
+      "descriptiveStatus": "CLOSED_DISCOVERY_ONLY_FOR_V2",
+      "claimBoundary": "Exact Customers, Visits, and Doctor D2R generated-family matched capture completed as diagnostic discovery only; no generated-family mutation, prototype admission, or runtime claim."
     }
   ],
   "rule": "Do not upgrade a closure type by wording alone. Runtime performance claims require fresh V2-C validation and V2-D attribution."

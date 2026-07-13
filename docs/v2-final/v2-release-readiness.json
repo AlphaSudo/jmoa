@@ -1,0 +1,24 @@
+{
+  "metadataVersion": "v2-final-release-readiness",
+  "decision": "READY_AFTER_LISTED_BLOCKERS",
+  "completed": [
+    "phase closure docs through V2-W",
+    "raw reducer implementation",
+    "evidence engine",
+    "attribution engine",
+    "recommendation engine",
+    "runtime policy engine",
+    "workflow helpers",
+    "claim boundaries"
+  ],
+  "notReadyForRc": [
+    "B0 vs V2 direct public performance gate not confirmed",
+    "public quickstart not clean-clone proven",
+    "distribution route not frozen",
+    "schema freeze incomplete",
+    "clean-machine qualification pending",
+    "governance/distribution extras incomplete"
+  ],
+  "decisionRule": "No v2.0.0-rc1 until P0 blockers are resolved or release scope removes the blocked headline."
+}
+

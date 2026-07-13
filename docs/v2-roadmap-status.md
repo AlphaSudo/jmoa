@@ -1,6 +1,6 @@
 # JMOA V2 Roadmap Status
 
-Status: V2-A through V2-V are closed, confirmed, or explicitly bounded within
+Status: V2-A through V2-W are closed, confirmed, or explicitly bounded within
 their declared closure types. V2-P adds a report-only end-to-end workflow
 coordinator around the existing V2-M, V2-N, V2-O, V2-C, and V2-D gates; V2-Q
 adds application-class admission with runtime promotion blocked by confirmation;
@@ -9,7 +9,9 @@ generated-family static inventory with diagnostic runtime relevance evidence;
 V2-T adds SHA-gated lifecycle reconciliation and records missing evidence as
 partial infrastructure rather than a prototype admission; V2-U adds the matched
 startup/warmup/workload capture campaign contract and records the currently
-available evidence as still incomplete.
+available evidence as still incomplete; V2-V makes that campaign executable;
+V2-W completes the matched diagnostic generated-family evidence campaign without
+admitting a generated-family mutation.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
@@ -20,7 +22,28 @@ the V2-N runtime-policy recommendation engine, the V2-O runtime-policy
 automation helpers, the V2-P workflow spine, the V2-Q application admission
 result, V2-R ROI discovery, V2-S generated-family runtime relevance, V2-T
 generated-family matched-evidence completion, V2-U matched lifecycle
-campaign infrastructure, and V2-V fresh matched-capture execution tooling.
+campaign infrastructure, V2-V fresh matched-capture execution tooling, V2-W
+matched capture execution, and the V2 final release audit.
+
+## Final Release Gate
+
+The V2 final audit freezes scope and blocks any broad final-product performance
+headline until the direct public `B0 -> V2` gate passes. The fresh direct
+customers-service run was valid but not confirmed:
+
+```text
+comparison: B0 baseline vs final V2 product artifact
+valid runs: 6/6
+paired wins: 1/3
+median PSS delta: +274 KB
+median Private_Dirty delta: +464 KB
+median memory.current delta: +225,280 bytes
+release decision: RELEASE_PERFORMANCE_GATE_FAILED
+```
+
+Confirmed `B0 -> V1` and `V1 -> V2` results remain valid inside their exact
+protocols, but they are not additive evidence for the final `B0 -> V2` product
+claim. See [V2 Final Audit](v2-final/README.md).
 
 ## Closure Taxonomy
 
@@ -58,6 +81,7 @@ claims.
 | V2-T | `PARTIAL_INFRASTRUCTURE` | SHA-gated generated-family evidence join, exclusive census, lifecycle model, and recommendation ingestion; no complete matched capture or family admission |
 | V2-U | `PARTIAL_INFRASTRUCTURE` | Matched generated-family lifecycle capture harness, full identity tuple enforcement, per-service evidence-gap reports, cross-service matrix, and no family admission |
 | V2-V | `PARTIAL_INFRASTRUCTURE` | Fresh matched generated-family campaign execution: preflight, automatic stage attribution, bundle validation, lifecycle/ROI reports, and no family admission; fresh complete bundles remain outstanding |
+| V2-W | `CLOSED_INFRASTRUCTURE` | Matched generated-family capture execution completed for Customers, Visits, and Doctor D2R as diagnostic discovery only; no generated-family mutation or runtime claim |
 
 ## Current Foundation
 
@@ -79,11 +103,12 @@ V2-N = which exact runtime policy is confirmed, screen-required, diagnostic-only
 V2-O = how do we prepare and capture evidence for that policy without bypassing V2-C/V2-D?
 V2-P = how do we coordinate the allowed workflow without flattening gates or declaring claims?
 V2-Q = can packaged application classes be admitted safely, and do they survive confirmation?
-V2-V = can the V2-U harness execute and validate fresh matched generated-family bundles across customers, visits, and Doctor?
 V2-R = where is the next meaningful application/generated ROI surface, before mutation?
 V2-S = which generated family is actually runtime-relevant and safe enough to deserve a future prototype?
 V2-T = do the static artifact and startup/warmup/workload diagnostics actually describe the same generated-family surface?
 V2-U = can fresh matched lifecycle bundles satisfy that evidence contract across customers, visits, and Doctor?
+V2-V = can the matched campaign be executed with preflight, stage attribution, bundle validation, lifecycle reporting, and admission reporting?
+V2-W = can exact Customers, Visits, and Doctor D2R matched bundles be completed as diagnostic generated-family evidence?
 ```
 
 Together, these milestones provide visibility, validation, explanation, the
@@ -91,8 +116,11 @@ first controlled post-v1 reducer, reducer productization, and a clear claim
 boundary between the earlier runtime-confirmed V2-E reducer, the safer
 V2-F-hardened reducer, the V2-I raw recovery engine, the V2-J productized raw
 engine, the V2-K private Doctor runtime confirmation, the V2-L public
-visits-service confirmation, the V2-M recommendation engine, and the V2-N
-runtime-policy recommendation engine. Reducer
+visits-service confirmation, the V2-M recommendation engine, the V2-N
+runtime-policy recommendation engine, the V2-O/P workflow automation layer, the
+V2-Q failed application-class confirmation, the V2-R/S/T/U/V generated-family
+evidence pipeline, and the V2-W diagnostic closure. The final audit adds the
+release-readiness gate on top of those phase closures. Reducer
 behavior is still disabled by default and report-only by default unless explicit
 release-low-footprint reducer flags are enabled. V2-M never enables mutation.
 V2-N never changes runtime configuration, trains CDS archives, or reuses an
@@ -115,6 +143,9 @@ V2-U does not enable generated-class mutation or add a runtime claim. It adds
 the capture harness and strict identity tuple, then closes the available
 customers/visits/Doctor evidence as still incomplete rather than admitting a
 prototype from unmatched captures.
+V2-W does not enable generated-class mutation or add a runtime claim. It closes
+generated-family discovery for V2 with matched diagnostic evidence and explicit
+non-admission.
 
 ## Still Blocked
 

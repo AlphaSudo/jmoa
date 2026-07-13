@@ -12,6 +12,8 @@ The case-study portfolio is published separately:
 - Portfolio: https://github.com/AlphaSudo/jmoa-jvm-optimization-portfolio
 - V2 claim register: [docs/v2-claim-register.md](docs/v2-claim-register.md)
 - V2 foundation closure: [docs/v2-foundation-closure.md](docs/v2-foundation-closure.md)
+- V2 final audit: [docs/v2-final](docs/v2-final/README.md)
+- V2 final performance gate: [docs/v2-final/v2-final-performance-acceptance.md](docs/v2-final/v2-final-performance-acceptance.md)
 
 ## What This Is
 
@@ -48,6 +50,32 @@ The source here supports the evidence portfolio, which currently summarizes:
 
 The PetClinic result is the public reproducibility bridge. It is scoped to the
 project's exploded Boot launch shape and the `NO_CDS_LOW_DIRTY` runtime policy.
+
+## V2 Final Release Gate
+
+V2-A through V2-W are closed within their declared boundaries, but the final V2
+publication gate is not green yet. A fresh direct public `B0 -> V2` PetClinic
+customers-service run completed with valid evidence and failed the release
+performance threshold:
+
+```text
+comparison: B0 baseline vs final V2 product artifact
+valid runs: 6/6
+paired wins: 1/3
+median PSS delta: +274 KB
+median Private_Dirty delta: +464 KB
+median memory.current delta: +225,280 bytes
+release decision: RELEASE_PERFORMANCE_GATE_FAILED
+```
+
+The confirmed incremental results remain valid within their measured scopes,
+but they must not be added together or reused as a final V2-over-baseline
+headline. See the final audit docs for the release blockers and allowed claim
+boundary:
+
+- [V2 final performance acceptance](docs/v2-final/v2-final-performance-acceptance.md)
+- [V2 release blockers](docs/v2-final/v2-release-blockers.md)
+- [V2 claim matrix](docs/v2-final/v2-claim-matrix.md)
 
 ## Build
 
@@ -680,6 +708,17 @@ The current V2-V closure is `PARTIAL_INFRASTRUCTURE`: no complete fresh
 customers, visits, and Doctor D2R bundle is claimed, no generated-family
 prototype is admitted, and no runtime claim is added. See the
 [V2-V final verdict](docs/v2-v/v2v-final-verdict.md).
+
+## V2-W Matched Capture Execution
+
+V2-W executed the frozen generated-family campaign against exact Customers,
+Visits, and Doctor D2R artifacts. All three startup/warmup/workload bundles
+reached `MATCHED_DIAGNOSTIC_EVIDENCE`, spanning exploded Boot/no-CDS and
+fat-JAR/CDS. No generated-family prototype was admitted: lambda is the existing
+v1 domain, Spring Data and compiler-generated surfaces lack a bounded safe
+transform, and AOT/proxy families remain safety blocked.
+
+See the [V2-W final verdict](docs/v2-w/v2w-final-verdict.md).
 
 ## Safety
 
