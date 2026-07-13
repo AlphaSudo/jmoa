@@ -1,0 +1,30 @@
+{
+  "metadataVersion": "v2-final-phase-closure-audit",
+  "phases": [
+    {"phase": "V2-A", "closureType": "INFRASTRUCTURE_CONFIRMED", "closed": true},
+    {"phase": "V2-B", "closureType": "INFRASTRUCTURE_CONFIRMED", "closed": true},
+    {"phase": "V2-C", "closureType": "INFRASTRUCTURE_CONFIRMED", "closed": true},
+    {"phase": "V2-D", "closureType": "INFRASTRUCTURE_CONFIRMED", "closed": true},
+    {"phase": "V2-E", "closureType": "RUNTIME_CONFIRMED", "closed": true},
+    {"phase": "V2-F", "closureType": "ARTIFACT_CONFIRMED", "closed": true},
+    {"phase": "V2-G", "closureType": "ARTIFACT_CONFIRMED", "closed": true},
+    {"phase": "V2-H", "closureType": "SCREEN_FAILED", "closed": true},
+    {"phase": "V2-I", "closureType": "RUNTIME_CONFIRMED", "closed": true},
+    {"phase": "V2-J", "closureType": "ARTIFACT_CONFIRMED", "closed": true},
+    {"phase": "V2-K", "closureType": "RUNTIME_CONFIRMED", "closed": true},
+    {"phase": "V2-L", "closureType": "RUNTIME_CONFIRMED", "closed": true},
+    {"phase": "V2-M", "closureType": "INFRASTRUCTURE_CONFIRMED", "closed": true},
+    {"phase": "V2-N", "closureType": "INFRASTRUCTURE_CONFIRMED", "closed": true},
+    {"phase": "V2-O", "closureType": "INFRASTRUCTURE_CONFIRMED", "closed": true},
+    {"phase": "V2-P", "closureType": "INFRASTRUCTURE_CONFIRMED", "closed": true},
+    {"phase": "V2-Q", "closureType": "CONFIRMATION_FAILED", "closed": true},
+    {"phase": "V2-R", "closureType": "INFRASTRUCTURE_CONFIRMED", "closed": true},
+    {"phase": "V2-S", "closureType": "INFRASTRUCTURE_CONFIRMED", "closed": true},
+    {"phase": "V2-T", "closureType": "PARTIAL_INFRASTRUCTURE", "closed": true},
+    {"phase": "V2-U", "closureType": "PARTIAL_INFRASTRUCTURE", "closed": true},
+    {"phase": "V2-V", "closureType": "PARTIAL_INFRASTRUCTURE", "closed": true, "supersededBy": "V2-W"},
+    {"phase": "V2-W", "closureType": "DISCOVERY_ONLY", "closed": true}
+  ],
+  "staleDocsRemain": true
+}
+

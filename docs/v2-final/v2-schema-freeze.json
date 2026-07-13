@@ -1,0 +1,28 @@
+{
+  "metadataVersion": "v2-final-schema-freeze",
+  "status": "INCOMPLETE",
+  "rcBlockerRank": "P1",
+  "schemas": [
+    "reducer report",
+    "reducer manifest v2",
+    "raw byte-preservation audit",
+    "V2-C run/evidence manifest",
+    "paired confirmation",
+    "V2-D attribution",
+    "reducer recommendation",
+    "runtime recommendation",
+    "runtime preflight",
+    "workflow report",
+    "generated inventory",
+    "generated lifecycle manifest",
+    "generated evidence reconciliation",
+    "prototype admission"
+  ],
+  "exitGate": [
+    "metadataVersion documented",
+    "required and optional fields documented",
+    "historical fixture parse tests pass",
+    "unsupported future schema behavior documented"
+  ]
+}
+

@@ -1,0 +1,42 @@
+{
+  "metadataVersion": "v2-final-release-blockers",
+  "decision": "READY_AFTER_LISTED_BLOCKERS",
+  "p0": [
+    {
+      "id": "FINAL_PUBLIC_B0_V2_NOT_CONFIRMED",
+      "evidence": "docs/v2-final/v2-final-performance-acceptance.md",
+      "requiredFix": "Pass direct B0 vs V2 public confirmation or remove final V2-over-baseline performance headline."
+    },
+    {
+      "id": "PUBLIC_GOLDEN_PATH_NOT_CLEAN_CLONE_PROVEN",
+      "evidence": "examples/spring-petclinic-customers-nocds",
+      "requiredFix": "Create and run a clean-clone public quickstart through artifact, audit, materialization, and semantic smoke."
+    },
+    {
+      "id": "DISTRIBUTION_ROUTE_UNDECIDED",
+      "evidence": "pom.xml",
+      "requiredFix": "Choose Maven Central, GitHub Packages, or GitHub Release artifact distribution and document checksums."
+    }
+  ],
+  "p1": [
+    "SCHEMA_FREEZE_INCOMPLETE",
+    "GOVERNANCE_FILES_INCOMPLETE",
+    "CLEAN_MACHINE_QA_PENDING"
+  ],
+  "resolved": [
+    {
+      "id": "STALE_RELEASE_DOCS",
+      "resolution": "README, roadmap, claim register, and closure taxonomy now point to V2-W plus the V2 final audit and block the failed direct B0 -> V2 product headline."
+    }
+  ],
+  "p2": [
+    "generated-family mutation",
+    "application-class runtime promotion",
+    "large-method splitting",
+    "constant-pool reduction",
+    "BootstrapMethods reduction",
+    "full JFR attribution",
+    "broad runtime matrix",
+    "dashboard"
+  ]
+}

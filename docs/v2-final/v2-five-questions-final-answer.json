@@ -1,0 +1,51 @@
+{
+  "metadataVersion": "v2-final-five-questions",
+  "questions": [
+    {
+      "question": "generated/synthetic optimization",
+      "analysisImplemented": true,
+      "mutationImplemented": false,
+      "runtimeConfirmed": false,
+      "status": "DISCOVERY_ONLY",
+      "publicationBlocker": false
+    },
+    {
+      "question": "64KB/classfile reduction",
+      "analysisImplemented": true,
+      "mutationImplemented": true,
+      "runtimeConfirmed": true,
+      "status": "PARTIAL",
+      "publicationBlocker": false,
+      "note": "Raw LVT/LVTT reducer confirmed; broad large-method/constant-pool optimization deferred."
+    },
+    {
+      "question": "three-run variance",
+      "analysisImplemented": true,
+      "mutationImplemented": false,
+      "runtimeConfirmed": true,
+      "status": "INFRASTRUCTURE_CONFIRMED",
+      "publicationBlocker": false
+    },
+    {
+      "question": "memory attribution",
+      "analysisImplemented": true,
+      "mutationImplemented": false,
+      "runtimeConfirmed": true,
+      "status": "INFRASTRUCTURE_CONFIRMED",
+      "publicationBlocker": false
+    },
+    {
+      "question": "advanced runtime policy",
+      "analysisImplemented": true,
+      "mutationImplemented": false,
+      "runtimeConfirmed": true,
+      "status": "INFRASTRUCTURE_CONFIRMED",
+      "publicationBlocker": false
+    }
+  ],
+  "finalPerformanceGate": {
+    "status": "BLOCKED",
+    "reason": "Fresh direct public B0 vs V2 run did not confirm."
+  }
+}
+

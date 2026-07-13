@@ -1,0 +1,17 @@
+{
+  "metadataVersion": "v2-final-original-plan-coverage",
+  "tracks": [
+    {"track": "synthetic/generated optimizer", "status": "DISCOVERY_ONLY", "evidence": ["docs/v2-w/v2w-final-verdict.md"], "blocker": false},
+    {"track": "bytecode/64KB optimizer", "status": "PARTIAL", "evidence": ["docs/v2-b", "docs/v2-i", "docs/v2-j"], "blocker": false},
+    {"track": "measurement stability", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-c/v2c-closure-report.md"], "blocker": false},
+    {"track": "memory attribution", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-d/v2d-closure-report.md"], "blocker": false},
+    {"track": "runtime policy layer", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-n", "docs/v2-o", "docs/v2-p"], "blocker": false},
+    {"track": "packaging/materialization", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-o", "docs/v2-k", "docs/v2-l"], "blocker": false},
+    {"track": "candidate ROI/recommendation", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-m", "docs/v2-r", "docs/v2-s"], "blocker": false},
+    {"track": "benchmark suite", "status": "PARTIAL", "evidence": ["docs/v2-i", "docs/v2-k", "docs/v2-l"], "blocker": false},
+    {"track": "safety/proof system", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-f", "docs/v2-j", "docs/v2-o", "docs/v2-p"], "blocker": false},
+    {"track": "public/product polish", "status": "PARTIAL", "evidence": ["examples", "docs/v2-final/v2-release-readiness.md"], "blocker": true}
+  ],
+  "decision": "Release V2 with explicit scope; move speculative optimizer breadth to V3."
+}
+
