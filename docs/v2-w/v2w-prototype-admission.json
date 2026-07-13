@@ -1,0 +1,12 @@
+{
+  "metadataVersion": "v2w-prototype-admission",
+  "prototypeAdmitted": false,
+  "candidateFamily": null,
+  "generatedMutationTrack": "CLOSED_DISCOVERY_ONLY_FOR_V2",
+  "matchedBundles": 3,
+  "reasons": [
+    "The runtime-relevant lambda family belongs to the existing v1 optimizer domain.",
+    "No bounded safe transform was established for Spring Data, synthetic/bridge, or anonymous-class surfaces.",
+    "Spring AOT and proxy families remain safety blocked."
+  ]
+}

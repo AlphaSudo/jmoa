@@ -221,7 +221,19 @@ $bundleValidation = [ordered]@{
     targetCount = @($campaign.targets).Count
     completeBundleCount = $completeTargets.Count
     prototypeAdmitted = $prototypeAdmitted
-    targets = $targetReports | ForEach-Object { $_ | Select-Object name, service, launchMode, runtimePolicy, reducerEngine, status, matched, missing, identityTupleMatch }
+    targets = $targetReports | ForEach-Object {
+        [ordered]@{
+            name = $_.name
+            service = $_.service
+            launchMode = $_.launchMode
+            runtimePolicy = $_.runtimePolicy
+            reducerEngine = $_.reducerEngine
+            status = $_.status
+            matched = $_.matched
+            missing = @($_.missing)
+            identityTupleMatch = $_.identityTupleMatch
+        }
+    }
     boundaries = @('Only MATCHED_DIAGNOSTIC_EVIDENCE enters cross-service ranking.', 'No lifecycle diagnostic is V2-C claimable memory evidence.', 'Private raw captures remain outside the public repository.')
 }
 $lifecycleMatrix = [ordered]@{
