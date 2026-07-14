@@ -1,14 +1,16 @@
 {
-  "metadataVersion": "v2-final-b0-v2-v2d-v1",
-  "status": "PASSED",
-  "evidenceVerdict": "CONFIRMED_WIN",
-  "primaryAttribution": "HEAP_PAGE_TOUCH_REDUCTION",
-  "medianHeapPssDeltaKb": -6584,
-  "medianHeapUsedDeltaKb": 28,
-  "medianClassHistogramBytesDelta": 29184,
-  "medianAnonymousRwPssDeltaKb": -1612,
-  "medianMetaspaceCommittedDeltaKb": -3128,
-  "medianClassCountDelta": -177,
-  "nmtToPssClassification": "NMT_INVISIBLE_OR_PARTIAL",
-  "source": "target/v2-final/v2d/b0-v2"
+  "metadataVersion": "v2-final-b0-v2-v2d-historical-v2",
+  "historicalRecord": {
+    "evidenceVerdict": "CONFIRMED_WIN",
+    "primaryAttribution": "HEAP_PAGE_TOUCH_REDUCTION",
+    "rawCanonicalEvidenceAvailable": false
+  },
+  "authoritativeReplication": {
+    "evidenceVerdict": "MIXED_METRICS_NEEDS_RERUN",
+    "primaryAttribution": "HEAP_PAGE_TOUCH_GROWTH",
+    "medianHeapPssDeltaKb": 2756,
+    "medianAnonymousRwPssDeltaKb": -1600,
+    "medianClassCountDelta": -174,
+    "source": "v2-rc2-frozen-image-replication.json"
+  }
 }

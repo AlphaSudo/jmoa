@@ -1,0 +1,18 @@
+{
+  "metadataVersion": "v2-rc2-consumer-qualification-v1",
+  "status": "PASSED",
+  "releaseUnderTest": "v2.0.0-rc1",
+  "checksumVerification": {
+    "assetsVerified": 9,
+    "result": "PASSED"
+  },
+  "isolatedMavenInstall": "PASSED",
+  "publicQuickstart": {
+    "source": "downloaded release assets",
+    "pinnedPetClinicRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+    "materialization": "PASSED",
+    "semanticSmoke": "PASSED"
+  },
+  "transientExternalIssue": "Maven Central DNS failed during the first Surefire resolution attempt; the unchanged retry passed.",
+  "rc2Decision": "consumer route qualified; RC2 adds the sanitized public evidence archive"
+}

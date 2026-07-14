@@ -2,9 +2,10 @@
 
 Decision: `READY_FOR_RC1`
 
-There are no unresolved P0 blockers. The corrected direct public B0-to-V2 gate
-passed, and V2 distribution is frozen to GitHub Release artifacts with SHA-256
-checksums.
+There are no unresolved P0 blockers for the constrained RC2 claim. Direct
+public B0-to-V2 remains explicitly non-claimable because its fresh five-pair
+replication was mixed. V2 distribution is frozen to GitHub Release artifacts
+with SHA-256 checksums.
 
 ## Qualification Gates
 

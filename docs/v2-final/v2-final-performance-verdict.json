@@ -1,22 +1,23 @@
 {
-  "metadataVersion": "v2-final-performance-verdict-v1",
-  "status": "PERFORMANCE_GATES_PASSED",
+  "metadataVersion": "v2-final-performance-verdict-v2",
+  "status": "INCREMENTAL_V1_TO_V2_GATE_PASSED_B0_TO_V2_REPRODUCTION_MIXED",
   "gateA": {
     "comparison": "B0 vs final V2",
-    "decision": "SUBSTANTIAL_WIN",
-    "pairedWins": "2/3",
-    "medianPssDeltaKb": -8956
+    "decision": "HISTORICAL_ONLY_NOT_REPRODUCED",
+    "historicalPairedWins": "2/3",
+    "historicalMedianPssDeltaKb": -8956,
+    "freshReplication": "MIXED_METRICS_NEEDS_RERUN, 2/5 paired wins, median PSS +585 KB"
   },
   "gateB": {
     "comparison": "finalized V1 vs final V2",
-    "decision": "SUBSTANTIAL_WIN",
-    "pairedWins": "3/3",
-    "medianPssDeltaKb": -4812
+    "decision": "CONFIRMED_WIN",
+    "pairedWins": "2/3",
+    "medianPssDeltaKb": -6012
   },
   "supersededRun": {
     "decision": "VALID_BUT_PROTOCOL_CONFOUNDED",
     "reason": "Fixed-order measurements did not control page-cache state; candidate block IO and cgroup file-cache charge were materially different.",
     "retained": true
   },
-  "releaseConsequence": "FINAL_PUBLIC_B0_V2_NOT_CONFIRMED is resolved. Release engineering gates remain independent."
+  "releaseConsequence": "RC2 may claim only the reproducible V1 to V2 incremental customers result. Release engineering gates remain independent."
 }

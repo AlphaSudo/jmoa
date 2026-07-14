@@ -1,20 +1,20 @@
 # V2 Final Performance Verdict
 
-Status: `PERFORMANCE_GATES_PASSED`
+Status: `INCREMENTAL_V1_TO_V2_GATE_PASSED_B0_TO_V2_REPRODUCTION_MIXED`
 
-The final public customers artifact passed both required release comparisons:
+The reproducible final public customers claim is intentionally narrow:
 
-- B0 -> final V2: `SUBSTANTIAL_WIN`, 2/3 pairs, median PSS -8,956 KB.
-- finalized V1 -> final V2: `SUBSTANTIAL_WIN`, 3/3 pairs, median PSS -4,812 KB.
+- finalized V1 -> final V2: `CONFIRMED_WIN`, 2/3 pairs, median PSS -6,012 KB,
+  Private_Dirty -5,708 KB, and memory.current -8,081,408 B.
 
-The earlier direct run remains in the record as valid captured evidence, but it
-is superseded for release acceptance because its fixed-order protocol did not
-control host page-cache state. The candidate incurred roughly 60 MB of block IO
-while its comparator incurred none, contaminating `memory.current` with an
-unequal file-cache charge. The corrected protocol drops page cache before every
-variant, records `memory.stat`, and balances pair order.
+The original corrected B0 -> V2 result remains retained as historical audited
+evidence, but a new five-pair exact-image replication was mixed: 2/5 paired
+wins, median PSS +585 KB and Private_Dirty +844 KB. V2-C classified the fresh
+replication as `MIXED_METRICS_NEEDS_RERUN`; V2-D found a high-confidence
+heap-page-touch-growth signal. It must not be presented as an RC2 reproducible
+performance claim.
 
-V2-C accepted every corrected run and both comparisons. V2-D attributes the
-wins primarily to heap page-touch reduction rather than retained-object
-reduction. This verdict does not establish a startup win or a universal Spring
-Boot result.
+All fresh samples used the frozen no-CDS exploded-Boot protocol, explicit page
+cache dropping, alternating pair order, fresh service stacks, and zero workload
+errors. This verdict does not establish a startup win or a universal Spring Boot
+result.

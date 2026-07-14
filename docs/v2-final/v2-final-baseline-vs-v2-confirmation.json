@@ -1,25 +1,24 @@
 {
-  "metadataVersion": "v2-final-b0-v2-confirmation-v1",
-  "status": "SUBSTANTIAL_WIN",
+  "metadataVersion": "v2-final-b0-v2-historical-v2",
   "comparison": "B0 vs final V2",
-  "validRuns": 6,
-  "pairedWins": "2/3",
-  "medianPssDeltaKb": -8956,
-  "medianPssDeltaPercent": -2.583,
-  "medianPrivateDirtyDeltaKb": -8620,
-  "medianPrivateDirtyDeltaPercent": -2.555,
-  "medianMemoryCurrentDeltaBytes": -11247616,
-  "medianMemoryCurrentDeltaPercent": -2.624,
-  "medianHeapPssDeltaKb": -6584,
-  "medianAnonymousRwPssDeltaKb": -1612,
-  "medianLoadedClassDelta": -153,
-  "workloadErrors": 0,
-  "pairDeltas": [
-    {"pair": 1, "pass": true, "pssKb": -8956, "privateDirtyKb": -9400, "memoryCurrentBytes": -11407360},
-    {"pair": 2, "pass": false, "pssKb": 6299, "privateDirtyKb": 6268, "memoryCurrentBytes": 4403200},
-    {"pair": 3, "pass": true, "pssKb": -8968, "privateDirtyKb": -8620, "memoryCurrentBytes": -11247616}
-  ],
-  "v2cVerdict": "CONFIRMED_WIN",
-  "v2dPassed": true,
-  "startupClaim": false
+  "status": "HISTORICAL_ONLY_NOT_REPRODUCED",
+  "historicalRecord": {
+    "validRuns": 6,
+    "pairedWins": "2/3",
+    "medianPssDeltaKb": -8956,
+    "medianPrivateDirtyDeltaKb": -8620,
+    "medianMemoryCurrentDeltaBytes": -11247616,
+    "v2cVerdict": "CONFIRMED_WIN",
+    "rawRunEvidenceAvailable": false
+  },
+  "authoritativeReplication": {
+    "report": "v2-rc2-frozen-image-replication.json",
+    "pairs": 5,
+    "pairedWins": "2/5",
+    "medianPssDeltaKb": 585,
+    "medianPrivateDirtyDeltaKb": 844,
+    "medianMemoryCurrentDeltaBytes": -1363968,
+    "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+    "releaseClaimEligible": false
+  }
 }

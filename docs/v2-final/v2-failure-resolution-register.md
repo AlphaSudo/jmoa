@@ -7,5 +7,4 @@
 | Doctor runtime blocked | Missing private stack/images/CDS path. | Stack recovered, CDS retrained, V2-K confirmed. | no |
 | Stale CDS risk | Old archive could be reused incorrectly. | V2-N/V2-O block archive/artifact mismatch. | no |
 | Generated-family mutation | Runtime relevance exists but no bounded safe transform. | V2-W closes generated mutation as discovery-only for V2. | no |
-| Final public B0 -> V2 | Fresh direct run did not confirm. | P0 release blocker for performance headline. | yes |
-
+| Final public B0 -> V2 | The first fixed-order direct run did not confirm. | The older corrected three-pair record reported a win, but its raw capture is unavailable. The fresh exact-image five-pair RC2 replication is valid but mixed (2/5 PSS wins; median PSS +585 KB), so direct B0-to-V2 release claims remain blocked. | no |

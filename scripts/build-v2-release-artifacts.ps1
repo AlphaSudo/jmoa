@@ -1,10 +1,11 @@
 param(
-    [string]$Version = "2.0.0-rc1",
+    [string]$Version = "2.0.0-rc2",
     [string]$OutputDir = "target/v2-release",
     [string]$Maven = "mvn",
     [string]$PublicCustomersProfile,
     [string]$PublicCustomersAdmission,
-    [string]$AdditionalSafeSams
+    [string]$AdditionalSafeSams,
+    [string]$PublicEvidenceArchive
 )
 
 $ErrorActionPreference = "Stop"
@@ -49,6 +50,10 @@ try {
     if ($AdditionalSafeSams) {
         if (-not (Test-Path -LiteralPath $AdditionalSafeSams -PathType Leaf)) { throw "SAM allowlist not found: $AdditionalSafeSams" }
         Copy-Item -LiteralPath $AdditionalSafeSams -Destination (Join-Path $output "jmoa-additional-safe-sams.txt") -Force
+    }
+    if ($PublicEvidenceArchive) {
+        if (-not (Test-Path -LiteralPath $PublicEvidenceArchive -PathType Leaf)) { throw "Public evidence archive not found: $PublicEvidenceArchive" }
+        Copy-Item -LiteralPath $PublicEvidenceArchive -Destination (Join-Path $output "jmoa-v2-public-evidence-$Version.zip") -Force
     }
 
     $files = Get-ChildItem -LiteralPath $output -File | Where-Object Name -NotIn @("SHA256SUMS.txt", "jmoa-release-manifest.json") | Sort-Object Name

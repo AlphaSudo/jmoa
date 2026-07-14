@@ -1,8 +1,8 @@
 {
-  "metadataVersion": "v2-final-claim-matrix-v2",
+  "metadataVersion": "v2-final-claim-matrix-v3",
   "claims": [
-    {"claim": "Final V2 substantially reduces customers memory versus B0 under the frozen protocol", "status": "ALLOWED_NARROW"},
-    {"claim": "Final V2 substantially reduces customers memory versus finalized V1 under the frozen protocol", "status": "ALLOWED_NARROW"},
+    {"claim": "Final V2 substantially reduces customers memory versus B0 under the frozen protocol", "status": "HISTORICAL_ONLY_NOT_REPRODUCED"},
+    {"claim": "Final V2 substantially reduces customers memory versus finalized V1 under the frozen protocol", "status": "ALLOWED_NARROW_REPRODUCIBLE"},
     {"claim": "V2 includes a byte-preserving raw dependency LVT/LVTT reducer", "status": "ALLOWED"},
     {"claim": "The raw reducer is runtime-confirmed on public visits", "status": "ALLOWED_NARROW"},
     {"claim": "The raw reducer is runtime-confirmed on private Doctor D2", "status": "ALLOWED_PRIVATE_NARROW"},

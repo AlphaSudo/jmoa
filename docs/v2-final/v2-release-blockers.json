@@ -1,12 +1,12 @@
 {
-  "metadataVersion": "v2-final-release-blockers-v3",
-  "decision": "READY_FOR_RC1",
+  "metadataVersion": "v2-final-release-blockers-v4",
+  "decision": "READY_FOR_RC2",
   "p0": [],
   "p1": [],
   "resolved": [
     {
       "id": "FINAL_PUBLIC_B0_V2_NOT_CONFIRMED",
-      "resolution": "Corrected cache-controlled confirmation passed B0-to-V2 with median PSS -8,956 KB, 2/3 paired wins, and V2-C/V2-D acceptance."
+      "resolution": "The direct B0-to-V2 claim is explicitly excluded from RC2 because the fresh five-pair replication is mixed. The independently reproducible V1-to-V2 incremental confirmation remains the release-driving performance result."
     },
     {
       "id": "DISTRIBUTION_ROUTE_UNDECIDED",

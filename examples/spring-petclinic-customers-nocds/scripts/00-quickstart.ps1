@@ -5,7 +5,7 @@ param(
     [Parameter(Mandatory)][string]$RuntimeJar,
     [string]$WorkDir = "./petclinic-work",
     [string]$Maven = "mvn",
-    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc1",
+    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2",
     [switch]$SkipSemanticSmoke
 )
 

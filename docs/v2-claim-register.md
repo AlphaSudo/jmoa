@@ -8,25 +8,27 @@ Closure terms follow:
 
 ## Final Product Gate
 
-Both final public customers-service release gates are confirmed under the
-frozen cache-controlled protocol.
+The reproducible final public customers-service release gate is the incremental
+V1-to-V2 comparison. The direct B0-to-V2 historical result is preserved but is
+not an RC2 claim because its raw capture is unavailable and a fresh five-pair
+exact-image replication was mixed.
 
 ```text
-comparison: B0 baseline vs final V2 product artifact
-valid runs: 6/6
-paired wins: 2/3
-median PSS delta: -8,956 KB
-median Private_Dirty delta: -8,620 KB
-median memory.current delta: -11,247,616 bytes
-decision: SUBSTANTIAL_WIN
-
 comparison: finalized V1 vs final V2 product artifact
 valid runs: 6/6
-paired wins: 3/3
-median PSS delta: -4,812 KB
-median Private_Dirty delta: -4,512 KB
-median memory.current delta: -6,791,168 bytes
-decision: SUBSTANTIAL_WIN
+paired wins: 2/3
+median PSS delta: -6,012 KB
+median Private_Dirty delta: -5,708 KB
+median memory.current delta: -8,081,408 bytes
+decision: CONFIRMED_WIN
+
+comparison: B0 baseline vs final V2 product artifact (fresh RC2 replication)
+valid runs: 10/10
+paired wins: 2/5
+median PSS delta: +585 KB
+median Private_Dirty delta: +844 KB
+median memory.current delta: -1,363,968 bytes
+decision: MIXED_METRICS_NEEDS_RERUN; not claimable
 ```
 
 The claim is limited to public customers-service under `EXPLODED_BOOT_APP`,

@@ -1,0 +1,34 @@
+{
+  "metadataVersion": "v2-rc2-frozen-image-replication-v1",
+  "protocol": {
+    "service": "spring-petclinic-customers-service",
+    "launchMode": "EXPLODED_BOOT_APP",
+    "runtimePolicy": "NO_CDS_LOW_DIRTY",
+    "mallocArenaMax": "1",
+    "workload": "corrected-petclinic-27x3",
+    "pageCachePolicy": "DROP_CACHES_BEFORE_EACH_VARIANT"
+  },
+  "b0ToV2": {
+    "pairs": 5,
+    "validRuns": 10,
+    "pairedWins": "2/5",
+    "medianPssDeltaKb": 585,
+    "medianPrivateDirtyDeltaKb": 844,
+    "medianMemoryCurrentDeltaBytes": -1363968,
+    "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+    "v2dPrimaryAttribution": "HEAP_PAGE_TOUCH_GROWTH",
+    "claimStatus": "HISTORICAL_ONLY_NOT_REPRODUCIBLE_RC2"
+  },
+  "v1ToV2": {
+    "pairs": 3,
+    "validRuns": 6,
+    "pairedWins": "2/3",
+    "medianPssDeltaKb": -6012,
+    "medianPrivateDirtyDeltaKb": -5708,
+    "medianMemoryCurrentDeltaBytes": -8081408,
+    "v2cVerdict": "CONFIRMED_WIN",
+    "v2dPrimaryAttribution": "HEAP_PAGE_TOUCH_REDUCTION",
+    "claimStatus": "ALLOWED_NARROW_REPRODUCIBLE"
+  },
+  "claimBoundary": "RC2 claims the V1 to V2 incremental public result only. The original B0 to V2 three-pair result remains historical evidence but was not reproduced by the fresh five-pair frozen-image run."
+}

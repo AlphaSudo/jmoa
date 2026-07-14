@@ -1,9 +1,9 @@
 {
-  "metadataVersion": "v2-final-release-readiness-v3",
-  "decision": "READY_FOR_RC1",
+  "metadataVersion": "v2-final-release-readiness-v4",
+  "decision": "READY_FOR_RC2",
   "performanceGates": "PASSED",
   "completed": [
-    "fresh B0-to-V2 and V1-to-V2 acceptance",
+    "fresh V1-to-V2 acceptance and a valid mixed B0-to-V2 replication with an explicit claim exclusion",
     "artifact and protocol freeze",
     "V2-C validation and V2-D attribution",
     "terminal unfinished-work disposition",
@@ -14,5 +14,5 @@
     "fresh Ubuntu/JDK 26 GitHub Actions build"
   ],
   "notReadyForRc": [],
-  "decisionRule": "RC1 may be tagged only while the strict release gate reports zero P0 and P1 blockers."
+  "decisionRule": "RC2 may be tagged only while the strict release gate reports zero P0 and P1 blockers."
 }

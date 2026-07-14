@@ -1,12 +1,11 @@
 {
-  "metadataVersion": "v2-final-failure-resolution-register",
+  "metadataVersion": "v2-final-failure-resolution-register-v2",
   "failures": [
     {"id": "V2-H", "currentResult": "raw engine replacement confirmed in V2-I", "blocksV2": false},
     {"id": "V2-Q", "currentResult": "runtime promotion blocked", "blocksV2": false},
     {"id": "Doctor blocked runtime", "currentResult": "recovered and confirmed in V2-K", "blocksV2": false},
     {"id": "stale CDS risk", "currentResult": "blocked by V2-N/V2-O policy and preflight", "blocksV2": false},
     {"id": "generated-family mutation", "currentResult": "closed discovery-only in V2-W", "blocksV2": false},
-    {"id": "final public B0 -> V2", "currentResult": "not confirmed", "blocksV2": true}
+    {"id": "final public B0 -> V2", "originalResult": "fixed-order, uncontrolled-cache run did not confirm", "currentResult": "the historical three-pair win lacks raw capture; fresh exact-image RC2 replication is valid but mixed (2/5 PSS wins; median +585 KB), so direct B0-to-V2 claims remain blocked", "supersededEvidenceRetained": true, "blocksV2": false}
   ]
 }
-

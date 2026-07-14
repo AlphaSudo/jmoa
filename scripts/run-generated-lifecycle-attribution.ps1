@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory)][string]$StaticInventory,
     [string]$OutputDirectory = "",
     [string]$MavenExecutable = "mvn",
-    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc1",
+    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2",
     [switch]$FailOnStageError
 )
 
