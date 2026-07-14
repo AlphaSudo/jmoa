@@ -13,7 +13,16 @@ $output = [IO.Path]::GetFullPath((Join-Path $repo $OutputDir))
 
 Push-Location $repo
 try {
-    & $Maven -q clean package source:jar-no-fork
+    foreach ($moduleTarget in @('jmoa-runtime-lib/target', 'jmoa-maven-plugin/target')) {
+        $resolvedTarget = [IO.Path]::GetFullPath((Join-Path $repo $moduleTarget))
+        if (-not $resolvedTarget.StartsWith(([IO.Path]::GetFullPath($repo) + [IO.Path]::DirectorySeparatorChar), [StringComparison]::OrdinalIgnoreCase)) {
+            throw "Refusing to clean release module outside repository: $resolvedTarget"
+        }
+        if (Test-Path -LiteralPath $resolvedTarget) {
+            Remove-Item -LiteralPath $resolvedTarget -Recurse -Force
+        }
+    }
+    & $Maven -q -pl jmoa-runtime-lib,jmoa-maven-plugin -am package source:jar-no-fork
     if ($LASTEXITCODE -ne 0) { throw "Maven release build failed." }
     New-Item -ItemType Directory -Force -Path $output | Out-Null
 
