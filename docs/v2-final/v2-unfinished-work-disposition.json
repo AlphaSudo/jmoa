@@ -1,0 +1,36 @@
+{
+  "metadataVersion": "v2-final-unfinished-work-disposition-v1",
+  "rule": "Every V2 capability is assigned exactly one terminal bucket.",
+  "SHIPPED": [
+    "V1 full-P2 optimizer and deployment materialization",
+    "raw dependency LVT/LVTT reducer",
+    "raw byte-preservation auditor and reducer manifest v2",
+    "classfile and near-64KB profiler",
+    "V2-C evidence engine",
+    "V2-D memory attribution engine",
+    "reducer and runtime-policy recommendation engines",
+    "runtime preflight and workflow automation",
+    "materialization proof, semantic smoke, screen, and confirmation workflow",
+    "no-CDS and CDS runtime-policy support"
+  ],
+  "VALIDATED_BUT_NOT_SHIPPED": [
+    "generated-class inventory, runtime attribution, safety, and ROI analysis",
+    "generated-family lifecycle capture and matched-evidence tooling",
+    "application-class reducer artifact safety",
+    "private Doctor runtime confirmation evidence"
+  ],
+  "INVESTIGATED_AND_REJECTED": [
+    "V2-H hardened ASM runtime promotion",
+    "V2-Q application-class reducer runtime promotion",
+    "generated-family mutation admission for V2"
+  ],
+  "DEFERRED_TO_V3": [
+    "CGLIB, JDK proxy, Spring AOT, and Spring Data generated-class mutation",
+    "large-method splitting",
+    "constant-pool and BootstrapMethods rewriting",
+    "broad AppCDS and Leyden matrices",
+    "JFR and async-profiler allocation-attribution pipeline",
+    "automatic deployment or runtime-policy mutation",
+    "FAST_STARTUP, Kubernetes policy, additional benchmark services, and dashboard"
+  ]
+}

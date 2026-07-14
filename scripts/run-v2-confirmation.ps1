@@ -26,7 +26,7 @@ param(
     [string]$EvidenceOutputDir = "",
     [string]$AttributionOutputDir = "",
     [string]$MavenExecutable = "mvn",
-    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:1.0.0-SNAPSHOT",
+    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc1",
     [string]$MallocArenaMax = "",
     [bool]$CdsEnabled = $false,
     [bool]$AppCdsEnabled = $false,

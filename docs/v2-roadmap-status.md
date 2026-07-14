@@ -11,7 +11,8 @@ partial infrastructure rather than a prototype admission; V2-U adds the matched
 startup/warmup/workload capture campaign contract and records the currently
 available evidence as still incomplete; V2-V makes that campaign executable;
 V2-W completes the matched diagnostic generated-family evidence campaign without
-admitting a generated-family mutation.
+admitting a generated-family mutation. Final performance reconciliation then
+passed both public customers acceptance comparisons.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
@@ -27,23 +28,30 @@ matched capture execution, and the V2 final release audit.
 
 ## Final Release Gate
 
-The V2 final audit freezes scope and blocks any broad final-product performance
-headline until the direct public `B0 -> V2` gate passes. The fresh direct
-customers-service run was valid but not confirmed:
+The corrected final protocol controls page-cache state before every variant and
+balances pair order. Both public customers-service acceptance gates passed:
 
 ```text
 comparison: B0 baseline vs final V2 product artifact
 valid runs: 6/6
-paired wins: 1/3
-median PSS delta: +274 KB
-median Private_Dirty delta: +464 KB
-median memory.current delta: +225,280 bytes
-release decision: RELEASE_PERFORMANCE_GATE_FAILED
+paired wins: 2/3
+median PSS delta: -8,956 KB
+median Private_Dirty delta: -8,620 KB
+median memory.current delta: -11,247,616 bytes
+decision: SUBSTANTIAL_WIN
+
+comparison: finalized V1 vs final V2 product artifact
+valid runs: 6/6
+paired wins: 3/3
+median PSS delta: -4,812 KB
+median Private_Dirty delta: -4,512 KB
+median memory.current delta: -6,791,168 bytes
+decision: SUBSTANTIAL_WIN
 ```
 
-Confirmed `B0 -> V1` and `V1 -> V2` results remain valid inside their exact
-protocols, but they are not additive evidence for the final `B0 -> V2` product
-claim. See [V2 Final Audit](v2-final/README.md).
+The previous failed gate remains documented as a page-cache-confounded protocol
+result. See [V2 Final Audit](v2-final/README.md) and the
+[memory-win matrix](v2-final/v2-final-memory-win-matrix.md).
 
 ## Closure Taxonomy
 
@@ -78,9 +86,9 @@ claims.
 | V2-Q | `CONFIRMATION_FAILED` | Application-class raw metadata admission passed artifact/semantic gates, but paired confirmation blocked runtime promotion |
 | V2-R | `CLOSED_INFRASTRUCTURE` | Application/generated ROI discovery, runtime-relevance taxonomy, candidate ranking, and report-only recommendation classifications |
 | V2-S | `CLOSED_INFRASTRUCTURE` | Generated-family registry, static/runtime reconciliation, safety matrix, ROI scoring, and recommendation replay; no family mutation admitted |
-| V2-T | `PARTIAL_INFRASTRUCTURE` | SHA-gated generated-family evidence join, exclusive census, lifecycle model, and recommendation ingestion; no complete matched capture or family admission |
-| V2-U | `PARTIAL_INFRASTRUCTURE` | Matched generated-family lifecycle capture harness, full identity tuple enforcement, per-service evidence-gap reports, cross-service matrix, and no family admission |
-| V2-V | `PARTIAL_INFRASTRUCTURE` | Fresh matched generated-family campaign execution: preflight, automatic stage attribution, bundle validation, lifecycle/ROI reports, and no family admission; fresh complete bundles remain outstanding |
+| V2-T | `VALIDATED_BUT_NOT_SHIPPED` | SHA-gated generated-family evidence join, exclusive census, lifecycle model, and recommendation ingestion; no family mutation shipped |
+| V2-U | `VALIDATED_BUT_NOT_SHIPPED` | Matched generated-family lifecycle capture harness and full identity tuple enforcement; analysis-only product surface |
+| V2-V | `VALIDATED_BUT_NOT_SHIPPED` | Fresh matched generated-family campaign execution tooling; no mutation shipped |
 | V2-W | `CLOSED_INFRASTRUCTURE` | Matched generated-family capture execution completed for Customers, Visits, and Doctor D2R as diagnostic discovery only; no generated-family mutation or runtime claim |
 
 ## Current Foundation

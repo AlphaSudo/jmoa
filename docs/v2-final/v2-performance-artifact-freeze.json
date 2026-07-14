@@ -1,0 +1,66 @@
+{
+  "metadataVersion": "v2-final-performance-artifact-freeze-v1",
+  "status": "FROZEN",
+  "service": "spring-petclinic-customers-service",
+  "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+  "toolchain": {
+    "runtimeJava": "Eclipse Temurin 17.0.19+10",
+    "buildJava": "Eclipse Temurin 26+35",
+    "maven": "3.9.9",
+    "podmanClient": "5.7.1 windows/amd64",
+    "podmanServer": "5.7.1 linux/amd64"
+  },
+  "protocol": {
+    "launchMode": "EXPLODED_BOOT_APP",
+    "runtimePolicy": "NO_CDS_LOW_DIRTY",
+    "jvmOptions": "-XX:+UseContainerSupport -XX:+UseSerialGC -Xms32m -Xmx256m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -XX:NativeMemoryTracking=summary -Xshare:off",
+    "mallocArenaMax": "1",
+    "cds": false,
+    "appCds": false,
+    "leyden": false,
+    "javaagent": false,
+    "containerCpuLimit": "none explicit",
+    "containerMemoryLimit": "none explicit",
+    "workload": "27 endpoints x 3 rounds (81 requests)",
+    "warmupSeconds": 20,
+    "postWorkloadSettleSeconds": 5,
+    "pageCachePolicy": "DROP_CACHES_BEFORE_EACH_VARIANT",
+    "pairOrder": ["BASELINE_THEN_CANDIDATE", "CANDIDATE_THEN_BASELINE", "BASELINE_THEN_CANDIDATE"]
+  },
+  "sharedFingerprints": {
+    "applicationFiles": 31,
+    "applicationBytes": 73263,
+    "applicationSha256": "51AC35014D684D8E249F97C88BD2899029D863DF0EB7C9F2E33AC331DF8194CC",
+    "loaderFiles": 98,
+    "loaderBytes": 398866,
+    "loaderSha256": "E47682E352C1D45AF2171723A977FAF98C092841AEF1A1CBDE6ECDE0C9AF4668"
+  },
+  "products": {
+    "B0": {
+      "definition": "Unoptimized public baseline",
+      "artifactSha256": "4952EF9306C732846BFAE0FAE6A67BE2F9B8509644B3396B8247215A03E5589D",
+      "imageId": "fb1f34ad575ddfe44e92b52d9f976876b5687bc0f36960236ffd606fcb92fe37",
+      "dependencyJarCount": 161,
+      "dependencyBytes": 92299443,
+      "dependencyFingerprint": "D37FB63329BD75E7042545BE8803448992BAA88E9579A981816DFE3A2B236C53"
+    },
+    "V1": {
+      "definition": "Finalized V1 full-P2 optimization without a V2 reducer",
+      "artifactSha256": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C",
+      "imageId": "79b29f0c3f98068cbd09bd77ee25a4f2c2a8507089c02242682bff3763ee620f",
+      "dependencyJarCount": 162,
+      "dependencyBytes": 92466274,
+      "dependencyFingerprint": "0E22756B26CAA143BB8962BF20FB3B7AEF6B4950E59E3A9A50ACA4CB893746F5"
+    },
+    "V2": {
+      "definition": "V1 plus the productized raw dependency LVT/LVTT reducer",
+      "artifactSha256": "007F1796B83FCC2217A57A6975EF5CAFD7494A5EF050A7F5261C088B63C6CC2F",
+      "imageId": "dabb463d1eced92211f108e8be4a6406a423d02c277f47d611eaf339e6b0b255",
+      "dependencyJarCount": 162,
+      "dependencyBytes": 88798165,
+      "dependencyFingerprint": "CDADE9E25FC25F16DD82A44E4202FE71224605BA37BA74FDF527EDCC1EBD6229",
+      "dependencyDeltaVsV1Bytes": -3668109
+    }
+  },
+  "gates": ["B0_ARTIFACT_FROZEN", "V1_ARTIFACT_FROZEN", "V2_ARTIFACT_FROZEN", "PROTOCOL_FROZEN"]
+}

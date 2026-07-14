@@ -1,24 +1,18 @@
 {
-  "metadataVersion": "v2-final-release-readiness",
-  "decision": "READY_AFTER_LISTED_BLOCKERS",
+  "metadataVersion": "v2-final-release-readiness-v3",
+  "decision": "READY_FOR_RC1",
+  "performanceGates": "PASSED",
   "completed": [
-    "phase closure docs through V2-W",
-    "raw reducer implementation",
-    "evidence engine",
-    "attribution engine",
-    "recommendation engine",
-    "runtime policy engine",
-    "workflow helpers",
-    "claim boundaries"
+    "fresh B0-to-V2 and V1-to-V2 acceptance",
+    "artifact and protocol freeze",
+    "V2-C validation and V2-D attribution",
+    "terminal unfinished-work disposition",
+    "GitHub Release distribution decision",
+    "governance baseline",
+    "six-family schema compatibility freeze",
+    "remote clean-clone build and public quickstart with isolated Maven repository",
+    "fresh Ubuntu/JDK 26 GitHub Actions build"
   ],
-  "notReadyForRc": [
-    "B0 vs V2 direct public performance gate not confirmed",
-    "public quickstart not clean-clone proven",
-    "distribution route not frozen",
-    "schema freeze incomplete",
-    "clean-machine qualification pending",
-    "governance/distribution extras incomplete"
-  ],
-  "decisionRule": "No v2.0.0-rc1 until P0 blockers are resolved or release scope removes the blocked headline."
+  "notReadyForRc": [],
+  "decisionRule": "RC1 may be tagged only while the strict release gate reports zero P0 and P1 blockers."
 }
-

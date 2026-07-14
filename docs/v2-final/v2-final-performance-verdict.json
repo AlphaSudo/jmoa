@@ -1,0 +1,22 @@
+{
+  "metadataVersion": "v2-final-performance-verdict-v1",
+  "status": "PERFORMANCE_GATES_PASSED",
+  "gateA": {
+    "comparison": "B0 vs final V2",
+    "decision": "SUBSTANTIAL_WIN",
+    "pairedWins": "2/3",
+    "medianPssDeltaKb": -8956
+  },
+  "gateB": {
+    "comparison": "finalized V1 vs final V2",
+    "decision": "SUBSTANTIAL_WIN",
+    "pairedWins": "3/3",
+    "medianPssDeltaKb": -4812
+  },
+  "supersededRun": {
+    "decision": "VALID_BUT_PROTOCOL_CONFOUNDED",
+    "reason": "Fixed-order measurements did not control page-cache state; candidate block IO and cgroup file-cache charge were materially different.",
+    "retained": true
+  },
+  "releaseConsequence": "FINAL_PUBLIC_B0_V2_NOT_CONFIRMED is resolved. Release engineering gates remain independent."
+}

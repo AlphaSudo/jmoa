@@ -1,0 +1,12 @@
+{
+  "metadataVersion": "v2-schema-registry-v1",
+  "compatibilityPolicy": "Readers must reject unknown major metadata versions and may ignore unknown optional fields within a known version.",
+  "schemas": [
+    {"name": "reducer artifact report", "metadataVersion": "v2l-visits-artifact-smoke", "fixture": "docs/v2-l/v2l-visits-artifact-smoke.json", "requiredFields": ["metadataVersion"]},
+    {"name": "evidence replay", "metadataVersion": "v2-c-historical-replay-results", "fixture": "docs/v2-c/v2c-historical-replay-results.json", "requiredFields": ["metadataVersion"]},
+    {"name": "attribution replay", "metadataVersion": "v2-d-historical-attribution-replay", "fixture": "docs/v2-d/v2d-historical-attribution-replay.json", "requiredFields": ["metadataVersion"]},
+    {"name": "reducer recommendation", "metadataVersion": "v2m-historical-recommendation-replay", "fixture": "docs/v2-m/v2m-historical-recommendation-replay.json", "requiredFields": ["metadataVersion"]},
+    {"name": "runtime policy recommendation", "metadataVersion": "v2n-runtime-replay", "fixture": "docs/v2-n/v2n-runtime-replay.json", "requiredFields": ["metadataVersion"]},
+    {"name": "generated evidence verdict", "metadataVersion": "v2w-final-verdict", "fixture": "docs/v2-w/v2w-final-verdict.json", "requiredFields": ["metadataVersion"]}
+  ]
+}

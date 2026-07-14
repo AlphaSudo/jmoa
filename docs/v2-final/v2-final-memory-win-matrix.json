@@ -1,0 +1,46 @@
+{
+  "metadataVersion": "v2-final-memory-win-matrix-v1",
+  "generatedAt": "2026-07-13",
+  "releaseDecision": "PERFORMANCE_GATES_PASSED",
+  "primaryAcceptance": [
+    {
+      "comparison": "public customers B0 vs final V2",
+      "runtime": "EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1",
+      "validRuns": 6,
+      "pairedWins": "2/3",
+      "medianPssDeltaKb": -8956,
+      "medianPrivateDirtyDeltaKb": -8620,
+      "medianMemoryCurrentDeltaBytes": -11247616,
+      "classification": "SUBSTANTIAL_WIN"
+    },
+    {
+      "comparison": "public customers finalized V1 vs final V2",
+      "runtime": "EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1",
+      "validRuns": 6,
+      "pairedWins": "3/3",
+      "medianPssDeltaKb": -4812,
+      "medianPrivateDirtyDeltaKb": -4512,
+      "medianMemoryCurrentDeltaBytes": -6791168,
+      "classification": "SUBSTANTIAL_WIN"
+    }
+  ],
+  "scopeBoundConfirmations": [
+    {
+      "comparison": "public visits baseline vs baseline plus raw reducer",
+      "pairedWins": "3/3",
+      "medianPssDeltaKb": -2012,
+      "medianPrivateDirtyDeltaKb": -1680,
+      "medianMemoryCurrentDeltaBytes": -1712128,
+      "classification": "CONFIRMED_NARROW_WIN"
+    },
+    {
+      "comparison": "private Doctor corrected D2 vs D2R",
+      "pairedWins": "3/3",
+      "medianPssDeltaKb": -5156,
+      "medianPrivateDirtyDeltaKb": -5212,
+      "medianMemoryCurrentDeltaBytes": -6975488,
+      "classification": "CONFIRMED_PRIVATE_NARROW_WIN"
+    }
+  ],
+  "claimBoundary": "The primary acceptance claims apply only to the frozen public customers protocol. Visits and Doctor results retain their own runtime scopes. No startup or universal Spring Boot claim is made."
+}

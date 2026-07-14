@@ -1,42 +1,33 @@
 {
-  "metadataVersion": "v2-final-release-blockers",
-  "decision": "READY_AFTER_LISTED_BLOCKERS",
-  "p0": [
+  "metadataVersion": "v2-final-release-blockers-v3",
+  "decision": "READY_FOR_RC1",
+  "p0": [],
+  "p1": [],
+  "resolved": [
     {
       "id": "FINAL_PUBLIC_B0_V2_NOT_CONFIRMED",
-      "evidence": "docs/v2-final/v2-final-performance-acceptance.md",
-      "requiredFix": "Pass direct B0 vs V2 public confirmation or remove final V2-over-baseline performance headline."
-    },
-    {
-      "id": "PUBLIC_GOLDEN_PATH_NOT_CLEAN_CLONE_PROVEN",
-      "evidence": "examples/spring-petclinic-customers-nocds",
-      "requiredFix": "Create and run a clean-clone public quickstart through artifact, audit, materialization, and semantic smoke."
+      "resolution": "Corrected cache-controlled confirmation passed B0-to-V2 with median PSS -8,956 KB, 2/3 paired wins, and V2-C/V2-D acceptance."
     },
     {
       "id": "DISTRIBUTION_ROUTE_UNDECIDED",
-      "evidence": "pom.xml",
-      "requiredFix": "Choose Maven Central, GitHub Packages, or GitHub Release artifact distribution and document checksums."
-    }
-  ],
-  "p1": [
-    "SCHEMA_FREEZE_INCOMPLETE",
-    "GOVERNANCE_FILES_INCOMPLETE",
-    "CLEAN_MACHINE_QA_PENDING"
-  ],
-  "resolved": [
+      "resolution": "GitHub Release artifacts with SHA-256 checksums are the V2 distribution route; Maven Central publication is out of scope for this release."
+    },
     {
-      "id": "STALE_RELEASE_DOCS",
-      "resolution": "README, roadmap, claim register, and closure taxonomy now point to V2-W plus the V2 final audit and block the failed direct B0 -> V2 product headline."
+      "id": "GOVERNANCE_FILES_INCOMPLETE",
+      "resolution": "Apache-2.0 LICENSE, SECURITY.md, and CONTRIBUTING.md are present; support and conduct policy are documented for RC qualification."
+    },
+    {
+      "id": "PUBLIC_GOLDEN_PATH_NOT_CLEAN_CLONE_PROVEN",
+      "resolution": "Commit 973257e passed a remote clean-clone qualification with an empty isolated Maven repository and the full PetClinic quickstart through semantic smoke."
+    },
+    {
+      "id": "SCHEMA_FREEZE_INCOMPLETE",
+      "resolution": "Six shipped report families are registered and passed scripts/check-v2-schema-compatibility.ps1."
+    },
+    {
+      "id": "CLEAN_MACHINE_QA_PENDING",
+      "resolution": "GitHub Actions run 29297537251 passed publication safety and Maven tests on a fresh Ubuntu/JDK 26 runner."
     }
   ],
-  "p2": [
-    "generated-family mutation",
-    "application-class runtime promotion",
-    "large-method splitting",
-    "constant-pool reduction",
-    "BootstrapMethods reduction",
-    "full JFR attribution",
-    "broad runtime matrix",
-    "dashboard"
-  ]
+  "deferred": "docs/v2-final/v2-unfinished-work-disposition.md"
 }

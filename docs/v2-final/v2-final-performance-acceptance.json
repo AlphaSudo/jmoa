@@ -1,6 +1,6 @@
 {
-  "metadataVersion": "v2-final-performance-acceptance",
-  "generatedAt": "2026-07-13T09:16:16+03:00",
+  "metadataVersion": "v2-final-performance-acceptance-v2",
+  "generatedAt": "2026-07-13",
   "service": "spring-petclinic-customers-service",
   "protocol": {
     "launchMode": "EXPLODED_BOOT_APP",
@@ -10,64 +10,48 @@
     "appCds": "OFF",
     "leyden": "OFF",
     "javaagentPresent": false,
-    "workload": "corrected 27 endpoints x 3 rounds"
+    "workload": "27 endpoints x 3 rounds",
+    "pageCachePolicy": "sync and drop_caches before every variant",
+    "pairOrder": ["B-C", "C-B", "B-C"]
   },
   "artifacts": {
-    "B0": {
-      "description": "unoptimized public baseline",
-      "sha256": "4952EF9306C732846BFAE0FAE6A67BE2F9B8509644B3396B8247215A03E5589D"
-    },
-    "V1": {
-      "description": "finalized V1/full-P2 artifact",
-      "sha256": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C"
-    },
-    "V2": {
-      "description": "finalized V2 product artifact, full-P2 plus raw LVT/LVTT reducer",
-      "sha256": "007F1796B83FCC2217A57A6975EF5CAFD7494A5EF050A7F5261C088B63C6CC2F"
-    }
+    "B0": {"sha256": "4952EF9306C732846BFAE0FAE6A67BE2F9B8509644B3396B8247215A03E5589D"},
+    "V1": {"sha256": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C"},
+    "V2": {"sha256": "007F1796B83FCC2217A57A6975EF5CAFD7494A5EF050A7F5261C088B63C6CC2F"}
   },
   "comparisons": [
     {
       "id": "B0_TO_V2_DIRECT",
-      "status": "NOT_CONFIRMED",
+      "status": "CONFIRMED_WIN",
+      "classification": "SUBSTANTIAL_WIN",
       "validRuns": 6,
-      "pairs": 3,
-      "pairedWins": 1,
-      "medianPssDeltaKb": 274,
-      "medianPrivateDirtyDeltaKb": 464,
-      "medianMemoryCurrentDeltaBytes": 225280,
-      "workloadErrors": 0,
-      "classification": "RELEASE_PERFORMANCE_GATE_FAILED",
-      "evidenceLocation": "target/v2-final/customers-b0-v2-direct"
+      "pairedWins": 2,
+      "medianPssDeltaKb": -8956,
+      "medianPrivateDirtyDeltaKb": -8620,
+      "medianMemoryCurrentDeltaBytes": -11247616,
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPrimaryAttribution": "HEAP_PAGE_TOUCH_REDUCTION"
     },
     {
       "id": "V1_TO_V2_INCREMENTAL",
       "status": "CONFIRMED_WIN",
+      "classification": "SUBSTANTIAL_WIN",
       "validRuns": 6,
-      "pairs": 3,
-      "pairedWins": 2,
-      "medianPssDeltaKb": -4467,
-      "medianPrivateDirtyDeltaKb": -4208,
-      "medianMemoryCurrentDeltaBytes": -4493312,
-      "classification": "CONFIRMED_INCREMENTAL_WIN",
-      "evidence": "docs/v2-i/v2i-petclinic-raw-confirmation.json"
-    },
-    {
-      "id": "B0_TO_V1_CONTEXT",
-      "status": "CONFIRMED_WIN",
-      "pairs": 3,
       "pairedWins": 3,
-      "medianPssDeltaKb": -4758,
-      "medianPrivateDirtyDeltaKb": -4904,
-      "medianMemoryCurrentDeltaBytes": -4849664,
-      "classification": "HISTORICAL_CONTEXT",
-      "evidence": "Phase 33M"
+      "medianPssDeltaKb": -4812,
+      "medianPrivateDirtyDeltaKb": -4512,
+      "medianMemoryCurrentDeltaBytes": -6791168,
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPrimaryAttribution": "HEAP_PAGE_TOUCH_REDUCTION"
     }
   ],
-  "decision": "READY_AFTER_LISTED_BLOCKERS",
-  "p0Blockers": [
-    "FINAL_PUBLIC_B0_V2_NOT_CONFIRMED"
-  ],
-  "claimBoundary": "Do not publish a final V2-over-baseline performance headline until B0_TO_V2_DIRECT passes."
+  "supersededComparison": {
+    "status": "VALID_BUT_PROTOCOL_CONFOUNDED",
+    "oldMedianPssDeltaKb": 274,
+    "oldMedianMemoryCurrentDeltaBytes": 225280,
+    "reason": "Uncontrolled page-cache state and fixed order produced unequal candidate block IO and file-cache charge."
+  },
+  "decision": "PERFORMANCE_GATES_PASSED",
+  "p0Blockers": [],
+  "claimBoundary": "Final V2 substantially beats B0 and V1 only under the frozen public customers no-CDS exploded-Boot protocol."
 }
-

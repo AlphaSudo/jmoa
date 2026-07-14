@@ -1,19 +1,32 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2W_AND_FINAL_AUDIT",
+  "status": "CURRENT_AFTER_FINAL_PERFORMANCE_RECONCILIATION",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "finalProductGate": {
     "id": "final-public-b0-v2",
     "comparison": "B0 baseline vs final V2 product artifact",
     "service": "Spring PetClinic customers-service",
     "validRuns": "6/6",
-    "pairedWins": "1/3",
-    "medianPssDeltaKb": 274,
-    "medianPrivateDirtyDeltaKb": 464,
-    "medianMemoryCurrentDeltaBytes": 225280,
-    "decision": "RELEASE_PERFORMANCE_GATE_FAILED",
-    "claimAllowed": false,
-    "claimBoundary": "Confirmed B0 -> V1 and V1 -> V2 results remain valid in scope but are not additive evidence for a final direct B0 -> V2 product claim."
+    "pairedWins": "2/3",
+    "medianPssDeltaKb": -8956,
+    "medianPrivateDirtyDeltaKb": -8620,
+    "medianMemoryCurrentDeltaBytes": -11247616,
+    "decision": "SUBSTANTIAL_WIN",
+    "claimAllowed": true,
+    "claimBoundary": "Confirmed only for the frozen public customers EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1 protocol."
+  },
+  "finalIncrementalGate": {
+    "id": "final-public-v1-v2",
+    "comparison": "finalized V1 vs final V2 product artifact",
+    "service": "Spring PetClinic customers-service",
+    "validRuns": "6/6",
+    "pairedWins": "3/3",
+    "medianPssDeltaKb": -4812,
+    "medianPrivateDirtyDeltaKb": -4512,
+    "medianMemoryCurrentDeltaBytes": -6791168,
+    "decision": "SUBSTANTIAL_WIN",
+    "claimAllowed": true,
+    "claimBoundary": "Incremental raw reducer result under the same frozen public customers protocol; no startup or universal claim."
   },
   "confirmedRuntimeClaims": [
     {
@@ -324,8 +337,7 @@
     "V2-W generated-family runtime improvement",
     "V2-W generated-family mutation",
     "V2-W generated-family prototype admission",
-    "final V2 public B0 -> V2 performance win",
-    "substantial final V2 public baseline-over-product win",
-    "addition of B0 -> V1 and V1 -> V2 medians as a final V2 claim"
+    "startup improvement from the final V2 customers acceptance",
+    "transfer of final customers acceptance to other services or runtime policies"
   ]
 }

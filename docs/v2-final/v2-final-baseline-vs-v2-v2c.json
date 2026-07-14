@@ -1,0 +1,14 @@
+{
+  "metadataVersion": "v2-final-b0-v2-v2c-v1",
+  "status": "PASSED",
+  "verdict": "CONFIRMED_WIN",
+  "validRuns": 6,
+  "invalidRuns": 0,
+  "pairs": 3,
+  "pairedWins": 2,
+  "medianPssDeltaKb": -8956,
+  "medianPrivateDirtyDeltaKb": -8620,
+  "medianMemoryCurrentDeltaBytes": -11247616,
+  "perturbations": [],
+  "source": "target/v2-final/v2c/b0-v2"
+}

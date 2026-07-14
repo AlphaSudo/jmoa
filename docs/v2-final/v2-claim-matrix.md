@@ -1,13 +1,15 @@
 # V2 Claim Matrix
 
-| Claim | Status | Allowed Wording |
-| --- | --- | --- |
-| JMOA V2 includes a raw LVT/LVTT reducer | `ALLOWED` | "JMOA V2 adds an opt-in raw dependency reducer for local-variable debug metadata." |
-| V2 raw reducer improves customers over full-P2 | `ALLOWED_NARROW` | "Confirmed on customers-service full-P2 vs full-P2+raw under exploded Boot no-CDS." |
-| V2 raw reducer improves visits baseline | `ALLOWED_NARROW` | "Confirmed on visits-service baseline vs baseline+raw under exploded Boot no-CDS." |
-| V2 raw reducer improves Doctor D2 | `ALLOWED_PRIVATE_NARROW` | "Confirmed on private Doctor D2/D2R under fat-JAR/CDS with fresh variant-specific CDS." |
-| Final V2 product substantially beats customers baseline | `BLOCKED` | Not allowed until direct `B0 -> V2` passes. |
-| V2 improves all Spring Boot services | `FORBIDDEN` | Universal claims are not supported. |
-| V2 optimizes generated/proxy classes | `FORBIDDEN` | V2 only inventories and classifies generated/proxy families. |
-| V2 improves startup | `FORBIDDEN` | Startup wins are not confirmed. |
+| Claim | Status |
+| --- | --- |
+| final V2 substantially reduces customers memory versus B0 under the frozen protocol | `ALLOWED_NARROW` |
+| final V2 substantially reduces customers memory versus finalized V1 under the frozen protocol | `ALLOWED_NARROW` |
+| V2 includes a byte-preserving raw dependency LVT/LVTT reducer | `ALLOWED` |
+| raw reducer is runtime-confirmed on public visits | `ALLOWED_NARROW` |
+| raw reducer is runtime-confirmed on private Doctor D2 | `ALLOWED_PRIVATE_NARROW` |
+| V2 improves startup | `FORBIDDEN` |
+| V2 improves every Spring Boot service/runtime mode | `FORBIDDEN` |
+| V2 mutates generated/proxy classes | `FORBIDDEN` |
 
+The word `substantial` is tied to the final acceptance rule: all three primary
+medians improve by at least 1% and more than 3 MiB. It is not a universal claim.

@@ -1,13 +1,15 @@
 # V2 Final Audit
 
-This folder is the release-readiness layer for V2. It freezes scope, audits the
-original plan, records the final performance gate, and lists the blockers that
-must be cleared before `rc1` or `v2.0.0`.
+This folder is the release-readiness layer for V2. It freezes scope, records the
+passed final performance gates, disposes every research item, and tracks the
+remaining release-qualification work before `rc1` or `v2.0.0`.
 
 ## Start Here
 
 - [Release scope](v2-release-scope.md)
 - [Final performance acceptance](v2-final-performance-acceptance.md)
+- [Final memory-win matrix](v2-final-memory-win-matrix.md)
+- [Unfinished-work disposition](v2-unfinished-work-disposition.md)
 - [Release blockers](v2-release-blockers.md)
 - [Release readiness](v2-release-readiness.md)
 
@@ -25,13 +27,15 @@ must be cleared before `rc1` or `v2.0.0`.
 
 - [Schema freeze](v2-schema-freeze.md)
 - [Public reproduction plan](v2-public-reproduction-plan.md)
+- [Public quickstart qualification](v2-public-quickstart-qualification.md)
+- [Clean-clone RC qualification](v2-clean-clone-qualification.md)
+- [Distribution](v2-distribution.md)
 
 ## Current Decision
 
 ```text
-READY_AFTER_LISTED_BLOCKERS
+READY_FOR_RC1
 ```
 
-The P0 blocker is the direct public `B0 -> V2` gate: the fresh final artifact
-run was valid but not confirmed, so V2 cannot be published with a broad
-baseline-over-final-product performance headline yet.
+There are no unresolved P0 or P1 blockers. The remote clean-clone quickstart,
+schema freeze, and independent GitHub Actions build all passed.

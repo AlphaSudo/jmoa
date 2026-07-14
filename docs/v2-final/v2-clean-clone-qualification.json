@@ -1,0 +1,51 @@
+{
+  "metadataVersion": "v2-clean-clone-qualification-public-v1",
+  "status": "PASSED",
+  "repository": "https://github.com/AlphaSudo/jmoa.git",
+  "revision": "973257e04648f4dee2bd7a850e8ae7eeb81b2e02",
+  "environment": {
+    "host": "Windows 11",
+    "buildJdk": "Temurin 26",
+    "runtimeJdk": "Temurin 17 container",
+    "isolatedMavenRepository": true,
+    "durationSeconds": 1104.5
+  },
+  "gates": {
+    "tests": "PASSED",
+    "schema": "PASSED",
+    "publicationSafety": "PASSED",
+    "releaseBundle": "PASSED",
+    "releaseInstall": "PASSED",
+    "fullP2": "PASSED",
+    "rawReducer": "PASSED",
+    "materialization": "PASSED",
+    "semanticSmoke": "PASSED"
+  },
+  "fullP2": {
+    "classesScanned": 11882,
+    "lambdaSites": 7331,
+    "optimizedDependencyJars": 24
+  },
+  "reducer": {
+    "jars": 24,
+    "classes": 8619,
+    "removedBytes": 776286
+  },
+  "materialization": {
+    "replacedJars": 24,
+    "runtimeLibraryHashMatched": true
+  },
+  "semanticSmoke": {
+    "health": "UP",
+    "requests": 3,
+    "errors": 0,
+    "linkageErrors": 0
+  },
+  "independentCi": {
+    "provider": "GitHub Actions",
+    "run": 29297537251,
+    "environment": "ubuntu-latest / Temurin 26",
+    "status": "PASSED"
+  },
+  "claimBoundary": "Release qualification only. The final performance matrix remains the source of memory claims."
+}

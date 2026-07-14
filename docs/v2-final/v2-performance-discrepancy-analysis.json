@@ -1,0 +1,25 @@
+{
+  "metadataVersion": "v2-final-performance-discrepancy-v1",
+  "status": "RESOLVED",
+  "failedFreshRun": {
+    "pairedWins": "1/3",
+    "medianPssDeltaKb": 274,
+    "medianPrivateDirtyDeltaKb": 464,
+    "medianMemoryCurrentDeltaBytes": 225280
+  },
+  "findings": [
+    {"difference": "B0, V1, and V2 application and loader fingerprints", "classification": "EXPECTED_NON_CAUSAL", "result": "identical"},
+    {"difference": "V1 and V2 dependency layers", "classification": "EXPECTED_NON_CAUSAL", "result": "exact audited raw-reducer delta"},
+    {"difference": "artifact cache state before each variant", "classification": "MEASUREMENT_MISMATCH", "result": "verified by 0 B versus about 60 MB block-I/O asymmetry"},
+    {"difference": "candidate always ran second", "classification": "POSSIBLE_VARIANCE_SOURCE", "result": "corrected with balanced pair order"},
+    {"difference": "cgroup category evidence", "classification": "MEASUREMENT_MISMATCH", "result": "memory.stat was absent; final protocol records it"},
+    {"difference": "runtime JDK, JVM options, allocator, launch mode, workload", "classification": "EXPECTED_NON_CAUSAL", "result": "matched"},
+    {"difference": "heap page-touch between pairs", "classification": "POSSIBLE_VARIANCE_SOURCE", "result": "retained and explained by V2-D; no run deleted"}
+  ],
+  "verifiedCorrection": {
+    "pageCachePolicy": "DROP_CACHES_BEFORE_EACH_VARIANT",
+    "pairOrder": ["B-C", "C-B", "B-C"],
+    "additionalCapture": "memory.stat"
+  },
+  "unresolvedArtifactProtocolOrMeasurementMismatches": 0
+}
