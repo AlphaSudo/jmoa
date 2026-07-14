@@ -1,19 +1,15 @@
 {
-  "metadataVersion": "v2-final-capability-matrix",
+  "metadataVersion": "v2-final-capability-matrix-v2",
   "capabilities": [
-    {"capability": "V1/full-P2 customers no-CDS optimization", "status": "RUNTIME_CONFIRMED", "evidence": ["Phase 33M", "docs/v2-claim-register.md"]},
-    {"capability": "raw LVT/LVTT dependency reducer, customers incremental", "status": "RUNTIME_CONFIRMED", "evidence": ["docs/v2-i/v2i-final-verdict.md"]},
-    {"capability": "raw LVT/LVTT dependency reducer, visits", "status": "RUNTIME_CONFIRMED", "evidence": ["docs/v2-l/v2l-visits-final-verdict.md"]},
-    {"capability": "raw LVT/LVTT dependency reducer, Doctor", "status": "RUNTIME_CONFIRMED", "evidence": ["docs/v2-k/v2k-doctor-final-verdict.md"]},
-    {"capability": "final public customers B0 -> V2 product gate", "status": "SCREEN_FAILED", "evidence": ["docs/v2-final/v2-final-performance-acceptance.md"]},
-    {"capability": "evidence engine", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-c/v2c-closure-report.md"]},
-    {"capability": "memory attribution engine", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-d/v2d-closure-report.md"]},
-    {"capability": "reducer recommendation", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-m/v2m-closure-report.md"]},
-    {"capability": "runtime policy recommendation", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-n/v2n-closure-report.md"]},
-    {"capability": "runtime workflow productization", "status": "INFRASTRUCTURE_CONFIRMED", "evidence": ["docs/v2-p/v2p-final-verdict.md"]},
-    {"capability": "generated-family matched evidence", "status": "DISCOVERY_ONLY", "evidence": ["docs/v2-w/v2w-final-verdict.md"]},
-    {"capability": "application-class raw reduction", "status": "CONFIRMATION_FAILED", "evidence": ["docs/v2-q/v2q-visits-application-confirmation.md"]},
-    {"capability": "broad bytecode surgery", "status": "DEFERRED_TO_V3", "evidence": ["docs/v2-final/v2-deferred-to-v3.md"]}
+    {"capability": "final public customers B0 -> V2 product", "status": "SHIPPED", "evidence": ["docs/v2-final/v2-final-baseline-vs-v2-confirmation.md"]},
+    {"capability": "final public customers V1 -> V2 increment", "status": "SHIPPED", "evidence": ["docs/v2-final/v2-final-v1-vs-v2-confirmation.md"]},
+    {"capability": "raw dependency LVT/LVTT reducer and byte auditor", "status": "SHIPPED", "evidence": ["docs/v2-i/v2i-final-verdict.md", "docs/v2-j"]},
+    {"capability": "public visits raw reducer", "status": "SHIPPED", "evidence": ["docs/v2-l/v2l-visits-final-verdict.md"]},
+    {"capability": "evidence, attribution, recommendation, and runtime workflow engines", "status": "SHIPPED", "evidence": ["docs/v2-c", "docs/v2-d", "docs/v2-m", "docs/v2-n", "docs/v2-p"]},
+    {"capability": "generated-family inventory and matched evidence", "status": "VALIDATED_BUT_NOT_SHIPPED", "evidence": ["docs/v2-w/v2w-final-verdict.md"]},
+    {"capability": "private Doctor runtime confirmation", "status": "VALIDATED_BUT_NOT_SHIPPED", "evidence": ["docs/v2-k/v2k-doctor-final-verdict.md"]},
+    {"capability": "hardened ASM runtime promotion", "status": "INVESTIGATED_AND_REJECTED", "evidence": ["docs/v2-h"]},
+    {"capability": "application-class raw reduction promotion", "status": "INVESTIGATED_AND_REJECTED", "evidence": ["docs/v2-q/v2q-visits-application-confirmation.md"]},
+    {"capability": "broad generated/proxy and bytecode surgery", "status": "DEFERRED_TO_V3", "evidence": ["docs/v2-final/v2-unfinished-work-disposition.md"]}
   ]
 }
-

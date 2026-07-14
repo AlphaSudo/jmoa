@@ -1,0 +1,25 @@
+{
+  "metadataVersion": "v2-final-v1-v2-confirmation-v1",
+  "status": "SUBSTANTIAL_WIN",
+  "comparison": "finalized V1 vs final V2",
+  "validRuns": 6,
+  "pairedWins": "3/3",
+  "medianPssDeltaKb": -4812,
+  "medianPssDeltaPercent": -1.388,
+  "medianPrivateDirtyDeltaKb": -4512,
+  "medianPrivateDirtyDeltaPercent": -1.337,
+  "medianMemoryCurrentDeltaBytes": -6791168,
+  "medianMemoryCurrentDeltaPercent": -1.584,
+  "medianHeapPssDeltaKb": -2300,
+  "medianAnonymousRwPssDeltaKb": -1476,
+  "medianLoadedClassDelta": 0,
+  "workloadErrors": 0,
+  "pairDeltas": [
+    {"pair": 1, "pass": true, "pssKb": -2176, "privateDirtyKb": -2664, "memoryCurrentBytes": -4624384},
+    {"pair": 2, "pass": true, "pssKb": -4812, "privateDirtyKb": -4512, "memoryCurrentBytes": -6791168},
+    {"pair": 3, "pass": true, "pssKb": -5353, "privateDirtyKb": -5416, "memoryCurrentBytes": -7507968}
+  ],
+  "v2cVerdict": "CONFIRMED_WIN",
+  "v2dPassed": true,
+  "startupClaim": false
+}

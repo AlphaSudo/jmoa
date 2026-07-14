@@ -51,29 +51,35 @@ The source here supports the evidence portfolio, which currently summarizes:
 The PetClinic result is the public reproducibility bridge. It is scoped to the
 project's exploded Boot launch shape and the `NO_CDS_LOW_DIRTY` runtime policy.
 
-## V2 Final Release Gate
+## V2 Final Performance Gate
 
-V2-A through V2-W are closed within their declared boundaries, but the final V2
-publication gate is not green yet. A fresh direct public `B0 -> V2` PetClinic
-customers-service run completed with valid evidence and failed the release
-performance threshold:
+The final public customers-service artifact passed both release comparisons
+under the frozen, cache-controlled no-CDS exploded-Boot protocol:
 
 ```text
 comparison: B0 baseline vs final V2 product artifact
 valid runs: 6/6
-paired wins: 1/3
-median PSS delta: +274 KB
-median Private_Dirty delta: +464 KB
-median memory.current delta: +225,280 bytes
-release decision: RELEASE_PERFORMANCE_GATE_FAILED
+paired wins: 2/3
+median PSS delta: -8,956 KB
+median Private_Dirty delta: -8,620 KB
+median memory.current delta: -11,247,616 bytes
+decision: SUBSTANTIAL_WIN
+
+comparison: finalized V1 vs final V2 product artifact
+valid runs: 6/6
+paired wins: 3/3
+median PSS delta: -4,812 KB
+median Private_Dirty delta: -4,512 KB
+median memory.current delta: -6,791,168 bytes
+decision: SUBSTANTIAL_WIN
 ```
 
-The confirmed incremental results remain valid within their measured scopes,
-but they must not be added together or reused as a final V2-over-baseline
-headline. See the final audit docs for the release blockers and allowed claim
-boundary:
+V2-C accepted all twelve runs and V2-D attributes both comparisons primarily
+to lower heap page touch. No startup or universal Spring Boot claim is made.
+See the final matrix and release qualification state:
 
 - [V2 final performance acceptance](docs/v2-final/v2-final-performance-acceptance.md)
+- [V2 final memory-win matrix](docs/v2-final/v2-final-memory-win-matrix.md)
 - [V2 release blockers](docs/v2-final/v2-release-blockers.md)
 - [V2 claim matrix](docs/v2-final/v2-claim-matrix.md)
 

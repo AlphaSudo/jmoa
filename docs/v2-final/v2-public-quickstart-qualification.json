@@ -1,0 +1,35 @@
+{
+  "metadataVersion": "v2-public-quickstart-qualification-v1",
+  "status": "LOCAL_GOLDEN_PATH_PASSED",
+  "petclinicRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+  "jmoaVersion": "2.0.0-rc1",
+  "inputs": {
+    "profileSha256": "ad1ec46aa174145392afad76824bacf9bb99e8d4faa3f10a20cda05ad3aa326a",
+    "admissionSha256": "617d5a15a6c6d1dcc9423f414097c30050c312be24bac8a9dcf6c39b95eef6",
+    "safeSamsSha256": "55b4be6073293594a4cc28cf4accc3d86e2ede2f671738e4a53519fdfc4cdb04"
+  },
+  "fullP2": {
+    "classesScanned": 11882,
+    "lambdaSites": 7331,
+    "optimizedDependencyJars": 24
+  },
+  "reducer": {
+    "jars": 24,
+    "classes": 8619,
+    "originalBytes": 14566646,
+    "reducedBytes": 13790360,
+    "removedBytes": 776286
+  },
+  "materialization": {
+    "replacedJars": 24,
+    "runtimeLibraryHashMatched": true
+  },
+  "semanticSmoke": {
+    "java": 17,
+    "health": "UP",
+    "requests": 3,
+    "errors": 0,
+    "linkageErrors": 0
+  },
+  "claimBoundary": "Local in-place golden-path qualification. Clean-clone qualification is a separate RC gate; no new memory claim is made."
+}

@@ -1,28 +1,19 @@
 {
-  "metadataVersion": "v2-final-schema-freeze",
-  "status": "INCOMPLETE",
-  "rcBlockerRank": "P1",
-  "schemas": [
-    "reducer report",
-    "reducer manifest v2",
-    "raw byte-preservation audit",
-    "V2-C run/evidence manifest",
-    "paired confirmation",
-    "V2-D attribution",
-    "reducer recommendation",
-    "runtime recommendation",
-    "runtime preflight",
-    "workflow report",
-    "generated inventory",
-    "generated lifecycle manifest",
-    "generated evidence reconciliation",
-    "prototype admission"
-  ],
-  "exitGate": [
-    "metadataVersion documented",
-    "required and optional fields documented",
-    "historical fixture parse tests pass",
-    "unsupported future schema behavior documented"
+  "metadataVersion": "v2-final-schema-freeze-v2",
+  "status": "COMPLETE",
+  "registry": "docs/v2-final/v2-schema-registry.json",
+  "compatibilityCheck": "scripts/check-v2-schema-compatibility.ps1",
+  "policy": {
+    "knownVersion": "Readers accept required fields and ignore unknown optional fields.",
+    "unknownMajorVersion": "Readers must reject rather than guess.",
+    "producerChange": "Removing or changing a required field requires a new metadataVersion."
+  },
+  "coverage": [
+    "reducer artifact reports",
+    "V2-C evidence replay",
+    "V2-D attribution replay",
+    "reducer recommendation replay",
+    "runtime-policy recommendation replay",
+    "generated-evidence final verdict"
   ]
 }
-

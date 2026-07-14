@@ -1,7 +1,6 @@
 # V2 Claim Register
 
-This is the source of truth for public V2 claims after V2-W and the V2 final
-release audit.
+This is the source of truth after final performance reconciliation.
 
 Closure terms follow:
 
@@ -9,22 +8,30 @@ Closure terms follow:
 
 ## Final Product Gate
 
-The final direct public `B0 -> V2` customers-service gate is not confirmed.
+Both final public customers-service release gates are confirmed under the
+frozen cache-controlled protocol.
 
 ```text
 comparison: B0 baseline vs final V2 product artifact
 valid runs: 6/6
-paired wins: 1/3
-median PSS delta: +274 KB
-median Private_Dirty delta: +464 KB
-median memory.current delta: +225,280 bytes
-decision: RELEASE_PERFORMANCE_GATE_FAILED
+paired wins: 2/3
+median PSS delta: -8,956 KB
+median Private_Dirty delta: -8,620 KB
+median memory.current delta: -11,247,616 bytes
+decision: SUBSTANTIAL_WIN
+
+comparison: finalized V1 vs final V2 product artifact
+valid runs: 6/6
+paired wins: 3/3
+median PSS delta: -4,812 KB
+median Private_Dirty delta: -4,512 KB
+median memory.current delta: -6,791,168 bytes
+decision: SUBSTANTIAL_WIN
 ```
 
-The register therefore does not allow a broad final V2-over-baseline public
-performance headline. Historical `B0 -> V1` and incremental `V1 -> V2` claims
-remain valid within their exact protocols, but they are not additive proof of
-the final direct `B0 -> V2` product result.
+The claim is limited to public customers-service under `EXPLODED_BOOT_APP`,
+`NO_CDS_LOW_DIRTY`, `MALLOC_ARENA_MAX=1`, no CDS/AppCDS/Leyden/javaagent, and
+the balanced cold-page-cache protocol. It is not a universal or startup claim.
 
 ## Confirmed Runtime Claims
 
@@ -403,9 +410,8 @@ V2-U cross-service generated-family runtime generalization
 V2-W generated-family runtime improvement
 V2-W generated-family mutation
 V2-W generated-family prototype admission
-final V2 public B0 -> V2 performance win
-substantial final V2 public baseline-over-product win
-addition of B0 -> V1 and V1 -> V2 medians as a final V2 claim
+startup improvement from the final V2 customers acceptance
+transfer of final customers acceptance to other services or runtime policies
 ```
 
 Any new runtime performance claim must pass V2-C validation and V2-D attribution.

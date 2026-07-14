@@ -1,0 +1,13 @@
+{
+  "metadataVersion": "v2-final-layer-isolation-v1",
+  "status": "COMPLETE",
+  "screens": [
+    {"comparison": "B0_V1", "cachePolicy": "UNCONTROLLED", "pssDeltaKb": -5120, "privateDirtyDeltaKb": -5160, "memoryCurrentDeltaBytes": -19283968, "classification": "POSSIBLE_VARIANCE_SOURCE"},
+    {"comparison": "V1_V2", "cachePolicy": "UNCONTROLLED", "pssDeltaKb": -11567, "privateDirtyDeltaKb": -11356, "memoryCurrentDeltaBytes": 49217536, "classification": "MEASUREMENT_MISMATCH"},
+    {"comparison": "B0_V1", "cachePolicy": "COLD_PER_VARIANT", "pssDeltaKb": 1965, "privateDirtyDeltaKb": 2092, "memoryCurrentDeltaBytes": 1806336, "classification": "SCREEN_REGRESSION"},
+    {"comparison": "V1_V2", "cachePolicy": "COLD_PER_VARIANT", "pssDeltaKb": 209, "privateDirtyDeltaKb": 268, "memoryCurrentDeltaBytes": -1880064, "classification": "MIXED_SCREEN"},
+    {"comparison": "B0_V2", "cachePolicy": "COLD_PER_VARIANT", "pssDeltaKb": 4006, "privateDirtyDeltaKb": 3764, "memoryCurrentDeltaBytes": 2252800, "classification": "SCREEN_REGRESSION"}
+  ],
+  "identifiedInteraction": "Heap page-touch and cgroup file-cache state can dominate a single screen even when class and artifact transformations are deterministic.",
+  "decision": "Proceed to balanced three-pair confirmations; do not promote any single screen."
+}

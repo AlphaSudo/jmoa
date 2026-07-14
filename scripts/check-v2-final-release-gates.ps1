@@ -1,6 +1,7 @@
 param(
   [string]$BlockerFile = "docs/v2-final/v2-release-blockers.json",
-  [switch]$AllowP0
+  [switch]$AllowP0,
+  [switch]$AllowP1
 )
 
 $ErrorActionPreference = "Stop"
@@ -26,6 +27,9 @@ foreach ($blocker in $p1) {
 
 if ($p0.Count -gt 0 -and -not $AllowP0) {
   throw "V2 final release gate failed: unresolved P0 blockers remain. Use -AllowP0 only for diagnostic CI jobs, never for rc/release tagging."
+}
+if ($p1.Count -gt 0 -and -not $AllowP1) {
+  throw "V2 final release gate failed: unresolved P1 qualification blockers remain. Use -AllowP1 only for diagnostic jobs, never for rc/release tagging."
 }
 
 Write-Host "V2 final release gate passed for this invocation."

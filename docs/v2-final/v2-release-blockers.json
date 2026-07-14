@@ -1,42 +1,25 @@
 {
-  "metadataVersion": "v2-final-release-blockers",
-  "decision": "READY_AFTER_LISTED_BLOCKERS",
-  "p0": [
-    {
-      "id": "FINAL_PUBLIC_B0_V2_NOT_CONFIRMED",
-      "evidence": "docs/v2-final/v2-final-performance-acceptance.md",
-      "requiredFix": "Pass direct B0 vs V2 public confirmation or remove final V2-over-baseline performance headline."
-    },
-    {
-      "id": "PUBLIC_GOLDEN_PATH_NOT_CLEAN_CLONE_PROVEN",
-      "evidence": "examples/spring-petclinic-customers-nocds",
-      "requiredFix": "Create and run a clean-clone public quickstart through artifact, audit, materialization, and semantic smoke."
-    },
-    {
-      "id": "DISTRIBUTION_ROUTE_UNDECIDED",
-      "evidence": "pom.xml",
-      "requiredFix": "Choose Maven Central, GitHub Packages, or GitHub Release artifact distribution and document checksums."
-    }
-  ],
+  "metadataVersion": "v2-final-release-blockers-v2",
+  "decision": "READY_FOR_RELEASE_QUALIFICATION",
+  "p0": [],
   "p1": [
+    "PUBLIC_GOLDEN_PATH_NOT_CLEAN_CLONE_PROVEN",
     "SCHEMA_FREEZE_INCOMPLETE",
-    "GOVERNANCE_FILES_INCOMPLETE",
     "CLEAN_MACHINE_QA_PENDING"
   ],
   "resolved": [
     {
-      "id": "STALE_RELEASE_DOCS",
-      "resolution": "README, roadmap, claim register, and closure taxonomy now point to V2-W plus the V2 final audit and block the failed direct B0 -> V2 product headline."
+      "id": "FINAL_PUBLIC_B0_V2_NOT_CONFIRMED",
+      "resolution": "Corrected cache-controlled confirmation passed B0-to-V2 with median PSS -8,956 KB, 2/3 paired wins, and V2-C/V2-D acceptance."
+    },
+    {
+      "id": "DISTRIBUTION_ROUTE_UNDECIDED",
+      "resolution": "GitHub Release artifacts with SHA-256 checksums are the V2 distribution route; Maven Central publication is out of scope for this release."
+    },
+    {
+      "id": "GOVERNANCE_FILES_INCOMPLETE",
+      "resolution": "Apache-2.0 LICENSE, SECURITY.md, and CONTRIBUTING.md are present; support and conduct policy are documented for RC qualification."
     }
   ],
-  "p2": [
-    "generated-family mutation",
-    "application-class runtime promotion",
-    "large-method splitting",
-    "constant-pool reduction",
-    "BootstrapMethods reduction",
-    "full JFR attribution",
-    "broad runtime matrix",
-    "dashboard"
-  ]
+  "deferred": "docs/v2-final/v2-unfinished-work-disposition.md"
 }
