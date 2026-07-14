@@ -2,24 +2,35 @@ param(
     [Parameter(Mandatory)][string]$ComparisonId,
     [Parameter(Mandatory)][string]$PetclinicRoot,
     [Parameter(Mandatory)][string]$OutputDir,
-    [Parameter(Mandatory)][string]$BaselineExplodedRoot,
-    [Parameter(Mandatory)][string]$CandidateExplodedRoot,
-    [Parameter(Mandatory)][string]$BaselineJar,
-    [Parameter(Mandatory)][string]$CandidateJar,
+    [string]$BaselineExplodedRoot,
+    [string]$CandidateExplodedRoot,
+    [string]$BaselineJar,
+    [string]$CandidateJar,
     [Parameter(Mandatory)][string]$BaselineImage,
     [Parameter(Mandatory)][string]$CandidateImage,
     [string]$BaselineProduct = "B0",
     [string]$CandidateProduct = "V2",
     [int]$Pairs = 3,
+    [ValidateRange(1, [int]::MaxValue)][int]$FirstPair = 1,
     [int]$Port = 8081,
     [int]$WarmupSeconds = 20,
     [int]$PostWorkloadSettleSeconds = 5,
     [int]$CustomerReadyTimeoutSeconds = 900,
+    [string]$BaselineArtifactSha256,
+    [string]$CandidateArtifactSha256,
+    [string]$BaselineExpectedImageId,
+    [string]$CandidateExpectedImageId,
     [switch]$SkipImageBuild,
     [switch]$AnalyzeExisting
 )
 
 $ErrorActionPreference = "Stop"
+
+if ($Pairs -lt 1) {
+    throw "Pairs must be at least 1."
+}
+$LastPair = $FirstPair + $Pairs - 1
+$MinimumPairedWins = [int][math]::Ceiling($Pairs / 2.0)
 
 $RunDir = $OutputDir
 $PetclinicOut = Join-Path $PetclinicRoot "out"
@@ -68,6 +79,39 @@ function Read-JsonFile {
     param([string]$Path)
     if (-not (Test-Path -LiteralPath $Path)) { return $null }
     return Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json
+}
+
+function Resolve-ArtifactSha256 {
+    param([string]$ArtifactPath, [string]$ExpectedSha256, [string]$Label)
+    if (-not [string]::IsNullOrWhiteSpace($ExpectedSha256) -and $ExpectedSha256 -notmatch '^[0-9a-fA-F]{64}$') {
+        throw "$Label expected SHA-256 must contain exactly 64 hexadecimal characters."
+    }
+    if (-not [string]::IsNullOrWhiteSpace($ArtifactPath)) {
+        if (-not (Test-Path -LiteralPath $ArtifactPath -PathType Leaf)) {
+            throw "$Label artifact is missing: $ArtifactPath"
+        }
+        $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $ArtifactPath).Hash.ToUpperInvariant()
+        if (-not [string]::IsNullOrWhiteSpace($ExpectedSha256) -and $actual -ne $ExpectedSha256.ToUpperInvariant()) {
+            throw "$Label artifact SHA-256 mismatch. Expected $ExpectedSha256 but found $actual."
+        }
+        return $actual
+    }
+    if (-not [string]::IsNullOrWhiteSpace($ExpectedSha256)) {
+        return $ExpectedSha256.ToUpperInvariant()
+    }
+    throw "$Label requires an artifact path or an explicit frozen artifact SHA-256."
+}
+
+function Resolve-ImageId {
+    param([string]$Image, [string]$ExpectedImageId, [string]$Label)
+    $actual = (& podman image inspect $Image --format '{{.Id}}' 2>&1 | Out-String).Trim()
+    if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($actual)) {
+        throw "$Label image is unavailable: $Image"
+    }
+    if (-not [string]::IsNullOrWhiteSpace($ExpectedImageId) -and $actual -ne $ExpectedImageId) {
+        throw "$Label image ID mismatch. Expected $ExpectedImageId but found $actual."
+    }
+    return $actual
 }
 
 function Format-Kb {
@@ -555,14 +599,15 @@ function Build-Analysis {
     $materializer = Read-JsonFile $MaterializerJson
     $originPassed = [bool]($origin.status -eq "passed" -and $origin.proof.dynamic_origin_proven)
     $materializerReady = [bool]($materializer.acceptance.ready_for_runtime_smoke)
+    $runtimeIdentityPassed = $originPassed -and ((-not $SkipImageBuild) -or $FrozenImageIdentityVerified)
 
     $samples = @()
-    for ($pair = 1; $pair -le $Pairs; $pair++) {
+    for ($pair = $FirstPair; $pair -le $LastPair; $pair++) {
         $samples += Read-Sample -Pair $pair -Variant "baseline"
         $samples += Read-Sample -Pair $pair -Variant "candidate"
     }
     $pairResults = @()
-    for ($pair = 1; $pair -le $Pairs; $pair++) {
+    for ($pair = $FirstPair; $pair -le $LastPair; $pair++) {
         $baseline = $samples | Where-Object { $_.pair -eq $pair -and $_.variant -eq "baseline" } | Select-Object -First 1
         $candidate = $samples | Where-Object { $_.pair -eq $pair -and $_.variant -eq "candidate" } | Select-Object -First 1
         if (-not $baseline -or -not $candidate) { throw "Missing sample for pair $pair" }
@@ -600,7 +645,7 @@ function Build-Analysis {
     $allNoJavaagent = (@($samples | Where-Object { $_.javaagent_present }).Count -eq 0)
     $allMalloc = (@($samples | Where-Object { -not $_.malloc_arena_max_1 }).Count -eq 0)
     $confirmed = (
-        $pairedWins -ge 2 -and
+        $pairedWins -ge $MinimumPairedWins -and
         $medians.smaps_pss_kb.delta -le -1024 -and
         $medians.smaps_private_dirty_kb.delta -le -1024 -and
         $medians.memory_current_bytes.delta -le -1MB -and
@@ -608,12 +653,12 @@ function Build-Analysis {
         $allNoCds -and
         $allNoJavaagent -and
         $allMalloc -and
-        $originPassed -and
+        $runtimeIdentityPassed -and
         $materializerReady
     )
     $marginal = (
         -not $confirmed -and
-        $pairedWins -ge 2 -and
+        $pairedWins -ge $MinimumPairedWins -and
         $medians.smaps_pss_kb.delta -le -1024 -and
         $medians.smaps_private_dirty_kb.delta -le -1024 -and
         $medians.memory_current_bytes.delta -gt -1MB -and
@@ -623,6 +668,8 @@ function Build-Analysis {
     return [pscustomobject][ordered]@{
         phase = "V2-FINAL"
         comparison_id = $ComparisonId
+        pair_range = "$FirstPair-$LastPair"
+        pair_count = $Pairs
         baseline_product = $BaselineProduct
         title = "Final V2 B0 vs V2 direct no-CDS confirmation"
         generated_at = (Get-Date).ToString("o")
@@ -640,17 +687,21 @@ function Build-Analysis {
         artifacts = [ordered]@{
             baseline_jar = $BaselineJar
             candidate_jar = $CandidateJar
-            baseline_sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $BaselineJar).Hash
-            candidate_sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $CandidateJar).Hash
+            baseline_sha256 = $BaselineArtifactHash
+            candidate_sha256 = $CandidateArtifactHash
+            baseline_image_id = $BaselineImageId
+            candidate_image_id = $CandidateImageId
+            image_only_runtime = [bool]$SkipImageBuild
             baseline_exploded_root = $BaselineExplodedRoot
             candidate_exploded_root = $CandidateExplodedRoot
         }
         gates = [ordered]@{
             materializer_ready = $materializerReady
             materializer_source = $MaterializerJson
-            dynamic_origin_proven = $originPassed
+            dynamic_origin_proven = $runtimeIdentityPassed
             dynamic_origin_source = $OriginProofJson
             dynamic_origin_sample_accepted_count = $origin.proof.sample_accepted_count
+            frozen_image_identity_verified = $FrozenImageIdentityVerified
             workload_errors_total = [long]$workloadErrors
             no_cds_all_samples = $allNoCds
             no_javaagent_all_samples = $allNoJavaagent
@@ -664,11 +715,12 @@ function Build-Analysis {
             median_private_dirty_delta_le_minus_1mb = ($medians.smaps_private_dirty_kb.delta -le -1024)
             median_memory_current_delta_le_minus_1mb = ($medians.memory_current_bytes.delta -le -1MB)
             paired_wins = $pairedWins
-            paired_wins_at_least_2_of_3 = ($pairedWins -ge 2)
+            paired_wins_required = $MinimumPairedWins
+            paired_wins_at_least_required = ($pairedWins -ge $MinimumPairedWins)
             workload_errors_zero = ($workloadErrors -eq 0)
             no_cds = $allNoCds
             no_javaagent = $allNoJavaagent
-            dynamic_origins_verified = $originPassed
+            dynamic_origins_verified = $runtimeIdentityPassed
             confirmed = [bool]$confirmed
             marginal = [bool]$marginal
         }
@@ -722,7 +774,7 @@ function Write-Reports {
         "- median PSS delta <= -1 MB: ``$($Analysis.win_gate.median_pss_delta_le_minus_1mb)``",
         "- median Private_Dirty delta <= -1 MB: ``$($Analysis.win_gate.median_private_dirty_delta_le_minus_1mb)``",
         "- median memory.current delta <= -1 MB: ``$($Analysis.win_gate.median_memory_current_delta_le_minus_1mb)``",
-        "- paired wins >= 2/3: ``$($Analysis.win_gate.paired_wins_at_least_2_of_3)`` ($($Analysis.win_gate.paired_wins)/3)",
+        "- paired wins >= $MinimumPairedWins/${Pairs}: ``$($Analysis.win_gate.paired_wins_at_least_required)`` ($($Analysis.win_gate.paired_wins)/$Pairs)",
         "- workload errors = 0: ``$($Analysis.win_gate.workload_errors_zero)``",
         "- no CDS: ``$($Analysis.win_gate.no_cds)``",
         "- no javaagent: ``$($Analysis.win_gate.no_javaagent)``",
@@ -778,7 +830,7 @@ function Write-Reports {
         "- memory.current: $(Format-Bytes $med.memory_current_bytes.delta)",
         "- heap PSS: $(Format-Kb $med.smaps_heap_pss_kb.delta)",
         "- loaded classes: $($med.loaded_classes.delta)",
-        "- paired wins: $($Analysis.win_gate.paired_wins)/3",
+        "- paired wins: $($Analysis.win_gate.paired_wins)/$Pairs",
         "",
         "Next action: $($Analysis.next_action)"
     )
@@ -814,11 +866,26 @@ function Write-Reports {
 
 New-Item -ItemType Directory -Force -Path $RunDir | Out-Null
 
-foreach ($required in @($CaptureScript, $ConfigDir, $OriginProofJson, $MaterializerJson, $BaselineExplodedRoot, $CandidateExplodedRoot, $BaselineJar, $CandidateJar)) {
+foreach ($required in @($CaptureScript, $ConfigDir, $OriginProofJson, $MaterializerJson)) {
     if (-not (Test-Path -LiteralPath $required)) {
         throw "Required file missing: $required"
     }
 }
+if (-not $SkipImageBuild) {
+    foreach ($required in @($BaselineExplodedRoot, $CandidateExplodedRoot)) {
+        if ([string]::IsNullOrWhiteSpace($required) -or -not (Test-Path -LiteralPath $required)) {
+            throw "Image build requires a valid exploded Boot root: $required"
+        }
+    }
+}
+$BaselineArtifactHash = Resolve-ArtifactSha256 -ArtifactPath $BaselineJar -ExpectedSha256 $BaselineArtifactSha256 -Label "Baseline"
+$CandidateArtifactHash = Resolve-ArtifactSha256 -ArtifactPath $CandidateJar -ExpectedSha256 $CandidateArtifactSha256 -Label "Candidate"
+$BaselineImageId = Resolve-ImageId -Image $BaselineImage -ExpectedImageId $BaselineExpectedImageId -Label "Baseline"
+$CandidateImageId = Resolve-ImageId -Image $CandidateImage -ExpectedImageId $CandidateExpectedImageId -Label "Candidate"
+$FrozenImageIdentityVerified = (
+    -not [string]::IsNullOrWhiteSpace($BaselineExpectedImageId) -and
+    -not [string]::IsNullOrWhiteSpace($CandidateExpectedImageId)
+)
 
 $transcriptPath = Join-Path $RunDir "run-33m-integrated-nocds-confirmation.log"
 Start-Transcript -Path $transcriptPath -Force | Out-Null
@@ -826,7 +893,7 @@ try {
     if (-not $AnalyzeExisting) {
         Write-Step "Build final comparison images"
         Build-Images
-        for ($pair = 1; $pair -le $Pairs; $pair++) {
+        for ($pair = $FirstPair; $pair -le $LastPair; $pair++) {
             if (($pair % 2) -eq 0) {
                 Measure-Variant -Pair $pair -Variant "candidate" -Image $CandidateImage
                 Measure-Variant -Pair $pair -Variant "baseline" -Image $BaselineImage

@@ -1,30 +1,30 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_FINAL_PERFORMANCE_RECONCILIATION",
+  "status": "CURRENT_AFTER_RC2_REPRODUCIBILITY_RECONCILIATION",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
-  "finalProductGate": {
+  "historicalDirectBaselineRecord": {
     "id": "final-public-b0-v2",
     "comparison": "B0 baseline vs final V2 product artifact",
     "service": "Spring PetClinic customers-service",
-    "validRuns": "6/6",
-    "pairedWins": "2/3",
+    "validRuns": "historical 6/6; fresh replication 10/10",
+    "pairedWins": "historical 2/3; fresh replication 2/5",
     "medianPssDeltaKb": -8956,
     "medianPrivateDirtyDeltaKb": -8620,
     "medianMemoryCurrentDeltaBytes": -11247616,
-    "decision": "SUBSTANTIAL_WIN",
-    "claimAllowed": true,
-    "claimBoundary": "Confirmed only for the frozen public customers EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1 protocol."
+    "decision": "HISTORICAL_ONLY_NOT_REPRODUCED",
+    "claimAllowed": false,
+    "claimBoundary": "Historical raw run capture is unavailable; fresh exact-image replication is mixed and does not support a direct B0-to-V2 claim."
   },
   "finalIncrementalGate": {
     "id": "final-public-v1-v2",
     "comparison": "finalized V1 vs final V2 product artifact",
     "service": "Spring PetClinic customers-service",
     "validRuns": "6/6",
-    "pairedWins": "3/3",
-    "medianPssDeltaKb": -4812,
-    "medianPrivateDirtyDeltaKb": -4512,
-    "medianMemoryCurrentDeltaBytes": -6791168,
-    "decision": "SUBSTANTIAL_WIN",
+    "pairedWins": "2/3",
+    "medianPssDeltaKb": -6012,
+    "medianPrivateDirtyDeltaKb": -5708,
+    "medianMemoryCurrentDeltaBytes": -8081408,
+    "decision": "CONFIRMED_WIN",
     "claimAllowed": true,
     "claimBoundary": "Incremental raw reducer result under the same frozen public customers protocol; no startup or universal claim."
   },

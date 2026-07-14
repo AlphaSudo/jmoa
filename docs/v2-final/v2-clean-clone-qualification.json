@@ -1,8 +1,10 @@
 {
-  "metadataVersion": "v2-clean-clone-qualification-public-v1",
+  "metadataVersion": "v2-clean-clone-qualification-public-v2",
   "status": "PASSED",
   "repository": "https://github.com/AlphaSudo/jmoa.git",
-  "revision": "973257e04648f4dee2bd7a850e8ae7eeb81b2e02",
+  "quickstartRevision": "973257e04648f4dee2bd7a850e8ae7eeb81b2e02",
+  "finalRcRevision": "52c261c64787d35e6044f281ee3b12ae9e49af8d",
+  "postQuickstartChanges": "Release documentation, RC qualification records, and release-package cleanup isolation only; no optimizer, protocol, artifact, or quickstart behavior changed.",
   "environment": {
     "host": "Windows 11",
     "buildJdk": "Temurin 26",
@@ -43,7 +45,7 @@
   },
   "independentCi": {
     "provider": "GitHub Actions",
-    "run": 29297537251,
+    "run": 29297868936,
     "environment": "ubuntu-latest / Temurin 26",
     "status": "PASSED"
   },

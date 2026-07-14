@@ -1,5 +1,5 @@
 {
-  "metadataVersion": "v2-final-five-questions",
+  "metadataVersion": "v2-final-five-questions-v2",
   "questions": [
     {
       "question": "generated/synthetic optimization",
@@ -44,8 +44,9 @@
     }
   ],
   "finalPerformanceGate": {
-    "status": "BLOCKED",
-    "reason": "Fresh direct public B0 vs V2 run did not confirm."
+    "status": "PASSED",
+    "supersededRun": "The initial fixed-order, uncontrolled-cache run did not confirm and remains retained evidence.",
+    "resolution": "The historical B0-to-V2 record lacks raw capture and the fresh exact-image replication is mixed. The release-driving reproducible claim is the V1-to-V2 CONFIRMED_WIN with 2/3 paired wins.",
+    "authoritativeVerdict": "docs/v2-final/v2-final-performance-verdict.md"
   }
 }
-

@@ -1,14 +1,21 @@
 {
-  "metadataVersion": "v2-final-b0-v2-v2c-v1",
-  "status": "PASSED",
-  "verdict": "CONFIRMED_WIN",
-  "validRuns": 6,
-  "invalidRuns": 0,
-  "pairs": 3,
-  "pairedWins": 2,
-  "medianPssDeltaKb": -8956,
-  "medianPrivateDirtyDeltaKb": -8620,
-  "medianMemoryCurrentDeltaBytes": -11247616,
-  "perturbations": [],
-  "source": "target/v2-final/v2c/b0-v2"
+  "metadataVersion": "v2-final-b0-v2-v2c-historical-v2",
+  "historicalRecord": {
+    "verdict": "CONFIRMED_WIN",
+    "validRuns": 6,
+    "pairedWins": 2,
+    "medianPssDeltaKb": -8956,
+    "rawCanonicalEvidenceAvailable": false
+  },
+  "authoritativeReplication": {
+    "verdict": "MIXED_METRICS_NEEDS_RERUN",
+    "validRuns": 10,
+    "invalidRuns": 0,
+    "pairs": 5,
+    "pairedWins": 2,
+    "medianPssDeltaKb": 585,
+    "medianPrivateDirtyDeltaKb": 844,
+    "medianMemoryCurrentDeltaBytes": -1363968,
+    "source": "v2-rc2-frozen-image-replication.json"
+  }
 }

@@ -1,8 +1,8 @@
-# Final B0 vs V2 V2-D Attribution
+# Historical B0 vs V2 V2-D Attribution
 
-V2-D attributes the median win primarily to heap page-touch reduction:
-heap PSS fell 6,584 KB while heap used changed by only 28 KB and histogram
-bytes changed by only 29,184 bytes. Supporting changes include 1,612 KB lower
-anonymous-RW PSS, about 3,128 KB lower metaspace committed, and fewer loaded
-classes. The result is not a retained-object reduction claim and class count is
-supporting evidence, not sole causality.
+The earlier B0-to-V2 attribution is retained only with its historical record.
+The authoritative RC2 exact-image replication instead attributes the mixed
+result primarily to `HEAP_PAGE_TOUCH_GROWTH`: heap PSS increased `2,756 KB`
+while heap-used and histogram bytes stayed effectively flat. Fewer loaded
+classes and lower anonymous-RW PSS were supporting effects, but did not produce
+a stable direct B0-to-V2 memory win.

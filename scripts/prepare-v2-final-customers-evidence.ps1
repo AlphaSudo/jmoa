@@ -2,16 +2,26 @@ param(
     [Parameter(Mandatory)][string]$SourceDir,
     [Parameter(Mandatory)][string]$OutputDir,
     [Parameter(Mandatory)][string]$ComparisonId,
-    [Parameter(Mandatory)][string]$BaselineArtifactPath,
-    [Parameter(Mandatory)][string]$CandidateArtifactPath,
+    [string]$BaselineArtifactPath,
+    [string]$CandidateArtifactPath,
     [Parameter(Mandatory)][string]$BaselineImage,
     [Parameter(Mandatory)][string]$CandidateImage,
     [string]$BaselineProduct = "B0",
     [string]$CandidateProduct = "V2",
-    [int]$Pairs = 3
+    [int]$Pairs = 3,
+    [ValidateRange(1, [int]::MaxValue)][int]$FirstPair = 1,
+    [string]$BaselineArtifactSha256,
+    [string]$CandidateArtifactSha256,
+    [string]$BaselineExpectedImageId,
+    [string]$CandidateExpectedImageId
 )
 
 $ErrorActionPreference = "Stop"
+
+if ($Pairs -lt 1) {
+    throw "Pairs must be at least 1."
+}
+$LastPair = $FirstPair + $Pairs - 1
 
 function Write-Json {
     param($Value, [string]$Path)
@@ -19,12 +29,36 @@ function Write-Json {
 }
 
 function Get-ImageId {
-    param([string]$Image)
+    param([string]$Image, [string]$ExpectedImageId, [string]$Label)
     $id = (& podman image inspect $Image --format "{{.Id}}" 2>&1 | Out-String).Trim()
     if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($id)) {
         throw "Could not inspect image $Image"
     }
+    if (-not [string]::IsNullOrWhiteSpace($ExpectedImageId) -and $id -ne $ExpectedImageId) {
+        throw "$Label image ID mismatch. Expected $ExpectedImageId but found $id"
+    }
     return $id
+}
+
+function Resolve-ArtifactSha256 {
+    param([string]$ArtifactPath, [string]$ExpectedSha256, [string]$Label)
+    if (-not [string]::IsNullOrWhiteSpace($ExpectedSha256) -and $ExpectedSha256 -notmatch '^[0-9a-fA-F]{64}$') {
+        throw "$Label expected SHA-256 must contain exactly 64 hexadecimal characters."
+    }
+    if (-not [string]::IsNullOrWhiteSpace($ArtifactPath)) {
+        if (-not (Test-Path -LiteralPath $ArtifactPath -PathType Leaf)) {
+            throw "$Label artifact is missing: $ArtifactPath"
+        }
+        $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath $ArtifactPath).Hash.ToUpperInvariant()
+        if (-not [string]::IsNullOrWhiteSpace($ExpectedSha256) -and $actual -ne $ExpectedSha256.ToUpperInvariant()) {
+            throw "$Label artifact SHA-256 mismatch. Expected $ExpectedSha256 but found $actual."
+        }
+        return $actual
+    }
+    if (-not [string]::IsNullOrWhiteSpace($ExpectedSha256)) {
+        return $ExpectedSha256.ToUpperInvariant()
+    }
+    throw "$Label requires an artifact path or explicit frozen SHA-256."
 }
 
 function Copy-Required {
@@ -35,27 +69,32 @@ function Copy-Required {
     Copy-Item -LiteralPath $Source -Destination $Destination -Force
 }
 
-foreach ($path in @($SourceDir, $BaselineArtifactPath, $CandidateArtifactPath)) {
+foreach ($path in @($SourceDir)) {
     if (-not (Test-Path -LiteralPath $path)) {
         throw "Required path is missing: $path"
     }
 }
 
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
-$baselineSha = (Get-FileHash -Algorithm SHA256 -LiteralPath $BaselineArtifactPath).Hash.ToUpperInvariant()
-$candidateSha = (Get-FileHash -Algorithm SHA256 -LiteralPath $CandidateArtifactPath).Hash.ToUpperInvariant()
-$baselineImageId = Get-ImageId -Image $BaselineImage
-$candidateImageId = Get-ImageId -Image $CandidateImage
+$baselineSha = Resolve-ArtifactSha256 -ArtifactPath $BaselineArtifactPath -ExpectedSha256 $BaselineArtifactSha256 -Label "Baseline"
+$candidateSha = Resolve-ArtifactSha256 -ArtifactPath $CandidateArtifactPath -ExpectedSha256 $CandidateArtifactSha256 -Label "Candidate"
+$baselineImageId = Get-ImageId -Image $BaselineImage -ExpectedImageId $BaselineExpectedImageId -Label "Baseline"
+$candidateImageId = Get-ImageId -Image $CandidateImage -ExpectedImageId $CandidateExpectedImageId -Label "Candidate"
 $runs = New-Object System.Collections.Generic.List[object]
 
-for ($pair = 1; $pair -le $Pairs; $pair++) {
+for ($pair = $FirstPair; $pair -le $LastPair; $pair++) {
     foreach ($definition in @(
         [pscustomobject]@{ source = "baseline"; variant = "BASELINE"; product = $BaselineProduct; artifact = $BaselineArtifactPath; sha = $baselineSha; image = $BaselineImage; imageId = $baselineImageId },
-        [pscustomobject]@{ source = "full-p2"; variant = "CANDIDATE"; product = $CandidateProduct; artifact = $CandidateArtifactPath; sha = $candidateSha; image = $CandidateImage; imageId = $candidateImageId }
+        [pscustomobject]@{ source = "full-p2"; fallbackSource = "candidate"; variant = "CANDIDATE"; product = $CandidateProduct; artifact = $CandidateArtifactPath; sha = $candidateSha; image = $CandidateImage; imageId = $candidateImageId }
     )) {
-        $label = "p$pair-$($definition.source)-post"
+        $captureSource = $definition.source
+        $label = "p$pair-$captureSource-post"
+        if (-not (Test-Path -LiteralPath (Join-Path $SourceDir "$label.json")) -and -not [string]::IsNullOrWhiteSpace($definition.fallbackSource)) {
+            $captureSource = $definition.fallbackSource
+            $label = "p$pair-$captureSource-post"
+        }
         $postPath = Join-Path $SourceDir "$label.json"
-        $workloadPath = Join-Path $SourceDir "p$pair-$($definition.source)-workload.json"
+        $workloadPath = Join-Path $SourceDir "p$pair-$captureSource-workload.json"
         $post = Get-Content -Raw -LiteralPath $postPath | ConvertFrom-Json
         $sourceWorkload = Get-Content -Raw -LiteralPath $workloadPath | ConvertFrom-Json
         $runId = "$($definition.variant.ToLowerInvariant())-$pair"
@@ -143,6 +182,8 @@ $index = [ordered]@{
     comparisonId = $ComparisonId
     sourceDir = $SourceDir
     outputDir = $OutputDir
+    firstPair = $FirstPair
+    lastPair = $LastPair
     pairs = $Pairs
     runs = $runs.ToArray()
     claimBoundary = "Canonical V2-C input generated from frozen final customers captures. Raw captures remain under target and are not publication artifacts."

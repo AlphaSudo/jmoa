@@ -45,7 +45,7 @@ paired confirmation protocol.
 
 ## Quick Start
 
-Install the plugin and runtime POM/JAR pairs from the `2.0.0-rc1` GitHub
+Install the plugin and runtime POM/JAR pairs from the `2.0.0-rc2` GitHub
 Release bundle, then run:
 
 ```powershell
@@ -53,7 +53,7 @@ Release bundle, then run:
   -ProfilePath <petclinic-customers-profile.json> `
   -AdmissionPath <petclinic-customers-admission.txt> `
   -SafeSamsPath <jmoa-additional-safe-sams.txt> `
-  -RuntimeJar <jmoa-runtime-lib-2.0.0-rc1.jar>
+  -RuntimeJar <jmoa-runtime-lib-2.0.0-rc2.jar>
 ```
 
 Podman must be available for semantic smoke. Add `-SkipSemanticSmoke` only for
@@ -82,4 +82,5 @@ The final report should state:
 - dynamic runtime-origin proof status.
 
 The quickstart proves build and semantic viability. The published memory
-numbers come from the separate frozen three-pair confirmation evidence.
+numbers come from the separate frozen paired-confirmation evidence and retain
+the service/protocol-specific claim boundary documented in `docs/v2-final`.

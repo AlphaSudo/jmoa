@@ -1,27 +1,27 @@
 {
-  "metadataVersion": "v2-final-memory-win-matrix-v1",
-  "generatedAt": "2026-07-13",
-  "releaseDecision": "PERFORMANCE_GATES_PASSED",
+  "metadataVersion": "v2-final-memory-win-matrix-v2",
+  "generatedAt": "2026-07-14",
+  "releaseDecision": "V1_TO_V2_REPRODUCIBLE_GATE_PASSED_B0_TO_V2_REPLICATION_MIXED",
   "primaryAcceptance": [
     {
-      "comparison": "public customers B0 vs final V2",
+      "comparison": "public customers finalized V1 vs final V2",
+      "runtime": "EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1",
+      "validRuns": 6,
+      "pairedWins": "2/3",
+      "medianPssDeltaKb": -6012,
+      "medianPrivateDirtyDeltaKb": -5708,
+      "medianMemoryCurrentDeltaBytes": -8081408,
+      "classification": "SUBSTANTIAL_WIN"
+    },
+    {
+      "comparison": "historical public customers B0 vs final V2",
       "runtime": "EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1",
       "validRuns": 6,
       "pairedWins": "2/3",
       "medianPssDeltaKb": -8956,
       "medianPrivateDirtyDeltaKb": -8620,
       "medianMemoryCurrentDeltaBytes": -11247616,
-      "classification": "SUBSTANTIAL_WIN"
-    },
-    {
-      "comparison": "public customers finalized V1 vs final V2",
-      "runtime": "EXPLODED_BOOT_APP, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1",
-      "validRuns": 6,
-      "pairedWins": "3/3",
-      "medianPssDeltaKb": -4812,
-      "medianPrivateDirtyDeltaKb": -4512,
-      "medianMemoryCurrentDeltaBytes": -6791168,
-      "classification": "SUBSTANTIAL_WIN"
+      "classification": "HISTORICAL_ONLY_NOT_REPRODUCED"
     }
   ],
   "scopeBoundConfirmations": [
@@ -42,5 +42,14 @@
       "classification": "CONFIRMED_PRIVATE_NARROW_WIN"
     }
   ],
-  "claimBoundary": "The primary acceptance claims apply only to the frozen public customers protocol. Visits and Doctor results retain their own runtime scopes. No startup or universal Spring Boot claim is made."
+  "freshReplication": {
+    "comparison": "public customers B0 vs final V2",
+    "validRuns": 10,
+    "pairedWins": "2/5",
+    "medianPssDeltaKb": 585,
+    "medianPrivateDirtyDeltaKb": 844,
+    "medianMemoryCurrentDeltaBytes": -1363968,
+    "classification": "MIXED_METRICS_NEEDS_RERUN"
+  },
+  "claimBoundary": "The reproducible public claim applies only to V1 versus V2 under the frozen customers protocol. The historical B0 versus V2 result is retained but not carried as an RC2 reproducible performance claim. Visits and Doctor results retain their own scopes. No startup or universal Spring Boot claim is made."
 }

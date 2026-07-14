@@ -14,11 +14,10 @@ product. This audit maps each major track to the current repository state.
 | Candidate ROI / recommendation | `INFRASTRUCTURE_CONFIRMED` | `docs/v2-m`, `docs/v2-r`, `docs/v2-s` | Reducer/runtime recommendation and discovery classifications delivered. |
 | Benchmark suite | `PARTIAL` | `docs/v2-i`, `docs/v2-k`, `docs/v2-l` | Customers, Doctor, and visits evidence exists; broad benchmark matrix deferred. |
 | Safety/proof system | `INFRASTRUCTURE_CONFIRMED` | `docs/v2-f`, `docs/v2-j`, `docs/v2-o`, `docs/v2-p` | Hashes, byte audits, jar safety, materialization, preflight, and claim guards delivered. |
-| Public/product polish | `PARTIAL` | `examples`, `docs/v2-final/v2-release-readiness.md` | Release docs are improving; clean-clone public golden path is still a blocker. |
+| Public/product polish | `INFRASTRUCTURE_CONFIRMED` | `examples`, `docs/v2-final/v2-clean-clone-qualification.md` | Clean-clone public golden path, checksummed release bundle, and Java 17 semantic smoke passed. |
 
 ## Bottom Line
 
 The release-critical V2 core is strong, but the broad research plan was not
 implemented literally. The final release must claim the delivered product scope,
 not every speculative optimizer in the original plan.
-

@@ -1,6 +1,6 @@
 param(
     [string]$PetclinicRoot = "./petclinic-work/spring-petclinic-microservices",
-    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc1",
+    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2",
     [string]$Maven = "mvn"
 )
 

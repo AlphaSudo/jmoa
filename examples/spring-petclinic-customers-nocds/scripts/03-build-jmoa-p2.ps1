@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory)][string]$AdmissionPath,
     [Parameter(Mandatory)][string]$SafeSamsPath,
     [Parameter(Mandatory)][string]$RuntimeJar,
-    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc1",
+    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2",
     [string]$Maven = "mvn"
 )
 

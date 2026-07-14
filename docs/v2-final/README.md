@@ -2,7 +2,7 @@
 
 This folder is the release-readiness layer for V2. It freezes scope, records the
 passed final performance gates, disposes every research item, and tracks the
-remaining release-qualification work before `rc1` or `v2.0.0`.
+remaining release-qualification work before `rc1`, `rc2`, or `v2.0.0`.
 
 ## Start Here
 
@@ -30,12 +30,15 @@ remaining release-qualification work before `rc1` or `v2.0.0`.
 - [Public quickstart qualification](v2-public-quickstart-qualification.md)
 - [Clean-clone RC qualification](v2-clean-clone-qualification.md)
 - [Distribution](v2-distribution.md)
+- [RC2 downloaded-asset qualification](v2-rc2-consumer-qualification.md)
 
 ## Current Decision
 
 ```text
-READY_FOR_RC1
+READY_FOR_RC2
 ```
 
-There are no unresolved P0 or P1 blockers. The remote clean-clone quickstart,
-schema freeze, and independent GitHub Actions build all passed.
+There are no unresolved P0 or P1 blockers for the constrained RC2 claim. The
+remote clean-clone quickstart, schema freeze, and independent GitHub Actions
+build all passed. The direct B0-to-V2 result is not an RC2 claim; see the
+five-pair replication report for the exact boundary.

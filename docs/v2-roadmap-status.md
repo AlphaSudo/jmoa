@@ -24,34 +24,29 @@ automation helpers, the V2-P workflow spine, the V2-Q application admission
 result, V2-R ROI discovery, V2-S generated-family runtime relevance, V2-T
 generated-family matched-evidence completion, V2-U matched lifecycle
 campaign infrastructure, V2-V fresh matched-capture execution tooling, V2-W
-matched capture execution, and the V2 final release audit.
+matched capture execution, and the V2 final release audit. The fresh RC2
+replication confirmed the incremental V1-to-V2 comparison but found the direct
+B0-to-V2 comparison mixed, so only the incremental result is release-claimable.
 
 ## Final Release Gate
 
-The corrected final protocol controls page-cache state before every variant and
-balances pair order. Both public customers-service acceptance gates passed:
+The frozen protocol controls page-cache state before every variant and balances
+pair order. The reproducible public customers-service acceptance result is:
 
 ```text
-comparison: B0 baseline vs final V2 product artifact
-valid runs: 6/6
-paired wins: 2/3
-median PSS delta: -8,956 KB
-median Private_Dirty delta: -8,620 KB
-median memory.current delta: -11,247,616 bytes
-decision: SUBSTANTIAL_WIN
-
 comparison: finalized V1 vs final V2 product artifact
 valid runs: 6/6
-paired wins: 3/3
-median PSS delta: -4,812 KB
-median Private_Dirty delta: -4,512 KB
-median memory.current delta: -6,791,168 bytes
-decision: SUBSTANTIAL_WIN
+paired wins: 2/3
+median PSS delta: -6,012 KB
+median Private_Dirty delta: -5,708 KB
+median memory.current delta: -8,081,408 bytes
+decision: CONFIRMED_WIN
 ```
 
-The previous failed gate remains documented as a page-cache-confounded protocol
-result. See [V2 Final Audit](v2-final/README.md) and the
-[memory-win matrix](v2-final/v2-final-memory-win-matrix.md).
+The direct B0-to-V2 five-pair replication was valid but mixed (2/5 PSS wins;
+median PSS `+585 KB`) and is explicitly non-claimable. The historical B0-to-V2
+record remains provenance only. See [V2 Final Audit](v2-final/README.md) and
+the [memory-win matrix](v2-final/v2-final-memory-win-matrix.md).
 
 ## Closure Taxonomy
 

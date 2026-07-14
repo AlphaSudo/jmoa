@@ -62,9 +62,16 @@ Publication blocker: no.
 
 ## Final Performance Acceptance
 
-A fresh direct final public `B0 -> V2` customers run on July 13, 2026 did not
-confirm. That is a P0 release blocker for any public `v2.0.0` headline claiming
-that the final V2 product substantially beats the unoptimized public baseline.
+The initial fixed-order public `B0 -> V2` run did not confirm and triggered a
+P0 investigation. That run remains in the evidence record. The investigation
+identified unequal block-I/O and page-cache charging, then froze a corrected
+protocol with a page-cache reset before every variant, `memory.stat` capture,
+and balanced pair order.
 
-See [V2 Final Performance Acceptance](v2-final-performance-acceptance.md).
-
+That corrected three-pair result is retained as historical provenance, but its
+raw capture is unavailable. A fresh exact-image five-pair replication was valid
+but mixed: 2/5 PSS wins with median PSS `+585 KB`; it does not support a direct
+B0-to-V2 release claim. The reproducible performance claim is instead the
+finalized `V1 -> V2` comparison: V2-C `CONFIRMED_WIN`, 2/3 paired wins, median
+PSS `-6,012 KB`, Private_Dirty `-5,708 KB`, and `memory.current` `-8,081,408`
+bytes. See [V2 Final Performance Verdict](v2-final-performance-verdict.md).

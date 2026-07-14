@@ -10,7 +10,7 @@ param(
     [string]$RegistryPath = "",
     [string]$OutputDir = "target/jmoa-runtime-preflight",
     [string]$MavenExecutable = "mvn",
-    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc1",
+    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2",
     [switch]$FailOnMavenError
 )
 

@@ -53,29 +53,33 @@ project's exploded Boot launch shape and the `NO_CDS_LOW_DIRTY` runtime policy.
 
 ## V2 Final Performance Gate
 
-The final public customers-service artifact passed both release comparisons
-under the frozen, cache-controlled no-CDS exploded-Boot protocol:
+The reproducible final public customers-service result is the incremental
+comparison under the frozen no-CDS exploded-Boot protocol. The historical direct
+B0-to-V2 result is retained in the evidence record, but its raw capture was not
+retained and a fresh five-pair exact-image replication was mixed; it is not a
+current release claim.
 
 ```text
-comparison: B0 baseline vs final V2 product artifact
-valid runs: 6/6
-paired wins: 2/3
-median PSS delta: -8,956 KB
-median Private_Dirty delta: -8,620 KB
-median memory.current delta: -11,247,616 bytes
-decision: SUBSTANTIAL_WIN
-
 comparison: finalized V1 vs final V2 product artifact
 valid runs: 6/6
-paired wins: 3/3
-median PSS delta: -4,812 KB
-median Private_Dirty delta: -4,512 KB
-median memory.current delta: -6,791,168 bytes
-decision: SUBSTANTIAL_WIN
+paired wins: 2/3
+median PSS delta: -6,012 KB
+median Private_Dirty delta: -5,708 KB
+median memory.current delta: -8,081,408 bytes
+decision: CONFIRMED_WIN
+
+comparison: B0 baseline vs final V2 (fresh exact-image replication)
+valid runs: 10/10
+paired wins: 2/5
+median PSS delta: +585 KB
+median Private_Dirty delta: +844 KB
+median memory.current delta: -1,363,968 bytes
+decision: MIXED_METRICS_NEEDS_RERUN (not a release claim)
 ```
 
-V2-C accepted all twelve runs and V2-D attributes both comparisons primarily
-to lower heap page touch. No startup or universal Spring Boot claim is made.
+V2-C confirms the V1-to-V2 comparison and V2-D attributes its median movement
+primarily to lower heap page touch. No startup, universal Spring Boot, or direct
+B0-to-V2 claim is made.
 See the final matrix and release qualification state:
 
 - [V2 final performance acceptance](docs/v2-final/v2-final-performance-acceptance.md)

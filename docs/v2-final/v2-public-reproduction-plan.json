@@ -1,15 +1,13 @@
 {
-  "metadataVersion": "v2-final-public-reproduction-plan",
-  "status": "P0_BLOCKER",
-  "preferredTarget": "spring-petclinic-visits-service",
-  "defaultQuickstartScope": "artifact-audit-materialization-smoke",
+  "metadataVersion": "v2-final-public-reproduction-plan-v2",
+  "status": "PUBLIC_GOLDEN_PATH_QUALIFIED",
+  "preferredTarget": "spring-petclinic-customers-service",
+  "defaultQuickstartScope": "full-p2-raw-reducer-materialization-semantic-smoke",
   "extendedScope": "screen plus V2-C/V2-D confirmation",
   "mustNotRequire": [
     "private Doctor assets",
     "phase32 folders",
-    "phase33 folders",
     "pre-existing Podman images",
     "stale local SNAPSHOT plugin"
   ]
 }
-
