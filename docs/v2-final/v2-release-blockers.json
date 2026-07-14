@@ -1,12 +1,8 @@
 {
-  "metadataVersion": "v2-final-release-blockers-v2",
-  "decision": "READY_FOR_RELEASE_QUALIFICATION",
+  "metadataVersion": "v2-final-release-blockers-v3",
+  "decision": "READY_FOR_RC1",
   "p0": [],
-  "p1": [
-    "PUBLIC_GOLDEN_PATH_NOT_CLEAN_CLONE_PROVEN",
-    "SCHEMA_FREEZE_INCOMPLETE",
-    "CLEAN_MACHINE_QA_PENDING"
-  ],
+  "p1": [],
   "resolved": [
     {
       "id": "FINAL_PUBLIC_B0_V2_NOT_CONFIRMED",
@@ -19,6 +15,18 @@
     {
       "id": "GOVERNANCE_FILES_INCOMPLETE",
       "resolution": "Apache-2.0 LICENSE, SECURITY.md, and CONTRIBUTING.md are present; support and conduct policy are documented for RC qualification."
+    },
+    {
+      "id": "PUBLIC_GOLDEN_PATH_NOT_CLEAN_CLONE_PROVEN",
+      "resolution": "Commit 973257e passed a remote clean-clone qualification with an empty isolated Maven repository and the full PetClinic quickstart through semantic smoke."
+    },
+    {
+      "id": "SCHEMA_FREEZE_INCOMPLETE",
+      "resolution": "Six shipped report families are registered and passed scripts/check-v2-schema-compatibility.ps1."
+    },
+    {
+      "id": "CLEAN_MACHINE_QA_PENDING",
+      "resolution": "GitHub Actions run 29297537251 passed publication safety and Maven tests on a fresh Ubuntu/JDK 26 runner."
     }
   ],
   "deferred": "docs/v2-final/v2-unfinished-work-disposition.md"

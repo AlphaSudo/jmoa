@@ -1,6 +1,6 @@
 # V2 Public Quickstart Qualification
 
-Status: `LOCAL_GOLDEN_PATH_PASSED`
+Status: `LOCAL_AND_CLEAN_CLONE_GOLDEN_PATH_PASSED`
 
 The public PetClinic customers path completed against pinned revision
 `305a1f13e4f961001d4e6cb50a9db51dc3fc5967` using JMOA `2.0.0-rc1`.
@@ -20,6 +20,9 @@ and failed with `NoClassDefFoundError: jmoa/runtime/JmoaFactory`. The
 materializer now treats the runtime library as a required, hash-audited part of
 the deployment artifact. The corrected run passed.
 
-This record proves the local golden path, not a clean-clone environment and not
-a new memory result. The accepted memory claims remain those in the final
-three-pair matrix.
+The same path then passed from remote commit `973257e` with an empty isolated
+Maven repository. That run rebuilt and installed the RC bundle before invoking
+full P2, so it did not rely on a JMOA artifact from the development repository.
+
+This is build, packaging, and semantic qualification, not a new memory result.
+The accepted memory claims remain those in the final three-pair matrix.

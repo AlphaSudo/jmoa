@@ -28,13 +28,14 @@ remaining release-qualification work before `rc1` or `v2.0.0`.
 - [Schema freeze](v2-schema-freeze.md)
 - [Public reproduction plan](v2-public-reproduction-plan.md)
 - [Public quickstart qualification](v2-public-quickstart-qualification.md)
+- [Clean-clone RC qualification](v2-clean-clone-qualification.md)
 - [Distribution](v2-distribution.md)
 
 ## Current Decision
 
 ```text
-READY_FOR_RELEASE_QUALIFICATION
+READY_FOR_RC1
 ```
 
-There are no unresolved P0 blockers. RC tagging waits on clean-clone public
-quickstart proof, schema compatibility freeze, and clean-machine QA.
+There are no unresolved P0 or P1 blockers. The remote clean-clone quickstart,
+schema freeze, and independent GitHub Actions build all passed.

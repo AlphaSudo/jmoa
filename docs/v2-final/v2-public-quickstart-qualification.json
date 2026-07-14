@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-public-quickstart-qualification-v1",
-  "status": "LOCAL_GOLDEN_PATH_PASSED",
+  "status": "LOCAL_AND_CLEAN_CLONE_GOLDEN_PATH_PASSED",
   "petclinicRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
   "jmoaVersion": "2.0.0-rc1",
   "inputs": {
@@ -31,5 +31,14 @@
     "errors": 0,
     "linkageErrors": 0
   },
-  "claimBoundary": "Local in-place golden-path qualification. Clean-clone qualification is a separate RC gate; no new memory claim is made."
+  "cleanClone": {
+    "revision": "973257e04648f4dee2bd7a850e8ae7eeb81b2e02",
+    "isolatedMavenRepository": true,
+    "tests": "PASSED",
+    "schema": "PASSED",
+    "publicationSafety": "PASSED",
+    "releaseBundle": "PASSED",
+    "publicQuickstart": "PASSED"
+  },
+  "claimBoundary": "Build, packaging, and semantic qualification only. No new memory claim is made."
 }

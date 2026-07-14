@@ -1,6 +1,6 @@
 {
-  "metadataVersion": "v2-final-release-readiness-v2",
-  "decision": "READY_FOR_RELEASE_QUALIFICATION",
+  "metadataVersion": "v2-final-release-readiness-v3",
+  "decision": "READY_FOR_RC1",
   "performanceGates": "PASSED",
   "completed": [
     "fresh B0-to-V2 and V1-to-V2 acceptance",
@@ -8,12 +8,11 @@
     "V2-C validation and V2-D attribution",
     "terminal unfinished-work disposition",
     "GitHub Release distribution decision",
-    "governance baseline"
+    "governance baseline",
+    "six-family schema compatibility freeze",
+    "remote clean-clone build and public quickstart with isolated Maven repository",
+    "fresh Ubuntu/JDK 26 GitHub Actions build"
   ],
-  "notReadyForRc": [
-    "public quickstart not clean-clone proven",
-    "schema compatibility freeze incomplete",
-    "clean-machine qualification pending"
-  ],
-  "decisionRule": "No v2.0.0-rc1 until all P1 qualification gates pass."
+  "notReadyForRc": [],
+  "decisionRule": "RC1 may be tagged only while the strict release gate reports zero P0 and P1 blockers."
 }
