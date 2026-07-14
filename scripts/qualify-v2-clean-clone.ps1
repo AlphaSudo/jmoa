@@ -26,7 +26,8 @@ if (-not $JavaHome -or -not (Test-Path -LiteralPath (Join-Path $JavaHome 'bin/ja
     throw "A valid -JavaHome is required for clean-clone qualification."
 }
 $env:JAVA_HOME = (Resolve-Path -LiteralPath $JavaHome).Path
-$env:MAVEN_OPTS = ((@($previousMavenOpts, "-Dmaven.repo.local=$isolatedMavenRepo") | Where-Object { $_ }) -join " ").Trim()
+$isolatedRepoOption = '"-Dmaven.repo.local={0}"' -f $isolatedMavenRepo
+$env:MAVEN_OPTS = ((@($previousMavenOpts, $isolatedRepoOption) | Where-Object { $_ }) -join " ").Trim()
 Push-Location $clone
 try {
     git checkout $Revision
