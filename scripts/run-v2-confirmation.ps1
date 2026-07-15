@@ -20,18 +20,24 @@ param(
     [string[]]$CandidateLaunchArguments = @(),
     [string[]]$WorkloadArguments = @(),
     [string]$StopScript = "",
+    [string[]]$StopScriptArguments = @(),
     [string]$ContainerCli = "podman",
     [int]$Pairs = 3,
     [string]$CaptureRoot = "target/jmoa-v2-confirmation",
     [string]$EvidenceOutputDir = "",
     [string]$AttributionOutputDir = "",
     [string]$MavenExecutable = "mvn",
+    [string]$JavaHome = "",
     [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2",
+    [ValidateSet('FIXED_BASELINE_FIRST', 'BALANCED')][string]$PairOrder = 'FIXED_BASELINE_FIRST',
+    [int]$WarmupSeconds = 20,
+    [switch]$DropPageCacheBeforeVariant,
     [string]$MallocArenaMax = "",
     [bool]$CdsEnabled = $false,
     [bool]$AppCdsEnabled = $false,
     [bool]$LeydenEnabled = $false,
     [bool]$JavaagentPresent = $false,
+    [int]$HealthTimeoutSeconds = 90,
     [switch]$FailOnFailure
 )
 
@@ -49,23 +55,53 @@ Assert-PassedReport -Path $BaselineSemanticSmokeReport -Role 'baseline semantic 
 Assert-PassedReport -Path $CandidateSemanticSmokeReport -Role 'candidate semantic smoke'
 Assert-PassedReport -Path $BaselineMaterializationProof -Role 'baseline materialization proof'
 Assert-PassedReport -Path $CandidateMaterializationProof -Role 'candidate materialization proof'
+if (-not [string]::IsNullOrWhiteSpace($JavaHome)) {
+    if (-not (Test-Path -LiteralPath $JavaHome -PathType Container)) {
+        throw "JavaHome does not exist: $JavaHome"
+    }
+    $resolvedJavaHome = (Resolve-Path -LiteralPath $JavaHome).Path
+    $env:JAVA_HOME = $resolvedJavaHome
+    $env:Path = "$(Join-Path $resolvedJavaHome 'bin');$env:Path"
+}
 if ($Pairs -lt 3) { throw 'V2-C confirmation requires at least three valid pairs.' }
 New-JmoaDirectory -Path $CaptureRoot
 $screenScript = Join-Path $PSScriptRoot 'runtime-screen-pair.ps1'
 
 for ($pair = 1; $pair -le $Pairs; $pair++) {
-    & $screenScript `
-        -BaselineLaunchScript $BaselineLaunchScript -CandidateLaunchScript $CandidateLaunchScript `
-        -BaselineContainerName $BaselineContainerName -CandidateContainerName $CandidateContainerName `
-        -WorkloadScript $WorkloadScript -HealthUrl $HealthUrl -Service $Service -LaunchMode $LaunchMode `
-        -RuntimePolicy $RuntimePolicy -BaselineArtifactPath $BaselineArtifactPath -CandidateArtifactPath $CandidateArtifactPath `
-        -BaselineLaunchArguments $BaselineLaunchArguments -CandidateLaunchArguments $CandidateLaunchArguments `
-        -WorkloadArguments $WorkloadArguments -StopScript $StopScript -ContainerCli $ContainerCli -PairIndex $pair `
-        -CaptureRoot $CaptureRoot `
-        -BaselineRuntimeVerificationPath $(if ($BaselineRuntimeVerificationPath) { $BaselineRuntimeVerificationPath } else { $BaselineMaterializationProof }) `
-        -CandidateRuntimeVerificationPath $(if ($CandidateRuntimeVerificationPath) { $CandidateRuntimeVerificationPath } else { $CandidateMaterializationProof }) `
-        -MallocArenaMax $MallocArenaMax -CdsEnabled:$CdsEnabled -AppCdsEnabled:$AppCdsEnabled `
-        -LeydenEnabled:$LeydenEnabled -JavaagentPresent:$JavaagentPresent -FailOnFailure
+    $screenArguments = @{
+        BaselineLaunchScript = $BaselineLaunchScript
+        CandidateLaunchScript = $CandidateLaunchScript
+        BaselineContainerName = $BaselineContainerName
+        CandidateContainerName = $CandidateContainerName
+        WorkloadScript = $WorkloadScript
+        HealthUrl = $HealthUrl
+        Service = $Service
+        LaunchMode = $LaunchMode
+        RuntimePolicy = $RuntimePolicy
+        BaselineArtifactPath = $BaselineArtifactPath
+        CandidateArtifactPath = $CandidateArtifactPath
+        BaselineLaunchArguments = $BaselineLaunchArguments
+        CandidateLaunchArguments = $CandidateLaunchArguments
+        WorkloadArguments = $WorkloadArguments
+        StopScript = $StopScript
+        StopScriptArguments = $StopScriptArguments
+        ContainerCli = $ContainerCli
+        PairIndex = $pair
+        HealthTimeoutSeconds = $HealthTimeoutSeconds
+        CaptureRoot = $CaptureRoot
+        BaselineRuntimeVerificationPath = if ($BaselineRuntimeVerificationPath) { $BaselineRuntimeVerificationPath } else { $BaselineMaterializationProof }
+        CandidateRuntimeVerificationPath = if ($CandidateRuntimeVerificationPath) { $CandidateRuntimeVerificationPath } else { $CandidateMaterializationProof }
+        FirstVariant = if ($PairOrder -eq 'BALANCED' -and ($pair % 2) -eq 0) { 'CANDIDATE_FIRST' } else { 'BASELINE_FIRST' }
+        MallocArenaMax = $MallocArenaMax
+        CdsEnabled = $CdsEnabled
+        AppCdsEnabled = $AppCdsEnabled
+        LeydenEnabled = $LeydenEnabled
+        JavaagentPresent = $JavaagentPresent
+        WarmupSeconds = $WarmupSeconds
+        DropPageCacheBeforeVariant = $DropPageCacheBeforeVariant
+        FailOnFailure = $true
+    }
+    & $screenScript @screenArguments
     if ($LASTEXITCODE -ne 0) { throw "Runtime screen pair $pair failed; confirmation stopped." }
 }
 

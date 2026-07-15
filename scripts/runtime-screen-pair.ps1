@@ -14,10 +14,12 @@ param(
     [string[]]$CandidateLaunchArguments = @(),
     [string[]]$WorkloadArguments = @(),
     [string]$StopScript = "",
+    [string[]]$StopScriptArguments = @(),
     [string]$ContainerCli = "podman",
     [string]$JcmdExecutable = "jcmd",
     [string]$JavaProcessPattern = "java",
     [int]$PairIndex = 1,
+    [ValidateSet('BASELINE_FIRST', 'CANDIDATE_FIRST')][string]$FirstVariant = 'BASELINE_FIRST',
     [string]$CaptureRoot = "target/jmoa-runtime-screen",
     [string]$BaselineRuntimeVerificationPath = "",
     [string]$CandidateRuntimeVerificationPath = "",
@@ -27,6 +29,8 @@ param(
     [bool]$LeydenEnabled = $false,
     [bool]$JavaagentPresent = $false,
     [string]$WorkloadId = "runtime-screen",
+    [int]$WarmupSeconds = 20,
+    [switch]$DropPageCacheBeforeVariant,
     [int]$HealthTimeoutSeconds = 90,
     [switch]$FailOnFailure
 )
@@ -55,7 +59,7 @@ if (-not $normalizedPolicy.StartsWith('NO_CDS') -and $normalizedPolicy.Contains(
 function Stop-VariantContainer {
     param([string]$ContainerName, [string]$Variant, [string]$RunDirectory)
     if (-not [string]::IsNullOrWhiteSpace($StopScript)) {
-        & $StopScript -RunDirectory $RunDirectory -ContainerName $ContainerName -Variant $Variant
+        & $StopScript -RunDirectory $RunDirectory -ContainerName $ContainerName -Variant $Variant @StopScriptArguments
         if ($LASTEXITCODE -ne 0) { throw "Stop script failed for $Variant ($ContainerName)." }
         return
     }
@@ -70,6 +74,19 @@ function Capture-Command {
     $result = Invoke-JmoaContainerShell -ContainerCli $ContainerCli -ContainerName $ContainerName -Command $ShellCommand
     Write-JmoaText -Value $result.output -Path $OutputPath
     return $result
+}
+
+function Reset-PageCache {
+    if (-not $DropPageCacheBeforeVariant) {
+        return [ordered]@{ policy = 'NOT_REQUESTED'; status = 'NOT_REQUESTED'; output = '' }
+    }
+    $result = Invoke-JmoaExternal -Executable $ContainerCli -Arguments @(
+        'machine', 'ssh', "sudo sh -c 'sync; echo 3 > /proc/sys/vm/drop_caches' && echo DROP_OK"
+    )
+    if ($result.exitCode -ne 0 -or $result.output -notmatch 'DROP_OK') {
+        throw "Could not establish a cold page-cache precondition: $($result.output)"
+    }
+    return [ordered]@{ policy = 'DROP_CACHES_BEFORE_EACH_VARIANT'; status = 'PASSED'; output = $result.output }
 }
 
 function Invoke-Variant {
@@ -87,26 +104,33 @@ function Invoke-Variant {
     $started = [DateTime]::UtcNow
     $launchError = ''
     try {
+        $pageCache = Reset-PageCache
+        Write-JmoaText -Value $pageCache.output -Path (Join-Path $runDirectory 'page-cache-reset.txt')
         & $LaunchScript -RunDirectory $runDirectory -ContainerName $ContainerName -Variant $Variant @LaunchArguments
         if ($LASTEXITCODE -ne 0) { throw "Launch script returned $LASTEXITCODE." }
         $health = Wait-JmoaHttpHealth -HealthUrl $HealthUrl -TimeoutSeconds $HealthTimeoutSeconds
         if (-not $health.passed) { throw "Health check did not pass: $($health.error)" }
         $healthyAt = [DateTime]::UtcNow
-        $pid = Get-JmoaJavaPid -ContainerCli $ContainerCli -ContainerName $ContainerName -JavaProcessPattern $JavaProcessPattern
-        if ([string]::IsNullOrWhiteSpace($pid)) { throw 'Could not locate the Java PID in the running container.' }
+        if ($WarmupSeconds -gt 0) { Start-Sleep -Seconds $WarmupSeconds }
+        $javaPid = Get-JmoaJavaPid -ContainerCli $ContainerCli -ContainerName $ContainerName -JavaProcessPattern $JavaProcessPattern
+        if ([string]::IsNullOrWhiteSpace($javaPid)) { throw 'Could not locate the Java PID in the running container.' }
 
         $workloadPath = Join-Path $runDirectory 'workload-result.json'
         & $WorkloadScript -OutputPath $workloadPath -BaseUrl $HealthUrl.TrimEnd('/') -ContainerName $ContainerName -Variant $Variant @WorkloadArguments
         if ($LASTEXITCODE -ne 0) { throw "Workload script returned $LASTEXITCODE." }
         if (-not (Test-Path -LiteralPath $workloadPath -PathType Leaf)) { throw 'Workload script did not emit workload-result.json.' }
 
+        # Do not let the application JVM's JAVA_TOOL_OPTIONS leak into diagnostic jcmd subprocesses.
+        $cleanJcmd = "env -u JAVA_TOOL_OPTIONS -u JDK_JAVA_OPTIONS $JcmdExecutable"
         $captureResults = @(
-            (Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$pid/smaps_rollup" -OutputPath (Join-Path $runDirectory 'smaps_rollup.txt')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$pid/smaps" -OutputPath (Join-Path $runDirectory 'smaps.txt')),
+            (Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$javaPid/smaps_rollup" -OutputPath (Join-Path $runDirectory 'smaps_rollup.txt')),
+            (Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$javaPid/smaps" -OutputPath (Join-Path $runDirectory 'smaps.txt')),
             (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/memory.current' -OutputPath (Join-Path $runDirectory 'memory.current')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand "$JcmdExecutable $pid VM.native_memory summary" -OutputPath (Join-Path $runDirectory 'nmt-summary.txt')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand "$JcmdExecutable $pid GC.heap_info" -OutputPath (Join-Path $runDirectory 'heap-info.txt')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand "$JcmdExecutable $pid GC.class_histogram" -OutputPath (Join-Path $runDirectory 'class-histogram.txt'))
+            (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/memory.stat' -OutputPath (Join-Path $runDirectory 'memory.stat')),
+            (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/io.stat' -OutputPath (Join-Path $runDirectory 'io.stat')),
+            (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $javaPid VM.native_memory summary" -OutputPath (Join-Path $runDirectory 'nmt-summary.txt')),
+            (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $javaPid GC.heap_info" -OutputPath (Join-Path $runDirectory 'heap-info.txt')),
+            (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $javaPid GC.class_histogram" -OutputPath (Join-Path $runDirectory 'class-histogram.txt'))
         )
         if ($captureResults | Where-Object { $_.exitCode -ne 0 }) {
             throw 'One or more required runtime captures failed.'
@@ -128,7 +152,7 @@ function Invoke-Variant {
             expectedArtifactSha256 = Get-JmoaSha256 -Path $ArtifactPath
             imageId = Get-JmoaContainerImageId -ContainerCli $ContainerCli -ContainerName $ContainerName
             containerId = Get-JmoaContainerId -ContainerCli $ContainerCli -ContainerName $ContainerName
-            pid = [int]$pid
+            pid = [int]$javaPid
             launchMode = $LaunchMode
             runtimePolicy = $RuntimePolicy
             cdsMode = if ($CdsEnabled) { 'ON' } else { 'OFF' }
@@ -141,6 +165,9 @@ function Invoke-Variant {
             timestampStart = $started.ToString('o')
             timestampPost = $ended.ToString('o')
             startupMillis = [int][Math]::Round(($healthyAt - $started).TotalMilliseconds)
+            warmupSeconds = $WarmupSeconds
+            firstVariant = $FirstVariant
+            pageCachePolicy = $pageCache.policy
             classLoadLoggingEnabled = $false
             jfrEnabled = $false
             nmtMode = 'SUMMARY'
@@ -158,12 +185,23 @@ function Invoke-Variant {
     }
 }
 
-$baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
-    -LaunchArguments $BaselineLaunchArguments -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
-    -RuntimeVerificationPath $BaselineRuntimeVerificationPath
-$candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
-    -LaunchArguments $CandidateLaunchArguments -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
-    -RuntimeVerificationPath $CandidateRuntimeVerificationPath
+$baseline = $null
+$candidate = $null
+if ($FirstVariant -eq 'BASELINE_FIRST') {
+    $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
+        -LaunchArguments $BaselineLaunchArguments -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
+        -RuntimeVerificationPath $BaselineRuntimeVerificationPath
+    $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
+        -LaunchArguments $CandidateLaunchArguments -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
+        -RuntimeVerificationPath $CandidateRuntimeVerificationPath
+} else {
+    $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
+        -LaunchArguments $CandidateLaunchArguments -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
+        -RuntimeVerificationPath $CandidateRuntimeVerificationPath
+    $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
+        -LaunchArguments $BaselineLaunchArguments -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
+        -RuntimeVerificationPath $BaselineRuntimeVerificationPath
+}
 $status = if ($baseline.status -eq 'CAPTURED' -and $candidate.status -eq 'CAPTURED') { 'CAPTURED' } else { 'FAILED' }
 $pair = [ordered]@{
     metadataVersion = 'v2o-runtime-screen-pair'
@@ -173,6 +211,8 @@ $pair = [ordered]@{
     service = $Service
     launchMode = $LaunchMode
     runtimePolicy = $RuntimePolicy
+    firstVariant = $FirstVariant
+    pageCachePolicy = if ($DropPageCacheBeforeVariant) { 'DROP_CACHES_BEFORE_EACH_VARIANT' } else { 'NOT_REQUESTED' }
     baseline = $baseline
     candidate = $candidate
     claimBoundary = 'One paired screen only. Run V2-C and V2-D after three valid pairs before making a runtime claim.'

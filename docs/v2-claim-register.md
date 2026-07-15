@@ -35,6 +35,25 @@ The claim is limited to public customers-service under `EXPLODED_BOOT_APP`,
 `NO_CDS_LOW_DIRTY`, `MALLOC_ARENA_MAX=1`, no CDS/AppCDS/Leyden/javaagent, and
 the balanced cold-page-cache protocol. It is not a universal or startup claim.
 
+## Three-Service Acceptance
+
+The frozen final V1-to-V2 launch gate is currently blocked:
+
+```text
+status: BLOCKED_FINAL_ACCEPTANCE
+PetClinic: PASS
+Doctor: PASS
+Patient: FAIL (6/6 valid, 1/3 paired wins, median PSS +1,652 KB)
+```
+
+The Patient evidence is valid and analyzed, but it does not meet the runtime
+thresholds required for a three-service headline. Consequently, the current
+release claims remain scoped to their individual service, launch-mode, and
+runtime-policy evidence; no aggregate three-service memory-win claim is made.
+
+See [the final three-service matrix](v2-final/v2-three-service-memory-matrix.md)
+and [the Patient verdict](v2-final/v2-three-service-patient-verdict.md).
+
 ## Confirmed Runtime Claims
 
 ### 1. PetClinic Full P2 No-CDS Win
