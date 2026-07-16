@@ -14,7 +14,10 @@ remaining release-qualification work before `rc1`, `rc2`, or `v2.0.0`.
 - [Release readiness](v2-release-readiness.md)
 - [Three-service acceptance contract](v2-three-service-acceptance-contract.md)
 - [Three-service memory matrix](v2-three-service-memory-matrix.md)
-- [Patient final verdict](v2-three-service-patient-verdict.md)
+- [Patient final policy verdict](patient-final-policy-verdict.md)
+- [Patient no-CDS confirmation](patient-nocds-confirmation.md)
+- [Patient CDS final verdict](patient-cds-final-verdict.md)
+- [Patient historical CDS verdict](v2-three-service-patient-verdict.md)
 - [Patient bounded root-cause investigation](patient-root-cause-investigation.md)
 - [Patient comparator audit](patient-comparator-audit.md)
 - [Patient pair attribution](patient-pair-attribution.md)
@@ -41,11 +44,13 @@ remaining release-qualification work before `rc1`, `rc2`, or `v2.0.0`.
 ## Current Decision
 
 ```text
-BLOCKED_FINAL_ACCEPTANCE
+READY_FOR_V2_FINAL
 ```
 
 The constrained RC2 public/customer claim remains scoped and valid, but the
-frozen three-service final V1-to-V2 launch gate is not passed. PetClinic and
-Doctor pass; Patient has 6/6 valid corrected runs but only 1/3 paired wins, a median PSS
-delta of +668 KB, and a V2-C mixed-metrics verdict. See the three-service
-matrix and Patient verdict above for the exact evidence boundary.
+frozen three-service final V1-to-V2 launch gate now passes under
+service-specific confirmed runtime policies: PetClinic no-CDS, Doctor CDS, and
+Patient no-CDS. Patient's separate corrected CDS confirmation remains blocked
+(1/3 paired wins, median PSS `+668 KB`) and is preserved as a policy-specific
+failure. See the three-service matrix, Patient policy verdict, and separate
+CDS/no-CDS records above for the exact evidence boundary.

@@ -1,6 +1,8 @@
 {
   "metadataVersion": "patient-root-cause-investigation-v1",
   "status": "COMPLETE_STOPPED_AT_BOUNDARY",
+  "recordScope": "PATIENT_CDS_POLICY",
+  "currentPolicyVerdict": "docs/v2-final/patient-final-policy-verdict.json",
   "classification": "CDS_INTERACTION",
   "secondaryClassification": "HEAP_PAGE_TOUCH_VARIANCE",
   "v1Identity": "V1_IDENTITY_CONFIRMED",
@@ -21,7 +23,7 @@
     "v2dPrimaryHypothesis": "ANONYMOUS_RW_ALLOCATOR_GROWTH"
   },
   "decision": "BLOCK_RUNTIME_PROMOTION",
-  "aggregate": "BLOCKED_FINAL_ACCEPTANCE",
+  "aggregateAtCdsClosure": "BLOCKED_FINAL_ACCEPTANCE",
   "nextAction": "STOP_NO_FURTHER_V2_PATIENT_RESEARCH",
-  "claimBoundary": "Diagnostics are not confirmation claims. The final balanced CDS confirmation remains authoritative."
+  "claimBoundary": "Diagnostics are not confirmation claims. The final balanced CDS confirmation remains authoritative for CDS; the later no-CDS confirmation is a separate policy record."
 }

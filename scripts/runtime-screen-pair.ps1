@@ -109,6 +109,38 @@ function Capture-RuntimeState {
     [ordered]@{ capturedAt = [DateTime]::UtcNow.ToString('o'); histogramIncluded = $IncludeHistogram; directory = $Directory }
 }
 
+function Capture-And-VerifyNoCdsState {
+    param(
+        [string]$ContainerName,
+        [string]$JavaPid,
+        [string]$Directory
+    )
+    $environment = Capture-Command -ContainerName $ContainerName -ShellCommand "tr '\0' '\n' < /proc/$JavaPid/environ" -OutputPath (Join-Path $Directory 'runtime-environment.txt')
+    $commandLine = Capture-Command -ContainerName $ContainerName -ShellCommand "tr '\0' ' ' < /proc/$JavaPid/cmdline" -OutputPath (Join-Path $Directory 'runtime-command-line.txt')
+    if ($environment.exitCode -ne 0 -or $commandLine.exitCode -ne 0) {
+        throw 'Could not capture the live JVM environment and command line for no-CDS proof.'
+    }
+    $proofText = "$($environment.output)`n$($commandLine.output)"
+    if ($proofText -notmatch '(?m)^MALLOC_ARENA_MAX=1\s*$') {
+        throw 'NO_CDS_LOW_DIRTY requires live JVM environment proof: MALLOC_ARENA_MAX=1.'
+    }
+    if ($proofText -notmatch '(?i)-Xshare:off') {
+        throw 'No-CDS policy requires live JVM proof of -Xshare:off.'
+    }
+    if ($proofText -match '(?i)(-javaagent:|SharedArchiveFile|ArchiveClassesAtExit|UseAppCDS|Leyden)') {
+        throw 'No-CDS policy proof found a CDS, Leyden, or javaagent option.'
+    }
+    [ordered]@{
+        status = 'PASSED'
+        cdsDisabled = $true
+        appCdsDisabled = $true
+        leydenDisabled = $true
+        javaagentAbsent = $true
+        mallocArenaMax = '1'
+        sourceFiles = @('runtime-environment.txt', 'runtime-command-line.txt')
+    }
+}
+
 function Reset-PageCache {
     if (-not $DropPageCacheBeforeVariant) {
         return [ordered]@{ policy = 'NOT_REQUESTED'; status = 'NOT_REQUESTED'; output = '' }
@@ -147,6 +179,10 @@ function Invoke-Variant {
         if ($WarmupSeconds -gt 0) { Start-Sleep -Seconds $WarmupSeconds }
         $javaPid = Get-JmoaJavaPid -ContainerCli $ContainerCli -ContainerName $ContainerName -JavaProcessPattern $JavaProcessPattern
         if ([string]::IsNullOrWhiteSpace($javaPid)) { throw 'Could not locate the Java PID in the running container.' }
+        $noCdsProof = $null
+        if ($normalizedPolicy.StartsWith('NO_CDS')) {
+            $noCdsProof = Capture-And-VerifyNoCdsState -ContainerName $ContainerName -JavaPid $javaPid -Directory $runDirectory
+        }
 
         $workloadPath = Join-Path $runDirectory 'workload-result.json'
         & $WorkloadScript -OutputPath $workloadPath -BaseUrl $HealthUrl.TrimEnd('/') -ContainerName $ContainerName -Variant $Variant @WorkloadArguments
@@ -218,6 +254,7 @@ function Invoke-Variant {
             diagnosticOnly = [bool]$DiagnosticOnly
             postWorkloadSnapshots = $snapshots
             postGcSnapshot = $postGc
+            noCdsStateProof = $noCdsProof
         }
         Write-JmoaJson -Value $manifest -Path (Join-Path $runDirectory 'run-manifest.json')
         return [ordered]@{ variant = $Variant; runDirectory = $runDirectory; status = 'CAPTURED'; workload = (Get-Content -Raw -LiteralPath $workloadPath | ConvertFrom-Json) }

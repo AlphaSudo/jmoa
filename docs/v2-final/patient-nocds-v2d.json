@@ -1,0 +1,30 @@
+{
+  "metadataVersion": "v2-final-patient-nocds-v2d-v1",
+  "status": "PASSED",
+  "service": "patient-service",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "v2cVerdict": "CONFIRMED_WIN",
+  "primaryHypothesis": { "name": "HEAP_PAGE_TOUCH_REDUCTION", "confidence": "HIGH" },
+  "secondaryHypothesis": { "name": "ANONYMOUS_RW_ALLOCATOR_REDUCTION", "confidence": "MEDIUM" },
+  "categoryDeltas": {
+    "pssKb": -8903,
+    "privateDirtyKb": -8636,
+    "memoryCurrentBytes": -9707520,
+    "heapPssKb": -5300,
+    "heapUsedKb": -335,
+    "heapCommittedKb": -700,
+    "classHistogramBytes": -262464,
+    "anonymousRwPssKb": -3328,
+    "nmtTotalCommittedKb": -3986,
+    "nmtMetaspaceCommittedKb": -2635,
+    "nmtClassCommittedKb": 0,
+    "mappedFilePssKb": 44
+  },
+  "reconciliation": {
+    "classification": "NMT_INVISIBLE_OR_PARTIAL",
+    "nmtToPssGapKb": -4917
+  },
+  "classCount": { "medianDelta": 1, "interpretation": "not a class-count savings explanation" },
+  "diagnostics": { "jfr": false, "asyncProfiler": false, "jol": false },
+  "claimBoundary": "V2-D provides a ranked explanation for this validated no-CDS result; it does not make a universal or startup claim."
+}

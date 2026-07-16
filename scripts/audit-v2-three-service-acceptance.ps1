@@ -41,7 +41,8 @@ function Test-ServiceVerdict {
     param(
         [string]$ServiceId,
         $Record,
-        $Gates
+        $Gates,
+        [string]$RuntimePolicy
     )
 
     $reasons = [System.Collections.Generic.List[string]]::new()
@@ -74,6 +75,7 @@ function Test-ServiceVerdict {
         service = $ServiceId
         status = if ($reasons.Count -eq 0) { 'PASS' } else { 'FAIL' }
         pass = ($reasons.Count -eq 0)
+        runtimePolicy = if (-not [string]::IsNullOrWhiteSpace($RuntimePolicy)) { $RuntimePolicy } elseif ($null -ne $Record.runtimePolicy) { [string]$Record.runtimePolicy } else { $null }
         validRuns = $validRuns
         pairedWins = $pairedWins
         pairs = [int]$Gates.pairs
@@ -96,11 +98,32 @@ $doctorPath = Get-FirstExisting @(
     (Join-Path $RepoRoot 'docs/v2-final/v2-three-service-doctor-verdict.json'),
     (Join-Path $RepoRoot 'docs/v2-k/v2k-doctor-final-verdict.json')
 )
-$patientPath = Join-Path $RepoRoot 'docs/v2-final/v2-three-service-patient-verdict.json'
+$patientPath = Get-FirstExisting @(
+    (Join-Path $RepoRoot 'docs/v2-final/patient-final-policy-verdict.json'),
+    (Join-Path $RepoRoot 'docs/v2-final/v2-three-service-patient-verdict.json')
+)
 
 $petRecord = Read-OptionalJson $petPath
 $doctorRecord = Read-OptionalJson $doctorPath
 $patientRecord = Read-OptionalJson $patientPath
+
+# Patient has separate policy records. The aggregate gate consumes the
+# confirmed no-CDS policy while preserving the CDS block as audit metadata.
+if ($patientRecord -and $patientRecord.noCdsPolicy) {
+    $patientNoCds = $patientRecord.noCdsPolicy
+    $patientRecord = [pscustomobject]@{
+        runtimePolicy = $patientRecord.confirmedPolicy
+        validRuns = $patientNoCds.validRuns
+        pairedWins = $patientNoCds.pairedWins
+        medianPssDeltaKb = $patientNoCds.medianPssDeltaKb
+        medianPrivateDirtyDeltaKb = $patientNoCds.medianPrivateDirtyDeltaKb
+        medianMemoryCurrentDeltaBytes = $patientNoCds.medianMemoryCurrentDeltaBytes
+        workloadErrors = $patientNoCds.workloadErrors
+        v2cVerdict = $patientNoCds.v2cVerdict
+        v2dAttributionPresent = $patientNoCds.v2dPresent
+        cdsPolicyVerdict = $patientRecord.cdsPolicy.status
+    }
+}
 
 # The existing matrix is a multi-result document, so select only the audited final V1 -> V2 row.
 if ($petRecord -and $petRecord.primaryAcceptance) {
@@ -119,9 +142,9 @@ if ($petRecord -and $petRecord.primaryAcceptance) {
 }
 
 $results = @(
-    (Test-ServiceVerdict -ServiceId 'petclinic-customers' -Record $petRecord -Gates $contract.gates),
-    (Test-ServiceVerdict -ServiceId 'doctor' -Record $doctorRecord -Gates $contract.gates),
-    (Test-ServiceVerdict -ServiceId 'patient' -Record $patientRecord -Gates $contract.gates)
+    (Test-ServiceVerdict -ServiceId 'petclinic-customers' -Record $petRecord -Gates $contract.gates -RuntimePolicy 'NO_CDS_LOW_DIRTY'),
+    (Test-ServiceVerdict -ServiceId 'doctor' -Record $doctorRecord -Gates $contract.gates -RuntimePolicy 'CDS'),
+    (Test-ServiceVerdict -ServiceId 'patient' -Record $patientRecord -Gates $contract.gates -RuntimePolicy 'NO_CDS_LOW_DIRTY')
 )
 $allPass = @($results | Where-Object { -not $_.pass }).Count -eq 0
 $overall = if ($allPass) { 'READY_FOR_V2_FINAL' } elseif ($results | Where-Object { $_.service -eq 'patient' -and $_.status -eq 'PENDING' }) { 'BLOCKED_PATIENT_EVIDENCE' } else { 'BLOCKED_FINAL_ACCEPTANCE' }
@@ -133,7 +156,7 @@ $matrix = [ordered]@{
     comparison = 'final V1 -> final V2'
     overallStatus = $overall
     services = $results
-    claimBoundary = if ($allPass) { 'All three required services pass the frozen V1-to-V2 contract.' } else { 'No stable three-service V2 claim is allowed until every required service passes.' }
+    claimBoundary = if ($allPass) { 'All three required services pass the frozen V1-to-V2 contract under their confirmed service-specific runtime policies. Patient CDS remains separately blocked.' } else { 'No stable three-service V2 claim is allowed until every required service passes.' }
 }
 $jsonPath = Join-Path $OutputDir 'v2-three-service-memory-matrix.json'
 $mdPath = Join-Path $OutputDir 'v2-three-service-memory-matrix.md'
@@ -146,10 +169,10 @@ $lines.Add("Overall status: **$overall**")
 $lines.Add('')
 $lines.Add('Comparison: `final V1 -> final V2`')
 $lines.Add('')
-$lines.Add('| Service | Status | Valid runs | Paired wins | Median PSS KB | Median Private_Dirty KB | Median memory.current bytes | V2-C | V2-D |')
-$lines.Add('|---|---:|---:|---:|---:|---:|---:|---|---|')
+$lines.Add('| Service | Runtime policy | Status | Valid runs | Paired wins | Median PSS KB | Median Private_Dirty KB | Median memory.current bytes | V2-C | V2-D |')
+$lines.Add('|---|---|---:|---:|---:|---:|---:|---:|---|---|')
 foreach ($result in $results) {
-    $lines.Add("| $($result.service) | $($result.status) | $($result.validRuns)/6 | $($result.pairedWins)/3 | $($result.medianPssDeltaKb) | $($result.medianPrivateDirtyDeltaKb) | $($result.medianMemoryCurrentDeltaBytes) | $($result.v2cVerdict) | $($result.v2dAttributionPresent) |")
+    $lines.Add("| $($result.service) | $($result.runtimePolicy) | $($result.status) | $($result.validRuns)/6 | $($result.pairedWins)/3 | $($result.medianPssDeltaKb) | $($result.medianPrivateDirtyDeltaKb) | $($result.medianMemoryCurrentDeltaBytes) | $($result.v2cVerdict) | $($result.v2dAttributionPresent) |")
 }
 $lines.Add('')
 $lines.Add('## Gate')
@@ -162,7 +185,7 @@ $lines.Add('- median memory.current <= -1048576 bytes')
 $lines.Add('- zero workload and semantic errors')
 $lines.Add('- V2-C `CONFIRMED_WIN` and V2-D attribution')
 $lines.Add('')
-$lines.Add('Raw private evidence is intentionally excluded from this repository. A pending or failed row blocks the aggregate claim.')
+$lines.Add('Raw private evidence is intentionally excluded from this repository. A pending or failed row blocks the aggregate claim; Patient CDS remains a separate blocked policy record.')
 $lines -join "`n" | Set-Content -LiteralPath $mdPath -Encoding UTF8
 
 Write-Host "Acceptance audit: $overall"

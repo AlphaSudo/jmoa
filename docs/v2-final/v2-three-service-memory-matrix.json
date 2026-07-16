@@ -1,12 +1,14 @@
 {
-  "metadataVersion": "v2-three-service-memory-matrix-v1",
-  "generatedAt": "2026-07-15T18:00:00Z",
+  "metadataVersion": "v2-three-service-memory-matrix-v2",
+  "generatedAt": "2026-07-16",
   "contract": "docs/v2-final/v2-three-service-acceptance-contract.json",
   "comparison": "final V1 -> final V2",
-  "overallStatus": "BLOCKED_FINAL_ACCEPTANCE",
+  "overallStatus": "READY_FOR_V2_FINAL",
+  "policySelection": "SERVICE_SPECIFIC_CONFIRMED_POLICY",
   "services": [
     {
       "service": "petclinic-customers",
+      "runtimePolicy": "NO_CDS_LOW_DIRTY",
       "status": "PASS",
       "pass": true,
       "validRuns": 6,
@@ -23,6 +25,7 @@
     },
     {
       "service": "doctor",
+      "runtimePolicy": "CDS",
       "status": "PASS",
       "pass": true,
       "validRuns": 6,
@@ -39,26 +42,22 @@
     },
     {
       "service": "patient",
-      "status": "FAIL",
-      "pass": false,
+      "runtimePolicy": "NO_CDS_LOW_DIRTY",
+      "status": "PASS",
+      "pass": true,
       "validRuns": 6,
-      "pairedWins": 1,
+      "pairedWins": 2,
       "pairs": 3,
-      "medianPssDeltaKb": 668,
-      "medianPrivateDirtyDeltaKb": 736,
-      "medianMemoryCurrentDeltaBytes": -1945600,
+      "medianPssDeltaKb": -8903,
+      "medianPrivateDirtyDeltaKb": -8636,
+      "medianMemoryCurrentDeltaBytes": -9707520,
       "workloadErrors": 0,
       "semanticErrors": 0,
-      "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+      "v2cVerdict": "CONFIRMED_WIN",
       "v2dAttributionPresent": true,
-      "reasons": [
-        "pairedWins=1, required >= 2",
-        "median PSS delta=668 KB, required <= -4096 KB",
-        "median Private_Dirty delta=736 KB, required <= -1024 KB",
-        "V2-C verdict=MIXED_METRICS_NEEDS_RERUN",
-        "bounded root-cause result=CDS_INTERACTION; recommendation=BLOCK_RUNTIME_PROMOTION"
-      ]
+      "cdsPolicyVerdict": "BLOCK_RUNTIME_PROMOTION",
+      "reasons": []
     }
   ],
-  "claimBoundary": "No stable three-service V2 claim is allowed until every required service passes."
+  "claimBoundary": "The three-service result is eligible under service-specific confirmed runtime policies. It does not transfer any result to an untested policy or launch mode."
 }

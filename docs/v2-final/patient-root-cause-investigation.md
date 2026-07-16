@@ -2,6 +2,11 @@
 
 Status: **COMPLETE_STOPPED_AT_BOUNDARY**
 
+Scope: this closure is for the corrected **CDS** investigation. Its
+`BLOCK_RUNTIME_PROMOTION` decision remains valid for CDS; the later bounded
+no-CDS confirmation is a separate policy record and does not rewrite these
+CDS findings.
+
 The bounded investigation completed the comparator audit, pair attribution, no-CDS test, deterministic separate-CDS test, normal/post-GC test, T+20/T+60/T+120 snapshots, reversed-order test, and one final balanced confirmation.
 
 ## Findings
@@ -19,4 +24,9 @@ The bounded investigation completed the comparator audit, pair attribution, no-C
 
 Root cause: **CDS_INTERACTION**, with **HEAP_PAGE_TOUCH_VARIANCE** as the secondary mechanism.
 
-The verified artifact defect was fixed, but corrected Patient still fails the frozen runtime gate. Recommendation is `BLOCK_RUNTIME_PROMOTION`; aggregate status remains `BLOCKED_FINAL_ACCEPTANCE`. No new optimizer or further Patient V2 phase is authorized.
+The verified artifact defect was fixed, but corrected Patient still fails the
+frozen CDS runtime gate. Recommendation is `BLOCK_RUNTIME_PROMOTION`. The
+separate no-CDS policy was subsequently confirmed in
+[patient-nocds-confirmation.md](patient-nocds-confirmation.md); no CDS result is
+transferred between policies, and no new Patient reducer or CDS experiment is
+authorized by this closure.

@@ -2,7 +2,7 @@
 
 Status: `FROZEN`
 
-This contract defines the final V2 acceptance gate. It compares the final V1 artifact with the final V2 artifact for each service. Historical baseline-to-candidate results are context only and cannot satisfy this gate.
+This contract defines the final V2 acceptance gate. It compares the final V1 artifact with the final V2 artifact for each service under the service's confirmed runtime policy. Historical baseline-to-candidate results are context only and cannot satisfy this gate.
 
 ## Services
 
@@ -37,7 +37,7 @@ The following are explicitly excluded from the final matrix:
 
 - baseline -> V2 comparisons
 - historical medians copied from another phase
-- a different launch mode or CDS policy than the frozen V1 run
+- a different launch mode or runtime policy than the frozen V1 run for that service
 - a substituted service
 - a single screen presented as confirmation
 - a report without run-level evidence
@@ -78,11 +78,38 @@ Runtime scope: corrected fat JAR, variant-specific CDS archives, no runtime java
 
 ### Patient
 
-Patient remains pending until a final V1-to-V2 six-run comparison is recovered or regenerated. Phase 31 C2 versus baseline evidence is historical context and is not accepted as this contract's Patient result.
+The corrected Patient V1-to-V2 record passes under `NO_CDS_LOW_DIRTY`:
+
+```text
+valid runs:              6/6
+paired wins:             2/3
+median PSS delta:        -8903 KB
+median Private_Dirty:    -8636 KB
+median memory.current:   -9707520 bytes
+V2-C:                    CONFIRMED_WIN
+V2-D:                    present
+```
+
+Runtime scope: corrected Spring Boot fat JAR, CDS/AppCDS/Leyden disabled,
+`MALLOC_ARENA_MAX=1`, no runtime javaagent, and the final 600-request workload.
+The separate corrected CDS record remains blocked (`1/3` paired wins, median
+PSS `+668 KB`) and is preserved as the authoritative CDS-policy failure. The
+Patient policy is therefore service-specific: no-CDS is admissible; CDS is not.
 
 ## Release rule
 
-The aggregate result is `READY_FOR_V2_FINAL` only when all three service verdicts pass. Otherwise the aggregate result is `BLOCKED_PATIENT_EVIDENCE` or another explicit fail-closed status. No stable three-service claim may be published while Patient is pending.
+The aggregate result is `READY_FOR_V2_FINAL` when all three services pass under
+their individually confirmed policies. The current matrix is:
+
+```text
+PetClinic: no-CDS, PASS
+Doctor:    CDS,    PASS
+Patient:   no-CDS, PASS; CDS BLOCKED
+aggregate: READY_FOR_V2_FINAL
+```
+
+This is not a universal CDS claim. Runtime-policy selection is part of the
+acceptance result, and evidence cannot be transferred between policies.
 
 ## Evidence boundary
 

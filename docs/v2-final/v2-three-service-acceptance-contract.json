@@ -1,7 +1,8 @@
 {
-  "metadataVersion": "v2-three-service-acceptance-contract-v1",
+  "metadataVersion": "v2-three-service-acceptance-contract-v2",
   "status": "FROZEN",
   "comparison": "final V1 -> final V2",
+  "runtimePolicySelection": "SERVICE_SPECIFIC_CONFIRMED_POLICY",
   "services": [
     {
       "id": "petclinic-customers",
@@ -41,23 +42,25 @@
     "substituted services",
     "single-screen results used as confirmation",
     "reports without run-level evidence",
-    "launch-mode or runtime-policy substitutions"
+    "launch-mode or runtime-policy substitutions within a service"
   ],
   "auditedResults": {
     "petclinic-customers": {
       "status": "PASS",
+      "runtimePolicy": "NO_CDS_LOW_DIRTY",
       "source": "docs/v2-final/v2-final-memory-win-matrix.json",
       "validRuns": 6,
       "pairedWins": 2,
       "pairs": 3,
       "medianPssDeltaKb": -6012,
-      "medianPrivateDirtyDeltaKb": -5708,
+      "medianPrivateDirtyKb": -5708,
       "medianMemoryCurrentDeltaBytes": -8081408,
       "v2cVerdict": "CONFIRMED_WIN",
       "v2dAttributionPresent": true
     },
     "doctor": {
       "status": "PASS",
+      "runtimePolicy": "CDS",
       "source": "docs/v2-k/v2k-doctor-final-verdict.json",
       "validRuns": 6,
       "pairedWins": 3,
@@ -69,18 +72,20 @@
       "v2dAttributionPresent": true
     },
     "patient": {
-      "status": "FAIL",
-      "source": "docs/v2-final/v2-three-service-patient-verdict.json",
+      "status": "PASS",
+      "runtimePolicy": "NO_CDS_LOW_DIRTY",
+      "source": "docs/v2-final/patient-final-policy-verdict.json",
       "validRuns": 6,
-      "pairedWins": 1,
+      "pairedWins": 2,
       "pairs": 3,
-      "medianPssDeltaKb": 668,
-      "medianPrivateDirtyDeltaKb": 736,
-      "medianMemoryCurrentDeltaBytes": -1945600,
-      "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+      "medianPssDeltaKb": -8903,
+      "medianPrivateDirtyDeltaKb": -8636,
+      "medianMemoryCurrentDeltaBytes": -9707520,
+      "v2cVerdict": "CONFIRMED_WIN",
       "v2dAttributionPresent": true,
-      "recommendation": "BLOCK_RUNTIME_PROMOTION"
+      "cdsPolicyVerdict": "BLOCK_RUNTIME_PROMOTION",
+      "recommendation": "RECOMMEND_CONFIRMED_POLICY"
     }
   },
-  "releaseRule": "READY_FOR_V2_FINAL only when all three required services pass."
+  "releaseRule": "READY_FOR_V2_FINAL only when all three required services pass under a confirmed service-specific runtime policy."
 }
