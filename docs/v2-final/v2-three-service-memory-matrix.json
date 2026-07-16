@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-three-service-memory-matrix-v1",
-  "generatedAt": "2026-07-15T10:30:05.7421893Z",
+  "generatedAt": "2026-07-15T18:00:00Z",
   "contract": "docs/v2-final/v2-three-service-acceptance-contract.json",
   "comparison": "final V1 -> final V2",
   "overallStatus": "BLOCKED_FINAL_ACCEPTANCE",
@@ -44,19 +44,19 @@
       "validRuns": 6,
       "pairedWins": 1,
       "pairs": 3,
-      "medianPssDeltaKb": 1652,
-      "medianPrivateDirtyDeltaKb": 1756,
-      "medianMemoryCurrentDeltaBytes": -774144,
+      "medianPssDeltaKb": 668,
+      "medianPrivateDirtyDeltaKb": 736,
+      "medianMemoryCurrentDeltaBytes": -1945600,
       "workloadErrors": 0,
       "semanticErrors": 0,
       "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
       "v2dAttributionPresent": true,
       "reasons": [
         "pairedWins=1, required >= 2",
-        "median PSS delta=1652 KB, required <= -4096 KB",
-        "median Private_Dirty delta=1756 KB, required <= -1024 KB",
-        "median memory.current delta=-774144 bytes, required <= -1048576 bytes",
-        "V2-C verdict=MIXED_METRICS_NEEDS_RERUN"
+        "median PSS delta=668 KB, required <= -4096 KB",
+        "median Private_Dirty delta=736 KB, required <= -1024 KB",
+        "V2-C verdict=MIXED_METRICS_NEEDS_RERUN",
+        "bounded root-cause result=CDS_INTERACTION; recommendation=BLOCK_RUNTIME_PROMOTION"
       ]
     }
   ],

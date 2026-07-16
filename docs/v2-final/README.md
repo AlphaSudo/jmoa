@@ -15,6 +15,9 @@ remaining release-qualification work before `rc1`, `rc2`, or `v2.0.0`.
 - [Three-service acceptance contract](v2-three-service-acceptance-contract.md)
 - [Three-service memory matrix](v2-three-service-memory-matrix.md)
 - [Patient final verdict](v2-three-service-patient-verdict.md)
+- [Patient bounded root-cause investigation](patient-root-cause-investigation.md)
+- [Patient comparator audit](patient-comparator-audit.md)
+- [Patient pair attribution](patient-pair-attribution.md)
 
 ## Audit Records
 
@@ -43,6 +46,6 @@ BLOCKED_FINAL_ACCEPTANCE
 
 The constrained RC2 public/customer claim remains scoped and valid, but the
 frozen three-service final V1-to-V2 launch gate is not passed. PetClinic and
-Doctor pass; Patient has 6/6 valid runs but only 1/3 paired wins, a median PSS
-delta of +1,652 KB, and a V2-C mixed-metrics verdict. See the three-service
+Doctor pass; Patient has 6/6 valid corrected runs but only 1/3 paired wins, a median PSS
+delta of +668 KB, and a V2-C mixed-metrics verdict. See the three-service
 matrix and Patient verdict above for the exact evidence boundary.

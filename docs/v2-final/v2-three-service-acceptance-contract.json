@@ -69,9 +69,17 @@
       "v2dAttributionPresent": true
     },
     "patient": {
-      "status": "PENDING",
-      "source": null,
-      "reason": "No final V1-to-V2 run-level confirmation has been accepted yet."
+      "status": "FAIL",
+      "source": "docs/v2-final/v2-three-service-patient-verdict.json",
+      "validRuns": 6,
+      "pairedWins": 1,
+      "pairs": 3,
+      "medianPssDeltaKb": 668,
+      "medianPrivateDirtyDeltaKb": 736,
+      "medianMemoryCurrentDeltaBytes": -1945600,
+      "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+      "v2dAttributionPresent": true,
+      "recommendation": "BLOCK_RUNTIME_PROMOTION"
     }
   },
   "releaseRule": "READY_FOR_V2_FINAL only when all three required services pass."

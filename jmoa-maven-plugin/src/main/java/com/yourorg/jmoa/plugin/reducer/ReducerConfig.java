@@ -19,7 +19,9 @@ public record ReducerConfig(
     String engine,
     boolean includeApplicationClasses,
     File applicationInputDir,
-    String generatedFamilies
+    String generatedFamilies,
+    String artifactIncludes,
+    String artifactExcludes
 ) {
 
     public ReducerConfig(
@@ -54,7 +56,9 @@ public record ReducerConfig(
             ReducerEngine.ASM.propertyValue(),
             false,
             null,
-            "report-only"
+            "report-only",
+            "",
+            ""
         );
     }
 
@@ -91,7 +95,38 @@ public record ReducerConfig(
             engine,
             false,
             null,
-            "report-only"
+            "report-only",
+            "",
+            ""
+        );
+    }
+
+    public ReducerConfig(
+        boolean reportOnly,
+        boolean optimize,
+        String profile,
+        File inputDir,
+        File outputDir,
+        boolean stripLocalVariableTable,
+        boolean stripLocalVariableTypeTable,
+        boolean stripLineNumberTable,
+        boolean stripSourceFile,
+        boolean stripStackMapTable,
+        boolean stripAnnotations,
+        boolean stripSignature,
+        boolean stripBootstrapMethods,
+        String engine,
+        boolean includeApplicationClasses,
+        File applicationInputDir,
+        String generatedFamilies
+    ) {
+        this(
+            reportOnly, optimize, profile, inputDir, outputDir,
+            stripLocalVariableTable, stripLocalVariableTypeTable,
+            stripLineNumberTable, stripSourceFile, stripStackMapTable,
+            stripAnnotations, stripSignature, stripBootstrapMethods,
+            engine, includeApplicationClasses, applicationInputDir, generatedFamilies,
+            "", ""
         );
     }
 

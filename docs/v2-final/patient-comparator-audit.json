@@ -1,0 +1,20 @@
+{
+  "metadataVersion": "patient-comparator-audit-public-v1",
+  "status": "COMPLETE",
+  "v1Identity": "V1_IDENTITY_CONFIRMED",
+  "optimizerReportEquivalentIgnoringTimestampAndMapOrder": true,
+  "applicationClassCount": 577,
+  "embeddedDependencyCount": 162,
+  "verifiedDefect": "RUNTIME_LIBRARY_WAS_IN_REDUCER_SCOPE",
+  "defectFixed": true,
+  "runtimeLibraryByteIdenticalAfterFix": true,
+  "applicationEntryContentDifferences": 0,
+  "bootLoaderEntryContentDifferences": 0,
+  "dependencyNamesEqual": true,
+  "rawAuditedClasses": 32616,
+  "rawFailedAudits": 0,
+  "rawNonTargetStructuresPreserved": true,
+  "classification": "PACKAGING_ONLY_DIFFERENCES_PRESENT",
+  "unexpectedDifferences": [],
+  "claimBoundary": "The corrected V2 comparator differs by admitted dependency metadata reduction and outer archive packaging. Private paths and raw artifacts are intentionally omitted."
+}

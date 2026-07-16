@@ -123,9 +123,16 @@ jmoa.reducer.profile=none
 jmoa.reducer.engine=asm
 jmoa.reducer.inputDir=<optimized-lib-dir>
 jmoa.reducer.outputDir=${project.build.directory}/jmoa-reduced-libs
+jmoa.reducer.artifactIncludes=*.jar
+jmoa.reducer.artifactExcludes=
 jmoa.reducer.stripLocalVariableTable=false
 jmoa.reducer.stripLocalVariableTypeTable=false
 ```
+
+`artifactIncludes` and `artifactExcludes` accept comma-separated filename
+globs. Exclusions take precedence. An excluded artifact is copied byte-for-byte
+and reported as `SKIPPED_ARTIFACT_POLICY`; this is useful for runtime support
+libraries or other dependencies that must remain identical to the comparator.
 
 Unsafe strip flags fail fast:
 

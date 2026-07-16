@@ -80,6 +80,12 @@ public class ReduceBytecodeMojo extends AbstractMojo {
     @Parameter(property = "jmoa.reducer.generatedFamilies", defaultValue = "report-only")
     private String generatedFamilies;
 
+    @Parameter(property = "jmoa.reducer.artifactIncludes", defaultValue = "")
+    private String artifactIncludes;
+
+    @Parameter(property = "jmoa.reducer.artifactExcludes", defaultValue = "")
+    private String artifactExcludes;
+
     @Override
     public void execute() throws MojoExecutionException {
         if (skip || !reducerEnabled) {
@@ -103,7 +109,9 @@ public class ReduceBytecodeMojo extends AbstractMojo {
             engine,
             includeApplicationClasses,
             applicationInputDir,
-            generatedFamilies
+            generatedFamilies,
+            artifactIncludes,
+            artifactExcludes
         );
         try {
             new ReducerSafetyPolicy().validate(config);

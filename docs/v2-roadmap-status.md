@@ -58,7 +58,7 @@ three services:
 ```text
 PetClinic customers-service: PASS
 Doctor-service: PASS
-Patient-service: FAIL (6/6 valid, 1/3 paired wins, median PSS +1,652 KB)
+Patient-service: FAIL (6/6 valid corrected runs, 1/3 paired wins, median PSS +668 KB; BLOCK_RUNTIME_PROMOTION)
 aggregate: BLOCKED_FINAL_ACCEPTANCE
 ```
 

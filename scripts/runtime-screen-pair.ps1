@@ -30,6 +30,11 @@ param(
     [bool]$JavaagentPresent = $false,
     [string]$WorkloadId = "runtime-screen",
     [int]$WarmupSeconds = 20,
+    [int[]]$PostWorkloadSnapshotSeconds = @(0),
+    [switch]$CapturePostGcSnapshot,
+    [int]$PostGcSettleSeconds = 5,
+    [switch]$DeferHistogramUntilFinalSnapshot,
+    [switch]$DiagnosticOnly,
     [switch]$DropPageCacheBeforeVariant,
     [int]$HealthTimeoutSeconds = 90,
     [switch]$FailOnFailure
@@ -76,6 +81,34 @@ function Capture-Command {
     return $result
 }
 
+function Capture-RuntimeState {
+    param(
+        [string]$ContainerName,
+        [string]$JavaPid,
+        [string]$Directory,
+        [bool]$IncludeHistogram
+    )
+    New-JmoaDirectory -Path $Directory
+    $cleanJcmd = "env -u JAVA_TOOL_OPTIONS -u JDK_JAVA_OPTIONS $JcmdExecutable"
+    $captures = @(
+        (Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$JavaPid/smaps_rollup" -OutputPath (Join-Path $Directory 'smaps_rollup.txt')),
+        (Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$JavaPid/smaps" -OutputPath (Join-Path $Directory 'smaps.txt')),
+        (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/memory.current' -OutputPath (Join-Path $Directory 'memory.current')),
+        (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/memory.stat' -OutputPath (Join-Path $Directory 'memory.stat')),
+        (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/io.stat' -OutputPath (Join-Path $Directory 'io.stat')),
+        (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid VM.native_memory summary" -OutputPath (Join-Path $Directory 'nmt-summary.txt')),
+        (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid GC.heap_info" -OutputPath (Join-Path $Directory 'heap-info.txt')),
+        (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid VM.metaspace" -OutputPath (Join-Path $Directory 'metaspace.txt')),
+        (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid VM.classloader_stats" -OutputPath (Join-Path $Directory 'classloader-stats.txt')),
+        (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid VM.flags" -OutputPath (Join-Path $Directory 'vm-flags.txt'))
+    )
+    if ($IncludeHistogram) {
+        $captures += Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid GC.class_histogram" -OutputPath (Join-Path $Directory 'class-histogram.txt')
+    }
+    if ($captures | Where-Object { $_.exitCode -ne 0 }) { throw 'One or more required runtime captures failed.' }
+    [ordered]@{ capturedAt = [DateTime]::UtcNow.ToString('o'); histogramIncluded = $IncludeHistogram; directory = $Directory }
+}
+
 function Reset-PageCache {
     if (-not $DropPageCacheBeforeVariant) {
         return [ordered]@{ policy = 'NOT_REQUESTED'; status = 'NOT_REQUESTED'; output = '' }
@@ -120,20 +153,30 @@ function Invoke-Variant {
         if ($LASTEXITCODE -ne 0) { throw "Workload script returned $LASTEXITCODE." }
         if (-not (Test-Path -LiteralPath $workloadPath -PathType Leaf)) { throw 'Workload script did not emit workload-result.json.' }
 
-        # Do not let the application JVM's JAVA_TOOL_OPTIONS leak into diagnostic jcmd subprocesses.
-        $cleanJcmd = "env -u JAVA_TOOL_OPTIONS -u JDK_JAVA_OPTIONS $JcmdExecutable"
-        $captureResults = @(
-            (Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$javaPid/smaps_rollup" -OutputPath (Join-Path $runDirectory 'smaps_rollup.txt')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$javaPid/smaps" -OutputPath (Join-Path $runDirectory 'smaps.txt')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/memory.current' -OutputPath (Join-Path $runDirectory 'memory.current')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/memory.stat' -OutputPath (Join-Path $runDirectory 'memory.stat')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/io.stat' -OutputPath (Join-Path $runDirectory 'io.stat')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $javaPid VM.native_memory summary" -OutputPath (Join-Path $runDirectory 'nmt-summary.txt')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $javaPid GC.heap_info" -OutputPath (Join-Path $runDirectory 'heap-info.txt')),
-            (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $javaPid GC.class_histogram" -OutputPath (Join-Path $runDirectory 'class-histogram.txt'))
-        )
-        if ($captureResults | Where-Object { $_.exitCode -ne 0 }) {
-            throw 'One or more required runtime captures failed.'
+        $snapshotOffsets = @($PostWorkloadSnapshotSeconds | Where-Object { $_ -ge 0 } | Sort-Object -Unique)
+        if ($snapshotOffsets.Count -eq 0) { $snapshotOffsets = @(0) }
+        $snapshots = @(); $snapshotClock = [Diagnostics.Stopwatch]::StartNew()
+        for ($snapshotIndex = 0; $snapshotIndex -lt $snapshotOffsets.Count; $snapshotIndex++) {
+            $offset = $snapshotOffsets[$snapshotIndex]
+            $remaining = $offset - [int][Math]::Floor($snapshotClock.Elapsed.TotalSeconds)
+            if ($remaining -gt 0) { Start-Sleep -Seconds $remaining }
+            $snapshotDirectory = if ($snapshotIndex -eq 0) { $runDirectory } else {
+                Join-Path $runDirectory ("snapshots/t-plus-{0:D3}" -f $offset)
+            }
+            $includeHistogram = -not $DeferHistogramUntilFinalSnapshot -or $snapshotIndex -eq ($snapshotOffsets.Count - 1)
+            $snapshot = Capture-RuntimeState -ContainerName $ContainerName -JavaPid $javaPid -Directory $snapshotDirectory -IncludeHistogram $includeHistogram
+            $snapshot.offsetSeconds = $offset
+            $snapshot.perturbed = $false
+            $snapshots += $snapshot
+        }
+        $postGc = $null
+        if ($CapturePostGcSnapshot) {
+            $cleanJcmd = "env -u JAVA_TOOL_OPTIONS -u JDK_JAVA_OPTIONS $JcmdExecutable"
+            $gcResult = Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $javaPid GC.run" -OutputPath (Join-Path $runDirectory 'post-gc-command.txt')
+            if ($gcResult.exitCode -ne 0) { throw 'Diagnostic GC.run failed.' }
+            if ($PostGcSettleSeconds -gt 0) { Start-Sleep -Seconds $PostGcSettleSeconds }
+            $postGc = Capture-RuntimeState -ContainerName $ContainerName -JavaPid $javaPid -Directory (Join-Path $runDirectory 'post-gc') -IncludeHistogram $true
+            $postGc.perturbed = $true
         }
         if (-not [string]::IsNullOrWhiteSpace($RuntimeVerificationPath)) {
             if (-not (Test-Path -LiteralPath $RuntimeVerificationPath -PathType Leaf)) {
@@ -172,6 +215,9 @@ function Invoke-Variant {
             jfrEnabled = $false
             nmtMode = 'SUMMARY'
             gcRunBeforeCapture = $false
+            diagnosticOnly = [bool]$DiagnosticOnly
+            postWorkloadSnapshots = $snapshots
+            postGcSnapshot = $postGc
         }
         Write-JmoaJson -Value $manifest -Path (Join-Path $runDirectory 'run-manifest.json')
         return [ordered]@{ variant = $Variant; runDirectory = $runDirectory; status = 'CAPTURED'; workload = (Get-Content -Raw -LiteralPath $workloadPath | ConvertFrom-Json) }
@@ -216,6 +262,7 @@ $pair = [ordered]@{
     baseline = $baseline
     candidate = $candidate
     claimBoundary = 'One paired screen only. Run V2-C and V2-D after three valid pairs before making a runtime claim.'
+    diagnosticOnly = [bool]$DiagnosticOnly
 }
 Write-JmoaJson -Value $pair -Path (Join-Path $CaptureRoot ("v2o-runtime-screen-pair-{0}.json" -f $PairIndex))
 Write-Host "Runtime screen pair $PairIndex status: $status"

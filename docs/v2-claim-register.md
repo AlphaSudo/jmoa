@@ -43,7 +43,7 @@ The frozen final V1-to-V2 launch gate is currently blocked:
 status: BLOCKED_FINAL_ACCEPTANCE
 PetClinic: PASS
 Doctor: PASS
-Patient: FAIL (6/6 valid, 1/3 paired wins, median PSS +1,652 KB)
+Patient: FAIL (6/6 valid corrected runs, 1/3 paired wins, median PSS +668 KB; reducer recommendation `BLOCK_RUNTIME_PROMOTION`)
 ```
 
 The Patient evidence is valid and analyzed, but it does not meet the runtime

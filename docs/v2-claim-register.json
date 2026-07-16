@@ -59,9 +59,9 @@
         "status": "FAIL",
         "validRuns": 6,
         "pairedWins": 1,
-        "medianPssDeltaKb": 1652,
-        "medianPrivateDirtyDeltaKb": 1756,
-        "medianMemoryCurrentDeltaBytes": -774144,
+        "medianPssDeltaKb": 668,
+        "medianPrivateDirtyDeltaKb": 736,
+        "medianMemoryCurrentDeltaBytes": -1945600,
         "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
         "v2dAttributionPresent": true
       }

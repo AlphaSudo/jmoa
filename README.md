@@ -50,7 +50,7 @@ service- and runtime-policy scoped:
 | Spring PetClinic customers-service (public) | exploded Boot / JarLauncher | no CDS | Median PSS reduction of 6.012 MB in the final V1-to-V2 comparison |
 
 The Patient result has valid run-level evidence, but its final V1-to-V2
-confirmation produced only 1/3 paired wins and a median PSS increase of 1,652
+confirmation produced only 1/3 paired wins and a median PSS increase of 668
 KB. It is therefore not a runtime-win claim. The Doctor result is private and
 the PetClinic result is the public reproducibility bridge; neither transfers
 to other services, packaging modes, or runtime policies.

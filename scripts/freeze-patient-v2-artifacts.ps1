@@ -72,6 +72,7 @@ function Invoke-Reducer([string]$InputDir, [string]$ReducedDir, [string]$LogPath
                 '-Djmoa.reducer.engine=raw',
                 '-Djmoa.reducer.stripLocalVariableTable=true',
                 '-Djmoa.reducer.stripLocalVariableTypeTable=true',
+                '-Djmoa.reducer.artifactExcludes=jmoa-runtime-lib-*.jar',
                 "-Djmoa.reducer.inputDir=$InputDir",
                 "-Djmoa.reducer.outputDir=$ReducedDir"
             )
@@ -142,6 +143,13 @@ $v1Manifest = Get-Manifest $v1Libraries
 
 $reducerLog = Join-Path $OutputDir 'reducer-command.log'
 Invoke-Reducer -InputDir $v1Libraries -ReducedDir $v2Libraries -LogPath $reducerLog
+$v1RuntimeLibrary = @(Get-ChildItem -LiteralPath $v1Libraries -Filter 'jmoa-runtime-lib-*.jar' -File)
+if ($v1RuntimeLibrary.Count -ne 1) { throw "Expected exactly one JMOA runtime library in V1, found $($v1RuntimeLibrary.Count)." }
+$v2RuntimeLibrary = Join-Path $v2Libraries $v1RuntimeLibrary[0].Name
+if (-not (Test-Path -LiteralPath $v2RuntimeLibrary -PathType Leaf)) { throw "Reducer output is missing JMOA runtime library: $v2RuntimeLibrary" }
+if ((Get-Sha256 $v1RuntimeLibrary[0].FullName) -ne (Get-Sha256 $v2RuntimeLibrary)) {
+    throw 'JMOA runtime library changed during dependency reduction; comparator is invalid.'
+}
 $v2Manifest = Get-Manifest $v2Libraries
 $repack = Repack-Application -SourceJar $ApplicationJar -ReducedDir $v2Libraries -DestinationJar $v2Artifact
 
@@ -169,6 +177,7 @@ $freeze = [ordered]@{
     dependencyByteDelta = $dependencyDelta
     outerJarByteDelta = $artifactDelta
     replacedEmbeddedLibraries = $repack.replacedLibraries
+    runtimeLibraryByteIdentical = $true
     reducerReport = if ($reducerReport) { [ordered]@{ mutationEnabled = $reducerReport.mutationEnabled; engine = $reducerReport.engine; classes = $reducerReport.classCount; reducedClasses = [long](($reducerReport.artifacts | ForEach-Object { [long]$_.reducedClassCount } | Measure-Object -Sum).Sum); removedBytes = $reducerReport.totalRemovedBytes; estimatedRemovableBytes = $reducerReport.totalEstimatedRemovableBytes } } else { $null }
     runtimeStatus = 'NOT_RUN'
     claimBoundary = 'This freeze proves artifact identity and materialization only. Runtime acceptance requires semantic smoke, six valid runs, V2-C validation, and V2-D attribution.'

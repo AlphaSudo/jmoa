@@ -1,52 +1,54 @@
 # Patient Final V1 -> V2 Verdict
 
 Status: **FAIL_PATIENT_NOT_CONFIRMED**
+Recommendation: **BLOCK_RUNTIME_PROMOTION**
 
-The Patient artifact freeze and semantic pre-gates passed, but the final V1 -> V2 runtime result does not satisfy the frozen three-service acceptance contract.
+The bounded root-cause investigation found and fixed a real artifact-scope defect: the first V2 artifact reduced `jmoa-runtime-lib`. The reducer now supports artifact exclusions, Patient excludes that support JAR, and the corrected V1/V2 runtime library is byte-identical. Phase 31 C2 was also confirmed as equivalent to the finalized Patient V1 optimizer policy.
 
-## Artifact freeze
+## Corrected Artifact
 
-| Item | Final V1 | Final V2 | Delta |
+| Item | Final V1 | Corrected final V2 | Delta |
 |---|---:|---:|---:|
-| Outer application JAR bytes | 99,585,809 | 95,770,035 | -3,815,774 |
-| Embedded dependency bytes | 98,600,337 | 94,847,956 | -3,752,381 |
+| Outer application JAR bytes | 99,585,809 | 95,770,204 | -3,815,605 |
+| Embedded dependency bytes | 98,600,337 | 94,848,125 | -3,752,212 |
 | Embedded dependency JARs | 162 | 162 | 0 |
-| Reduced classes | n/a | 32,624 | n/a |
+| Reduced classes | n/a | 32,616 | n/a |
 
-Artifact identities are recorded in the accompanying JSON verdict. The materialization and semantic pre-gates passed, with all 162 embedded dependency entries replaced and no workload or linkage errors in the pre-gate smoke.
+Application classes and the Spring Boot loader are unchanged by content. Raw class auditing found zero non-target byte differences. Repacking introduces container-level ZIP metadata differences, so the comparator classification is `PACKAGING_ONLY_DIFFERENCES_PRESENT`, not a claim of byte-identical outer JARs.
 
-## Runtime confirmation
+## Diagnosis
 
-Protocol: Spring Boot fat JAR, CDS enabled with variant-specific archives, Java 26, no runtime javaagent, and 600 health/Prometheus requests per run.
+The original controlled `+10,504 KB` anonymous writable PSS movement consisted of `+8,932 KB` outside the Java heap and `+1,572 KB` in Java heap pages. Histogram bytes and heap occupancy did not grow, so retained application objects do not explain the regression.
+
+| Diagnostic pair | PSS KB | Private Dirty KB | memory.current B |
+|---|---:|---:|---:|
+| No CDS | -10,455 | -10,612 | -11,104,256 |
+| Deterministic separate CDS archives | -5,366 | -5,488 | -8,081,408 |
+| Normal state before forced GC | +3,651 | +3,768 | +1,134,592 |
+| Post-forced-GC, diagnostic only | +3,817 | +3,928 | +1,241,088 |
+| Settle T+20 | +6,350 | +6,348 | +3,665,920 |
+| Settle T+60 | +6,266 | +6,244 | +3,629,056 |
+| Settle T+120 | +6,270 | +6,244 | +3,719,168 |
+| Reversed-order CDS | -858 | -960 | -3,600,384 |
+
+The result is classified `CDS_INTERACTION`, with `HEAP_PAGE_TOUCH_VARIANCE` as the secondary mechanism. No-CDS is strongly favorable, while fresh CDS runs vary in sign; forced GC and longer settling do not remove that variance.
+
+## Final Balanced Confirmation
+
+Protocol: corrected artifacts, separate deterministic CDS archives, Spring Boot fat JAR, Java 26, no runtime javaagent, cache reset before every run, T+20 post-workload capture, and order `B->C`, `C->B`, `B->C`.
 
 | Metric | Result | Required |
 |---|---:|---:|
 | Valid runs | 6/6 | 6/6 |
 | Paired wins | 1/3 | >= 2/3 |
-| Median PSS delta | +1,652 KB | <= -4,096 KB |
-| Median Private_Dirty delta | +1,756 KB | <= -1,024 KB |
-| Median memory.current delta | -774,144 B | <= -1,048,576 B |
+| Pair PSS deltas | +668, +2,870, -2,373 KB | n/a |
+| Median PSS delta | +668 KB | <= -4,096 KB |
+| Median Private_Dirty delta | +736 KB | <= -1,024 KB |
+| Median memory.current delta | -1,945,600 B | <= -1,048,576 B |
 | Workload errors | 0 | 0 |
 | V2-C | MIXED_METRICS_NEEDS_RERUN | CONFIRMED_WIN |
-| V2-D | present | required |
+| V2-D | `ANONYMOUS_RW_ALLOCATOR_GROWTH` | required |
 
-V2-D ranked `ANONYMOUS_RW_ALLOCATOR_GROWTH` as the primary hypothesis. The result is therefore a valid, analyzed non-win, not missing evidence.
+Patient remains artifact-safe but is not admitted for runtime promotion. The aggregate three-service matrix stays blocked. RC2's narrower PetClinic claim remains valid and is not retagged or deleted.
 
-## Bounded diagnostic
-
-One additional screen used the corrected protocol: page-cache reset before each variant, a 20-second post-health settle, and the same CDS policy. It also regressed:
-
-| Metric | Diagnostic delta |
-|---|---:|
-| PSS | +7,579 KB |
-| Private_Dirty | +7,656 KB |
-| memory.current | +4,935,680 B |
-| anonymous_rw PSS | +10,504 KB |
-
-This bounded check was screen evidence only and was not promoted to confirmation.
-
-## Decision
-
-Patient is **not confirmed**. The aggregate three-service matrix remains blocked. The PetClinic and Doctor wins remain valid within their own documented scopes, but they cannot be promoted to a stable three-service headline until Patient passes the frozen contract.
-
-Raw Patient run folders, private configuration, database details, CDS archives, and local paths remain outside the public repository.
+Raw Patient runs, private configuration, archives, and local paths remain outside the public repository.
