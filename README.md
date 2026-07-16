@@ -38,26 +38,39 @@ JMOA is a source release for the tooling behind the published portfolio:
 - Not tied to one Spring Boot deployment shape
 - Not a publication of private HMS, patient-service, or doctor-service source
 
-## Confirmed Case Studies
+## Case Study Status
 
-The source here supports the evidence portfolio, which currently summarizes:
+The source here supports the evidence portfolio. The current evidence is
+service- and runtime-policy scoped:
 
 | Case | Runtime shape | CDS mode | Confirmed result |
 | --- | --- | --- | --- |
-| Patient-service | expanded classpath | CDS/AppCDS-style | ~4.2-4.4 MB median memory reduction |
-| Doctor-service | corrected Spring Boot fat JAR | CDS | ~2.7 MB median PSS reduction |
-| Spring PetClinic customers-service | exploded Boot / JarLauncher | no CDS | ~4.6 MB median PSS reduction |
+| Patient-service (private) | corrected Spring Boot fat JAR | CDS | Artifact-only dependency reduction of ~3.75 MB; final runtime gate not confirmed |
+| Doctor-service (private) | corrected Spring Boot fat JAR | CDS | Median PSS reduction of 5.156 MB in the corrected D2-to-D2R comparison |
+| Spring PetClinic customers-service (public) | exploded Boot / JarLauncher | no CDS | Median PSS reduction of 6.012 MB in the final V1-to-V2 comparison |
 
-The PetClinic result is the public reproducibility bridge. It is scoped to the
-project's exploded Boot launch shape and the `NO_CDS_LOW_DIRTY` runtime policy.
+The Patient result has valid run-level evidence, but its final V1-to-V2
+confirmation produced only 1/3 paired wins and a median PSS increase of 668
+KB. It is therefore not a runtime-win claim. The Doctor result is private and
+the PetClinic result is the public reproducibility bridge; neither transfers
+to other services, packaging modes, or runtime policies.
 
 ## V2 Final Performance Gate
 
-The reproducible final public customers-service result is the incremental
-comparison under the frozen no-CDS exploded-Boot protocol. The historical direct
-B0-to-V2 result is retained in the evidence record, but its raw capture was not
-retained and a fresh five-pair exact-image replication was mixed; it is not a
-current release claim.
+The frozen three-service launch gate compares final V1 with final V2 for
+PetClinic customers-service, Doctor-service, and Patient-service. The current
+aggregate status is `BLOCKED_FINAL_ACCEPTANCE`: PetClinic and Doctor pass the
+frozen thresholds, while Patient has valid evidence but does not.
+
+See the machine-readable and human-readable final matrix:
+
+- [Three-service memory matrix](docs/v2-final/v2-three-service-memory-matrix.md)
+- [Patient final verdict](docs/v2-final/v2-three-service-patient-verdict.md)
+
+The reproducible PetClinic result below remains a scoped service claim. The
+historical direct B0-to-V2 result is retained in the evidence record, but its
+raw capture was not retained and a fresh five-pair exact-image replication was
+mixed; it is not a current release claim.
 
 ```text
 comparison: finalized V1 vs final V2 product artifact

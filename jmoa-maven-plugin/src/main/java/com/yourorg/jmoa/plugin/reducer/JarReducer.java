@@ -23,10 +23,12 @@ public final class JarReducer {
     private final RawLocalVariableDebugAttributeReducer rawReducer = new RawLocalVariableDebugAttributeReducer();
     private final RawReducerBytePreservationAuditor rawAuditor = new RawReducerBytePreservationAuditor();
     private final JarSafetyInspector safetyInspector = new JarSafetyInspector();
+    private final ArtifactSelectionPolicy selectionPolicy;
     private final List<RawReducerClassAuditRecord> rawClassAudits = new ArrayList<>();
 
     public JarReducer(ReducerConfig config) {
         this.config = config;
+        this.selectionPolicy = new ArtifactSelectionPolicy(config);
     }
 
     public ReducerReport reduce() throws IOException {
@@ -52,12 +54,12 @@ public final class JarReducer {
         int reducedClassCount = 0;
         int skippedBootstrapMethodsClassCount = 0;
         JarSafetyAssessment safety;
-        try (JarFile source = new JarFile(jar);
-             JarOutputStream target = new JarOutputStream(new FileOutputStream(output))) {
+        try (JarFile source = new JarFile(jar)) {
             safety = safetyInspector.assess(source);
-            if (!safety.mutationAllowed()) {
-                target.close();
-                ScanResult scan = scanSkippedJar(jar, source, safety.skipReason());
+            String selectionSkip = selectionPolicy.isSelected(jar.getName()) ? null : "SKIPPED_ARTIFACT_POLICY";
+            String skipReason = selectionSkip != null ? selectionSkip : safety.skipReason();
+            if (selectionSkip != null || !safety.mutationAllowed()) {
+                ScanResult scan = scanSkippedJar(jar, source, skipReason);
                 Files.copy(jar.toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 return new JarReductionRecord(
                     jar.getName(),
@@ -75,23 +77,24 @@ public final class JarReducer {
                     safety.signedJar(),
                     safety.multiReleaseJar(),
                     safety.sealedJar(),
-                    safety.skipReason(),
+                    skipReason,
                     "preserve",
-                    safety.skipReason(),
+                    skipReason,
                     scan.records().stream().limit(200).toList()
                 );
             }
-            Enumeration<JarEntry> entries = source.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry entry = entries.nextElement();
-                JarEntry copy = new JarEntry(entry.getName());
-                copy.setTime(entry.getTime());
-                target.putNextEntry(copy);
-                byte[] bytes;
-                try (var input = source.getInputStream(entry)) {
-                    bytes = input.readAllBytes();
-                }
-                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+            try (JarOutputStream target = new JarOutputStream(new FileOutputStream(output))) {
+                Enumeration<JarEntry> entries = source.entries();
+                while (entries.hasMoreElements()) {
+                    JarEntry entry = entries.nextElement();
+                    JarEntry copy = new JarEntry(entry.getName());
+                    copy.setTime(entry.getTime());
+                    target.putNextEntry(copy);
+                    byte[] bytes;
+                    try (var input = source.getInputStream(entry)) {
+                        bytes = input.readAllBytes();
+                    }
+                    if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
                     classCount++;
                     ClassDebugMetadata before = inspector.inspect(bytes);
                     estimated += before.removableBytes();
@@ -143,10 +146,11 @@ public final class JarReducer {
                     } else {
                         target.write(bytes);
                     }
-                } else {
-                    target.write(bytes);
+                    } else {
+                        target.write(bytes);
+                    }
+                    target.closeEntry();
                 }
-                target.closeEntry();
             }
         } catch (Exception e) {
             if (output.isFile() && !output.delete()) {

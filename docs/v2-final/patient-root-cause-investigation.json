@@ -1,0 +1,27 @@
+{
+  "metadataVersion": "patient-root-cause-investigation-v1",
+  "status": "COMPLETE_STOPPED_AT_BOUNDARY",
+  "classification": "CDS_INTERACTION",
+  "secondaryClassification": "HEAP_PAGE_TOUCH_VARIANCE",
+  "v1Identity": "V1_IDENTITY_CONFIRMED",
+  "comparatorClassification": "PACKAGING_ONLY_DIFFERENCES_PRESENT",
+  "verifiedDefect": "RUNTIME_LIBRARY_WAS_IN_REDUCER_SCOPE",
+  "defectFixed": true,
+  "retainedObjectGrowth": false,
+  "postGcRegressionPersisted": true,
+  "settleTimeConvergedWithoutSignChange": true,
+  "noCdsPssDeltaKb": -10455,
+  "finalConfirmation": {
+    "validRuns": 6,
+    "pairedWins": 1,
+    "medianPssDeltaKb": 668,
+    "medianPrivateDirtyDeltaKb": 736,
+    "medianMemoryCurrentDeltaBytes": -1945600,
+    "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+    "v2dPrimaryHypothesis": "ANONYMOUS_RW_ALLOCATOR_GROWTH"
+  },
+  "decision": "BLOCK_RUNTIME_PROMOTION",
+  "aggregate": "BLOCKED_FINAL_ACCEPTANCE",
+  "nextAction": "STOP_NO_FURTHER_V2_PATIENT_RESEARCH",
+  "claimBoundary": "Diagnostics are not confirmation claims. The final balanced CDS confirmation remains authoritative."
+}

@@ -12,6 +12,12 @@ remaining release-qualification work before `rc1`, `rc2`, or `v2.0.0`.
 - [Unfinished-work disposition](v2-unfinished-work-disposition.md)
 - [Release blockers](v2-release-blockers.md)
 - [Release readiness](v2-release-readiness.md)
+- [Three-service acceptance contract](v2-three-service-acceptance-contract.md)
+- [Three-service memory matrix](v2-three-service-memory-matrix.md)
+- [Patient final verdict](v2-three-service-patient-verdict.md)
+- [Patient bounded root-cause investigation](patient-root-cause-investigation.md)
+- [Patient comparator audit](patient-comparator-audit.md)
+- [Patient pair attribution](patient-pair-attribution.md)
 
 ## Audit Records
 
@@ -35,10 +41,11 @@ remaining release-qualification work before `rc1`, `rc2`, or `v2.0.0`.
 ## Current Decision
 
 ```text
-READY_FOR_RC2
+BLOCKED_FINAL_ACCEPTANCE
 ```
 
-There are no unresolved P0 or P1 blockers for the constrained RC2 claim. The
-remote clean-clone quickstart, schema freeze, and independent GitHub Actions
-build all passed. The direct B0-to-V2 result is not an RC2 claim; see the
-five-pair replication report for the exact boundary.
+The constrained RC2 public/customer claim remains scoped and valid, but the
+frozen three-service final V1-to-V2 launch gate is not passed. PetClinic and
+Doctor pass; Patient has 6/6 valid corrected runs but only 1/3 paired wins, a median PSS
+delta of +668 KB, and a V2-C mixed-metrics verdict. See the three-service
+matrix and Patient verdict above for the exact evidence boundary.

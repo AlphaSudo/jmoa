@@ -113,8 +113,8 @@ function Get-JmoaJavaPid {
         [string]$JavaProcessPattern = 'java'
     )
     $escaped = $JavaProcessPattern.Replace("'", "'`"'`"'")
-    $result = Invoke-JmoaContainerShell -ContainerCli $ContainerCli -ContainerName $ContainerName `
-        -Command "ps -eo pid,args | awk '/[j]ava/ && index(`$0, \"$escaped\") { print `$1; exit }'"
+    $command = "ps -eo pid,args | grep -F -- '$escaped' | grep -v grep | awk '{print `$1; exit}'"
+    $result = Invoke-JmoaContainerShell -ContainerCli $ContainerCli -ContainerName $ContainerName -Command $command
     if ($result.exitCode -ne 0 -or [string]::IsNullOrWhiteSpace($result.output)) {
         return ''
     }

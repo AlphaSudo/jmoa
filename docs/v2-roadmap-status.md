@@ -11,8 +11,10 @@ partial infrastructure rather than a prototype admission; V2-U adds the matched
 startup/warmup/workload capture campaign contract and records the currently
 available evidence as still incomplete; V2-V makes that campaign executable;
 V2-W completes the matched diagnostic generated-family evidence campaign without
-admitting a generated-family mutation. Final performance reconciliation then
-passed both public customers acceptance comparisons.
+admitting a generated-family mutation. Final performance reconciliation passed
+the scoped public customers acceptance comparison. A separate frozen
+three-service V1-to-V2 launch gate was also executed and remains blocked by the
+Patient result.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
@@ -47,6 +49,27 @@ The direct B0-to-V2 five-pair replication was valid but mixed (2/5 PSS wins;
 median PSS `+585 KB`) and is explicitly non-claimable. The historical B0-to-V2
 record remains provenance only. See [V2 Final Audit](v2-final/README.md) and
 the [memory-win matrix](v2-final/v2-final-memory-win-matrix.md).
+
+## Final Three-Service Acceptance
+
+The stricter final launch contract compares final V1 with final V2 for exactly
+three services:
+
+```text
+PetClinic customers-service: PASS
+Doctor-service: PASS
+Patient-service: FAIL (6/6 valid corrected runs, 1/3 paired wins, median PSS +668 KB; BLOCK_RUNTIME_PROMOTION)
+aggregate: BLOCKED_FINAL_ACCEPTANCE
+```
+
+Patient evidence is valid and has V2-D attribution, but it does not meet the
+frozen runtime thresholds. Therefore no stable aggregate three-service memory
+claim is allowed. This status is intentionally distinct from the narrower
+`READY_FOR_RC2` qualification for the scoped public PetClinic claim.
+
+See the [three-service acceptance contract](v2-final/v2-three-service-acceptance-contract.md),
+the [final three-service memory matrix](v2-final/v2-three-service-memory-matrix.md),
+and the [Patient verdict](v2-final/v2-three-service-patient-verdict.md).
 
 ## Closure Taxonomy
 

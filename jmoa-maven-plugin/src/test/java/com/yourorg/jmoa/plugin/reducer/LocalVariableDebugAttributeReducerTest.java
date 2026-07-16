@@ -19,6 +19,7 @@ import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -301,6 +302,32 @@ class LocalVariableDebugAttributeReducerTest {
         assertTrue(artifact.sealedJar());
         assertEquals(0, artifact.reducedClassCount());
         assertEquals(artifact.inputSha256(), artifact.outputSha256());
+    }
+
+    @Test
+    void artifactExclusionCopiesJarByteForByte() throws Exception {
+        Path input = tempDir.resolve("excluded-input");
+        Path output = tempDir.resolve("excluded-output");
+        Files.createDirectories(input);
+        Path source = input.resolve("jmoa-runtime-lib-1.0.0.jar");
+        writeJar(source, "com/example/RuntimeAdapter.class", localVariableFixtureWithoutBootstrap());
+
+        ReducerConfig config = new ReducerConfig(
+            false, true, "release-low-footprint", input.toFile(), output.toFile(),
+            true, true, false, false, false, false, false, false,
+            "raw", false, null, "report-only", "", "jmoa-runtime-lib-*.jar"
+        );
+        ReducerReport report = new JarReducer(config).reduce();
+
+        JarReductionRecord artifact = report.artifacts().get(0);
+        assertEquals("SKIPPED_ARTIFACT_POLICY", artifact.status());
+        assertEquals(0, artifact.reducedClassCount());
+        assertEquals(artifact.inputSha256(), artifact.outputSha256());
+        assertArrayEquals(Files.readAllBytes(source), Files.readAllBytes(output.resolve(source.getFileName())));
+
+        ReducerReport estimate = new DebugMetadataSavingsEstimator(config).estimate();
+        assertEquals(0, estimate.totalEstimatedRemovableBytes());
+        assertEquals("SKIPPED_ARTIFACT_POLICY", estimate.artifacts().get(0).status());
     }
 
     @Test

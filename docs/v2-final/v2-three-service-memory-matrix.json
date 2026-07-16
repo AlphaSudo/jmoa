@@ -1,0 +1,64 @@
+{
+  "metadataVersion": "v2-three-service-memory-matrix-v1",
+  "generatedAt": "2026-07-15T18:00:00Z",
+  "contract": "docs/v2-final/v2-three-service-acceptance-contract.json",
+  "comparison": "final V1 -> final V2",
+  "overallStatus": "BLOCKED_FINAL_ACCEPTANCE",
+  "services": [
+    {
+      "service": "petclinic-customers",
+      "status": "PASS",
+      "pass": true,
+      "validRuns": 6,
+      "pairedWins": 2,
+      "pairs": 3,
+      "medianPssDeltaKb": -6012,
+      "medianPrivateDirtyDeltaKb": -5708,
+      "medianMemoryCurrentDeltaBytes": -8081408,
+      "workloadErrors": 0,
+      "semanticErrors": 0,
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dAttributionPresent": true,
+      "reasons": []
+    },
+    {
+      "service": "doctor",
+      "status": "PASS",
+      "pass": true,
+      "validRuns": 6,
+      "pairedWins": 3,
+      "pairs": 3,
+      "medianPssDeltaKb": -5156,
+      "medianPrivateDirtyDeltaKb": -5212,
+      "medianMemoryCurrentDeltaBytes": -6975488,
+      "workloadErrors": 0,
+      "semanticErrors": 0,
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dAttributionPresent": true,
+      "reasons": []
+    },
+    {
+      "service": "patient",
+      "status": "FAIL",
+      "pass": false,
+      "validRuns": 6,
+      "pairedWins": 1,
+      "pairs": 3,
+      "medianPssDeltaKb": 668,
+      "medianPrivateDirtyDeltaKb": 736,
+      "medianMemoryCurrentDeltaBytes": -1945600,
+      "workloadErrors": 0,
+      "semanticErrors": 0,
+      "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+      "v2dAttributionPresent": true,
+      "reasons": [
+        "pairedWins=1, required >= 2",
+        "median PSS delta=668 KB, required <= -4096 KB",
+        "median Private_Dirty delta=736 KB, required <= -1024 KB",
+        "V2-C verdict=MIXED_METRICS_NEEDS_RERUN",
+        "bounded root-cause result=CDS_INTERACTION; recommendation=BLOCK_RUNTIME_PROMOTION"
+      ]
+    }
+  ],
+  "claimBoundary": "No stable three-service V2 claim is allowed until every required service passes."
+}

@@ -1,0 +1,47 @@
+{
+  "metadataVersion": "patient-pair-attribution-public-v1",
+  "status": "COMPLETE",
+  "scope": "original Patient confirmation plus controlled diagnostic screen",
+  "pairs": [
+    {
+      "id": "original-pair-1",
+      "pssDeltaKb": -2359,
+      "heapPssDeltaKb": -1644,
+      "anonymousRwOutsideHeapPssDeltaKb": 2248,
+      "histogramBytesDelta": -54112,
+      "heapUsedDeltaKb": -8227,
+      "heapCommittedDeltaKb": -492
+    },
+    {
+      "id": "original-pair-2",
+      "pssDeltaKb": 12127,
+      "heapPssDeltaKb": 864,
+      "anonymousRwOutsideHeapPssDeltaKb": 13892,
+      "histogramBytesDelta": -143760,
+      "heapUsedDeltaKb": 1746,
+      "heapCommittedDeltaKb": -96
+    },
+    {
+      "id": "original-pair-3",
+      "pssDeltaKb": 1652,
+      "heapPssDeltaKb": -272,
+      "anonymousRwOutsideHeapPssDeltaKb": 4788,
+      "histogramBytesDelta": -43712,
+      "heapUsedDeltaKb": -15198,
+      "heapCommittedDeltaKb": -356
+    },
+    {
+      "id": "controlled-screen",
+      "pssDeltaKb": 7579,
+      "heapPssDeltaKb": 1572,
+      "anonymousRwOutsideHeapPssDeltaKb": 8932,
+      "histogramBytesDelta": -183536,
+      "heapUsedDeltaKb": -14936,
+      "heapCommittedDeltaKb": -16
+    }
+  ],
+  "fullSmapsClassification": "NON_HEAP_ANONYMOUS_GROWTH",
+  "histogramClassification": "NO_MEANINGFUL_OBJECT_GROWTH",
+  "retainedObjectGrowth": false,
+  "interpretation": "Heap occupancy and class-histogram deltas do not explain the anonymous writable PSS movement; the bounded diagnostics therefore isolated CDS, order, GC state, and settle time."
+}
