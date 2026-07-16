@@ -1,0 +1,27 @@
+{
+  "metadataVersion": "patient-cds-archive-comparison-v1",
+  "left": {
+    "label": "Patient V1",
+    "archiveSha256": "9ACFFFFD9C3089715048D3BC567C62DE95809289AEE121A73574F7E0BD5A0E75",
+    "archiveBytes": 118583296,
+    "trainingLoadedNormalizedClasses": 18944
+  },
+  "right": {
+    "label": "Patient V2",
+    "archiveSha256": "DB83ECB79E6466C8EE366D76ED6A0318BE091A4BE9AE47AE6BE6EA408E6D72C9",
+    "archiveBytes": 115863552,
+    "trainingLoadedNormalizedClasses": 18942
+  },
+  "normalizedClassSet": {
+    "shared": 18942,
+    "v1Only": 2,
+    "v2Only": 0,
+    "jaccard": 0.999894,
+    "v1OnlyClasses": [
+      "com.fasterxml.jackson.core.util.InternalJacksonUtil",
+      "java.util.concurrent.locks.AbstractQueuedLongSynchronizer$Node"
+    ]
+  },
+  "interpretation": "The recovered V1/V2 training class-load sets are nearly identical. Training coverage drift is not a strong explanation for the observed policy regression.",
+  "evidenceBoundary": "Training class-load logs do not prove that every observed class was archived. Archived/rejected counts require JVM archive diagnostics."
+}

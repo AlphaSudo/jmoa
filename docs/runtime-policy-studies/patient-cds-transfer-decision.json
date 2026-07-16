@@ -1,0 +1,23 @@
+{
+  "metadataVersion": "patient-cds-transfer-decision-v1",
+  "decision": "V1_CDS_NOT_REPRODUCIBLE",
+  "secondaryObservation": "CDS_SHARED_SPACE_COST_EXCEEDS_CURRENT_PATIENT_BENEFIT",
+  "patientCdsPolicy": "BLOCK_RUNTIME_PROMOTION",
+  "patientReleasePolicy": "NO_CDS_LOW_DIRTY",
+  "releaseImpact": "NONE",
+  "completed": [
+    "historical V1 audit",
+    "V1 fixed-artifact no-CDS vs CDS screen",
+    "V2 fixed-artifact no-CDS vs CDS screen",
+    "V1/V2 archive and normalized training-class comparison",
+    "smaps/NMT policy-effect reconciliation",
+    "Doctor CDS positive-control reconciliation"
+  ],
+  "stoppedByDesign": [
+    "NMT detail diagnostic",
+    "archive A/B retraining and screens",
+    "final V1-to-V2 CDS confirmation"
+  ],
+  "stopReason": "The current V1 artifact regressed under CDS in the fixed-artifact screen, satisfying the study's predeclared stop condition. Continuing until a favorable archive appears would be selection bias.",
+  "frozenReleaseTruthUnchanged": true
+}

@@ -1,0 +1,42 @@
+{
+  "metadataVersion": "patient-cds-transfer-study-v1",
+  "status": "OPEN_BOUNDED_RESEARCH",
+  "releaseBlocking": false,
+  "frozenReleaseTruth": {
+    "patientNoCds": {"status": "RECOMMEND_CONFIRMED_POLICY", "medianPssDeltaKb": -8903, "v2c": "CONFIRMED_WIN"},
+    "patientCds": {"status": "BLOCK_RUNTIME_PROMOTION", "medianPssDeltaKb": 668, "v2c": "MIXED_METRICS_NEEDS_RERUN"},
+    "aggregate": "READY_FOR_V2_FINAL"
+  },
+  "stages": [
+    "historical-v1-audit",
+    "v1-fixed-artifact-policy-screen",
+    "v2-fixed-artifact-policy-screen",
+    "archive-and-class-set-comparison",
+    "nmt-detail-diagnostic",
+    "jvm-ergonomics-comparison",
+    "archive-a-b-reproducibility",
+    "bounded-decision"
+  ],
+  "positiveControl": {
+    "service": "doctor-service",
+    "status": "CONFIRMED_WIN",
+    "policy": "CDS",
+    "medianPssDeltaKb": -5156,
+    "lesson": "Use variant-specific archives, exact artifact/archive pairing, live mapping proof, and no class-load logging during memory pairs."
+  },
+  "stopConditions": [
+    "V1_CDS_NOT_REPRODUCIBLE",
+    "CDS_ARCHIVE_TRAINING_UNSTABLE",
+    "archive class sets materially unstable",
+    "anonymous PSS remains highly pair-dependent",
+    "same artifact changes sign across equivalent archive builds"
+  ],
+  "allowedDecisions": [
+    "CDS_TRANSFER_CONFIRMED",
+    "CDS_ARCHIVE_TRAINING_UNSTABLE",
+    "CDS_PRIVATE_METADATA_PENALTY",
+    "CDS_ANONYMOUS_PAGE_VARIANCE",
+    "V1_CDS_NOT_REPRODUCIBLE",
+    "UNRESOLVED"
+  ]
+}
