@@ -1,0 +1,103 @@
+{
+  "metadataVersion": "v2-final-patient-nocds-confirmation-v1",
+  "status": "CONFIRMED_WIN",
+  "service": "patient-service",
+  "visibility": "PRIVATE",
+  "comparison": "corrected final V1 -> corrected final V2",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "launchMode": "SPRING_BOOT_FAT_JAR",
+  "javaMajor": 26,
+  "cdsMode": "OFF",
+  "appCds": false,
+  "leyden": false,
+  "javaagentPresent": false,
+  "mallocArenaMax": "1",
+  "workload": {
+    "requestsPerRun": 600,
+    "totalRequests": 3600,
+    "workloadErrors": 0,
+    "semanticErrors": 0,
+    "linkageErrors": 0,
+    "postWorkloadSettleSeconds": 20
+  },
+  "pairOrder": [
+    "BASELINE_FIRST",
+    "CANDIDATE_FIRST",
+    "BASELINE_FIRST"
+  ],
+  "artifactFreeze": {
+    "v1Sha256": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+    "v2Sha256": "4CFC40ADBD559066071A65BAC4A0D6836411BDBF4BB69E9162C0D2E7C65569E3",
+    "embeddedDependencyCountV1": 162,
+    "embeddedDependencyCountV2": 162,
+    "runtimeLibraryByteIdentical": true,
+    "rawAuditedClasses": 32616,
+    "rawAuditFailures": 0,
+    "dependencyJarByteDelta": -3752212,
+    "outerJarByteDelta": -3815605
+  },
+  "preGates": {
+    "artifactProof": "PASSED",
+    "materializationProof": "STATIC_PASSED_RUNTIME_ORIGIN_NOT_CAPTURED",
+    "semanticPreGate": "PASSED",
+    "liveNoCdsProofRuns": 6,
+    "liveNoCdsProofStatus": "PASSED",
+    "classLoadLoggingDuringMemoryPairs": false,
+    "jfrDuringMemoryPairs": false,
+    "nmtMode": "SUMMARY"
+  },
+  "pairs": [
+    {
+      "pair": 1,
+      "order": "BASELINE_FIRST",
+      "pssDeltaKb": 2971,
+      "privateDirtyDeltaKb": 2684,
+      "memoryCurrentDeltaBytes": 3256320,
+      "pass": false
+    },
+    {
+      "pair": 2,
+      "order": "CANDIDATE_FIRST",
+      "pssDeltaKb": -8903,
+      "privateDirtyDeltaKb": -8636,
+      "memoryCurrentDeltaBytes": -9707520,
+      "pass": true
+    },
+    {
+      "pair": 3,
+      "order": "BASELINE_FIRST",
+      "pssDeltaKb": -9650,
+      "privateDirtyDeltaKb": -9572,
+      "memoryCurrentDeltaBytes": -9932800,
+      "pass": true
+    }
+  ],
+  "confirmation": {
+    "validRuns": 6,
+    "pairs": 3,
+    "pairedWins": 2,
+    "medianPssDeltaKb": -8903,
+    "medianPrivateDirtyDeltaKb": -8636,
+    "medianMemoryCurrentDeltaBytes": -9707520,
+    "medianHeapPssDeltaKb": -5300,
+    "medianAnonymousRwPssDeltaKb": -3328,
+    "v2cVerdict": "CONFIRMED_WIN",
+    "v2dAttributionPresent": true
+  },
+  "frozenGate": {
+    "validRunsRequired": 6,
+    "pairedWinsRequired": 2,
+    "medianPssDeltaKbMaximum": -4096,
+    "medianPrivateDirtyDeltaKbMaximum": -1024,
+    "medianMemoryCurrentDeltaBytesMaximum": -1048576,
+    "workloadErrorsMaximum": 0,
+    "semanticErrorsMaximum": 0,
+    "passed": true
+  },
+  "evidenceBoundary": {
+    "dynamicRuntimeOriginProof": "NOT_CAPTURED_IN_CLEAN_MEMORY_PAIRS",
+    "reason": "Class-load logging was disabled to avoid diagnostic perturbation.",
+    "cdsPolicyVerdict": "BLOCK_RUNTIME_PROMOTION",
+    "claim": "Confirmed only for corrected Patient under NO_CDS_LOW_DIRTY and the documented Spring Boot fat-JAR protocol."
+  }
+}

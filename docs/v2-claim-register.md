@@ -37,22 +37,27 @@ the balanced cold-page-cache protocol. It is not a universal or startup claim.
 
 ## Three-Service Acceptance
 
-The frozen final V1-to-V2 launch gate is currently blocked:
+The frozen final V1-to-V2 launch gate now passes under service-specific
+confirmed runtime policies:
 
 ```text
-status: BLOCKED_FINAL_ACCEPTANCE
-PetClinic: PASS
-Doctor: PASS
-Patient: FAIL (6/6 valid corrected runs, 1/3 paired wins, median PSS +668 KB; reducer recommendation `BLOCK_RUNTIME_PROMOTION`)
+status: READY_FOR_V2_FINAL
+PetClinic: PASS (NO_CDS_LOW_DIRTY; median PSS -6,012 KB)
+Doctor: PASS (CDS; median PSS -5,156 KB)
+Patient: PASS (NO_CDS_LOW_DIRTY; 6/6 valid runs, 2/3 paired wins, median PSS -8,903 KB)
+Patient CDS policy: BLOCK_RUNTIME_PROMOTION (6/6 valid runs, 1/3 paired wins, median PSS +668 KB)
 ```
 
-The Patient evidence is valid and analyzed, but it does not meet the runtime
-thresholds required for a three-service headline. Consequently, the current
-release claims remain scoped to their individual service, launch-mode, and
-runtime-policy evidence; no aggregate three-service memory-win claim is made.
+The Patient no-CDS evidence is valid, V2-C-confirmed, and V2-D-attributed. The
+separate corrected CDS result remains a policy-specific failure and is not
+erased by the no-CDS confirmation. The aggregate claim is therefore
+service-policy scoped: it does not mean that CDS is universally admissible or
+that a result transfers between CDS and no-CDS.
 
 See [the final three-service matrix](v2-final/v2-three-service-memory-matrix.md)
-and [the Patient verdict](v2-final/v2-three-service-patient-verdict.md).
+and [the Patient policy verdict](v2-final/patient-final-policy-verdict.md).
+The preserved CDS failure is recorded in
+[patient-cds-final-verdict.md](v2-final/patient-cds-final-verdict.md).
 
 ## Confirmed Runtime Claims
 
@@ -158,7 +163,35 @@ JFR disabled
 This claim is not public-reproducible and is not transferred to all Doctor
 deployments, all fat-JAR services, all CDS/AppCDS modes, or startup performance.
 
-### 5. V2-L Visits Raw Reducer Runtime Win
+### 5. Final Patient No-CDS Runtime Win
+
+The final bounded Patient comparison passes under the confirmed no-CDS policy:
+
+```text
+comparison: corrected final V1 vs corrected final V2
+launch mode: SPRING_BOOT_FAT_JAR
+runtime policy: NO_CDS_LOW_DIRTY
+paired wins: 2/3
+median PSS delta: -8,903 KB
+median Private_Dirty delta: -8,636 KB
+median memory.current delta: -9,707,520 bytes
+```
+
+Scope:
+
+```text
+private Patient service
+Java 26, Serial GC, MALLOC_ARENA_MAX=1
+CDS/AppCDS/Leyden disabled
+no runtime javaagent
+600-request workload, T+20 capture, balanced cache-reset pairs
+```
+
+This claim is policy-specific. The separate corrected Patient CDS
+confirmation remains blocked at 1/3 paired wins and +668 KB median PSS. The
+no-CDS result is not transferred to CDS or to another Patient deployment.
+
+### 6. V2-L Visits Raw Reducer Runtime Win
 
 V2-L confirmed the productized raw reducer on a second public runtime target:
 

@@ -1,0 +1,39 @@
+{
+  "metadataVersion": "v2-final-patient-nocds-v2c-v1",
+  "status": "CONFIRMED_WIN",
+  "service": "patient-service",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "validRuns": 6,
+  "invalidRuns": 0,
+  "pairs": 3,
+  "pairedWins": 2,
+  "pairDeltas": [
+    { "pair": 1, "order": "BASELINE_FIRST", "pssDeltaKb": 2971, "privateDirtyDeltaKb": 2684, "memoryCurrentDeltaBytes": 3256320, "pass": false },
+    { "pair": 2, "order": "CANDIDATE_FIRST", "pssDeltaKb": -8903, "privateDirtyDeltaKb": -8636, "memoryCurrentDeltaBytes": -9707520, "pass": true },
+    { "pair": 3, "order": "BASELINE_FIRST", "pssDeltaKb": -9650, "privateDirtyDeltaKb": -9572, "memoryCurrentDeltaBytes": -9932800, "pass": true }
+  ],
+  "medianPssDeltaKb": -8903,
+  "medianPrivateDirtyDeltaKb": -8636,
+  "medianMemoryCurrentDeltaBytes": -9707520,
+  "workloadErrors": 0,
+  "semanticErrors": 0,
+  "linkageErrors": 0,
+  "perturbation": {
+    "classLoadLogging": false,
+    "jfr": false,
+    "nmtMode": "SUMMARY",
+    "gcRunBeforeCapture": false,
+    "diagnosticOnly": false
+  },
+  "liveNoCdsProof": {
+    "runsPassed": 6,
+    "cdsDisabled": true,
+    "appCdsDisabled": true,
+    "leydenDisabled": true,
+    "javaagentAbsent": true,
+    "mallocArenaMax": "1",
+    "xshareOff": true
+  },
+  "dynamicOriginProof": "NOT_CAPTURED_DURING_CLEAN_MEMORY_PAIRS",
+  "claimBoundary": "V2-C confirms the paired evidence under NO_CDS_LOW_DIRTY; it does not establish a universal reducer claim."
+}

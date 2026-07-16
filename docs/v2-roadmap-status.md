@@ -13,8 +13,9 @@ available evidence as still incomplete; V2-V makes that campaign executable;
 V2-W completes the matched diagnostic generated-family evidence campaign without
 admitting a generated-family mutation. Final performance reconciliation passed
 the scoped public customers acceptance comparison. A separate frozen
-three-service V1-to-V2 launch gate was also executed and remains blocked by the
-Patient result.
+three-service V1-to-V2 launch gate was also executed. The later bounded Patient
+no-CDS confirmation completes that matrix under service-specific policies;
+the separate Patient CDS policy remains blocked.
 
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
@@ -29,6 +30,8 @@ campaign infrastructure, V2-V fresh matched-capture execution tooling, V2-W
 matched capture execution, and the V2 final release audit. The fresh RC2
 replication confirmed the incremental V1-to-V2 comparison but found the direct
 B0-to-V2 comparison mixed, so only the incremental result is release-claimable.
+The final Patient no-CDS confirmation is now part of the three-service matrix;
+the Patient CDS failure remains a separate policy-specific record.
 
 ## Final Release Gate
 
@@ -53,23 +56,26 @@ the [memory-win matrix](v2-final/v2-final-memory-win-matrix.md).
 ## Final Three-Service Acceptance
 
 The stricter final launch contract compares final V1 with final V2 for exactly
-three services:
+three services under their individually confirmed runtime policies:
 
 ```text
-PetClinic customers-service: PASS
-Doctor-service: PASS
-Patient-service: FAIL (6/6 valid corrected runs, 1/3 paired wins, median PSS +668 KB; BLOCK_RUNTIME_PROMOTION)
-aggregate: BLOCKED_FINAL_ACCEPTANCE
+PetClinic customers-service: PASS (NO_CDS_LOW_DIRTY)
+Doctor-service: PASS (CDS)
+Patient-service: PASS (NO_CDS_LOW_DIRTY; 6/6 valid runs, 2/3 paired wins, median PSS -8903 KB)
+Patient CDS policy: BLOCK_RUNTIME_PROMOTION (6/6 valid runs, 1/3 paired wins, median PSS +668 KB)
+aggregate: READY_FOR_V2_FINAL
 ```
 
-Patient evidence is valid and has V2-D attribution, but it does not meet the
-frozen runtime thresholds. Therefore no stable aggregate three-service memory
-claim is allowed. This status is intentionally distinct from the narrower
-`READY_FOR_RC2` qualification for the scoped public PetClinic claim.
+Patient's no-CDS evidence is valid and has V2-C/V2-D confirmation. The CDS
+failure remains authoritative for that policy and is not erased or transferred
+to no-CDS. The aggregate is therefore policy-selected, not a universal CDS
+claim, and remains distinct from the narrower `READY_FOR_RC2` qualification for
+the scoped public PetClinic claim.
 
 See the [three-service acceptance contract](v2-final/v2-three-service-acceptance-contract.md),
 the [final three-service memory matrix](v2-final/v2-three-service-memory-matrix.md),
-and the [Patient verdict](v2-final/v2-three-service-patient-verdict.md).
+the [Patient policy verdict](v2-final/patient-final-policy-verdict.md), and the
+[separate Patient CDS verdict](v2-final/patient-cds-final-verdict.md).
 
 ## Closure Taxonomy
 

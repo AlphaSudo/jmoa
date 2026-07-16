@@ -1,6 +1,8 @@
 {
   "metadataVersion": "v2-three-service-patient-verdict-v2",
   "status": "FAIL_PATIENT_NOT_CONFIRMED",
+  "recordScope": "PATIENT_CDS_POLICY",
+  "currentPolicyVerdict": "docs/v2-final/patient-final-policy-verdict.json",
   "comparison": "final V1 -> corrected final V2",
   "service": "patient-service",
   "visibility": "PRIVATE",

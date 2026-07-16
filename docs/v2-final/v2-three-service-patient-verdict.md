@@ -3,6 +3,11 @@
 Status: **FAIL_PATIENT_NOT_CONFIRMED**
 Recommendation: **BLOCK_RUNTIME_PROMOTION**
 
+Scope: this is the preserved corrected **CDS-policy** verdict. It remains
+authoritative for Patient under CDS, but it is no longer the current aggregate
+Patient policy verdict. The later no-CDS confirmation is recorded separately in
+[patient-final-policy-verdict.md](patient-final-policy-verdict.md).
+
 The bounded root-cause investigation found and fixed a real artifact-scope defect: the first V2 artifact reduced `jmoa-runtime-lib`. The reducer now supports artifact exclusions, Patient excludes that support JAR, and the corrected V1/V2 runtime library is byte-identical. Phase 31 C2 was also confirmed as equivalent to the finalized Patient V1 optimizer policy.
 
 ## Corrected Artifact

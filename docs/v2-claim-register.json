@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_RC2_REPRODUCIBILITY_RECONCILIATION",
+  "status": "CURRENT_AFTER_V2_FINAL_PATIENT_POLICY_RECONCILIATION",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "historicalDirectBaselineRecord": {
     "id": "final-public-b0-v2",
@@ -29,12 +29,14 @@
     "claimBoundary": "Incremental raw reducer result under the same frozen public customers protocol; no startup or universal claim."
   },
   "threeServiceAcceptance": {
-    "status": "BLOCKED_FINAL_ACCEPTANCE",
-    "comparison": "final V1 -> final V2",
+    "status": "READY_FOR_V2_FINAL",
+    "comparison": "final V1 -> final V2 under each service's confirmed runtime policy",
+    "policySelection": "SERVICE_SPECIFIC_CONFIRMED_POLICY",
     "services": [
       {
         "service": "Spring PetClinic customers-service",
         "status": "PASS",
+        "runtimePolicy": "NO_CDS_LOW_DIRTY",
         "validRuns": 6,
         "pairedWins": 2,
         "medianPssDeltaKb": -6012,
@@ -46,6 +48,7 @@
       {
         "service": "Doctor-service",
         "status": "PASS",
+        "runtimePolicy": "CDS",
         "validRuns": 6,
         "pairedWins": 3,
         "medianPssDeltaKb": -5156,
@@ -56,20 +59,31 @@
       },
       {
         "service": "Patient-service",
-        "status": "FAIL",
+        "status": "PASS",
+        "runtimePolicy": "NO_CDS_LOW_DIRTY",
         "validRuns": 6,
-        "pairedWins": 1,
-        "medianPssDeltaKb": 668,
-        "medianPrivateDirtyDeltaKb": 736,
-        "medianMemoryCurrentDeltaBytes": -1945600,
-        "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
-        "v2dAttributionPresent": true
+        "pairedWins": 2,
+        "medianPssDeltaKb": -8903,
+        "medianPrivateDirtyDeltaKb": -8636,
+        "medianMemoryCurrentDeltaBytes": -9707520,
+        "v2cVerdict": "CONFIRMED_WIN",
+        "v2dAttributionPresent": true,
+        "cdsPolicyVerdict": "BLOCK_RUNTIME_PROMOTION",
+        "cdsEvidence": {
+          "validRuns": 6,
+          "pairedWins": 1,
+          "medianPssDeltaKb": 668,
+          "medianPrivateDirtyDeltaKb": 736,
+          "medianMemoryCurrentDeltaBytes": -1945600,
+          "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN"
+        }
       }
     ],
-    "claimAllowed": false,
+    "claimAllowed": true,
     "matrix": "docs/v2-final/v2-three-service-memory-matrix.json",
-    "patientVerdict": "docs/v2-final/v2-three-service-patient-verdict.json",
-    "reason": "Patient final V1 -> final V2 evidence is valid but fails the frozen runtime thresholds, so no aggregate three-service memory-win claim is allowed."
+    "patientVerdict": "docs/v2-final/patient-final-policy-verdict.json",
+    "patientCdsVerdict": "docs/v2-final/patient-cds-final-verdict.json",
+    "reason": "All three services pass under their individually confirmed runtime policies. Patient CDS remains blocked and is not transferred to the no-CDS policy."
   },
   "confirmedRuntimeClaims": [
     {
@@ -115,6 +129,18 @@
       "medianPrivateDirtyDeltaKb": -5212,
       "medianMemoryCurrentDeltaBytes": -6975488,
       "claimBoundary": "Private Doctor runtime confirmation only; not public-reproducible and not transferable to all fat-JAR/CDS deployments or startup performance."
+    },
+    {
+      "id": "v2-final-patient-no-cds",
+      "claim": "The final bounded Patient comparison confirms an incremental runtime win under NO_CDS_LOW_DIRTY.",
+      "service": "Private Patient service",
+      "comparison": "corrected final V1 vs corrected final V2",
+      "runtimeScope": "SPRING_BOOT_FAT_JAR, NO_CDS_LOW_DIRTY, MALLOC_ARENA_MAX=1, no CDS/AppCDS/Leyden/javaagent, Java 26, Serial GC",
+      "pairedWins": "2/3",
+      "medianPssDeltaKb": -8903,
+      "medianPrivateDirtyDeltaKb": -8636,
+      "medianMemoryCurrentDeltaBytes": -9707520,
+      "claimBoundary": "Confirmed only for the corrected Patient artifact and documented no-CDS protocol. The separate Patient CDS policy remains blocked and this result is not transferable across policies or deployments."
     },
     {
       "id": "v2l-visits-raw-reducer",
