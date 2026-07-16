@@ -1,0 +1,31 @@
+{
+  "metadataVersion": "patient-v1-cds-historical-audit-v1",
+  "classification": "V1_CDS_HISTORICAL_INCOMPLETE",
+  "acceptedRuns": 6,
+  "acceptedPairs": 3,
+  "historicalClaim": "The optimized Patient candidate won its three-pair comparison while baseline and candidate each used a matching CDS archive.",
+  "historicalMedianApproximation": {
+    "pssDeltaMb": -4.2,
+    "privateDirtyDeltaMb": -4.3,
+    "memoryCurrentDeltaMb": -4.4
+  },
+  "archives": [
+    {"role": "baseline", "sha256": "52C7A93ADD0437550BA7543BE165A6EFC64A888B741E237F2222258B6A8E3D66", "bytes": 116559872},
+    {"role": "optimized-c2", "sha256": "A97A23031DF72A18317A022E044A1B441781082327B9CB5CE2C8A6F70271224C", "bytes": 116359168}
+  ],
+  "knownProtocol": {
+    "gc": "SerialGC",
+    "heap": "-Xms32m -Xmx256m",
+    "nmt": "summary",
+    "cds": "variant-specific archive",
+    "javaagent": false,
+    "requestsPerRun": 600,
+    "workloadErrors": 0
+  },
+  "missingCurrentGateFields": [
+    "frozen historical artifact SHA-256",
+    "source revision",
+    "fixed-artifact no-CDS vs CDS comparison"
+  ],
+  "claimBoundary": "The historical result remains valid for its original optimized-candidate comparison. It does not isolate CDS policy value on one artifact."
+}

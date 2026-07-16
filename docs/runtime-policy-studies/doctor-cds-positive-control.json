@@ -1,0 +1,18 @@
+{
+  "metadataVersion": "doctor-cds-positive-control-v1",
+  "status": "CONFIRMED_WIN",
+  "comparison": "Doctor corrected D2 plus fresh D2 CDS vs D2R plus fresh D2R CDS",
+  "pairs": 3,
+  "pairedWins": 3,
+  "medianPssDeltaKb": -5156,
+  "medianPrivateDirtyDeltaKb": -5212,
+  "medianMemoryCurrentDeltaBytes": -6975488,
+  "controls": [
+    "variant-specific archives",
+    "exact artifact/archive pairing",
+    "Spring Boot fat-JAR runtime proof",
+    "no class-load logging during memory pairs",
+    "no runtime javaagent"
+  ],
+  "lesson": "CDS remains a valid service-specific policy. Patient's result must not be generalized to Doctor, and Doctor's win must not be generalized to Patient."
+}

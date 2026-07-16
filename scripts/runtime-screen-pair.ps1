@@ -23,6 +23,16 @@ param(
     [string]$CaptureRoot = "target/jmoa-runtime-screen",
     [string]$BaselineRuntimeVerificationPath = "",
     [string]$CandidateRuntimeVerificationPath = "",
+    [string]$BaselineRuntimePolicy = "",
+    [string]$CandidateRuntimePolicy = "",
+    [Nullable[bool]]$BaselineCdsEnabled = $null,
+    [Nullable[bool]]$CandidateCdsEnabled = $null,
+    [string]$BaselineCdsArchivePath = "",
+    [string]$CandidateCdsArchivePath = "",
+    [string]$BaselineRuntimeArtifactPath = "",
+    [string]$CandidateRuntimeArtifactPath = "",
+    [string]$BaselineMallocArenaMax = "",
+    [string]$CandidateMallocArenaMax = "",
     [string]$MallocArenaMax = "",
     [bool]$CdsEnabled = $false,
     [bool]$AppCdsEnabled = $false,
@@ -50,16 +60,36 @@ if (-not [string]::IsNullOrWhiteSpace($StopScript) -and -not (Test-Path -Literal
     throw "Stop script does not exist: $StopScript"
 }
 New-JmoaDirectory -Path $CaptureRoot
-$normalizedPolicy = $RuntimePolicy.Trim().ToUpperInvariant().Replace('-', '_').Replace(' ', '_')
-if ($normalizedPolicy -eq 'NO_CDS_LOW_DIRTY' -and $MallocArenaMax -ne '1') {
-    throw 'NO_CDS_LOW_DIRTY requires -MallocArenaMax 1 for every clean memory pair.'
+function Resolve-VariantPolicy {
+    param(
+        [string]$PolicyOverride,
+        [Nullable[bool]]$CdsOverride,
+        [string]$ArchivePath,
+        [string]$MallocOverride
+    )
+    $policy = if ([string]::IsNullOrWhiteSpace($PolicyOverride)) { $RuntimePolicy } else { $PolicyOverride }
+    $normalized = $policy.Trim().ToUpperInvariant().Replace('-', '_').Replace(' ', '_')
+    $cds = if ($null -eq $CdsOverride) { $CdsEnabled } else { [bool]$CdsOverride }
+    $malloc = if ([string]::IsNullOrWhiteSpace($MallocOverride)) { $MallocArenaMax } else { $MallocOverride }
+    if ($normalized -eq 'NO_CDS_LOW_DIRTY' -and $malloc -ne '1') {
+        throw 'NO_CDS_LOW_DIRTY requires MALLOC_ARENA_MAX=1 for the affected variant.'
+    }
+    if ($normalized.StartsWith('NO_CDS') -and ($cds -or $AppCdsEnabled -or $LeydenEnabled -or $JavaagentPresent)) {
+        throw 'A no-CDS variant requires CDS, AppCDS, Leyden, and runtime javaagent to be disabled.'
+    }
+    if (-not $normalized.StartsWith('NO_CDS') -and $normalized.Contains('CDS')) {
+        if (-not $cds) { throw 'A CDS variant requires CDS to be explicitly enabled.' }
+        if ([string]::IsNullOrWhiteSpace($ArchivePath) -or -not (Test-Path -LiteralPath $ArchivePath -PathType Leaf)) {
+            throw "A CDS variant requires an existing variant-specific archive: $ArchivePath"
+        }
+    }
+    [ordered]@{ policy = $policy; normalized = $normalized; cdsEnabled = $cds; archivePath = $ArchivePath; mallocArenaMax = $malloc }
 }
-if ($normalizedPolicy.StartsWith('NO_CDS') -and ($CdsEnabled -or $AppCdsEnabled -or $LeydenEnabled -or $JavaagentPresent)) {
-    throw 'A no-CDS screen requires CDS, AppCDS, Leyden, and runtime javaagent to be explicitly disabled.'
-}
-if (-not $normalizedPolicy.StartsWith('NO_CDS') -and $normalizedPolicy.Contains('CDS') -and -not $CdsEnabled) {
-    throw 'A CDS screen requires -CdsEnabled:$true and variant-specific materialization proof.'
-}
+
+$baselinePolicy = Resolve-VariantPolicy -PolicyOverride $BaselineRuntimePolicy -CdsOverride $BaselineCdsEnabled `
+    -ArchivePath $BaselineCdsArchivePath -MallocOverride $BaselineMallocArenaMax
+$candidatePolicy = Resolve-VariantPolicy -PolicyOverride $CandidateRuntimePolicy -CdsOverride $CandidateCdsEnabled `
+    -ArchivePath $CandidateCdsArchivePath -MallocOverride $CandidateMallocArenaMax
 
 function Stop-VariantContainer {
     param([string]$ContainerName, [string]$Variant, [string]$RunDirectory)
@@ -109,11 +139,12 @@ function Capture-RuntimeState {
     [ordered]@{ capturedAt = [DateTime]::UtcNow.ToString('o'); histogramIncluded = $IncludeHistogram; directory = $Directory }
 }
 
-function Capture-And-VerifyNoCdsState {
+function Capture-And-VerifyRuntimePolicy {
     param(
         [string]$ContainerName,
         [string]$JavaPid,
-        [string]$Directory
+        [string]$Directory,
+        [System.Collections.IDictionary]$Policy
     )
     $environment = Capture-Command -ContainerName $ContainerName -ShellCommand "tr '\0' '\n' < /proc/$JavaPid/environ" -OutputPath (Join-Path $Directory 'runtime-environment.txt')
     $commandLine = Capture-Command -ContainerName $ContainerName -ShellCommand "tr '\0' ' ' < /proc/$JavaPid/cmdline" -OutputPath (Join-Path $Directory 'runtime-command-line.txt')
@@ -121,22 +152,37 @@ function Capture-And-VerifyNoCdsState {
         throw 'Could not capture the live JVM environment and command line for no-CDS proof.'
     }
     $proofText = "$($environment.output)`n$($commandLine.output)"
-    if ($proofText -notmatch '(?m)^MALLOC_ARENA_MAX=1\s*$') {
+    if ($Policy.normalized -eq 'NO_CDS_LOW_DIRTY' -and $proofText -notmatch '(?m)^MALLOC_ARENA_MAX=1\s*$') {
         throw 'NO_CDS_LOW_DIRTY requires live JVM environment proof: MALLOC_ARENA_MAX=1.'
     }
-    if ($proofText -notmatch '(?i)-Xshare:off') {
-        throw 'No-CDS policy requires live JVM proof of -Xshare:off.'
+    if ($Policy.normalized.StartsWith('NO_CDS')) {
+        if ($proofText -notmatch '(?i)-Xshare:off') { throw 'No-CDS policy requires live JVM proof of -Xshare:off.' }
+        if ($proofText -match '(?i)(-javaagent:|SharedArchiveFile|ArchiveClassesAtExit|UseAppCDS|AOTCache|AOTMode)') {
+            throw 'No-CDS policy proof found a CDS, Leyden, or javaagent option.'
+        }
+    } else {
+        if ($proofText -notmatch '(?i)-Xshare:(on|auto)') { throw 'CDS policy requires live JVM proof of -Xshare:on or -Xshare:auto.' }
+        if ($proofText -notmatch '(?i)-XX:SharedArchiveFile=') { throw 'CDS policy requires live JVM proof of -XX:SharedArchiveFile.' }
+        if ($proofText -match '(?i)(-javaagent:|ArchiveClassesAtExit|AOTCache|AOTMode)') { throw 'CDS measurement policy found a training, AOT/Leyden, or javaagent option.' }
     }
-    if ($proofText -match '(?i)(-javaagent:|SharedArchiveFile|ArchiveClassesAtExit|UseAppCDS|Leyden)') {
-        throw 'No-CDS policy proof found a CDS, Leyden, or javaagent option.'
+    $runtimeArchiveSha256 = $null
+    if ($Policy.cdsEnabled -and $proofText -match '(?i)-XX:SharedArchiveFile=([^\s]+)') {
+        $runtimeArchivePath = $Matches[1].Trim('"', "'")
+        $hashCapture = Capture-Command -ContainerName $ContainerName -ShellCommand "sha256sum '$runtimeArchivePath' | awk '{print `$1}'" -OutputPath (Join-Path $Directory 'runtime-cds-archive-sha256.txt')
+        if ($hashCapture.exitCode -ne 0) { throw 'Could not hash the live CDS archive inside the container.' }
+        $runtimeArchiveSha256 = $hashCapture.output.Trim().ToUpperInvariant()
+        if ($runtimeArchiveSha256 -ne (Get-JmoaSha256 -Path $Policy.archivePath)) { throw 'Live CDS archive SHA-256 does not match the host archive supplied to the screen.' }
     }
     [ordered]@{
         status = 'PASSED'
-        cdsDisabled = $true
-        appCdsDisabled = $true
+        runtimePolicy = $Policy.policy
+        cdsMode = if ($Policy.cdsEnabled) { 'ON' } else { 'OFF' }
+        cdsArchiveSha256 = if ($Policy.cdsEnabled) { Get-JmoaSha256 -Path $Policy.archivePath } else { $null }
+        runtimeCdsArchiveSha256 = $runtimeArchiveSha256
+        cdsArchiveBytes = if ($Policy.cdsEnabled) { [long](Get-Item -LiteralPath $Policy.archivePath).Length } else { 0 }
         leydenDisabled = $true
         javaagentAbsent = $true
-        mallocArenaMax = '1'
+        mallocArenaMax = if ([string]::IsNullOrWhiteSpace($Policy.mallocArenaMax)) { $null } else { $Policy.mallocArenaMax }
         sourceFiles = @('runtime-environment.txt', 'runtime-command-line.txt')
     }
 }
@@ -162,7 +208,9 @@ function Invoke-Variant {
         [string[]]$LaunchArguments,
         [string]$ContainerName,
         [string]$ArtifactPath,
-        [string]$RuntimeVerificationPath
+        [string]$RuntimeVerificationPath,
+        [System.Collections.IDictionary]$Policy,
+        [string]$RuntimeArtifactPath
     )
     $runDirectory = Join-Path $CaptureRoot ("{0}{1}" -f $Label, $PairIndex)
     New-JmoaDirectory -Path $runDirectory
@@ -179,9 +227,13 @@ function Invoke-Variant {
         if ($WarmupSeconds -gt 0) { Start-Sleep -Seconds $WarmupSeconds }
         $javaPid = Get-JmoaJavaPid -ContainerCli $ContainerCli -ContainerName $ContainerName -JavaProcessPattern $JavaProcessPattern
         if ([string]::IsNullOrWhiteSpace($javaPid)) { throw 'Could not locate the Java PID in the running container.' }
-        $noCdsProof = $null
-        if ($normalizedPolicy.StartsWith('NO_CDS')) {
-            $noCdsProof = Capture-And-VerifyNoCdsState -ContainerName $ContainerName -JavaPid $javaPid -Directory $runDirectory
+        $runtimePolicyProof = Capture-And-VerifyRuntimePolicy -ContainerName $ContainerName -JavaPid $javaPid -Directory $runDirectory -Policy $Policy
+        $runtimeArtifactSha256 = $null
+        if (-not [string]::IsNullOrWhiteSpace($RuntimeArtifactPath)) {
+            $artifactHashCapture = Capture-Command -ContainerName $ContainerName -ShellCommand "sha256sum '$RuntimeArtifactPath' | awk '{print `$1}'" -OutputPath (Join-Path $runDirectory 'runtime-artifact-sha256.txt')
+            if ($artifactHashCapture.exitCode -ne 0) { throw "Could not hash runtime artifact: $RuntimeArtifactPath" }
+            $runtimeArtifactSha256 = $artifactHashCapture.output.Trim().ToUpperInvariant()
+            if ($runtimeArtifactSha256 -ne (Get-JmoaSha256 -Path $ArtifactPath)) { throw 'Runtime artifact SHA-256 does not match the host artifact supplied to the screen.' }
         }
 
         $workloadPath = Join-Path $runDirectory 'workload-result.json'
@@ -229,16 +281,18 @@ function Invoke-Variant {
             phase = 'V2-O'
             artifactSha256 = Get-JmoaSha256 -Path $ArtifactPath
             expectedArtifactSha256 = Get-JmoaSha256 -Path $ArtifactPath
+            runtimeArtifactSha256 = $runtimeArtifactSha256
             imageId = Get-JmoaContainerImageId -ContainerCli $ContainerCli -ContainerName $ContainerName
             containerId = Get-JmoaContainerId -ContainerCli $ContainerCli -ContainerName $ContainerName
             pid = [int]$javaPid
             launchMode = $LaunchMode
-            runtimePolicy = $RuntimePolicy
-            cdsMode = if ($CdsEnabled) { 'ON' } else { 'OFF' }
+            runtimePolicy = $Policy.policy
+            cdsMode = if ($Policy.cdsEnabled) { 'ON' } else { 'OFF' }
+            cdsArchiveSha256 = if ($Policy.cdsEnabled) { Get-JmoaSha256 -Path $Policy.archivePath } else { $null }
             appCds = $AppCdsEnabled
             leyden = $LeydenEnabled
             javaagentPresent = $JavaagentPresent
-            mallocArenaMax = if ([string]::IsNullOrWhiteSpace($MallocArenaMax)) { $null } else { $MallocArenaMax }
+            mallocArenaMax = if ([string]::IsNullOrWhiteSpace($Policy.mallocArenaMax)) { $null } else { $Policy.mallocArenaMax }
             javaVersion = (Invoke-JmoaContainerShell -ContainerCli $ContainerCli -ContainerName $ContainerName -Command 'java -version 2>&1 | head -n 1').output
             workloadId = $WorkloadId
             timestampStart = $started.ToString('o')
@@ -254,7 +308,8 @@ function Invoke-Variant {
             diagnosticOnly = [bool]$DiagnosticOnly
             postWorkloadSnapshots = $snapshots
             postGcSnapshot = $postGc
-            noCdsStateProof = $noCdsProof
+            runtimePolicyProof = $runtimePolicyProof
+            noCdsStateProof = if ($Policy.normalized.StartsWith('NO_CDS')) { $runtimePolicyProof } else { $null }
         }
         Write-JmoaJson -Value $manifest -Path (Join-Path $runDirectory 'run-manifest.json')
         return [ordered]@{ variant = $Variant; runDirectory = $runDirectory; status = 'CAPTURED'; workload = (Get-Content -Raw -LiteralPath $workloadPath | ConvertFrom-Json) }
@@ -273,17 +328,17 @@ $candidate = $null
 if ($FirstVariant -eq 'BASELINE_FIRST') {
     $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
         -LaunchArguments $BaselineLaunchArguments -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
-        -RuntimeVerificationPath $BaselineRuntimeVerificationPath
+        -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
     $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
         -LaunchArguments $CandidateLaunchArguments -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
-        -RuntimeVerificationPath $CandidateRuntimeVerificationPath
+        -RuntimeVerificationPath $CandidateRuntimeVerificationPath -Policy $candidatePolicy -RuntimeArtifactPath $CandidateRuntimeArtifactPath
 } else {
     $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
         -LaunchArguments $CandidateLaunchArguments -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
-        -RuntimeVerificationPath $CandidateRuntimeVerificationPath
+        -RuntimeVerificationPath $CandidateRuntimeVerificationPath -Policy $candidatePolicy -RuntimeArtifactPath $CandidateRuntimeArtifactPath
     $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
         -LaunchArguments $BaselineLaunchArguments -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
-        -RuntimeVerificationPath $BaselineRuntimeVerificationPath
+        -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
 }
 $status = if ($baseline.status -eq 'CAPTURED' -and $candidate.status -eq 'CAPTURED') { 'CAPTURED' } else { 'FAILED' }
 $pair = [ordered]@{
@@ -293,7 +348,9 @@ $pair = [ordered]@{
     status = $status
     service = $Service
     launchMode = $LaunchMode
-    runtimePolicy = $RuntimePolicy
+    runtimePolicy = if ($baselinePolicy.policy -eq $candidatePolicy.policy) { $RuntimePolicy } else { 'MIXED_POLICY_DIAGNOSTIC' }
+    baselineRuntimePolicy = $baselinePolicy.policy
+    candidateRuntimePolicy = $candidatePolicy.policy
     firstVariant = $FirstVariant
     pageCachePolicy = if ($DropPageCacheBeforeVariant) { 'DROP_CACHES_BEFORE_EACH_VARIANT' } else { 'NOT_REQUESTED' }
     baseline = $baseline

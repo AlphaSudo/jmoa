@@ -1,0 +1,44 @@
+{
+  "metadataVersion": "patient-cds-fixed-artifact-screens-v1",
+  "status": "STOP_CONDITION_REACHED",
+  "screens": [
+    {
+      "artifact": "Patient V1 final",
+      "comparison": "NO_CDS_LOW_DIRTY -> CDS",
+      "artifactHeldFixed": true,
+      "requestsPerVariant": 600,
+      "workloadErrors": 0,
+      "pssDeltaKb": 20797,
+      "privateDirtyDeltaKb": -2228,
+      "memoryCurrentDeltaBytes": 120639488,
+      "heapPssDeltaKb": -88184,
+      "anonymousRwPssDeltaKb": -19148,
+      "archiveMappedPssKb": 113880,
+      "nmtTotalCommittedDeltaKb": 12915,
+      "nmtClassCommittedDeltaKb": -20996,
+      "nmtMetaspaceCommittedDeltaKb": -74989,
+      "nmtSharedClassSpaceCommittedDeltaKb": 129052,
+      "verdict": "CDS_POLICY_SCREEN_REGRESSION"
+    },
+    {
+      "artifact": "Patient V2 final",
+      "comparison": "NO_CDS_LOW_DIRTY -> CDS",
+      "artifactHeldFixed": true,
+      "requestsPerVariant": 600,
+      "workloadErrors": 0,
+      "pssDeltaKb": 40888,
+      "privateDirtyDeltaKb": 17848,
+      "memoryCurrentDeltaBytes": 138641408,
+      "heapPssDeltaKb": -81840,
+      "anonymousRwPssDeltaKb": -2832,
+      "archiveMappedPssKb": 111340,
+      "nmtTotalCommittedDeltaKb": 13928,
+      "nmtClassCommittedDeltaKb": -20999,
+      "nmtMetaspaceCommittedDeltaKb": -72294,
+      "nmtSharedClassSpaceCommittedDeltaKb": 126436,
+      "verdict": "CDS_POLICY_SCREEN_REGRESSION"
+    }
+  ],
+  "interpretation": "CDS reduces heap PSS and ordinary Class/Metaspace commitment, but mapped/shared-class-space and other costs more than offset those reductions under the current Patient protocol.",
+  "claimBoundary": "Each result is one diagnostic fixed-artifact pair, not a confirmed runtime-policy claim. The V1 result is sufficient to activate the study's predeclared stop rule."
+}
