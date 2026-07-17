@@ -1,7 +1,7 @@
 param(
     [Parameter(Mandatory)][string]$LaunchScript,
     [Parameter(Mandatory)][string]$StopScript,
-    [Parameter(Mandatory)][string]$WorkloadScript,
+    [string]$WorkloadScript = '',
     [Parameter(Mandatory)][string]$HealthUrl,
     [Parameter(Mandatory)][string]$ContainerName,
     [Parameter(Mandatory)][string]$Variant,
@@ -12,13 +12,17 @@ param(
     [string[]]$WorkloadArguments = @(),
     [string]$ContainerCli = 'podman',
     [string]$JcmdExecutable = 'jcmd',
+    [ValidateSet('STARTUP','REPRESENTATIVE')][string]$TrainingProfile = 'REPRESENTATIVE',
+    [string]$ArtifactPath = '',
+    [string]$ClasspathFingerprint = '',
+    [string]$ClassLoadLogPath = '',
     [int]$HealthTimeoutSeconds = 180,
     [int]$ReadinessSettleSeconds = 20
 )
 
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'runtime-automation-common.ps1')
-foreach($path in @($LaunchScript,$StopScript,$WorkloadScript)){
+foreach($path in @($LaunchScript,$StopScript)){
     if(-not(Test-Path -LiteralPath $path -PathType Leaf)){throw "Required script does not exist: $path"}
 }
 New-JmoaDirectory -Path $RunDirectory
@@ -35,8 +39,13 @@ try{
     $javaPid=Get-JmoaJavaPid -ContainerCli $ContainerCli -ContainerName $ContainerName -JavaProcessPattern 'java'
     if([string]::IsNullOrWhiteSpace($javaPid)){throw 'Could not locate training JVM.'}
     $workloadPath=Join-Path $RunDirectory 'training-workload.json'
-    & $WorkloadScript -OutputPath $workloadPath -BaseUrl $HealthUrl -ContainerName $ContainerName -Variant $Variant @WorkloadArguments
-    if($LASTEXITCODE -ne 0){throw "Training workload failed with exit code $LASTEXITCODE."}
+    if($TrainingProfile -eq 'REPRESENTATIVE'){
+        if([string]::IsNullOrWhiteSpace($WorkloadScript)-or-not(Test-Path -LiteralPath $WorkloadScript -PathType Leaf)){throw 'REPRESENTATIVE training requires an existing WorkloadScript.'}
+        & $WorkloadScript -OutputPath $workloadPath -BaseUrl $HealthUrl -ContainerName $ContainerName -Variant $Variant @WorkloadArguments
+        if($LASTEXITCODE -ne 0){throw "Training workload failed with exit code $LASTEXITCODE."}
+    }else{
+        Write-JmoaJson -Value ([ordered]@{metadataVersion='jmoa-startup-only-training-v1';requests=0;errorCount=0;profile='STARTUP'}) -Path $workloadPath
+    }
     $cleanJcmd="env -u JAVA_TOOL_OPTIONS -u JDK_JAVA_OPTIONS $JcmdExecutable"
     foreach($capture in @(
         @{name='classloader-stats.txt';command="$cleanJcmd $javaPid VM.classloader_stats"},
@@ -64,11 +73,22 @@ try{
 }
 if(-not(Test-Path -LiteralPath $ExpectedArchive -PathType Leaf)){throw "CDS training did not produce archive: $ExpectedArchive"}
 $workload=Get-Content -Raw -LiteralPath (Join-Path $RunDirectory 'training-workload.json')|ConvertFrom-Json
+$classLoadSha='';$classLoadCount=$null
+if(-not[string]::IsNullOrWhiteSpace($ClassLoadLogPath)-and(Test-Path -LiteralPath $ClassLoadLogPath -PathType Leaf)){
+    $classLoadSha=Get-JmoaSha256 $ClassLoadLogPath
+    $classLoadCount=(Select-String -LiteralPath $ClassLoadLogPath -Pattern '\[class,load'|Measure-Object).Count
+}
 $manifest=[ordered]@{
     metadataVersion='jmoa-deterministic-cds-training-v1';variant=$Variant;status=if($workload.errorCount -eq 0){'PASSED'}else{'FAILED'}
+    trainingProfile=$TrainingProfile
+    artifactSha256=if([string]::IsNullOrWhiteSpace($ArtifactPath)){''}else{Get-JmoaSha256 $ArtifactPath}
+    classpathFingerprint=$ClasspathFingerprint
     startedAt=$started.ToString('o');completedAt=[DateTime]::UtcNow.ToString('o');readinessSettleSeconds=$ReadinessSettleSeconds
     workloadRequests=$workload.requests;workloadErrors=$workload.errorCount;archiveSha256=Get-JmoaSha256 $ExpectedArchive
     archiveBytes=[long](Get-Item -LiteralPath $ExpectedArchive).Length
+    classLoadLogSha256=$classLoadSha;trainingClassLoadEventCount=$classLoadCount
+    jdkFingerprint=(Invoke-JmoaExternal -Executable $ContainerCli -Arguments @('run','--rm','eclipse-temurin:26-jdk-jammy','java','-version')).output
+    aotCacheFlagsRejected=$true
     claimBoundary='Variant-specific diagnostic CDS training. The archive must only be used with its matching artifact.'
 }
 Write-JmoaJson -Value $manifest -Path (Join-Path $RunDirectory 'cds-training-manifest.json')

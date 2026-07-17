@@ -1,0 +1,141 @@
+{
+  "metadataVersion": "patient-dynamic-appcds-economics-v1",
+  "status": "SINGLE_REPLICA_ARCHIVE_REGRESSION",
+  "primaryComparison": "APP_MINUS_BASE",
+  "fixedArtifact": "V1",
+  "profiles": [
+    {
+      "profile": "STARTUP",
+      "summary": {
+        "metadataVersion": "jmoa-balanced-appcds-profile-analysis-v1",
+        "artifact": "V1",
+        "profile": "STARTUP",
+        "status": "PROFILE_VARIANT_REJECTED",
+        "pairCount": 2,
+        "pssDirection": [
+          "REGRESSION"
+        ],
+        "medianAppMinusBasePssKb": 24475,
+        "medianAppMinusBasePrivateDirtyKb": 4650,
+        "medianAppMinusBaseMemoryCurrentBytes": 120147968,
+        "semanticPassed": true,
+        "structuralReproducibilityPassed": true,
+        "gates": {
+          "sameDirectionInBothOrders": true,
+          "medianPssMaximumKb": 1024,
+          "medianMemoryCurrentMaximumBytes": 1048576
+        },
+        "claimBoundary": "Diagnostic profile admission for one fixed artifact. This is not a V1-to-V2 result."
+      },
+      "pairs": [
+        {
+          "archive": "A",
+          "order": "BASE_TO_APP",
+          "deltas": {
+            "pssKb": 24049,
+            "privateDirtyKb": 4204,
+            "memoryCurrentBytes": 119775232,
+            "heapPssKb": -88008,
+            "anonymousRwPssKb": -1096,
+            "archiveMappedPssKb": 113668,
+            "nmtTotalCommittedKb": 12841,
+            "nmtClassCommittedKb": -20301,
+            "nmtSharedClassSpaceCommittedKb": 114104,
+            "nmtMetaspaceCommittedKb": -64364,
+            "nmtCodeCommittedKb": 56
+          },
+          "status": "CDS_POLICY_SCREEN_REGRESSION"
+        },
+        {
+          "archive": "B",
+          "order": "APP_TO_BASE",
+          "deltas": {
+            "pssKb": 24901,
+            "privateDirtyKb": 5096,
+            "memoryCurrentBytes": 120520704,
+            "heapPssKb": -86672,
+            "anonymousRwPssKb": -1656,
+            "archiveMappedPssKb": 113804,
+            "nmtTotalCommittedKb": 13279,
+            "nmtClassCommittedKb": -20310,
+            "nmtSharedClassSpaceCommittedKb": 114212,
+            "nmtMetaspaceCommittedKb": -64171,
+            "nmtCodeCommittedKb": -421
+          },
+          "status": "CDS_POLICY_SCREEN_REGRESSION"
+        }
+      ]
+    },
+    {
+      "profile": "REPRESENTATIVE",
+      "summary": {
+        "metadataVersion": "jmoa-balanced-appcds-profile-analysis-v1",
+        "artifact": "V1",
+        "profile": "REPRESENTATIVE",
+        "status": "PROFILE_VARIANT_REJECTED",
+        "pairCount": 2,
+        "pssDirection": [
+          "REGRESSION"
+        ],
+        "medianAppMinusBasePssKb": 36431,
+        "medianAppMinusBasePrivateDirtyKb": 16560,
+        "medianAppMinusBaseMemoryCurrentBytes": 132292608,
+        "semanticPassed": true,
+        "structuralReproducibilityPassed": true,
+        "gates": {
+          "sameDirectionInBothOrders": true,
+          "medianPssMaximumKb": 1024,
+          "medianMemoryCurrentMaximumBytes": 1048576
+        },
+        "claimBoundary": "Diagnostic profile admission for one fixed artifact. This is not a V1-to-V2 result."
+      },
+      "pairs": [
+        {
+          "archive": "A",
+          "order": "BASE_TO_APP",
+          "deltas": {
+            "pssKb": 40207,
+            "privateDirtyKb": 20376,
+            "memoryCurrentBytes": 136208384,
+            "heapPssKb": -77824,
+            "anonymousRwPssKb": 4744,
+            "archiveMappedPssKb": 113864,
+            "nmtTotalCommittedKb": 13079,
+            "nmtClassCommittedKb": -20470,
+            "nmtSharedClassSpaceCommittedKb": 114252,
+            "nmtMetaspaceCommittedKb": -64298,
+            "nmtCodeCommittedKb": 43
+          },
+          "status": "CDS_POLICY_SCREEN_REGRESSION"
+        },
+        {
+          "archive": "B",
+          "order": "APP_TO_BASE",
+          "deltas": {
+            "pssKb": 32655,
+            "privateDirtyKb": 12744,
+            "memoryCurrentBytes": 128376832,
+            "heapPssKb": -85480,
+            "anonymousRwPssKb": 4672,
+            "archiveMappedPssKb": 113964,
+            "nmtTotalCommittedKb": 13301,
+            "nmtClassCommittedKb": -20485,
+            "nmtSharedClassSpaceCommittedKb": 114348,
+            "nmtMetaspaceCommittedKb": -64359,
+            "nmtCodeCommittedKb": 522
+          },
+          "status": "CDS_POLICY_SCREEN_REGRESSION"
+        }
+      ]
+    }
+  ],
+  "explanatoryBaseMinusOff": {
+    "diagnosticOnly": true,
+    "pssKb": 256,
+    "privateDirtyKb": -2864,
+    "memoryCurrentBytes": 4886528,
+    "heapPssKb": -5172,
+    "sharedClassSpaceCommittedKb": 14768
+  },
+  "decomposition": "Default JDK CDS was approximately PSS-neutral in one explanatory pair. The broad Patient dynamic application archive caused the repeated large single-replica regression."
+}

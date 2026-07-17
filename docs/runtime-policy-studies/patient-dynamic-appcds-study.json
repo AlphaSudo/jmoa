@@ -1,0 +1,28 @@
+{
+  "metadataVersion": "patient-dynamic-appcds-study-v1",
+  "status": "COMPLETE",
+  "classification": [
+    "NON_BLOCKING_POST_V2",
+    "TERMINAL"
+  ],
+  "primaryQuestion": "Does a Patient dynamic application archive add single-replica value beyond the default JDK CDS archive?",
+  "arms": {
+    "OFF": "CDS disabled",
+    "BASE": "default JDK CDS only",
+    "APP": "default JDK CDS plus Patient dynamic archive"
+  },
+  "profiles": [
+    "STARTUP",
+    "REPRESENTATIVE"
+  ],
+  "predeclaredTerminalVerdicts": [
+    "PATIENT_APP_CDS_CONFIRMED",
+    "APP_CDS_NO_MARGINAL_VALUE",
+    "SINGLE_REPLICA_ARCHIVE_REGRESSION",
+    "MULTI_REPLICA_ONLY_BENEFIT",
+    "NON_REPRODUCIBLE_ARCHIVE",
+    "ENVIRONMENT_BLOCKED"
+  ],
+  "terminalVerdict": "SINGLE_REPLICA_ARCHIVE_REGRESSION",
+  "rawEvidenceCommitted": false
+}

@@ -34,3 +34,7 @@ another launch shape.
 No further Patient V2 performance experiment is authorized by this record:
 do not retune CDS, rebuild JSA archives, change thresholds, or introduce a new
 reducer to chase a broader claim.
+
+The later [Patient Dynamic AppCDS Archive Economics Study](../runtime-policy-studies/patient-dynamic-appcds-study.md)
+was explicitly registered after `v2.0.0` as a non-blocking terminal policy
+exception study. It did not reopen or alter this V2 launch gate.

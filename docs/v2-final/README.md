@@ -1,8 +1,8 @@
 # V2 Final Audit
 
 This folder is the release-readiness layer for V2. It freezes scope, records the
-passed final performance gates, disposes every research item, and tracks the
-remaining release-qualification work before `rc1`, `rc2`, or `v2.0.0`.
+passed final performance gates, and preserves the qualification trail that led
+to the stable `v2.0.0` release.
 
 ## Start Here
 
@@ -54,3 +54,8 @@ Patient no-CDS. Patient's separate corrected CDS confirmation remains blocked
 (1/3 paired wins, median PSS `+668 KB`) and is preserved as a policy-specific
 failure. See the three-service matrix, Patient policy verdict, and separate
 CDS/no-CDS records above for the exact evidence boundary.
+
+Stable `v2.0.0` was published on July 16, 2026. The later
+[Patient Dynamic AppCDS Archive Economics Study](../runtime-policy-studies/patient-dynamic-appcds-study.md)
+is a non-blocking post-release policy exception study and does not reopen this
+launch decision.
