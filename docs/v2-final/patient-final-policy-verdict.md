@@ -38,3 +38,8 @@ reducer to chase a broader claim.
 The later [Patient Dynamic AppCDS Archive Economics Study](../runtime-policy-studies/patient-dynamic-appcds-study.md)
 was explicitly registered after `v2.0.0` as a non-blocking terminal policy
 exception study. It did not reopen or alter this V2 launch gate.
+
+The final [extracted-layout common-class AppCDS study](../runtime-policy-studies/patient-extracted-common-appcds-study.md)
+also failed its fixed-artifact admission gate. It is the permanent stop for
+single-replica Patient AppCDS work; the V1-to-V2 APP screen was therefore not
+run. Patient remains on `NO_CDS_LOW_DIRTY`.
