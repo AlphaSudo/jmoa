@@ -1,0 +1,34 @@
+{
+  "metadataVersion": "patient-dynamic-appcds-terminal-verdict-v1",
+  "study": "Patient Dynamic AppCDS Archive Economics Study",
+  "status": "SINGLE_REPLICA_ARCHIVE_REGRESSION",
+  "topology": "SINGLE_REPLICA",
+  "releaseBlocking": false,
+  "selectedProfile": null,
+  "holdoutCTrained": false,
+  "v2FixedArtifactScreensRun": false,
+  "finalV1ToV2AppCdsConfirmationRun": false,
+  "stopReason": "Both predeclared profiles regressed on V1 in independently trained A/B archives and balanced run order. Neither can satisfy the both-V1-and-V2 admission rule.",
+  "productDecision": "Keep Patient on its confirmed NO_CDS_LOW_DIRTY policy. Do not promote Patient dynamic AppCDS.",
+  "releaseMatrixPreserved": {
+    "petClinic": {
+      "policy": "NO_CDS_LOW_DIRTY",
+      "medianV1ToV2PssDeltaKb": -6012
+    },
+    "doctor": {
+      "policy": "CDS",
+      "medianV1ToV2PssDeltaKb": -5156,
+      "interpretation": "Variant-specific CDS positive control, not fixed-artifact proof of marginal AppCDS value."
+    },
+    "patient": {
+      "policy": "NO_CDS_LOW_DIRTY",
+      "medianV1ToV2PssDeltaKb": -8903
+    }
+  },
+  "forbiddenClaims": [
+    "CDS is universally harmful.",
+    "Doctor proves marginal AppCDS benefit on a fixed artifact.",
+    "Patient AppCDS was tested under multi-replica economics.",
+    "The terminal study changes the released Patient no-CDS V2 win."
+  ]
+}

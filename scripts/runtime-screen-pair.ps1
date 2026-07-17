@@ -77,13 +77,19 @@ function Resolve-VariantPolicy {
     if ($normalized.StartsWith('NO_CDS') -and ($cds -or $AppCdsEnabled -or $LeydenEnabled -or $JavaagentPresent)) {
         throw 'A no-CDS variant requires CDS, AppCDS, Leyden, and runtime javaagent to be disabled.'
     }
-    if (-not $normalized.StartsWith('NO_CDS') -and $normalized.Contains('CDS')) {
+    $kind = if ($normalized.StartsWith('NO_CDS') -or $normalized -eq 'OFF') { 'OFF' } `
+        elseif ($normalized -in @('BASE_CDS','JDK_CDS_BASE','BASE')) { 'BASE' } `
+        elseif ($normalized.Contains('CDS')) { 'APP' } else { 'UNKNOWN' }
+    if ($kind -eq 'UNKNOWN') { throw "Unsupported runtime policy: $policy" }
+    if ($kind -eq 'BASE' -and -not $cds) { throw 'BASE_CDS requires CDS to be explicitly enabled.' }
+    if ($kind -eq 'BASE' -and -not [string]::IsNullOrWhiteSpace($ArchivePath)) { throw 'BASE_CDS must not specify an application archive.' }
+    if ($kind -eq 'APP') {
         if (-not $cds) { throw 'A CDS variant requires CDS to be explicitly enabled.' }
         if ([string]::IsNullOrWhiteSpace($ArchivePath) -or -not (Test-Path -LiteralPath $ArchivePath -PathType Leaf)) {
             throw "A CDS variant requires an existing variant-specific archive: $ArchivePath"
         }
     }
-    [ordered]@{ policy = $policy; normalized = $normalized; cdsEnabled = $cds; archivePath = $ArchivePath; mallocArenaMax = $malloc }
+    [ordered]@{ policy = $policy; normalized = $normalized; kind = $kind; cdsEnabled = $cds; archivePath = $ArchivePath; mallocArenaMax = $malloc }
 }
 
 $baselinePolicy = Resolve-VariantPolicy -PolicyOverride $BaselineRuntimePolicy -CdsOverride $BaselineCdsEnabled `
@@ -155,16 +161,31 @@ function Capture-And-VerifyRuntimePolicy {
     if ($Policy.normalized -eq 'NO_CDS_LOW_DIRTY' -and $proofText -notmatch '(?m)^MALLOC_ARENA_MAX=1\s*$') {
         throw 'NO_CDS_LOW_DIRTY requires live JVM environment proof: MALLOC_ARENA_MAX=1.'
     }
-    if ($Policy.normalized.StartsWith('NO_CDS')) {
+    if ($Policy.kind -eq 'OFF') {
         if ($proofText -notmatch '(?i)-Xshare:off') { throw 'No-CDS policy requires live JVM proof of -Xshare:off.' }
-        if ($proofText -match '(?i)(-javaagent:|SharedArchiveFile|ArchiveClassesAtExit|UseAppCDS|AOTCache|AOTMode)') {
+        if ($proofText -match '(?i)(-javaagent:|SharedArchiveFile|ArchiveClassesAtExit|UseAppCDS|AOTCache|AOTCacheOutput|AOTMode|AOTConfiguration)') {
             throw 'No-CDS policy proof found a CDS, Leyden, or javaagent option.'
         }
+    } elseif ($Policy.kind -eq 'BASE') {
+        if ($proofText -notmatch '(?i)-Xshare:(on|auto)') { throw 'BASE_CDS requires live JVM proof of -Xshare:on or -Xshare:auto.' }
+        if ($proofText -match '(?i)-XX:SharedArchiveFile=') { throw 'BASE_CDS must use the default JDK archive without an application SharedArchiveFile override.' }
+        if ($proofText -match '(?i)(-javaagent:|ArchiveClassesAtExit|AOTCache|AOTCacheOutput|AOTMode|AOTConfiguration)') { throw 'BASE_CDS found a training, AOT/Leyden, or javaagent option.' }
     } else {
         if ($proofText -notmatch '(?i)-Xshare:(on|auto)') { throw 'CDS policy requires live JVM proof of -Xshare:on or -Xshare:auto.' }
         if ($proofText -notmatch '(?i)-XX:SharedArchiveFile=') { throw 'CDS policy requires live JVM proof of -XX:SharedArchiveFile.' }
-        if ($proofText -match '(?i)(-javaagent:|ArchiveClassesAtExit|AOTCache|AOTMode)') { throw 'CDS measurement policy found a training, AOT/Leyden, or javaagent option.' }
+        if ($proofText -match '(?i)(-javaagent:|ArchiveClassesAtExit|AOTCache|AOTCacheOutput|AOTMode|AOTConfiguration)') { throw 'APP_CDS found a training, AOT/Leyden, or javaagent option.' }
     }
+    $mapsCapture = Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$JavaPid/maps" -OutputPath (Join-Path $Directory 'runtime-cds-maps.txt')
+    if ($mapsCapture.exitCode -ne 0) { throw 'Could not capture live JVM mappings for CDS policy proof.' }
+    $jsaMappings = @()
+    foreach ($line in ($mapsCapture.output -split "`r?`n")) {
+        if ($line -match '^([0-9a-f]+)-([0-9a-f]+)\s+(\S+)\s+([0-9a-f]+)\s+(\S+)\s+(\d+)\s+(.+\.jsa)\s*$') {
+            $jsaMappings += [ordered]@{ start=$Matches[1]; end=$Matches[2]; permissions=$Matches[3]; offset=$Matches[4]; device=$Matches[5]; inode=$Matches[6]; path=$Matches[7].Trim() }
+        }
+    }
+    $defaultMappings = @($jsaMappings | Where-Object { $_.path -match '(?i)[/\\]lib[/\\]server[/\\]classes[^/\\]*\.jsa$' })
+    if ($Policy.kind -eq 'OFF' -and $jsaMappings.Count -ne 0) { throw 'OFF policy unexpectedly mapped one or more CDS archives.' }
+    if ($Policy.kind -in @('BASE','APP') -and $defaultMappings.Count -eq 0) { throw "$($Policy.kind) policy did not map the default JDK CDS archive." }
     $runtimeArchiveSha256 = $null
     if ($Policy.cdsEnabled -and $proofText -match '(?i)-XX:SharedArchiveFile=([^\s]+)') {
         $runtimeArchivePath = $Matches[1].Trim('"', "'")
@@ -172,14 +193,19 @@ function Capture-And-VerifyRuntimePolicy {
         if ($hashCapture.exitCode -ne 0) { throw 'Could not hash the live CDS archive inside the container.' }
         $runtimeArchiveSha256 = $hashCapture.output.Trim().ToUpperInvariant()
         if ($runtimeArchiveSha256 -ne (Get-JmoaSha256 -Path $Policy.archivePath)) { throw 'Live CDS archive SHA-256 does not match the host archive supplied to the screen.' }
+        if (-not ($jsaMappings | Where-Object { $_.path -eq $runtimeArchivePath })) { throw 'Selected application archive is not present in the live JVM mappings.' }
     }
     [ordered]@{
         status = 'PASSED'
         runtimePolicy = $Policy.policy
+        policyArm = $Policy.kind
         cdsMode = if ($Policy.cdsEnabled) { 'ON' } else { 'OFF' }
-        cdsArchiveSha256 = if ($Policy.cdsEnabled) { Get-JmoaSha256 -Path $Policy.archivePath } else { $null }
+        cdsArchiveSha256 = if ($Policy.kind -eq 'APP') { Get-JmoaSha256 -Path $Policy.archivePath } else { $null }
         runtimeCdsArchiveSha256 = $runtimeArchiveSha256
-        cdsArchiveBytes = if ($Policy.cdsEnabled) { [long](Get-Item -LiteralPath $Policy.archivePath).Length } else { 0 }
+        jsaMappings = $jsaMappings
+        defaultJdkArchiveMapped = $defaultMappings.Count -gt 0
+        applicationArchiveMapped = $Policy.kind -eq 'APP' -and $null -ne $runtimeArchiveSha256
+        cdsArchiveBytes = if ($Policy.kind -eq 'APP') { [long](Get-Item -LiteralPath $Policy.archivePath).Length } else { 0 }
         leydenDisabled = $true
         javaagentAbsent = $true
         mallocArenaMax = if ([string]::IsNullOrWhiteSpace($Policy.mallocArenaMax)) { $null } else { $Policy.mallocArenaMax }
@@ -191,13 +217,24 @@ function Reset-PageCache {
     if (-not $DropPageCacheBeforeVariant) {
         return [ordered]@{ policy = 'NOT_REQUESTED'; status = 'NOT_REQUESTED'; output = '' }
     }
-    $result = Invoke-JmoaExternal -Executable $ContainerCli -Arguments @(
-        'machine', 'ssh', "sudo sh -c 'sync; echo 3 > /proc/sys/vm/drop_caches' && echo DROP_OK"
-    )
-    if ($result.exitCode -ne 0 -or $result.output -notmatch 'DROP_OK') {
-        throw "Could not establish a cold page-cache precondition: $($result.output)"
+    $attempts = @()
+    for ($attempt = 1; $attempt -le 3; $attempt++) {
+        $result = Invoke-JmoaExternal -Executable $ContainerCli -Arguments @(
+            'machine', 'ssh', "sudo sh -c 'sync; echo 3 > /proc/sys/vm/drop_caches' && echo DROP_OK"
+        )
+        $attempts += [ordered]@{
+            attempt = $attempt
+            exitCode = $result.exitCode
+            output = $result.output
+        }
+        if ($result.exitCode -eq 0 -and $result.output -match 'DROP_OK') {
+            $attemptText = ($attempts | ForEach-Object { "attempt=$($_.attempt) exitCode=$($_.exitCode) output=$($_.output)" }) -join [Environment]::NewLine
+            return [ordered]@{ policy = 'DROP_CACHES_BEFORE_EACH_VARIANT'; status = 'PASSED'; attempts = $attempt; output = $attemptText }
+        }
+        if ($attempt -lt 3) { Start-Sleep -Seconds (2 * $attempt) }
     }
-    return [ordered]@{ policy = 'DROP_CACHES_BEFORE_EACH_VARIANT'; status = 'PASSED'; output = $result.output }
+    $failureText = ($attempts | ForEach-Object { "attempt=$($_.attempt) exitCode=$($_.exitCode) output=$($_.output)" }) -join '; '
+    throw "Could not establish a cold page-cache precondition after 3 attempts: $failureText"
 }
 
 function Invoke-Variant {
@@ -288,7 +325,7 @@ function Invoke-Variant {
             launchMode = $LaunchMode
             runtimePolicy = $Policy.policy
             cdsMode = if ($Policy.cdsEnabled) { 'ON' } else { 'OFF' }
-            cdsArchiveSha256 = if ($Policy.cdsEnabled) { Get-JmoaSha256 -Path $Policy.archivePath } else { $null }
+            cdsArchiveSha256 = if ($Policy.kind -eq 'APP') { Get-JmoaSha256 -Path $Policy.archivePath } else { $null }
             appCds = $AppCdsEnabled
             leyden = $LeydenEnabled
             javaagentPresent = $JavaagentPresent
@@ -309,7 +346,7 @@ function Invoke-Variant {
             postWorkloadSnapshots = $snapshots
             postGcSnapshot = $postGc
             runtimePolicyProof = $runtimePolicyProof
-            noCdsStateProof = if ($Policy.normalized.StartsWith('NO_CDS')) { $runtimePolicyProof } else { $null }
+            noCdsStateProof = if ($Policy.kind -eq 'OFF') { $runtimePolicyProof } else { $null }
         }
         Write-JmoaJson -Value $manifest -Path (Join-Path $runDirectory 'run-manifest.json')
         return [ordered]@{ variant = $Variant; runDirectory = $runDirectory; status = 'CAPTURED'; workload = (Get-Content -Raw -LiteralPath $workloadPath | ConvertFrom-Json) }

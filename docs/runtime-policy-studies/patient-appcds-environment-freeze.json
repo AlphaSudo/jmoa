@@ -1,0 +1,39 @@
+{
+  "metadataVersion": "patient-dynamic-appcds-environment-freeze-v1",
+  "status": "FROZEN",
+  "study": "Patient Dynamic AppCDS Archive Economics Study",
+  "repositoryRevision": "000e3d7d0254d64276e54e0f662416d3c2e994b6",
+  "releaseBaseline": "v2.0.0",
+  "primaryTopology": "SINGLE_REPLICA",
+  "service": "patient-service",
+  "launchMode": "SPRING_BOOT_FAT_JAR",
+  "runtimeImage": "eclipse-temurin:26-jdk-jammy",
+  "jdkFingerprint": "openjdk version \"26.0.1\" 2026-04-21\r\nOpenJDK Runtime Environment Temurin-26.0.1+8 (build 26.0.1+8)\r\nOpenJDK 64-Bit Server VM Temurin-26.0.1+8 (build 26.0.1+8, mixed mode, sharing)",
+  "podmanVersion": "5.7.1",
+  "containerHost": {
+    "os": "linux",
+    "architecture": "amd64",
+    "kernel": "6.6.87.2-microsoft-standard-WSL2",
+    "cgroupVersion": "v2"
+  },
+  "artifacts": {
+    "v1Sha256": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+    "v2Sha256": "4CFC40ADBD559066071A65BAC4A0D6836411BDBF4BB69E9162C0D2E7C65569E3"
+  },
+  "classpathFingerprints": {
+    "v1": "4AF56A8FB3D03ADCE4F12EA239DA5A93F8E036FC4F631C6D768388F68EDB087A",
+    "v2": "9A9D7FBAD8885A35A05E620CF0BDED18B5A593E31067D90CA0A938444AC3F328"
+  },
+  "runtime": {
+    "gc": "SerialGC",
+    "heap": "-Xms32m -Xmx256m",
+    "stack": "-Xss256k",
+    "codeCache": "-XX:ReservedCodeCacheSize=48m",
+    "mallocArenaMax": "1",
+    "nmt": "summary",
+    "workloadRequests": 600,
+    "cachePrecondition": "DROP_CACHES_BEFORE_EACH_VARIANT",
+    "aotCacheAllowed": false,
+    "javaagentAllowed": false
+  }
+}

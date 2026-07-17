@@ -14,6 +14,7 @@ The case-study portfolio is published separately:
 - V2 foundation closure: [docs/v2-foundation-closure.md](docs/v2-foundation-closure.md)
 - V2 final audit: [docs/v2-final](docs/v2-final/README.md)
 - V2 final performance gate: [docs/v2-final/v2-final-performance-acceptance.md](docs/v2-final/v2-final-performance-acceptance.md)
+- Stable release: [v2.0.0](https://github.com/AlphaSudo/jmoa/releases/tag/v2.0.0)
 
 ## What This Is
 
@@ -71,6 +72,13 @@ See the machine-readable and human-readable final matrix:
 - [Patient final policy verdict](docs/v2-final/patient-final-policy-verdict.md)
 - [Patient no-CDS confirmation](docs/v2-final/patient-nocds-confirmation.md)
 - [Patient CDS final verdict](docs/v2-final/patient-cds-final-verdict.md)
+- [Patient Dynamic AppCDS terminal study](docs/runtime-policy-studies/patient-dynamic-appcds-study.md)
+
+The post-release Patient Dynamic AppCDS study isolates the marginal application
+archive cost from default JDK CDS. Under the frozen single-replica protocol,
+both STARTUP and REPRESENTATIVE archives were structurally reproducible but
+regressed versus base CDS in both balanced run orders. Its terminal verdict is
+`SINGLE_REPLICA_ARCHIVE_REGRESSION`; Patient remains on `NO_CDS_LOW_DIRTY`.
 
 The reproducible PetClinic result below remains a scoped service claim. The
 historical direct B0-to-V2 result is retained in the evidence record, but its
