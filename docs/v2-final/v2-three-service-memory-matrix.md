@@ -11,7 +11,7 @@ different confirmed policies.
 | Service | Runtime policy | Status | Valid runs | Paired wins | Median PSS KB | Median Private_Dirty KB | Median memory.current bytes | V2-C | V2-D |
 |---|---|---|---:|---:|---:|---:|---:|---|---|
 | petclinic-customers | NO_CDS_LOW_DIRTY | PASS | 6/6 | 2/3 | -6012 | -5708 | -8081408 | CONFIRMED_WIN | True |
-| doctor | CDS | PASS | 6/6 | 3/3 | -5156 | -5212 | -6975488 | CONFIRMED_WIN | True |
+| doctor | APPLICATION_CDS | PASS | 6/6 | 3/3 | -5156 | -5212 | -6975488 | CONFIRMED_WIN | True |
 | patient | JDK_BASE_CDS_LOW_DIRTY | PASS | 6/6 | 3/3 | -8279 | -8444 | -8523776 | CONFIRMED_WIN | True |
 
 ## Gate

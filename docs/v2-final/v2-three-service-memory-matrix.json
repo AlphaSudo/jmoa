@@ -25,7 +25,7 @@
     },
     {
       "service": "doctor",
-      "runtimePolicy": "CDS",
+      "runtimePolicy": "APPLICATION_CDS",
       "status": "PASS",
       "pass": true,
       "validRuns": 6,

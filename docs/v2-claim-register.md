@@ -43,7 +43,7 @@ confirmed runtime policies:
 ```text
 status: READY_FOR_V2_FINAL
 PetClinic: PASS (NO_CDS_LOW_DIRTY; median PSS -6,012 KB)
-Doctor: PASS (CDS; median PSS -5,156 KB)
+Doctor: PASS (APPLICATION_CDS; median PSS -5,156 KB)
 Patient: PASS (JDK_BASE_CDS_LOW_DIRTY; 6/6 valid runs, 3/3 paired wins, median PSS -8,279 KB)
 Patient secondary policy: PASS (NO_CDS_LOW_DIRTY; median PSS -8,903 KB)
 Patient application CDS: BLOCK_RUNTIME_PROMOTION

@@ -39,14 +39,14 @@ Use `00-quickstart.ps1` for the qualified build path. It performs:
 5. exploded-Boot materialization with hash proof;
 6. Java 17 semantic smoke against config and discovery services.
 
-The `05` through `08` scripts remain measurement scaffolding. They are not
-invoked by the build-only quickstart and do not replace the accepted V2-C
-paired confirmation protocol.
+The `05` through `08` scripts are legacy measurement helpers. They are not
+invoked by the build-and-smoke quickstart and do not replace the accepted
+balanced V2-C confirmation protocol.
 
 ## Quick Start
 
-Install the plugin and runtime POM/JAR pairs from the `2.0.0-rc2` GitHub
-Release bundle, then run:
+Build and install the plugin/runtime modules from source, then run with the
+frozen profile, admission, and SAM inputs:
 
 ```powershell
 .\scripts\00-quickstart.ps1 `
