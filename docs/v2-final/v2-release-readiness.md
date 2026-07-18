@@ -1,6 +1,6 @@
 # V2 Release Readiness
 
-Status: `READY_FOR_RC2`
+Status: `READY_FOR_V2_FINAL`
 
 The reproducible incremental performance gate is green. V2-C and V2-D accepted
 and explained the fresh V1-to-V2 public comparison. The direct B0-to-V2
@@ -15,5 +15,8 @@ The final engineering gates passed:
 The strict release script now rejects both P0 and P1 blockers by default. No
 override is required for `2.0.0-rc2`.
 
-The distribution route is GitHub Release artifacts plus SHA-256 checksums. A
-Maven Central claim is not made.
+The source tag and GitHub release page are public. The release currently has no
+uploaded binary or frozen PetClinic-input assets. Local release-bundle tooling
+produces SHA-256 manifests, but public documentation must not imply those files
+are downloadable until they are uploaded. Maven Central and GitHub Packages
+claims are not made.

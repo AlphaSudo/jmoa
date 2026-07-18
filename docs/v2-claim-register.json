@@ -48,7 +48,7 @@
       {
         "service": "Doctor-service",
         "status": "PASS",
-        "runtimePolicy": "CDS",
+        "runtimePolicy": "APPLICATION_CDS",
         "validRuns": 6,
         "pairedWins": 3,
         "medianPssDeltaKb": -5156,
@@ -60,30 +60,23 @@
       {
         "service": "Patient-service",
         "status": "PASS",
-        "runtimePolicy": "NO_CDS_LOW_DIRTY",
+        "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
         "validRuns": 6,
-        "pairedWins": 2,
-        "medianPssDeltaKb": -8903,
-        "medianPrivateDirtyDeltaKb": -8636,
-        "medianMemoryCurrentDeltaBytes": -9707520,
+        "pairedWins": 3,
+        "medianPssDeltaKb": -8279,
+        "medianPrivateDirtyDeltaKb": -8444,
+        "medianMemoryCurrentDeltaBytes": -8523776,
         "v2cVerdict": "CONFIRMED_WIN",
         "v2dAttributionPresent": true,
-        "cdsPolicyVerdict": "BLOCK_RUNTIME_PROMOTION",
-        "cdsEvidence": {
-          "validRuns": 6,
-          "pairedWins": 1,
-          "medianPssDeltaKb": 668,
-          "medianPrivateDirtyDeltaKb": 736,
-          "medianMemoryCurrentDeltaBytes": -1945600,
-          "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN"
-        }
+        "noCdsPolicyAlsoConfirmed": true,
+        "applicationCdsPolicyVerdict": "BLOCK_RUNTIME_PROMOTION"
       }
     ],
     "claimAllowed": true,
     "matrix": "docs/v2-final/v2-three-service-memory-matrix.json",
     "patientVerdict": "docs/v2-final/patient-final-policy-verdict.json",
     "patientCdsVerdict": "docs/v2-final/patient-cds-final-verdict.json",
-    "reason": "All three services pass under their individually confirmed runtime policies. Patient CDS remains blocked and is not transferred to the no-CDS policy."
+    "reason": "All three services pass under their individually confirmed runtime policies. Patient no-CDS is independently confirmed; dynamic Patient application CDS remains blocked."
   },
   "confirmedRuntimeClaims": [
     {

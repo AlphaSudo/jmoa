@@ -25,5 +25,9 @@ jobs:
         shell: pwsh
         run: ./scripts/check-publication-safety.ps1
 
+      - name: Documentation quality
+        shell: pwsh
+        run: ./scripts/check-documentation-quality.ps1 -SkipPublicationSafety
+
       - name: Build public modules
         run: mvn -q -pl jmoa-runtime-lib,jmoa-maven-plugin clean test

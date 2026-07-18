@@ -1,5 +1,10 @@
 # JMOA V2 Roadmap Status
 
+Current product navigation is capability-oriented: [architecture](architecture/system-overview.md),
+[methodology](methodology/measurement-protocol.md), [results](results/v2-three-service-matrix.md),
+and [reproduction](reproduction/petclinic-quickstart.md). This file preserves
+development chronology and is not the primary public entry point.
+
 Status: V2-A through V2-W are closed, confirmed, or explicitly bounded within
 their declared closure types. V2-P adds a report-only end-to-end workflow
 coordinator around the existing V2-M, V2-N, V2-O, V2-C, and V2-D gates; V2-Q

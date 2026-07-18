@@ -53,14 +53,14 @@
       "pairedWins": 2,
       "pairs": 3,
       "medianPssDeltaKb": -6012,
-      "medianPrivateDirtyKb": -5708,
+      "medianPrivateDirtyDeltaKb": -5708,
       "medianMemoryCurrentDeltaBytes": -8081408,
       "v2cVerdict": "CONFIRMED_WIN",
       "v2dAttributionPresent": true
     },
     "doctor": {
       "status": "PASS",
-      "runtimePolicy": "CDS",
+      "runtimePolicy": "APPLICATION_CDS",
       "source": "docs/v2-k/v2k-doctor-final-verdict.json",
       "validRuns": 6,
       "pairedWins": 3,

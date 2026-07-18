@@ -107,21 +107,23 @@ $petRecord = Read-OptionalJson $petPath
 $doctorRecord = Read-OptionalJson $doctorPath
 $patientRecord = Read-OptionalJson $patientPath
 
-# Patient has separate policy records. The aggregate gate consumes the
-# confirmed no-CDS policy while preserving the CDS block as audit metadata.
-if ($patientRecord -and $patientRecord.noCdsPolicy) {
-    $patientNoCds = $patientRecord.noCdsPolicy
+# Patient has separate policy records. The aggregate gate consumes the primary
+# stock-base-CDS policy while preserving no-CDS confirmation and application-CDS
+# rejection as audit metadata.
+if ($patientRecord -and $patientRecord.baseCdsPolicy) {
+    $patientBaseCds = $patientRecord.baseCdsPolicy
     $patientRecord = [pscustomobject]@{
-        runtimePolicy = $patientRecord.confirmedPolicy
-        validRuns = $patientNoCds.validRuns
-        pairedWins = $patientNoCds.pairedWins
-        medianPssDeltaKb = $patientNoCds.medianPssDeltaKb
-        medianPrivateDirtyDeltaKb = $patientNoCds.medianPrivateDirtyDeltaKb
-        medianMemoryCurrentDeltaBytes = $patientNoCds.medianMemoryCurrentDeltaBytes
-        workloadErrors = $patientNoCds.workloadErrors
-        v2cVerdict = $patientNoCds.v2cVerdict
-        v2dAttributionPresent = $patientNoCds.v2dPresent
-        cdsPolicyVerdict = $patientRecord.cdsPolicy.status
+        runtimePolicy = $patientRecord.primaryConfirmedPolicy
+        validRuns = $patientBaseCds.validRuns
+        pairedWins = $patientBaseCds.pairedWins
+        medianPssDeltaKb = $patientBaseCds.medianPssDeltaKb
+        medianPrivateDirtyDeltaKb = $patientBaseCds.medianPrivateDirtyDeltaKb
+        medianMemoryCurrentDeltaBytes = $patientBaseCds.medianMemoryCurrentDeltaBytes
+        workloadErrors = $patientBaseCds.workloadErrors
+        v2cVerdict = $patientBaseCds.v2cVerdict
+        v2dAttributionPresent = $patientBaseCds.v2dPresent
+        noCdsPolicyAlsoConfirmed = $true
+        applicationCdsPolicyVerdict = $patientRecord.applicationCdsPolicy.status
     }
 }
 
@@ -143,8 +145,8 @@ if ($petRecord -and $petRecord.primaryAcceptance) {
 
 $results = @(
     (Test-ServiceVerdict -ServiceId 'petclinic-customers' -Record $petRecord -Gates $contract.gates -RuntimePolicy 'NO_CDS_LOW_DIRTY'),
-    (Test-ServiceVerdict -ServiceId 'doctor' -Record $doctorRecord -Gates $contract.gates -RuntimePolicy 'CDS'),
-    (Test-ServiceVerdict -ServiceId 'patient' -Record $patientRecord -Gates $contract.gates -RuntimePolicy 'NO_CDS_LOW_DIRTY')
+    (Test-ServiceVerdict -ServiceId 'doctor' -Record $doctorRecord -Gates $contract.gates -RuntimePolicy 'APPLICATION_CDS'),
+    (Test-ServiceVerdict -ServiceId 'patient' -Record $patientRecord -Gates $contract.gates -RuntimePolicy 'JDK_BASE_CDS_LOW_DIRTY')
 )
 $allPass = @($results | Where-Object { -not $_.pass }).Count -eq 0
 $overall = if ($allPass) { 'READY_FOR_V2_FINAL' } elseif ($results | Where-Object { $_.service -eq 'patient' -and $_.status -eq 'PENDING' }) { 'BLOCKED_PATIENT_EVIDENCE' } else { 'BLOCKED_FINAL_ACCEPTANCE' }
@@ -156,7 +158,7 @@ $matrix = [ordered]@{
     comparison = 'final V1 -> final V2'
     overallStatus = $overall
     services = $results
-    claimBoundary = if ($allPass) { 'All three required services pass the frozen V1-to-V2 contract under their confirmed service-specific runtime policies. Patient CDS remains separately blocked.' } else { 'No stable three-service V2 claim is allowed until every required service passes.' }
+    claimBoundary = if ($allPass) { 'All three required services pass the frozen V1-to-V2 contract under confirmed service-specific policies. Patient no-CDS is independently confirmed; dynamic Patient application CDS remains blocked.' } else { 'No stable three-service V2 claim is allowed until every required service passes.' }
 }
 $jsonPath = Join-Path $OutputDir 'v2-three-service-memory-matrix.json'
 $mdPath = Join-Path $OutputDir 'v2-three-service-memory-matrix.md'
@@ -185,7 +187,7 @@ $lines.Add('- median memory.current <= -1048576 bytes')
 $lines.Add('- zero workload and semantic errors')
 $lines.Add('- V2-C `CONFIRMED_WIN` and V2-D attribution')
 $lines.Add('')
-$lines.Add('Raw private evidence is intentionally excluded from this repository. A pending or failed row blocks the aggregate claim; Patient CDS remains a separate blocked policy record.')
+$lines.Add('Raw private evidence is intentionally excluded. A pending or failed row blocks the aggregate claim; Patient no-CDS is independently confirmed and dynamic Patient application CDS remains blocked.')
 $lines -join "`n" | Set-Content -LiteralPath $mdPath -Encoding UTF8
 
 Write-Host "Acceptance audit: $overall"
