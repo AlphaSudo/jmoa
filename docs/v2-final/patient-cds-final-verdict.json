@@ -1,8 +1,8 @@
 {
-  "metadataVersion": "v2-final-patient-cds-final-verdict-v1",
+  "metadataVersion": "v2-final-patient-application-cds-final-verdict-v2",
   "status": "BLOCK_RUNTIME_PROMOTION",
   "service": "patient-service",
-  "policy": "CDS",
+  "policy": "PATIENT_APPLICATION_CDS",
   "comparison": "corrected final V1 -> corrected final V2",
   "validRuns": 6,
   "pairs": 3,
@@ -20,5 +20,5 @@
     "runtimeSupportJarByteIdentical": true,
     "rawPreservationFailures": 0
   },
-  "claimBoundary": "Patient CDS is blocked for runtime promotion. The separate NO_CDS_LOW_DIRTY confirmation is the policy-selection record and does not revise this CDS result."
+  "claimBoundary": "The tested Patient application-CDS policy is blocked for runtime promotion. The separate JDK_BASE_CDS_LOW_DIRTY and NO_CDS_LOW_DIRTY confirmations do not revise this application-archive result."
 }

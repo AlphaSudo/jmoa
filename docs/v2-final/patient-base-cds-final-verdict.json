@@ -1,0 +1,82 @@
+{
+  "metadataVersion": "patient-base-cds-final-verdict-v1",
+  "status": "PATIENT_BASE_CDS_V2_CONFIRMED",
+  "service": "patient-service",
+  "visibility": "PRIVATE_SANITIZED_SUMMARY",
+  "comparison": "accepted Patient V1 -> corrected Patient V2",
+  "launchMode": "SPRING_BOOT_FAT_JAR",
+  "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
+  "defaultArchive": {
+    "sha256": "77BCC7CC41CBD2EE8920CAE555019C722B4E40FCA731EAD484620D100FDC9EE6",
+    "sameBytesRequired": true,
+    "applicationArchiveMapped": false
+  },
+  "artifactFreeze": {
+    "v1Sha256": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+    "v2Sha256": "4CFC40ADBD559066071A65BAC4A0D6836411BDBF4BB69E9162C0D2E7C65569E3",
+    "dependencyCountV1": 162,
+    "dependencyCountV2": 162,
+    "runtimeLibraryByteIdentical": true,
+    "rawAuditedClasses": 32616,
+    "rawPreservationFailures": 0
+  },
+  "qualification": {
+    "status": "BASE_CDS_POLICY_PROOF_PASSED",
+    "requestsPerArtifact": 600,
+    "errors": 0
+  },
+  "screen": {
+    "metadataVersion": "patient-base-cds-screen-v1",
+    "status": "PROMOTED_TO_CONFIRMATION",
+    "deltas": {
+      "pair": 1,
+      "pssKb": -12613,
+      "privateDirtyKb": -12564,
+      "memoryCurrentBytes": -12894208
+    },
+    "gate": {
+      "pssKbMaximum": -1024,
+      "privateDirtyKbMaximum": -1024,
+      "memoryCurrentBytesMaximum": -1048576
+    },
+    "workloadErrors": 0,
+    "semanticLinkageErrors": 0
+  },
+  "confirmation": {
+    "validRuns": 6,
+    "pairedWins": 3,
+    "medianPssDeltaKb": -8279,
+    "medianPrivateDirtyDeltaKb": -8444,
+    "medianMemoryCurrentDeltaBytes": -8523776,
+    "pairs": [
+      {
+        "pair": 1,
+        "pssKb": -9149,
+        "privateDirtyKb": -9440,
+        "memoryCurrentBytes": -9453568
+      },
+      {
+        "pair": 2,
+        "pssKb": -6326,
+        "privateDirtyKb": -6308,
+        "memoryCurrentBytes": -6311936
+      },
+      {
+        "pair": 3,
+        "pssKb": -8279,
+        "privateDirtyKb": -8444,
+        "memoryCurrentBytes": -8523776
+      }
+    ],
+    "workloadErrors": 0,
+    "semanticLinkageErrors": 0,
+    "v2cVerdict": "CONFIRMED_WIN",
+    "v2dPassed": true,
+    "primaryAttribution": "HEAP_PAGE_TOUCH_REDUCTION"
+  },
+  "stage": "CONFIRMATION",
+  "reason": "The frozen final BASE-CDS gate passed.",
+  "noFivePairRescue": true,
+  "noFurtherPatientV2Experiments": true,
+  "claimBoundary": "Patient V2 is confirmed over V1 under the identical default JDK base CDS archive. Dynamic Patient application CDS remains rejected."
+}

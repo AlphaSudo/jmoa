@@ -78,23 +78,23 @@ Runtime scope: corrected fat JAR, variant-specific CDS archives, no runtime java
 
 ### Patient
 
-The corrected Patient V1-to-V2 record passes under `NO_CDS_LOW_DIRTY`:
+The corrected Patient V1-to-V2 record passes under
+`JDK_BASE_CDS_LOW_DIRTY`:
 
 ```text
 valid runs:              6/6
-paired wins:             2/3
-median PSS delta:        -8903 KB
-median Private_Dirty:    -8636 KB
-median memory.current:   -9707520 bytes
+paired wins:             3/3
+median PSS delta:        -8279 KB
+median Private_Dirty:    -8444 KB
+median memory.current:   -8523776 bytes
 V2-C:                    CONFIRMED_WIN
 V2-D:                    present
 ```
 
-Runtime scope: corrected Spring Boot fat JAR, CDS/AppCDS/Leyden disabled,
-`MALLOC_ARENA_MAX=1`, no runtime javaagent, and the final 600-request workload.
-The separate corrected CDS record remains blocked (`1/3` paired wins, median
-PSS `+668 KB`) and is preserved as the authoritative CDS-policy failure. The
-Patient policy is therefore service-specific: no-CDS is admissible; CDS is not.
+Runtime scope: corrected Spring Boot fat JAR, identical stock JDK base archive
+mapped in both arms, no Patient application archive, `MALLOC_ARENA_MAX=1`, no
+runtime javaagent, and the final 600-request workload. `NO_CDS_LOW_DIRTY` is
+also independently confirmed. Dynamic Patient application CDS remains blocked.
 
 ## Release rule
 
@@ -104,7 +104,7 @@ their individually confirmed policies. The current matrix is:
 ```text
 PetClinic: no-CDS, PASS
 Doctor:    CDS,    PASS
-Patient:   no-CDS, PASS; CDS BLOCKED
+Patient:   stock base CDS, PASS; no-CDS also PASS; application CDS BLOCKED
 aggregate: READY_FOR_V2_FINAL
 ```
 

@@ -6,5 +6,8 @@ The historical optimized Patient candidate did win while using a matching CDS ar
 
 The study therefore stops before NMT-detail tuning, archive A/B selection, or a final V1-to-V2 CDS confirmation. Generic tooling for those diagnostics is implemented, but running them after the stop condition would not change the admission decision and risks selecting a favorable archive.
 
-Patient remains confirmed under `NO_CDS_LOW_DIRTY`; Patient CDS remains blocked. Doctor remains confirmed under CDS. The service-specific V2 release matrix is unchanged.
-
+Historical boundary: this decision blocks the tested Patient application-CDS
+transfer. Patient was later confirmed under `JDK_BASE_CDS_LOW_DIRTY`, using only
+the identical stock JDK base archive in both arms, and remains independently
+confirmed under `NO_CDS_LOW_DIRTY`. Doctor remains confirmed under its
+service-specific application-CDS policy.

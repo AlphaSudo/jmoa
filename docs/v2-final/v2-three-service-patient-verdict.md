@@ -1,11 +1,12 @@
 # Patient Final V1 -> V2 Verdict
 
-Status: **FAIL_PATIENT_NOT_CONFIRMED**
-Recommendation: **BLOCK_RUNTIME_PROMOTION**
+Historical status: **FAIL_PATIENT_APPLICATION_CDS_NOT_CONFIRMED**
+Historical recommendation: **BLOCK_APPLICATION_CDS_RUNTIME_PROMOTION**
 
-Scope: this is the preserved corrected **CDS-policy** verdict. It remains
-authoritative for Patient under CDS, but it is no longer the current aggregate
-Patient policy verdict. The later no-CDS confirmation is recorded separately in
+Scope: this is the preserved corrected **application-CDS-policy** verdict. It
+remains authoritative for that tested variant-specific JSA policy, but it is no
+longer the current aggregate Patient verdict. The later stock-base-CDS and
+no-CDS confirmations are recorded in
 [patient-final-policy-verdict.md](patient-final-policy-verdict.md).
 
 The bounded root-cause investigation found and fixed a real artifact-scope defect: the first V2 artifact reduced `jmoa-runtime-lib`. The reducer now supports artifact exclusions, Patient excludes that support JAR, and the corrected V1/V2 runtime library is byte-identical. Phase 31 C2 was also confirmed as equivalent to the finalized Patient V1 optimizer policy.
@@ -54,6 +55,9 @@ Protocol: corrected artifacts, separate deterministic CDS archives, Spring Boot 
 | V2-C | MIXED_METRICS_NEEDS_RERUN | CONFIRMED_WIN |
 | V2-D | `ANONYMOUS_RW_ALLOCATOR_GROWTH` | required |
 
-Patient remains artifact-safe but is not admitted for runtime promotion. The aggregate three-service matrix stays blocked. RC2's narrower PetClinic claim remains valid and is not retagged or deleted.
+This tested Patient application-CDS policy is not admitted for runtime
+promotion. This historical conclusion is superseded only for aggregate matrix
+status: Patient later passed under stock JDK base CDS and independently under
+no-CDS. The application-CDS failure itself remains valid.
 
 Raw Patient runs, private configuration, archives, and local paths remain outside the public repository.

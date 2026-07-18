@@ -44,15 +44,15 @@ confirmed runtime policies:
 status: READY_FOR_V2_FINAL
 PetClinic: PASS (NO_CDS_LOW_DIRTY; median PSS -6,012 KB)
 Doctor: PASS (CDS; median PSS -5,156 KB)
-Patient: PASS (NO_CDS_LOW_DIRTY; 6/6 valid runs, 2/3 paired wins, median PSS -8,903 KB)
-Patient CDS policy: BLOCK_RUNTIME_PROMOTION (6/6 valid runs, 1/3 paired wins, median PSS +668 KB)
+Patient: PASS (JDK_BASE_CDS_LOW_DIRTY; 6/6 valid runs, 3/3 paired wins, median PSS -8,279 KB)
+Patient secondary policy: PASS (NO_CDS_LOW_DIRTY; median PSS -8,903 KB)
+Patient application CDS: BLOCK_RUNTIME_PROMOTION
 ```
 
-The Patient no-CDS evidence is valid, V2-C-confirmed, and V2-D-attributed. The
-separate corrected CDS result remains a policy-specific failure and is not
-erased by the no-CDS confirmation. The aggregate claim is therefore
-service-policy scoped: it does not mean that CDS is universally admissible or
-that a result transfers between CDS and no-CDS.
+The Patient stock-base-CDS and no-CDS evidence sets are independently valid,
+V2-C-confirmed, and V2-D-attributed. The failed application-archive studies
+remain policy-specific failures. The aggregate claim is service-policy scoped:
+it does not transfer between base CDS, application CDS, and no-CDS.
 
 See [the final three-service matrix](v2-final/v2-three-service-memory-matrix.md)
 and [the Patient policy verdict](v2-final/patient-final-policy-verdict.md).
@@ -163,9 +163,27 @@ JFR disabled
 This claim is not public-reproducible and is not transferred to all Doctor
 deployments, all fat-JAR services, all CDS/AppCDS modes, or startup performance.
 
-### 5. Final Patient No-CDS Runtime Win
+### 5. Final Patient Runtime Wins
 
-The final bounded Patient comparison passes under the confirmed no-CDS policy:
+The primary final Patient matrix comparison passes with the identical stock JDK
+base archive mapped in both arms:
+
+```text
+comparison: accepted Patient V1 vs corrected Patient V2
+launch mode: SPRING_BOOT_FAT_JAR
+runtime policy: JDK_BASE_CDS_LOW_DIRTY
+paired wins: 3/3
+median PSS delta: -8,279 KB
+median Private_Dirty delta: -8,444 KB
+median memory.current delta: -8,523,776 bytes
+```
+
+Both arms used the same stock `classes_coh.jsa` bytes, no Patient application
+archive, `MALLOC_ARENA_MAX=1`, and no runtime javaagent. V2-C returned
+`CONFIRMED_WIN`; V2-D identified `HEAP_PAGE_TOUCH_REDUCTION` as the primary
+attribution.
+
+The independent no-CDS comparison also passes:
 
 ```text
 comparison: corrected final V1 vs corrected final V2
@@ -187,9 +205,9 @@ no runtime javaagent
 600-request workload, T+20 capture, balanced cache-reset pairs
 ```
 
-This claim is policy-specific. The separate corrected Patient CDS
-confirmation remains blocked at 1/3 paired wins and +668 KB median PSS. The
-no-CDS result is not transferred to CDS or to another Patient deployment.
+These claims are policy-specific. Dynamic Patient application CDS remains
+blocked. Neither result transfers to an application archive or another Patient
+deployment.
 
 ### 6. V2-L Visits Raw Reducer Runtime Win
 

@@ -1,15 +1,32 @@
 {
-  "metadataVersion": "v2-final-patient-policy-verdict-v1",
-  "status": "NO_CDS_CONFIRMED_CDS_BLOCKED",
+  "metadataVersion": "v2-final-patient-policy-verdict-v2",
+  "status": "BASE_CDS_AND_NO_CDS_CONFIRMED_APP_CDS_BLOCKED",
   "service": "patient-service",
   "visibility": "PRIVATE",
   "comparison": "final V1 -> corrected final V2",
-  "confirmedPolicy": "NO_CDS_LOW_DIRTY",
+  "primaryConfirmedPolicy": "JDK_BASE_CDS_LOW_DIRTY",
+  "confirmedPolicies": [
+    "JDK_BASE_CDS_LOW_DIRTY",
+    "NO_CDS_LOW_DIRTY"
+  ],
   "patientStatus": "PASS",
-  "cdsPolicy": {
+  "applicationCdsPolicy": {
     "status": "BLOCK_RUNTIME_PROMOTION",
     "source": "docs/v2-final/patient-cds-final-verdict.json",
     "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN"
+  },
+  "baseCdsPolicy": {
+    "status": "RECOMMEND_CONFIRMED_POLICY",
+    "source": "docs/v2-final/patient-base-cds-final-verdict.json",
+    "validRuns": 6,
+    "pairs": 3,
+    "pairedWins": 3,
+    "medianPssDeltaKb": -8279,
+    "medianPrivateDirtyDeltaKb": -8444,
+    "medianMemoryCurrentDeltaBytes": -8523776,
+    "workloadErrors": 0,
+    "v2cVerdict": "CONFIRMED_WIN",
+    "v2dPresent": true
   },
   "noCdsPolicy": {
     "status": "RECOMMEND_CONFIRMED_POLICY",
@@ -30,8 +47,8 @@
     "services": {
       "petclinic-customers": "NO_CDS_LOW_DIRTY",
       "doctor": "CDS",
-      "patient": "NO_CDS_LOW_DIRTY"
+      "patient": "JDK_BASE_CDS_LOW_DIRTY"
     }
   },
-  "claimBoundary": "Patient is confirmed only under NO_CDS_LOW_DIRTY for the corrected artifact and documented Spring Boot fat-JAR protocol. The CDS policy remains blocked."
+  "claimBoundary": "Patient is confirmed under JDK_BASE_CDS_LOW_DIRTY and independently under NO_CDS_LOW_DIRTY for the corrected artifact and documented Spring Boot fat-JAR protocol. Dynamic Patient application CDS remains blocked."
 }

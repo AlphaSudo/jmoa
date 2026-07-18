@@ -1,5 +1,5 @@
 {
-  "metadataVersion": "v2-three-service-acceptance-contract-v2",
+  "metadataVersion": "v2-three-service-acceptance-contract-v3",
   "status": "FROZEN",
   "comparison": "final V1 -> final V2",
   "runtimePolicySelection": "SERVICE_SPECIFIC_CONFIRMED_POLICY",
@@ -73,17 +73,18 @@
     },
     "patient": {
       "status": "PASS",
-      "runtimePolicy": "NO_CDS_LOW_DIRTY",
-      "source": "docs/v2-final/patient-final-policy-verdict.json",
+      "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
+      "source": "docs/v2-final/patient-base-cds-final-verdict.json",
       "validRuns": 6,
-      "pairedWins": 2,
+      "pairedWins": 3,
       "pairs": 3,
-      "medianPssDeltaKb": -8903,
-      "medianPrivateDirtyDeltaKb": -8636,
-      "medianMemoryCurrentDeltaBytes": -9707520,
+      "medianPssDeltaKb": -8279,
+      "medianPrivateDirtyDeltaKb": -8444,
+      "medianMemoryCurrentDeltaBytes": -8523776,
       "v2cVerdict": "CONFIRMED_WIN",
       "v2dAttributionPresent": true,
-      "cdsPolicyVerdict": "BLOCK_RUNTIME_PROMOTION",
+      "noCdsPolicyAlsoConfirmed": true,
+      "applicationCdsPolicyVerdict": "BLOCK_RUNTIME_PROMOTION",
       "recommendation": "RECOMMEND_CONFIRMED_POLICY"
     }
   },

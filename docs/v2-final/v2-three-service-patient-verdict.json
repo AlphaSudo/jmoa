@@ -1,7 +1,7 @@
 {
-  "metadataVersion": "v2-three-service-patient-verdict-v2",
-  "status": "FAIL_PATIENT_NOT_CONFIRMED",
-  "recordScope": "PATIENT_CDS_POLICY",
+  "metadataVersion": "v2-three-service-patient-application-cds-verdict-v3",
+  "status": "FAIL_PATIENT_APPLICATION_CDS_NOT_CONFIRMED",
+  "recordScope": "PATIENT_APPLICATION_CDS_POLICY",
   "currentPolicyVerdict": "docs/v2-final/patient-final-policy-verdict.json",
   "comparison": "final V1 -> corrected final V2",
   "service": "patient-service",
@@ -90,5 +90,5 @@
     "v2dPresent": true,
     "overallPass": false
   },
-  "claimBoundary": "Patient remains artifact-safe but performance-blocked. PetClinic and Doctor retain their scoped wins; the aggregate three-service final claim remains blocked."
+  "claimBoundary": "This historical application-CDS policy remains blocked. Patient later passed the aggregate gate under JDK_BASE_CDS_LOW_DIRTY and independently under NO_CDS_LOW_DIRTY."
 }

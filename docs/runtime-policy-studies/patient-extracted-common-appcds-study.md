@@ -55,13 +55,14 @@ artifact admission gate.
 ## Terminal Decision
 
 The V1-to-V2 APP screen and confirmation were not run because the fixed-
-artifact gate failed first. Patient remains on its confirmed
-`NO_CDS_LOW_DIRTY` policy.
+artifact gate failed first. Patient application CDS remains blocked. Patient's
+later stock-base-CDS and no-CDS confirmations are separate policy results.
 
 No further single-replica Patient AppCDS work is authorized. This does not
 alter the accepted Patient V1-to-V2 no-CDS median PSS win, does not contradict
 Doctor's artifact-specific CDS result, and does not make a universal claim
-about CDS.
+about CDS. The later `JDK_BASE_CDS_LOW_DIRTY` confirmation used only the stock
+JDK base archive and therefore does not reopen this application-archive study.
 
 References: [Java 26 launcher/CDS options](https://docs.oracle.com/en/java/javase/26/docs/specs/man/java.html),
 [Spring Boot efficient deployments](https://docs.spring.io/spring-boot/reference/packaging/efficient.html).

@@ -1,0 +1,42 @@
+{
+  "metadataVersion": "patient-base-cds-acceptance-contract-v1",
+  "status": "FROZEN",
+  "comparison": "accepted Patient V1 -> corrected Patient V2",
+  "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
+  "launchMode": "SPRING_BOOT_FAT_JAR",
+  "runtime": {
+    "xshare": "on",
+    "defaultJdkArchiveOnly": true,
+    "mallocArenaMax": "1",
+    "applicationArchiveAllowed": false,
+    "archiveTrainingAllowed": false,
+    "aotCacheAllowed": false,
+    "javaagentAllowed": false
+  },
+  "screenGate": {
+    "pssDeltaKbMaximum": -1024,
+    "privateDirtyDeltaKbMaximum": -1024,
+    "memoryCurrentDeltaBytesMaximum": -1048576,
+    "workloadErrorsMaximum": 0,
+    "semanticLinkageErrorsMaximum": 0
+  },
+  "confirmationGate": {
+    "validRunsRequired": 6,
+    "pairedWinsRequired": 2,
+    "medianPssDeltaKbMaximum": -4096,
+    "medianPrivateDirtyDeltaKbMaximum": -1024,
+    "medianMemoryCurrentDeltaBytesMaximum": -1048576,
+    "workloadErrorsMaximum": 0,
+    "semanticLinkageErrorsMaximum": 0,
+    "v2cVerdictRequired": "CONFIRMED_WIN",
+    "v2dRequired": true
+  },
+  "pairOrder": ["BASELINE_FIRST", "CANDIDATE_FIRST", "BASELINE_FIRST"],
+  "fivePairRescueAllowed": false,
+  "thresholdChangesAllowed": false,
+  "terminalOutcomes": [
+    "PATIENT_BASE_CDS_V2_CONFIRMED",
+    "PATIENT_ALL_CDS_POLICIES_BLOCKED",
+    "PATIENT_BASE_CDS_ENVIRONMENT_INVALID"
+  ]
+}
