@@ -2,6 +2,17 @@
 
 Evidence-driven, build-time JVM footprint optimization for Spring Boot applications.
 
+[![Build](https://github.com/AlphaSudo/jmoa/actions/workflows/build.yml/badge.svg)](https://github.com/AlphaSudo/jmoa/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/AlphaSudo/jmoa)](https://github.com/AlphaSudo/jmoa/releases/tag/v2.0.0)
+[![License](https://img.shields.io/github/license/AlphaSudo/jmoa)](LICENSE)
+![Build JDK](https://img.shields.io/badge/build-JDK%2026-E76F00?logo=openjdk&logoColor=white)
+
+[Architecture](docs/architecture/system-overview.md) |
+[Methodology](docs/methodology/measurement-protocol.md) |
+[Reproduction](docs/reproduction/petclinic-quickstart.md) |
+[Results](docs/results/v2-three-service-matrix.md) |
+[Portfolio](https://github.com/AlphaSudo/jmoa-jvm-optimization-portfolio)
+
 JMOA rewrites admitted lambda and adapter call sites, reduces selected dependency
 classfile metadata, materializes optimized bytecode into the real deployment
 shape, proves which artifacts the JVM loaded, and validates memory effects with
