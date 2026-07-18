@@ -2,8 +2,9 @@
 
 Status: `BLOCK_RUNTIME_PROMOTION`
 
-This is the authoritative Patient **CDS** record. It is preserved separately
-from the later no-CDS policy confirmation and is not rewritten by that result.
+This is the authoritative Patient **application CDS** record for the tested
+variant-specific JSA policy. It is preserved separately from the later stock
+JDK base-CDS and no-CDS confirmations and is not rewritten by those results.
 
 ## Corrected CDS Result
 
@@ -26,6 +27,6 @@ writable-page variance.
 
 ## Boundary
 
-Patient CDS is not an admissible runtime promotion policy. The bounded no-CDS
-confirmation is recorded in [patient-nocds-confirmation.md](patient-nocds-confirmation.md)
-and does not erase this failure.
+The tested Patient application-CDS policy is not admissible for runtime
+promotion. The bounded [stock-base-CDS](patient-base-cds-final-verdict.md) and
+[no-CDS](patient-nocds-confirmation.md) confirmations do not erase this failure.

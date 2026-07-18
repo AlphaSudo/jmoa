@@ -45,6 +45,36 @@ class EvidenceEngineTest {
     }
 
     @Test
+    void acceptsJdkBaseCdsLowDirtyPolicy() throws Exception {
+        writeRun("b1", "BASELINE", 1, 100_000, 90_000, 120_000_000, 40_000, 8_000, 20_000);
+        Path manifest = tempDir.resolve("b1/run-manifest.json");
+        String json = Files.readString(manifest)
+            .replace("NO_CDS_LOW_DIRTY", "JDK_BASE_CDS_LOW_DIRTY")
+            .replace("\"cdsMode\": \"OFF\"", "\"cdsMode\": \"ON\"");
+        Files.writeString(manifest, json);
+
+        EvidenceAnalysisReport report = new EvidenceEngine().analyze(tempDir.toFile(),
+            new EvidenceConfig(RuntimePolicy.JDK_BASE_CDS_LOW_DIRTY, true, true, true, true, true));
+
+        assertEquals(1, report.validation().validRuns());
+        assertEquals(0, report.validation().invalidRuns());
+    }
+
+    @Test
+    void rejectsJdkBaseCdsLowDirtyWithoutCds() throws Exception {
+        writeRun("b1", "BASELINE", 1, 100_000, 90_000, 120_000_000, 40_000, 8_000, 20_000);
+        Path manifest = tempDir.resolve("b1/run-manifest.json");
+        Files.writeString(manifest, Files.readString(manifest)
+            .replace("NO_CDS_LOW_DIRTY", "JDK_BASE_CDS_LOW_DIRTY"));
+
+        EvidenceAnalysisReport report = new EvidenceEngine().analyze(tempDir.toFile(),
+            new EvidenceConfig(RuntimePolicy.JDK_BASE_CDS_LOW_DIRTY, true, true, true, true, true));
+
+        assertEquals(0, report.validation().validRuns());
+        assertEquals(1, report.validation().invalidRuns());
+    }
+
+    @Test
     void classifiesValidHeapPageTouchRegression() throws Exception {
         writeRun("b1", "BASELINE", 1, 100_000, 90_000, 120_000_000, 40_000, 8_000, 20_000);
         writeRun("c1", "CANDIDATE", 1, 108_700, 98_900, 129_000_000, 48_600, 7_900, 20_100);

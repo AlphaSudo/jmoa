@@ -5,7 +5,8 @@ This is bounded runtime-policy research. It is not a V2 phase and does not block
 ## Frozen release truth
 
 - Patient `NO_CDS_LOW_DIRTY`: confirmed, median PSS `-8,903 KB`.
-- Patient `CDS`: runtime promotion blocked, median PSS `+668 KB`.
+- Patient application CDS: runtime promotion blocked, median PSS `+668 KB`.
+- Patient `JDK_BASE_CDS_LOW_DIRTY`: later confirmed, median PSS `-8,279 KB`.
 - Three-service release matrix: ready using service-specific confirmed policies.
 
 ## Question
@@ -28,4 +29,3 @@ Doctor is the positive control, not a universal-policy assumption. Its confirmed
 ## Stop rule
 
 If V1 CDS does not reproduce, archive training is structurally or behaviorally unstable, or equivalent archives change the sign of the policy effect, Patient CDS remains blocked and the study stops without tuning toward a favorable archive.
-

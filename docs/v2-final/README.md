@@ -15,6 +15,8 @@ to the stable `v2.0.0` release.
 - [Three-service acceptance contract](v2-three-service-acceptance-contract.md)
 - [Three-service memory matrix](v2-three-service-memory-matrix.md)
 - [Patient final policy verdict](patient-final-policy-verdict.md)
+- [Patient stock-base-CDS confirmation](patient-base-cds-final-verdict.md)
+- [Patient stock-base-CDS acceptance contract](patient-base-cds-acceptance-contract.md)
 - [Patient no-CDS confirmation](patient-nocds-confirmation.md)
 - [Patient CDS final verdict](patient-cds-final-verdict.md)
 - [Patient historical CDS verdict](v2-three-service-patient-verdict.md)
@@ -49,11 +51,11 @@ READY_FOR_V2_FINAL
 
 The constrained RC2 public/customer claim remains scoped and valid, but the
 frozen three-service final V1-to-V2 launch gate now passes under
-service-specific confirmed runtime policies: PetClinic no-CDS, Doctor CDS, and
-Patient no-CDS. Patient's separate corrected CDS confirmation remains blocked
-(1/3 paired wins, median PSS `+668 KB`) and is preserved as a policy-specific
-failure. See the three-service matrix, Patient policy verdict, and separate
-CDS/no-CDS records above for the exact evidence boundary.
+service-specific confirmed runtime policies: PetClinic no-CDS, Doctor
+application CDS, and Patient stock JDK base CDS. Patient no-CDS is independently
+confirmed. Patient dynamic application CDS remains blocked and is preserved as
+a policy-specific failure. See the three-service matrix and Patient policy
+records above for the exact evidence boundary.
 
 Stable `v2.0.0` was published on July 16, 2026. The later
 [Patient Dynamic AppCDS Archive Economics Study](../runtime-policy-studies/patient-dynamic-appcds-study.md)
@@ -62,6 +64,6 @@ launch decision.
 
 The subsequent
 [Patient Extracted-Layout Common-Class AppCDS Study](../runtime-policy-studies/patient-extracted-common-appcds-study.md)
-is terminal: both fixed artifacts rejected the application archive, so Patient
-remains on `NO_CDS_LOW_DIRTY` and no further single-replica AppCDS attempt is
-authorized.
+is terminal for application archives: both fixed artifacts rejected the
+application archive. The later stock-base-CDS confirmation is a different
+policy and does not reopen that terminal AppCDS decision.

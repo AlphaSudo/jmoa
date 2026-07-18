@@ -78,7 +78,7 @@ function Resolve-VariantPolicy {
         throw 'A no-CDS variant requires CDS, AppCDS, Leyden, and runtime javaagent to be disabled.'
     }
     $kind = if ($normalized.StartsWith('NO_CDS') -or $normalized -eq 'OFF') { 'OFF' } `
-        elseif ($normalized -in @('BASE_CDS','JDK_CDS_BASE','BASE')) { 'BASE' } `
+        elseif ($normalized -in @('BASE_CDS','JDK_CDS_BASE','JDK_BASE_CDS_LOW_DIRTY','BASE')) { 'BASE' } `
         elseif ($normalized.Contains('CDS')) { 'APP' } else { 'UNKNOWN' }
     if ($kind -eq 'UNKNOWN') { throw "Unsupported runtime policy: $policy" }
     if ($kind -eq 'BASE' -and -not $cds) { throw 'BASE_CDS requires CDS to be explicitly enabled.' }
@@ -186,6 +186,23 @@ function Capture-And-VerifyRuntimePolicy {
     $defaultMappings = @($jsaMappings | Where-Object { $_.path -match '(?i)[/\\]lib[/\\]server[/\\]classes[^/\\]*\.jsa$' })
     if ($Policy.kind -eq 'OFF' -and $jsaMappings.Count -ne 0) { throw 'OFF policy unexpectedly mapped one or more CDS archives.' }
     if ($Policy.kind -in @('BASE','APP') -and $defaultMappings.Count -eq 0) { throw "$($Policy.kind) policy did not map the default JDK CDS archive." }
+    if ($Policy.kind -eq 'BASE') {
+        $unexpectedArchives = @($jsaMappings | Where-Object { $_.path -notmatch '(?i)[/\\]lib[/\\]server[/\\]classes[^/\\]*\.jsa$' })
+        if ($unexpectedArchives.Count -ne 0) { throw 'BASE policy mapped an unexpected application or non-default CDS archive.' }
+    }
+    $defaultArchivePath = $null
+    $defaultArchiveSha256 = $null
+    $defaultArchiveDeviceInode = $null
+    if ($Policy.kind -in @('BASE','APP')) {
+        $defaultPaths = @($defaultMappings | ForEach-Object { $_.path } | Sort-Object -Unique)
+        if ($defaultPaths.Count -ne 1) { throw 'CDS policy must map exactly one default JDK archive path.' }
+        $defaultArchivePath = $defaultPaths[0]
+        $defaultHash = Capture-Command -ContainerName $ContainerName -ShellCommand "sha256sum '$defaultArchivePath' | awk '{print `$1}'" -OutputPath (Join-Path $Directory 'default-cds-archive-sha256.txt')
+        $defaultIdentity = Capture-Command -ContainerName $ContainerName -ShellCommand "stat -Lc '%d:%i' '$defaultArchivePath'" -OutputPath (Join-Path $Directory 'default-cds-archive-device-inode.txt')
+        if ($defaultHash.exitCode -ne 0 -or $defaultIdentity.exitCode -ne 0) { throw 'Could not capture default JDK CDS archive identity.' }
+        $defaultArchiveSha256 = $defaultHash.output.Trim().ToUpperInvariant()
+        $defaultArchiveDeviceInode = $defaultIdentity.output.Trim()
+    }
     $runtimeArchiveSha256 = $null
     if ($Policy.cdsEnabled -and $proofText -match '(?i)-XX:SharedArchiveFile=([^\s]+)') {
         $runtimeArchivePath = $Matches[1].Trim('"', "'")
@@ -204,6 +221,9 @@ function Capture-And-VerifyRuntimePolicy {
         runtimeCdsArchiveSha256 = $runtimeArchiveSha256
         jsaMappings = $jsaMappings
         defaultJdkArchiveMapped = $defaultMappings.Count -gt 0
+        defaultJdkArchivePath = $defaultArchivePath
+        defaultJdkArchiveSha256 = $defaultArchiveSha256
+        defaultJdkArchiveDeviceInode = $defaultArchiveDeviceInode
         applicationArchiveMapped = $Policy.kind -eq 'APP' -and $null -ne $runtimeArchiveSha256
         cdsArchiveBytes = if ($Policy.kind -eq 'APP') { [long](Get-Item -LiteralPath $Policy.archivePath).Length } else { 0 }
         leydenDisabled = $true
@@ -349,7 +369,20 @@ function Invoke-Variant {
             noCdsStateProof = if ($Policy.kind -eq 'OFF') { $runtimePolicyProof } else { $null }
         }
         Write-JmoaJson -Value $manifest -Path (Join-Path $runDirectory 'run-manifest.json')
-        return [ordered]@{ variant = $Variant; runDirectory = $runDirectory; status = 'CAPTURED'; workload = (Get-Content -Raw -LiteralPath $workloadPath | ConvertFrom-Json) }
+        $containerLog = Invoke-JmoaExternal -Executable $ContainerCli -Arguments @('logs', $ContainerName)
+        Write-JmoaText -Value $containerLog.output -Path (Join-Path $runDirectory 'runtime-container.log')
+        if ($containerLog.exitCode -ne 0) { throw 'Could not capture runtime container logs.' }
+        $linkagePatterns = '(?i)(VerifyError|ClassFormatError|NoSuchMethodError|NoClassDefFoundError|ExceptionInInitializerError|LinkageError)'
+        $linkageMatches = @($containerLog.output -split "`r?`n" | Where-Object { $_ -match $linkagePatterns })
+        if ($linkageMatches.Count -ne 0) { throw "Runtime semantic/linkage error detected: $($linkageMatches[0])" }
+        return [ordered]@{
+            variant = $Variant
+            runDirectory = $runDirectory
+            status = 'CAPTURED'
+            workload = (Get-Content -Raw -LiteralPath $workloadPath | ConvertFrom-Json)
+            runtimePolicyProof = $runtimePolicyProof
+            semanticLinkageErrors = 0
+        }
     } catch {
         $launchError = $_.Exception.Message
         $failure = [ordered]@{ health = 'DOWN'; errors = 1; requests = 0; status = 'FAILED'; error = $launchError }
@@ -378,6 +411,22 @@ if ($FirstVariant -eq 'BASELINE_FIRST') {
         -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
 }
 $status = if ($baseline.status -eq 'CAPTURED' -and $candidate.status -eq 'CAPTURED') { 'CAPTURED' } else { 'FAILED' }
+$baseArchiveIdentity = $null
+if ($status -eq 'CAPTURED' -and $baselinePolicy.kind -eq 'BASE' -and $candidatePolicy.kind -eq 'BASE') {
+    $sameHash = $baseline.runtimePolicyProof.defaultJdkArchiveSha256 -eq $candidate.runtimePolicyProof.defaultJdkArchiveSha256
+    $samePath = $baseline.runtimePolicyProof.defaultJdkArchivePath -eq $candidate.runtimePolicyProof.defaultJdkArchivePath
+    $sameDeviceInode = $baseline.runtimePolicyProof.defaultJdkArchiveDeviceInode -eq $candidate.runtimePolicyProof.defaultJdkArchiveDeviceInode
+    $baseArchiveIdentity = [ordered]@{
+        status = if ($sameHash -and $samePath -and $sameDeviceInode) { 'PASSED' } else { 'FAILED' }
+        sameSha256 = $sameHash
+        samePath = $samePath
+        sameDeviceInode = $sameDeviceInode
+        sha256 = $baseline.runtimePolicyProof.defaultJdkArchiveSha256
+        path = $baseline.runtimePolicyProof.defaultJdkArchivePath
+        deviceInode = $baseline.runtimePolicyProof.defaultJdkArchiveDeviceInode
+    }
+    if ($baseArchiveIdentity.status -ne 'PASSED') { $status = 'FAILED' }
+}
 $pair = [ordered]@{
     metadataVersion = 'v2o-runtime-screen-pair'
     generatedAt = (Get-Date).ToUniversalTime().ToString('o')
@@ -392,6 +441,7 @@ $pair = [ordered]@{
     pageCachePolicy = if ($DropPageCacheBeforeVariant) { 'DROP_CACHES_BEFORE_EACH_VARIANT' } else { 'NOT_REQUESTED' }
     baseline = $baseline
     candidate = $candidate
+    baseArchiveIdentity = $baseArchiveIdentity
     claimBoundary = 'One paired screen only. Run V2-C and V2-D after three valid pairs before making a runtime claim.'
     diagnosticOnly = [bool]$DiagnosticOnly
 }

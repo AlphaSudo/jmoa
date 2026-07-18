@@ -19,6 +19,7 @@ public final class EvidenceModels {
         NO_CDS,
         CDS,
         NO_CDS_LOW_DIRTY,
+        JDK_BASE_CDS_LOW_DIRTY,
         DIAGNOSTIC,
         UNKNOWN
     }

@@ -46,30 +46,32 @@ service- and runtime-policy scoped:
 
 | Case | Runtime shape | CDS mode | Confirmed result |
 | --- | --- | --- | --- |
-| Patient-service (private) | corrected Spring Boot fat JAR | no CDS (`NO_CDS_LOW_DIRTY`) | Median PSS reduction of 8.903 MB in the final V1-to-V2 comparison; CDS policy remains blocked |
+| Patient-service (private) | corrected Spring Boot fat JAR | stock JDK base CDS (`JDK_BASE_CDS_LOW_DIRTY`) | Median PSS reduction of 8.279 MB; no-CDS is also confirmed and application CDS remains blocked |
 | Doctor-service (private) | corrected Spring Boot fat JAR | CDS | Median PSS reduction of 5.156 MB in the corrected D2-to-D2R comparison |
 | Spring PetClinic customers-service (public) | exploded Boot / JarLauncher | no CDS | Median PSS reduction of 6.012 MB in the final V1-to-V2 comparison |
 
-The Patient result is policy-specific: corrected Patient passes the frozen gate
-under `NO_CDS_LOW_DIRTY` with 2/3 paired wins and a median PSS reduction of
-8.903 MB, while the separate corrected CDS confirmation remains blocked with
-1/3 wins and a median PSS increase of 668 KB. The Doctor result is private and
-the PetClinic result is the public reproducibility bridge; none of these claims
-transfers to another service, packaging mode, or runtime policy.
+The primary Patient matrix result uses the identical stock JDK base archive in
+both arms: 3/3 paired wins and a median PSS reduction of 8.279 MB under
+`JDK_BASE_CDS_LOW_DIRTY`. Patient also independently passes under
+`NO_CDS_LOW_DIRTY` with a median PSS reduction of 8.903 MB. Dynamic Patient
+application CDS remains blocked. None of these claims transfers to another
+service, packaging mode, archive, or runtime policy.
 
 ## V2 Final Performance Gate
 
 The frozen three-service launch gate compares final V1 with final V2 for
 PetClinic customers-service, Doctor-service, and Patient-service. The current
 aggregate status is `READY_FOR_V2_FINAL` under service-specific confirmed
-policies: PetClinic no-CDS, Doctor CDS, and Patient no-CDS. Patient CDS remains
-explicitly blocked and is not silently substituted into the no-CDS result.
+policies: PetClinic no-CDS, Doctor application CDS, and Patient stock JDK base
+CDS. Patient no-CDS is also independently confirmed; Patient application CDS
+remains explicitly blocked.
 
 See the machine-readable and human-readable final matrix:
 
 - [Three-service memory matrix](docs/v2-final/v2-three-service-memory-matrix.md)
 - [Three-service acceptance contract](docs/v2-final/v2-three-service-acceptance-contract.md)
 - [Patient final policy verdict](docs/v2-final/patient-final-policy-verdict.md)
+- [Patient stock-base-CDS confirmation](docs/v2-final/patient-base-cds-final-verdict.md)
 - [Patient no-CDS confirmation](docs/v2-final/patient-nocds-confirmation.md)
 - [Patient CDS final verdict](docs/v2-final/patient-cds-final-verdict.md)
 - [Patient Dynamic AppCDS terminal study](docs/runtime-policy-studies/patient-dynamic-appcds-study.md)
@@ -78,7 +80,8 @@ The post-release Patient Dynamic AppCDS study isolates the marginal application
 archive cost from default JDK CDS. Under the frozen single-replica protocol,
 both STARTUP and REPRESENTATIVE archives were structurally reproducible but
 regressed versus base CDS in both balanced run orders. Its terminal verdict is
-`SINGLE_REPLICA_ARCHIVE_REGRESSION`; Patient remains on `NO_CDS_LOW_DIRTY`.
+`SINGLE_REPLICA_ARCHIVE_REGRESSION`; dynamic Patient application CDS remains
+blocked. The stock-base-CDS and no-CDS confirmations remain valid.
 
 The reproducible PetClinic result below remains a scoped service claim. The
 historical direct B0-to-V2 result is retained in the evidence record, but its

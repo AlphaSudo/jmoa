@@ -12,7 +12,7 @@ different confirmed policies.
 |---|---|---|---:|---:|---:|---:|---:|---|---|
 | petclinic-customers | NO_CDS_LOW_DIRTY | PASS | 6/6 | 2/3 | -6012 | -5708 | -8081408 | CONFIRMED_WIN | True |
 | doctor | CDS | PASS | 6/6 | 3/3 | -5156 | -5212 | -6975488 | CONFIRMED_WIN | True |
-| patient | NO_CDS_LOW_DIRTY | PASS | 6/6 | 2/3 | -8903 | -8636 | -9707520 | CONFIRMED_WIN | True |
+| patient | JDK_BASE_CDS_LOW_DIRTY | PASS | 6/6 | 3/3 | -8279 | -8444 | -8523776 | CONFIRMED_WIN | True |
 
 ## Gate
 
@@ -27,9 +27,9 @@ different confirmed policies.
 Raw private evidence is intentionally excluded from this repository. All three
 rows now pass under their service-specific confirmed policies.
 
-Patient's corrected CDS policy remains blocked in the separate
-`patient-cds-final-verdict` record. The final no-CDS confirmation is the
-admitted Patient policy and is recorded in `patient-final-policy-verdict`.
+Patient's stock JDK base-CDS result is the admitted matrix policy. The separate
+`NO_CDS_LOW_DIRTY` result is also independently confirmed. Dynamic Patient
+application CDS remains blocked in the AppCDS policy records.
 
 The aggregate status is not a claim that CDS, fat JARs, or any one allocator
 policy is universally beneficial. It is a policy-selected three-service gate.

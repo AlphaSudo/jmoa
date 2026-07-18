@@ -80,10 +80,22 @@ public final class EvidenceValidator {
             && evidence.manifest().javaagentPresent()) {
             invalid.add("javaagent present while policy forbids javaagent");
         }
+        if (expected == RuntimePolicy.JDK_BASE_CDS_LOW_DIRTY
+            && evidence.manifest().cdsMode() != CdsMode.ON
+            && evidence.manifest().cdsMode() != CdsMode.AUTO) {
+            invalid.add("CDS mode mismatch: JDK_BASE_CDS_LOW_DIRTY requires ON or AUTO");
+        }
+        if (expected == RuntimePolicy.JDK_BASE_CDS_LOW_DIRTY && evidence.manifest().javaagentPresent()) {
+            invalid.add("javaagent present while JDK_BASE_CDS_LOW_DIRTY forbids javaagent");
+        }
         if (expected == RuntimePolicy.NO_CDS_LOW_DIRTY
             && evidence.manifest().mallocArenaMax() != null
             && !"1".equals(evidence.manifest().mallocArenaMax())) {
             invalid.add("NO_CDS_LOW_DIRTY expected MALLOC_ARENA_MAX=1");
+        }
+        if (expected == RuntimePolicy.JDK_BASE_CDS_LOW_DIRTY
+            && !"1".equals(evidence.manifest().mallocArenaMax())) {
+            invalid.add("JDK_BASE_CDS_LOW_DIRTY expected MALLOC_ARENA_MAX=1");
         }
     }
 
