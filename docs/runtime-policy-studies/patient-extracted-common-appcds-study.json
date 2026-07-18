@@ -1,0 +1,125 @@
+{
+  "metadataVersion": "patient-extracted-common-appcds-study-v1",
+  "status": "PATIENT_SINGLE_REPLICA_APP_CDS_REJECTED",
+  "classification": [
+    "POST_V2",
+    "V3_INVESTIGATION",
+    "TERMINAL"
+  ],
+  "service": "patient-service",
+  "topology": "SINGLE_REPLICA",
+  "launchMode": "EXTRACTED_CLASSPATH",
+  "mechanism": "DYNAMIC_APP_CDS_COMMON_CLASS_TOP_ARCHIVE",
+  "optimizerArtifactsChanged": false,
+  "commonClassProfileCount": 1,
+  "requestedCommonClassCount": 13410,
+  "normalizedDynamicArchivedClassCount": 14511,
+  "classpathEntryCount": 164,
+  "dynamicClassListFilterSupportedByJdk": false,
+  "archiveMethodCorrection": "Java 26 ignores SharedClassListFile during ArchiveClassesAtExit. A deterministic non-initializing preloader generated a true dynamic top archive over the stock JDK base while preserving identical BASE/APP classpaths.",
+  "reproducibility": [
+    {
+      "artifact": "V1",
+      "archivedClassJaccard": 1.0,
+      "archiveSizeDeltaPercent": 0.0037926195623317026,
+      "passed": true
+    },
+    {
+      "artifact": "V2",
+      "archivedClassJaccard": 1.0,
+      "archiveSizeDeltaPercent": 0.0038951427569820433,
+      "passed": true
+    }
+  ],
+  "archives": [
+    {
+      "artifact": "V1",
+      "copy": "A",
+      "archiveBytes": 107999232,
+      "dynamicArchivedClassCount": 14511
+    },
+    {
+      "artifact": "V1",
+      "copy": "B",
+      "archiveBytes": 107995136,
+      "dynamicArchivedClassCount": 14511
+    },
+    {
+      "artifact": "V2",
+      "copy": "A",
+      "archiveBytes": 105152512,
+      "dynamicArchivedClassCount": 14511
+    },
+    {
+      "artifact": "V2",
+      "copy": "B",
+      "archiveBytes": 105156608,
+      "dynamicArchivedClassCount": 14511
+    }
+  ],
+  "fixedArtifactGates": [
+    {
+      "artifact": "V1",
+      "status": "REJECTED",
+      "medianAppMinusBasePssKb": 7766,
+      "medianAppMinusBaseMemoryCurrentBytes": 95565824,
+      "samePssDirectionInBothOrders": true,
+      "mappedPssDeltaPercent": 0.08998083017096357,
+      "pairs": [
+        {
+          "copy": "A",
+          "order": "BASE_TO_APP",
+          "pssKb": 3041,
+          "privateDirtyKb": -16520,
+          "memoryCurrentBytes": 90263552,
+          "archiveMappedPssKb": 102244
+        },
+        {
+          "copy": "B",
+          "order": "APP_TO_BASE",
+          "pssKb": 12492,
+          "privateDirtyKb": -7332,
+          "memoryCurrentBytes": 100868096,
+          "archiveMappedPssKb": 102152
+        }
+      ]
+    },
+    {
+      "artifact": "V2",
+      "status": "REJECTED",
+      "medianAppMinusBasePssKb": 1495,
+      "medianAppMinusBaseMemoryCurrentBytes": 87711744,
+      "samePssDirectionInBothOrders": false,
+      "mappedPssDeltaPercent": 0.0,
+      "pairs": [
+        {
+          "copy": "A",
+          "order": "BASE_TO_APP",
+          "pssKb": 6090,
+          "privateDirtyKb": -13108,
+          "memoryCurrentBytes": 93233152,
+          "archiveMappedPssKb": 99424
+        },
+        {
+          "copy": "B",
+          "order": "APP_TO_BASE",
+          "pssKb": -3100,
+          "privateDirtyKb": -22576,
+          "memoryCurrentBytes": 82190336,
+          "archiveMappedPssKb": 99424
+        }
+      ]
+    }
+  ],
+  "workload": {
+    "requestsPerRun": 600,
+    "runCount": 8,
+    "totalRequests": 4800,
+    "errors": 0
+  },
+  "v1ToV2AppCdsScreenRun": false,
+  "v1ToV2AppCdsConfirmationRun": false,
+  "permanentStop": true,
+  "productDecision": "Keep Patient on NO_CDS_LOW_DIRTY. Do not perform further single-replica Patient AppCDS studies.",
+  "claimBoundary": "This fixed-artifact study measures marginal application-archive economics. It does not alter the accepted Patient V1-to-V2 no-CDS win and does not imply CDS is universally harmful."
+}

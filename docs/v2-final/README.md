@@ -59,3 +59,9 @@ Stable `v2.0.0` was published on July 16, 2026. The later
 [Patient Dynamic AppCDS Archive Economics Study](../runtime-policy-studies/patient-dynamic-appcds-study.md)
 is a non-blocking post-release policy exception study and does not reopen this
 launch decision.
+
+The subsequent
+[Patient Extracted-Layout Common-Class AppCDS Study](../runtime-policy-studies/patient-extracted-common-appcds-study.md)
+is terminal: both fixed artifacts rejected the application archive, so Patient
+remains on `NO_CDS_LOW_DIRTY` and no further single-replica AppCDS attempt is
+authorized.
