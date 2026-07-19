@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "jmoa-command-ledger-v1",
+  "schemaVersion": "jmoa-protocol-inventory-v1",
   "service": "petclinic",
   "era": "historical",
   "classification": [

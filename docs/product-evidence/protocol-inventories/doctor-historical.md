@@ -1,10 +1,12 @@
-# doctor historical Command Ledger
+# doctor historical Protocol Inventory
+
+This is an inventory of recovered scripts and artifacts. It is not an executed command ledger and does not contain command responses.
 
 Classification: **HISTORICAL_COMMANDS_COMPLETE, HISTORICAL_ARTIFACT_COMPLETE, HISTORICAL_RUNTIME_REPRODUCIBLE**
 
 D2 is the corrected historical optimized comparator, not a strict B0.
 
-## Commands
+## Scripts
 
 | Logical path | Present | SHA-256 |
 |---|---:|---|

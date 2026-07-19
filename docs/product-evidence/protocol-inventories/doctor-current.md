@@ -1,10 +1,12 @@
-# doctor current Command Ledger
+# doctor current Protocol Inventory
+
+This is an inventory of recovered scripts and artifacts. It is not an executed command ledger and does not contain command responses.
 
 Classification: **CURRENT_COMMANDS_COMPLETE, CURRENT_ARTIFACT_COMPLETE**
 
 Current strict B0 to final V2 confirmation with separately trained archives.
 
-## Commands
+## Scripts
 
 | Logical path | Present | SHA-256 |
 |---|---:|---|

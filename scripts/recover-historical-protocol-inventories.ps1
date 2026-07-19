@@ -1,6 +1,6 @@
 param(
-    [string]$OutputDirectory = 'docs/product-evidence/command-ledgers',
-    [string]$PrivateOutputDirectory = 'target/runtime-equivalence/command-ledgers'
+    [string]$OutputDirectory = 'docs/product-evidence/protocol-inventories',
+    [string]$PrivateOutputDirectory = 'target/runtime-equivalence/protocol-inventories'
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference='Stop'
@@ -68,12 +68,12 @@ foreach($spec in $specs){
     $artifactIndex++
     [ordered]@{logicalPath="artifact/$($spec.service)/$publicLeaf";privatePath=$privatePath;exists=$exists;sha256=if($exists){Get-JmoaSha256 $privatePath}else{''};bytes=if($exists){(Get-Item $privatePath).Length}else{$null}}
   })
-  $private=[ordered]@{schemaVersion='jmoa-command-ledger-v1';service=$spec.service;era=$spec.era;generatedUtc=[DateTime]::UtcNow.ToString('o');classification=$spec.classification;notes=$spec.notes;commands=$commands;artifacts=$artifacts}
+  $private=[ordered]@{schemaVersion='jmoa-protocol-inventory-v1';service=$spec.service;era=$spec.era;generatedUtc=[DateTime]::UtcNow.ToString('o');classification=$spec.classification;notes=$spec.notes;commands=$commands;artifacts=$artifacts}
   Write-JmoaJson $private (Join-Path $PrivateOutputDirectory "$($spec.service)-$($spec.era).json")
   $public=[ordered]@{schemaVersion=$private.schemaVersion;service=$spec.service;era=$spec.era;classification=$spec.classification;notes=$spec.notes;commands=@($commands|ForEach-Object{[ordered]@{logicalPath=$_.logicalPath;exists=$_.exists;sha256=$_.sha256;bytes=$_.bytes}});artifacts=@($artifacts|ForEach-Object{[ordered]@{logicalPath=$_.logicalPath;exists=$_.exists;sha256=$_.sha256;bytes=$_.bytes}})}
   Write-JmoaJson $public (Join-Path $OutputDirectory "$($spec.service)-$($spec.era).json")
   $commandRows=@($public.commands|ForEach-Object{"| $($_.logicalPath) | $($_.exists) | $($_.sha256) |"})
   $artifactRows=@($public.artifacts|ForEach-Object{"| $($_.logicalPath) | $($_.exists) | $($_.sha256) |"})
-  $md="# $($spec.service) $($spec.era) Command Ledger`n`nClassification: **$($spec.classification -join ', ')**`n`n$($spec.notes)`n`n## Commands`n`n| Logical path | Present | SHA-256 |`n|---|---:|---|`n$($commandRows-join"`n")`n`n## Artifacts`n`n| Logical path | Present | SHA-256 |`n|---|---:|---|`n$($artifactRows-join"`n")"
+  $md="# $($spec.service) $($spec.era) Protocol Inventory`n`nThis is an inventory of recovered scripts and artifacts. It is not an executed command ledger and does not contain command responses.`n`nClassification: **$($spec.classification -join ', ')**`n`n$($spec.notes)`n`n## Scripts`n`n| Logical path | Present | SHA-256 |`n|---|---:|---|`n$($commandRows-join"`n")`n`n## Artifacts`n`n| Logical path | Present | SHA-256 |`n|---|---:|---|`n$($artifactRows-join"`n")"
   Write-JmoaText $md (Join-Path $OutputDirectory "$($spec.service)-$($spec.era).md")
 }

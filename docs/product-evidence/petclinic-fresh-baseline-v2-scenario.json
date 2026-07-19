@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "jmoa-scenario-public-summary-v1",
+  "scenarioId": "petclinic-baseline-v2-20260719T173123Z",
+  "classification": "VALID_SINGLE_SCREEN_NOT_CONFIRMATION",
+  "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+  "commandCount": 444,
+  "hardFailedCommands": 0,
+  "allowedNonZeroCommands": 22,
+  "workloadRequestsPerVariant": 81,
+  "baseline": {
+    "artifactSha256": "88D4BC9F000A22041F8FD521A0442B85F9FC49966948FA11F642CBBABE0D6AE7",
+    "pssKb": 353485,
+    "privateDirtyKb": 344284,
+    "memoryCurrentBytes": 432865280
+  },
+  "v2": {
+    "artifactSha256": "338F5D44431E66B3EEC9B2CFAD6D9769D70D08E3C351B6FA221AE883D8E5A34B",
+    "pssKb": 349870,
+    "privateDirtyKb": 340988,
+    "memoryCurrentBytes": 428793856
+  },
+  "delta": {
+    "pssKb": -3615,
+    "privateDirtyKb": -3296,
+    "memoryCurrentBytes": -4071424
+  },
+  "reusedInputs": [
+    "frozen runtime profile",
+    "frozen observed-site admission set",
+    "frozen additional safe-SAM allowlist",
+    "prebuilt config-server support image",
+    "prebuilt discovery-server support image"
+  ],
+  "freshActions": [
+    "source checkout",
+    "JMOA plugin and runtime build",
+    "strict B0 service build",
+    "B0 runtime image build and measurement",
+    "JMOA full-P2 transform",
+    "LVT/LVTT reducer",
+    "V2 materialization and image build",
+    "V2 runtime measurement"
+  ],
+  "limitation": "The original profile-generation command chain is incomplete, so the profile/admission inputs were reused and this scenario does not claim fresh profile training. This is one screen, not a paired confirmation."
+}

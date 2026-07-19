@@ -1,10 +1,12 @@
-# patient current Command Ledger
+# patient current Protocol Inventory
+
+This is an inventory of recovered scripts and artifacts. It is not an executed command ledger and does not contain command responses.
 
 Classification: **CURRENT_COMMANDS_COMPLETE, CURRENT_ARTIFACT_COMPLETE**
 
 Current direct screens used one stock JDK base archive for both variants.
 
-## Commands
+## Scripts
 
 | Logical path | Present | SHA-256 |
 |---|---:|---|
