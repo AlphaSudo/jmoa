@@ -10,7 +10,8 @@ Evidence-driven, build-time JVM footprint optimization for Spring Boot applicati
 [Architecture](docs/architecture/system-overview.md) |
 [Methodology](docs/methodology/measurement-protocol.md) |
 [Reproduction](docs/reproduction/petclinic-quickstart.md) |
-[Results](docs/results/v2-three-service-matrix.md) |
+[Direct Result](docs/product-evidence/jmoa-vs-no-jmoa-matrix.md) |
+[V1 to V2](docs/results/v2-three-service-matrix.md) |
 [Portfolio](https://github.com/AlphaSudo/jmoa-jvm-optimization-portfolio)
 
 JMOA rewrites admitted lambda and adapter call sites, reduces selected dependency
@@ -18,9 +19,30 @@ classfile metadata, materializes optimized bytecode into the real deployment
 shape, proves which artifacts the JVM loaded, and validates memory effects with
 paired PSS, Private_Dirty, cgroup, NMT, and class-level evidence.
 
-## Confirmed V2 Results
+## Direct Product Result
 
-The final gate compares the accepted V1 artifact with V2 under one frozen
+The primary adoption comparison is a clean no-JMOA `B0` artifact versus final
+JMOA V2 under a frozen service-specific protocol. One service cleared the
+substantial product gate; two valid screens did not promote.
+
+| Service | Deployment and policy | Direct B0 to V2 result | State |
+| --- | --- | ---: | --- |
+| Doctor | Fat JAR, artifact-specific application CDS | **-5,809 KB median PSS**, 3/3 wins | Confirmed substantial win |
+| PetClinic customers | Exploded Boot, `NO_CDS_LOW_DIRTY` | +5,446 KB PSS | Screen failed |
+| Patient | Fat JAR, stock JDK base CDS | +3,290 KB PSS on corrected screen | Screen failed |
+
+Overall state: `ONE_SERVICE_PRODUCT_WIN`. This is not a universal-win claim.
+The Doctor result has six valid runs, zero workload errors, V2-C
+`CONFIRMED_WIN`, and V2-D attribution. PetClinic and Patient stopped at the
+frozen screen gate and were not promoted to confirmation.
+
+Read the [direct matrix](docs/product-evidence/jmoa-vs-no-jmoa-matrix.md),
+[evidence contract](docs/product-evidence/jmoa-vs-no-jmoa-contract.md), and
+[service records](docs/product-evidence/doctor-direct-result.md).
+
+## V1 To V2 Engineering Evolution
+
+This separate matrix compares the accepted V1 artifact with V2 under one frozen
 runtime policy per service. Every row has `6/6` valid runs, zero workload
 errors, a V2-C `CONFIRMED_WIN` verdict, and V2-D attribution.
 
@@ -36,7 +58,10 @@ tested single-replica deployment. Results are protocol-specific: JMOA does not
 claim that CDS, no-CDS, fat JARs, exploded Boot, or one allocator policy is
 universally optimal.
 
-Read the [three-service result](docs/results/v2-three-service-matrix.md) or the
+These medians explain how the product improved after V1. They are not added to
+older baseline-to-V1 results and do not replace the direct matrix above.
+
+Read the [engineering-evolution result](docs/results/v2-three-service-matrix.md) or the
 [machine-readable audit matrix](docs/v2-final/v2-three-service-memory-matrix.json).
 
 ## What V2 Adds

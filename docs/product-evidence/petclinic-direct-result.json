@@ -1,0 +1,35 @@
+{
+  "service": "petclinic-customers",
+  "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "status": "SCREEN_FAILED",
+  "validRuns": 2,
+  "pairedWins": 0,
+  "pairs": 1,
+  "medianPssDeltaKb": 5446,
+  "medianPssPercent": 1.62,
+  "medianPrivateDirtyDeltaKb": 5580,
+  "medianMemoryCurrentDeltaBytes": 3059712,
+  "workloadErrors": 0,
+  "semanticErrors": 0,
+  "v2cVerdict": "NOT_RUN_SCREEN_FAILED",
+  "v2dPassed": false,
+  "baselineArtifact": {
+    "sha256": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+    "bytes": 92557714,
+    "jmoaEntries": 0
+  },
+  "candidateArtifact": {
+    "sha256": "007F1796B83FCC2217A57A6975EF5CAFD7494A5EF050A7F5261C088B63C6CC2F"
+  },
+  "diagnosis": {
+    "heapPssDeltaKb": 7020,
+    "heapUsedDeltaKb": 20,
+    "classHistogramBytesDelta": 27336,
+    "loadedClassDelta": -154,
+    "anonymousRwPssDeltaKb": -1504,
+    "interpretation": "The candidate loaded fewer classes but dirtied more heap pages. The direct screen did not promote."
+  },
+  "claimBoundary": "This is a valid single-pair screen failure, not a confirmation result. The historical PetClinic V1 and V1-to-V2 wins remain separate evidence."
+}

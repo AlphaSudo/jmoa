@@ -2,6 +2,22 @@
 
 JMOA preserves valid failures because they define the product boundary.
 
+## Clean No-JMOA Product Screens
+
+The final buyer-facing campaign compared clean no-JMOA `B0` artifacts with
+final V2 under frozen per-service policies.
+
+- PetClinic customers regressed by `+5,446 KB` PSS, `+5,580 KB`
+  Private_Dirty, and `+3,059,712` bytes `memory.current` under exploded Boot
+  `NO_CDS_LOW_DIRTY`.
+- Patient regressed in both bounded screens. The corrected reverse-order screen
+  measured `+3,290 KB` PSS, `+3,336 KB` Private_Dirty, and `+3,244,032` bytes
+  `memory.current` under the identical stock JDK base archive.
+
+Both services stopped before confirmation. These direct failures coexist with,
+and do not invalidate, their historical V1 and V1-to-V2 engineering wins.
+Doctor is the only service that cleared the direct substantial product gate.
+
 ## Hardened ASM Metadata Reducer
 
 **Hypothesis:** a productized policy that skipped signed, multi-release, sealed,

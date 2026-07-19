@@ -1,5 +1,9 @@
 # V2 Three-Service Matrix
 
+This is the accepted V1-to-final-V2 engineering-evolution matrix. For the
+clean no-JMOA buyer comparison, use the
+[direct product matrix](../product-evidence/jmoa-vs-no-jmoa-matrix.md).
+
 The final matrix compares each service's accepted V1 artifact with V2 under a
 frozen, service-specific runtime policy.
 

@@ -1,0 +1,17 @@
+{
+  "metadataVersion": "direct-result-reconciliation-v1",
+  "buyerComparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
+  "buyerResult": "ONE_SERVICE_PRODUCT_WIN",
+  "engineeringComparison": "ACCEPTED_V1_TO_FINAL_V2",
+  "matricesMustNotBeAdded": true,
+  "petclinicHistoricalBaseline": {
+    "cleanNoJmoa": false,
+    "reason": "The image contained JmoaRuntime.class.",
+    "disposition": "Superseded for the clean buyer comparison; retained as historical provenance."
+  },
+  "currentDirectServices": {
+    "doctor": "CONFIRMED_SUBSTANTIAL_WIN",
+    "petclinic": "SCREEN_FAILED",
+    "patient": "SCREEN_FAILED"
+  }
+}

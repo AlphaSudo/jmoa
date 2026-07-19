@@ -1,0 +1,39 @@
+{
+  "service": "patient-service",
+  "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
+  "launchMode": "SPRING_BOOT_FAT_JAR",
+  "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
+  "status": "SCREEN_FAILED",
+  "validRuns": 2,
+  "pairedWins": 0,
+  "pairs": 1,
+  "medianPssDeltaKb": 3290,
+  "medianPssPercent": 1.14,
+  "medianPrivateDirtyDeltaKb": 3336,
+  "medianMemoryCurrentDeltaBytes": 3244032,
+  "workloadErrors": 0,
+  "semanticErrors": 0,
+  "v2cVerdict": "NOT_RUN_SCREEN_FAILED",
+  "v2dPassed": false,
+  "baselineArtifact": {
+    "sha256": "2BE7E1D761ECE8BDC74CE44E7B82FB0B79D7508E45B22E9864577F4D643E0352",
+    "bytes": 99431613,
+    "jmoaEntries": 0
+  },
+  "candidateArtifact": {
+    "sha256": "FB4E6295364EC564AEEC1123F5D72EB8C7C4C5A47B677C57909EFEA2E678618C",
+    "bytes": 95770035
+  },
+  "runtimeProof": {
+    "sameStockJdkArchive": true,
+    "stockArchiveSha256": "77BCC7CC41CBD2EE8920CAE555019C722B4E40FCA731EAD484620D100FDC9EE6",
+    "applicationCds": false,
+    "javaagent": false,
+    "mallocArenaMax": "1"
+  },
+  "attemptedScreens": [
+    { "order": "B0_TO_V2", "pssKb": 1146, "privateDirtyKb": 1364, "memoryCurrentBytes": 1245184 },
+    { "order": "V2_TO_B0", "pssKb": 3290, "privateDirtyKb": 3336, "memoryCurrentBytes": 3244032 }
+  ],
+  "claimBoundary": "Both bounded screens failed. No confirmation or direct product memory claim is permitted for Patient. Historical Patient V1 and V1-to-V2 wins remain separate evidence."
+}

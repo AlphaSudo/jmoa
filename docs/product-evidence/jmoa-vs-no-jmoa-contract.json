@@ -1,0 +1,69 @@
+{
+  "metadataVersion": "jmoa-vs-no-jmoa-contract-v1",
+  "status": "FROZEN",
+  "primaryComparison": "B0_TO_FINAL_V2",
+  "secondaryComparison": "FINAL_V1_TO_FINAL_V2",
+  "variants": {
+    "B0": {
+      "jmoaLambdaTransformation": false,
+      "rawMetadataReducer": false,
+      "jmoaRuntimeLibrary": false,
+      "runtimeJavaagent": false
+    },
+    "V2": {
+      "finalV1FullP2Transformation": true,
+      "rawDependencyLvtLvttReducer": true,
+      "runtimeSupportIdentityRequired": true,
+      "materializationAndOriginProofRequired": true
+    }
+  },
+  "services": [
+    {
+      "id": "spring-petclinic-customers-service",
+      "deployment": "EXPLODED_BOOT_APP",
+      "runtimePolicy": "NO_CDS_LOW_DIRTY"
+    },
+    {
+      "id": "doctor-service",
+      "deployment": "SPRING_BOOT_FAT_JAR",
+      "runtimePolicy": "APPLICATION_CDS",
+      "archiveRule": "SEPARATE_ARTIFACT_CORRECT_ARCHIVES_SAME_TRAINING_CONTRACT"
+    },
+    {
+      "id": "patient-service",
+      "deployment": "SPRING_BOOT_FAT_JAR",
+      "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
+      "archiveRule": "IDENTICAL_STOCK_JDK_BASE_ARCHIVE_BETWEEN_ARMS"
+    }
+  ],
+  "screenGate": {
+    "medianPssDeltaKbMax": -1024,
+    "medianPrivateDirtyDeltaKbMax": -1024,
+    "medianMemoryCurrentDeltaBytesMax": -1048576,
+    "workloadErrors": 0,
+    "semanticErrors": 0,
+    "maximumCorrectedScreens": 1
+  },
+  "confirmation": {
+    "pairs": 3,
+    "order": ["B0_TO_V2", "V2_TO_B0", "B0_TO_V2"],
+    "requiredValidRuns": 6
+  },
+  "substantialProductGate": {
+    "minimumPairedPssWins": 2,
+    "medianPssDeltaKbMax": -4096,
+    "medianPrivateDirtyDeltaKbMax": -1024,
+    "medianMemoryCurrentDeltaBytesMax": -1048576,
+    "workloadErrors": 0,
+    "semanticErrors": 0,
+    "requiredV2cVerdict": "CONFIRMED_WIN",
+    "requireV2dPassed": true
+  },
+  "overallStates": [
+    "THREE_SERVICE_PRODUCT_WIN",
+    "TWO_SERVICE_PRODUCT_WIN",
+    "ONE_SERVICE_PRODUCT_WIN",
+    "PRODUCT_EFFECT_NOT_CONFIRMED"
+  ],
+  "claimBoundary": "Direct medians are measured. Historical B0-to-V1 and V1-to-V2 medians are never added to derive B0-to-V2."
+}
