@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "jmoa-artifact-lineage-v1",
+  "service": "petclinic",
+  "variants": [
+    {
+      "id": "B0",
+      "classification": "STRICT_NO_JMOA_REBUILD",
+      "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+      "logicalArtifactPath": "petclinic/coherent/B0.jar",
+      "artifact": {
+        "exists": true,
+        "bytes": 92557714,
+        "sha256": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+        "entryCount": 326,
+        "jmoaEntryCount": 0,
+        "nestedDependencyCount": 161,
+        "nestedDependencyFingerprint": "957BCB976EC91784F7C6E7FB28B2D4301BFACEFF45D67B1221F0E9C26D330375",
+        "nestedDependencyNameFingerprint": "EBF13254D1DFDC7FBC2FCB14F5D802631D99CA46690E747416E4A7ECB91D513D",
+        "applicationEntryNameFingerprint": "07FF88679F317D2A9707D8EBF8C5E0CD0A58F070BE2AA2631C7C016A43FA07C0",
+        "applicationClassNameFingerprint": "982BCCF97A46F037D0F0AFFEC6BFD7D03BF9892B4866B8C358D95EEEF35160DB",
+        "applicationResourceFingerprint": "7B5C94C2CA68B54AFC8B68D6108653F8F09FFE7295D2B8AD64374F2EF36B9851"
+      },
+      "transformCommandIds": [
+        "petclinic-current-clean-b0-build"
+      ],
+      "parentVariant": null,
+      "b0Proof": {
+        "noJmoaEntries": true,
+        "noRuntimeDependency": true,
+        "noPluginExecution": true,
+        "noReducerManifest": true,
+        "noJavaagent": true
+      }
+    },
+    {
+      "id": "V1",
+      "classification": "FINALIZED_V1_FULL_P2",
+      "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+      "logicalArtifactPath": "petclinic/frozen/V1-full-p2.jar",
+      "artifact": {
+        "exists": true,
+        "bytes": 92727362,
+        "sha256": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C",
+        "entryCount": 330,
+        "jmoaEntryCount": 4,
+        "nestedDependencyCount": 162,
+        "nestedDependencyFingerprint": "170E5C38641745F0EC0EFB61728AD4CB9A9CDCC18C335A9AE4B615C2611F8422",
+        "nestedDependencyNameFingerprint": "EBF13254D1DFDC7FBC2FCB14F5D802631D99CA46690E747416E4A7ECB91D513D",
+        "applicationEntryNameFingerprint": "07FF88679F317D2A9707D8EBF8C5E0CD0A58F070BE2AA2631C7C016A43FA07C0",
+        "applicationClassNameFingerprint": "982BCCF97A46F037D0F0AFFEC6BFD7D03BF9892B4866B8C358D95EEEF35160DB",
+        "applicationResourceFingerprint": "B322045838FC15D2AF80C2AEA8FEDF9745F7F7F20ED56BCDCD0AD6EBE470EE30"
+      },
+      "transformCommandIds": [
+        "petclinic-phase33-full-p2"
+      ],
+      "parentVariant": null,
+      "b0Proof": null
+    },
+    {
+      "id": "V2",
+      "classification": "PRODUCTIZED_RAW_REDUCER_V2",
+      "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+      "logicalArtifactPath": "petclinic/frozen/V2-exploded-dependency-layer",
+      "artifact": {
+        "exists": true,
+        "bytes": 88798165,
+        "sha256": "007F1796B83FCC2217A57A6975EF5CAFD7494A5EF050A7F5261C088B63C6CC2F",
+        "entryCount": null,
+        "jmoaEntryCount": 0,
+        "nestedDependencyCount": 162,
+        "nestedDependencyFingerprint": "CDADE9E25FC25F16DD82A44E4202FE71224605BA37BA74FDF527EDCC1EBD6229",
+        "nestedDependencyNameFingerprint": "",
+        "applicationEntryNameFingerprint": "",
+        "applicationClassNameFingerprint": "",
+        "applicationResourceFingerprint": ""
+      },
+      "transformCommandIds": [
+        "petclinic-phase33-full-p2",
+        "petclinic-v2-raw-reducer"
+      ],
+      "parentVariant": "V1",
+      "b0Proof": null
+    }
+  ],
+  "sameSourceUniverse": true,
+  "sourceRevisions": [
+    "305a1f13e4f961001d4e6cb50a9db51dc3fc5967"
+  ],
+  "strictB0Valid": true,
+  "comparisonAdmissible": true
+}

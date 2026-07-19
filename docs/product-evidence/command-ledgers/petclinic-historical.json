@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "jmoa-command-ledger-v1",
+  "service": "petclinic",
+  "era": "historical",
+  "classification": [
+    "HISTORICAL_COMMANDS_COMPLETE",
+    "HISTORICAL_ARTIFACT_COMPLETE",
+    "HISTORICAL_RUNTIME_NOT_REPRODUCIBLE"
+  ],
+  "notes": "Phase 33M is the authoritative exploded-Boot, no-CDS full-P2 protocol. Its frozen 2026-07-19 replay reversed direction and is classified as historical runtime drift.",
+  "commands": [
+    {
+      "logicalPath": "historical/petclinic/run-33l7-exploded-boot-materialization.ps1",
+      "exists": true,
+      "sha256": "BD80B5DE195B2BC2E754721F9625C06B6C3496F764AD0A6A344A233AEC6099D8",
+      "bytes": 56495
+    },
+    {
+      "logicalPath": "historical/petclinic/run-33m-integrated-nocds-confirmation.ps1",
+      "exists": true,
+      "sha256": "3F7193F09E80B1D65ECDF36778298AFBD6D111C85EB51C8649715CE1194E9BBD",
+      "bytes": 36767
+    }
+  ],
+  "artifacts": [
+    {
+      "logicalPath": "artifact/petclinic/baseline.jar",
+      "exists": true,
+      "sha256": "4952EF9306C732846BFAE0FAE6A67BE2F9B8509644B3396B8247215A03E5589D",
+      "bytes": 92563715
+    },
+    {
+      "logicalPath": "artifact/petclinic/optimized.jar",
+      "exists": true,
+      "sha256": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C",
+      "bytes": 92727362
+    }
+  ]
+}

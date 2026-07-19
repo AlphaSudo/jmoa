@@ -1,6 +1,7 @@
 param(
     [Parameter(Mandatory)][string[]]$ServiceResult,
-    [Parameter(Mandatory)][string]$OutputDir
+    [Parameter(Mandatory)][string]$OutputDir,
+    [switch]$UnderRuntimeReconciliation
 )
 
 $ErrorActionPreference = 'Stop'
@@ -35,16 +36,19 @@ $overall = switch ($passes) {
     1 { 'ONE_SERVICE_PRODUCT_WIN' }
     default { 'PRODUCT_EFFECT_NOT_CONFIRMED' }
 }
+$measuredOverall = $overall
+if ($UnderRuntimeReconciliation) { $overall = 'DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION' }
 
 $report = [ordered]@{
     metadataVersion = 'jmoa-vs-no-jmoa-matrix-v1'
     generatedAt = (Get-Date).ToUniversalTime().ToString('o')
     comparison = 'NO_JMOA_B0_TO_FINAL_JMOA_V2'
     overallState = $overall
+    measuredGateState = $measuredOverall
     substantialProductWins = $passes
     evaluatedServices = $rows.Count
     services = @($rows)
-    claimBoundary = 'Direct measured comparisons only. No B0-to-V1 and V1-to-V2 arithmetic is used.'
+    claimBoundary = if($UnderRuntimeReconciliation){'Direct measurements are retained, but no aggregate adoption verdict is permitted until runtime-equivalence and artifact-lineage gates close.'}else{'Direct measured comparisons only. No B0-to-V1 and V1-to-V2 arithmetic is used.'}
 }
 
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
