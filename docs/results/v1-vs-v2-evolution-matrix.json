@@ -1,0 +1,11 @@
+{
+  "metadataVersion": "v1-vs-v2-evolution-matrix-v1",
+  "comparison": "FINAL_V1_TO_FINAL_V2",
+  "claimType": "ENGINEERING_EVOLUTION",
+  "services": [
+    {"service":"spring-petclinic-customers-service","runtimePolicy":"NO_CDS_LOW_DIRTY","validRuns":6,"pairs":3,"pairedWins":2,"medianPssDeltaKb":-6012,"medianPrivateDirtyDeltaKb":-5708,"medianMemoryCurrentDeltaBytes":-8081408},
+    {"service":"doctor-service","runtimePolicy":"APPLICATION_CDS","validRuns":6,"pairs":3,"pairedWins":3,"medianPssDeltaKb":-5156,"medianPrivateDirtyDeltaKb":-5212,"medianMemoryCurrentDeltaBytes":-6975488},
+    {"service":"patient-service","runtimePolicy":"JDK_BASE_CDS_LOW_DIRTY","validRuns":6,"pairs":3,"pairedWins":3,"medianPssDeltaKb":-8279,"medianPrivateDirtyDeltaKb":-8444,"medianMemoryCurrentDeltaBytes":-8523776}
+  ],
+  "claimBoundary": "Engineering-evolution evidence only. Values are not arithmetically combined with historical baseline results."
+}

@@ -1,0 +1,10 @@
+{
+  "verdict": "ONE_SERVICE_PRODUCT_WIN",
+  "substantialProductWins": 1,
+  "evaluatedServices": 3,
+  "confirmedServices": ["doctor-service"],
+  "screenFailedServices": ["petclinic-customers", "patient-service"],
+  "productPosture": "EVIDENCE_GATED_ADMISSION",
+  "universalWinClaim": false,
+  "claimBoundary": "Direct no-JMOA B0 to final V2 only; V1-to-V2 medians are separate engineering evidence."
+}

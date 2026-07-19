@@ -1,0 +1,156 @@
+{
+  "metadataVersion": "jmoa-vs-no-jmoa-matrix-v1",
+  "generatedAt": "2026-07-19T00:15:21.1325824Z",
+  "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
+  "overallState": "ONE_SERVICE_PRODUCT_WIN",
+  "substantialProductWins": 1,
+  "evaluatedServices": 3,
+  "services": [
+    {
+      "service": "petclinic-customers",
+      "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
+      "launchMode": "EXPLODED_BOOT_APP",
+      "runtimePolicy": "NO_CDS_LOW_DIRTY",
+      "status": "SCREEN_FAILED",
+      "validRuns": 2,
+      "pairedWins": 0,
+      "pairs": 1,
+      "medianPssDeltaKb": 5446,
+      "medianPssPercent": 1.62,
+      "medianPrivateDirtyDeltaKb": 5580,
+      "medianMemoryCurrentDeltaBytes": 3059712,
+      "workloadErrors": 0,
+      "semanticErrors": 0,
+      "v2cVerdict": "NOT_RUN_SCREEN_FAILED",
+      "v2dPassed": false,
+      "baselineArtifact": {
+        "sha256": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+        "bytes": 92557714,
+        "jmoaEntries": 0
+      },
+      "candidateArtifact": {
+        "sha256": "007F1796B83FCC2217A57A6975EF5CAFD7494A5EF050A7F5261C088B63C6CC2F"
+      },
+      "diagnosis": {
+        "heapPssDeltaKb": 7020,
+        "heapUsedDeltaKb": 20,
+        "classHistogramBytesDelta": 27336,
+        "loadedClassDelta": -154,
+        "anonymousRwPssDeltaKb": -1504,
+        "interpretation": "The candidate loaded fewer classes but dirtied more heap pages. The direct screen did not promote."
+      },
+      "claimBoundary": "This is a valid single-pair screen failure, not a confirmation result. The historical PetClinic V1 and V1-to-V2 wins remain separate evidence.",
+      "substantialProductGatePassed": false
+    },
+    {
+      "service": "doctor-service",
+      "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
+      "launchMode": "SPRING_BOOT_FAT_JAR",
+      "runtimePolicy": "APPLICATION_CDS",
+      "status": "CONFIRMED",
+      "validRuns": 6,
+      "pairedWins": 3,
+      "pairs": 3,
+      "medianPssDeltaKb": -5809,
+      "medianPssPercent": -1.77,
+      "medianPrivateDirtyDeltaKb": -5492,
+      "medianMemoryCurrentDeltaBytes": -11845632,
+      "workloadErrors": 0,
+      "semanticErrors": 0,
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true,
+      "pairDeltas": [
+        {
+          "pair": 1,
+          "pssKb": -10484,
+          "privateDirtyKb": -10456,
+          "memoryCurrentBytes": -16670720
+        },
+        {
+          "pair": 2,
+          "pssKb": -5809,
+          "privateDirtyKb": -5492,
+          "memoryCurrentBytes": -11845632
+        },
+        {
+          "pair": 3,
+          "pssKb": -1255,
+          "privateDirtyKb": -1284,
+          "memoryCurrentBytes": -7245824
+        }
+      ],
+      "baselineArtifact": {
+        "sha256": "5B0AF47F86D174E885F7B17CDC329E1AB3119C12D4BE96D2A908758CFD8DEE16",
+        "bytes": 101677501,
+        "jmoaEntries": 0,
+        "cdsArchiveSha256": "608C1067611EC7666F913D9D121201328B4C11753B6AA8430B37276A4E5A7261"
+      },
+      "candidateArtifact": {
+        "sha256": "9D00877C0AF90E02B0C8D812F8BC659297CA67D6A939016CAF96D3D5CED79742",
+        "bytes": 97989324,
+        "cdsArchiveSha256": "9F0ED3865564C46D7CAD2E200B1449831C7199B32119E0CDA98778A700EAA8DC"
+      },
+      "attribution": {
+        "loadedClassDelta": -131,
+        "medianAnonymousRwPssDeltaKb": -3180,
+        "hypotheses": [
+          "CLASS_COUNT_SAVINGS",
+          "ANONYMOUS_RW_ALLOCATOR_REDUCTION"
+        ]
+      },
+      "claimBoundary": "Confirmed only for the corrected Doctor fat JAR with separately trained artifact-specific application CDS archives and the frozen workload.",
+      "substantialProductGatePassed": true
+    },
+    {
+      "service": "patient-service",
+      "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
+      "launchMode": "SPRING_BOOT_FAT_JAR",
+      "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
+      "status": "SCREEN_FAILED",
+      "validRuns": 2,
+      "pairedWins": 0,
+      "pairs": 1,
+      "medianPssDeltaKb": 3290,
+      "medianPssPercent": 1.14,
+      "medianPrivateDirtyDeltaKb": 3336,
+      "medianMemoryCurrentDeltaBytes": 3244032,
+      "workloadErrors": 0,
+      "semanticErrors": 0,
+      "v2cVerdict": "NOT_RUN_SCREEN_FAILED",
+      "v2dPassed": false,
+      "baselineArtifact": {
+        "sha256": "2BE7E1D761ECE8BDC74CE44E7B82FB0B79D7508E45B22E9864577F4D643E0352",
+        "bytes": 99431613,
+        "jmoaEntries": 0
+      },
+      "candidateArtifact": {
+        "sha256": "FB4E6295364EC564AEEC1123F5D72EB8C7C4C5A47B677C57909EFEA2E678618C",
+        "bytes": 95770035
+      },
+      "runtimeProof": {
+        "sameStockJdkArchive": true,
+        "stockArchiveSha256": "77BCC7CC41CBD2EE8920CAE555019C722B4E40FCA731EAD484620D100FDC9EE6",
+        "applicationCds": false,
+        "javaagent": false,
+        "mallocArenaMax": "1"
+      },
+      "attemptedScreens": [
+        {
+          "order": "B0_TO_V2",
+          "pssKb": 1146,
+          "privateDirtyKb": 1364,
+          "memoryCurrentBytes": 1245184
+        },
+        {
+          "order": "V2_TO_B0",
+          "pssKb": 3290,
+          "privateDirtyKb": 3336,
+          "memoryCurrentBytes": 3244032
+        }
+      ],
+      "claimBoundary": "Both bounded screens failed. No confirmation or direct product memory claim is permitted for Patient. Historical Patient V1 and V1-to-V2 wins remain separate evidence.",
+      "substantialProductGatePassed": false
+    }
+  ],
+  "claimBoundary": "Direct measured comparisons only. No B0-to-V1 and V1-to-V2 arithmetic is used."
+}

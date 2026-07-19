@@ -1,0 +1,40 @@
+{
+  "service": "doctor-service",
+  "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
+  "launchMode": "SPRING_BOOT_FAT_JAR",
+  "runtimePolicy": "APPLICATION_CDS",
+  "status": "CONFIRMED",
+  "validRuns": 6,
+  "pairedWins": 3,
+  "pairs": 3,
+  "medianPssDeltaKb": -5809,
+  "medianPssPercent": -1.77,
+  "medianPrivateDirtyDeltaKb": -5492,
+  "medianMemoryCurrentDeltaBytes": -11845632,
+  "workloadErrors": 0,
+  "semanticErrors": 0,
+  "v2cVerdict": "CONFIRMED_WIN",
+  "v2dPassed": true,
+  "pairDeltas": [
+    { "pair": 1, "pssKb": -10484, "privateDirtyKb": -10456, "memoryCurrentBytes": -16670720 },
+    { "pair": 2, "pssKb": -5809, "privateDirtyKb": -5492, "memoryCurrentBytes": -11845632 },
+    { "pair": 3, "pssKb": -1255, "privateDirtyKb": -1284, "memoryCurrentBytes": -7245824 }
+  ],
+  "baselineArtifact": {
+    "sha256": "5B0AF47F86D174E885F7B17CDC329E1AB3119C12D4BE96D2A908758CFD8DEE16",
+    "bytes": 101677501,
+    "jmoaEntries": 0,
+    "cdsArchiveSha256": "608C1067611EC7666F913D9D121201328B4C11753B6AA8430B37276A4E5A7261"
+  },
+  "candidateArtifact": {
+    "sha256": "9D00877C0AF90E02B0C8D812F8BC659297CA67D6A939016CAF96D3D5CED79742",
+    "bytes": 97989324,
+    "cdsArchiveSha256": "9F0ED3865564C46D7CAD2E200B1449831C7199B32119E0CDA98778A700EAA8DC"
+  },
+  "attribution": {
+    "loadedClassDelta": -131,
+    "medianAnonymousRwPssDeltaKb": -3180,
+    "hypotheses": ["CLASS_COUNT_SAVINGS", "ANONYMOUS_RW_ALLOCATOR_REDUCTION"]
+  },
+  "claimBoundary": "Confirmed only for the corrected Doctor fat JAR with separately trained artifact-specific application CDS archives and the frozen workload."
+}
