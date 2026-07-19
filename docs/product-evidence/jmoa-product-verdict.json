@@ -1,10 +1,12 @@
 {
-  "verdict": "ONE_SERVICE_PRODUCT_WIN",
+  "verdict": "DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION",
+  "previousProvisionalVerdict": "ONE_SERVICE_PRODUCT_WIN",
   "substantialProductWins": 1,
   "evaluatedServices": 3,
   "confirmedServices": ["doctor-service"],
-  "screenFailedServices": ["petclinic-customers", "patient-service"],
-  "productPosture": "EVIDENCE_GATED_ADMISSION",
+  "screenFailedServices": ["petclinic-customers"],
+  "artifactMismatchServices": ["patient-service"],
+  "productPosture": "RUNTIME_EQUIVALENCE_RECONCILIATION",
   "universalWinClaim": false,
-  "claimBoundary": "Direct no-JMOA B0 to final V2 only; V1-to-V2 medians are separate engineering evidence."
+  "claimBoundary": "Direct measurements are retained but the aggregate adoption verdict is provisional pending runtime and artifact-provenance reconciliation."
 }

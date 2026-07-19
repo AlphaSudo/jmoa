@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "jmoa-runtime-fingerprint-audit-v1",
+  "sourceRevisionAtAuditStart": "adc6a2318227e597c16a82b9d995d18a1b90dbdc",
+  "javaHomeMajor": 17,
+  "pathJavaMajor": 26,
+  "pathJavacMajor": 26,
+  "bareMavenAvailable": false,
+  "podmanVersion": "5.7.1",
+  "risk": "TOOLCHAIN_SELECTION_AMBIGUOUS",
+  "privateFingerprintLocation": "target/runtime-equivalence/public-audit/fingerprint",
+  "requiredAction": "Select and record one explicit toolchain before another confirmation campaign."
+}

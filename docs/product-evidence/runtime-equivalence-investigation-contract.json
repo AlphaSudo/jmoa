@@ -1,0 +1,37 @@
+{
+  "metadataVersion": "runtime-equivalence-contract-v1",
+  "status": "FROZEN",
+  "aggregateAdoptionState": "DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION",
+  "objective": "Audit source, artifact, runtime, archive, support-stack, workload, and capture equivalence before finalizing direct product claims.",
+  "forbidden": [
+    "OPTIMIZER_CHANGE",
+    "THRESHOLD_CHANGE",
+    "FAVORABLE_RUN_SELECTION",
+    "HISTORICAL_MEDIAN_ADDITION",
+    "PROTOCOL_REDESIGN_BEFORE_REPLAY",
+    "UNPROVEN_HAND_EDITED_BASELINE",
+    "VALID_LOSS_REPLACEMENT",
+    "UNRELATED_B0_V2_COMPARISON"
+  ],
+  "allowedCorrectionClasses": [
+    "WRONG_ARTIFACT",
+    "WRONG_SOURCE_REVISION",
+    "WRONG_DEPENDENCY_GRAPH",
+    "WRONG_RUNTIME_IMAGE",
+    "WRONG_JVM_FLAGS",
+    "WRONG_CDS_ARCHIVE",
+    "WRONG_SUPPORT_STACK",
+    "WRONG_WORKLOAD",
+    "WRONG_CACHE_PRECONDITION",
+    "WRONG_CAPTURE_TIMING",
+    "BROKEN_EVIDENCE_TOOLING"
+  ],
+  "terminalStates": [
+    "DIRECT_PRODUCT_WIN_CONFIRMED",
+    "DIRECT_PRODUCT_EFFECT_NOT_CONFIRMED",
+    "HISTORICAL_RUNTIME_NOT_REPRODUCIBLE",
+    "ARTIFACT_LINEAGE_INVALID",
+    "RUNTIME_PROTOCOL_MISMATCH",
+    "ENVIRONMENT_VARIANCE_TOO_HIGH"
+  ]
+}

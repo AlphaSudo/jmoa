@@ -1,0 +1,90 @@
+{
+  "schemaVersion": "jmoa-artifact-lineage-v1",
+  "service": "patient",
+  "variants": [
+    {
+      "id": "B0",
+      "classification": "STRICT_NO_JMOA_REBUILD",
+      "sourceRevision": "c33d6e9312739ab15fd705a28e60e9f50c6e7b8b",
+      "logicalArtifactPath": "patient/current/B0.jar",
+      "artifact": {
+        "exists": true,
+        "bytes": 99431613,
+        "sha256": "2BE7E1D761ECE8BDC74CE44E7B82FB0B79D7508E45B22E9864577F4D643E0352",
+        "entryCount": 859,
+        "jmoaEntryCount": 0,
+        "nestedDependencyCount": 160,
+        "nestedDependencyFingerprint": "908C5D889A6AA3729D13AD785B71D3F8D1136F3A91D8882ED8788BF72E72AD24",
+        "nestedDependencyNameFingerprint": "94E2D81A4EC554A3A8C48ADFA6BF3D746734E9703ABE9597CAF353598E37DAEF",
+        "applicationEntryNameFingerprint": "9508DDBE466559F9B3E6C80116A8B72E9FF6B6B459FD6F316E5D4E689065271E",
+        "applicationClassNameFingerprint": "0CD02CF9CE73EEBC36FCF9955379CF043C8104AAF084445418C86B26B6B4C8C3",
+        "applicationResourceFingerprint": "BB1C80CCA90335FFABE7DE7364DE20BEB1804CEA1F5FFA7A7E3B417C689F20E8"
+      },
+      "transformCommandIds": [
+        "patient-current-clean-b0-build"
+      ],
+      "parentVariant": null,
+      "b0Proof": {
+        "noJmoaEntries": true,
+        "noRuntimeDependency": true,
+        "noPluginExecution": true,
+        "noReducerManifest": true,
+        "noJavaagent": true
+      }
+    },
+    {
+      "id": "V1",
+      "classification": "FINAL_C2_V1_ARTIFACT",
+      "sourceRevision": "c33d6e9312739ab15fd705a28e60e9f50c6e7b8b",
+      "logicalArtifactPath": "patient/current/V1-final.jar",
+      "artifact": {
+        "exists": true,
+        "bytes": 99585809,
+        "sha256": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+        "entryCount": 873,
+        "jmoaEntryCount": 9,
+        "nestedDependencyCount": 162,
+        "nestedDependencyFingerprint": "9B3C881508C200F3B1ED1586C9B140CFC9812BC4A0E948DB5EF67E5E5AA82647",
+        "nestedDependencyNameFingerprint": "3DC0F5F8E0BD8208E06D28E47378E02C3EABF8398CC77E002E1349CD6980B947",
+        "applicationEntryNameFingerprint": "E9E11A8A9A070FDDE1DC4076E30010BC0FB1BB9E4447A9ECD0E0891E05ABFCD1",
+        "applicationClassNameFingerprint": "CFFE41F00047F4281D5D0EF7AAD5C2AB2B4B6989AD32E2DFEC79A3E41C95FAC5",
+        "applicationResourceFingerprint": "1DAF53658B58ED6D06DC89E11F0C51C0D73BBA57E72E9CC48A939A6B6F6D05F2"
+      },
+      "transformCommandIds": [
+        "patient-final-c2-v1-build"
+      ],
+      "parentVariant": null,
+      "b0Proof": null
+    },
+    {
+      "id": "V2",
+      "classification": "FINAL_V2_REDUCED_V1_LINEAGE",
+      "sourceRevision": "c33d6e9312739ab15fd705a28e60e9f50c6e7b8b",
+      "logicalArtifactPath": "patient/current/V2-final.jar",
+      "artifact": {
+        "exists": true,
+        "bytes": 95770204,
+        "sha256": "4CFC40ADBD559066071A65BAC4A0D6836411BDBF4BB69E9162C0D2E7C65569E3",
+        "entryCount": 873,
+        "jmoaEntryCount": 9,
+        "nestedDependencyCount": 162,
+        "nestedDependencyFingerprint": "2142E4160C4C6ACB8B02B539F076847684F6CCFCCDC22965CD3D1820A02886F6",
+        "nestedDependencyNameFingerprint": "3DC0F5F8E0BD8208E06D28E47378E02C3EABF8398CC77E002E1349CD6980B947",
+        "applicationEntryNameFingerprint": "E9E11A8A9A070FDDE1DC4076E30010BC0FB1BB9E4447A9ECD0E0891E05ABFCD1",
+        "applicationClassNameFingerprint": "CFFE41F00047F4281D5D0EF7AAD5C2AB2B4B6989AD32E2DFEC79A3E41C95FAC5",
+        "applicationResourceFingerprint": "1DAF53658B58ED6D06DC89E11F0C51C0D73BBA57E72E9CC48A939A6B6F6D05F2"
+      },
+      "transformCommandIds": [
+        "patient-v2-raw-reducer"
+      ],
+      "parentVariant": "V1",
+      "b0Proof": null
+    }
+  ],
+  "sameSourceUniverse": true,
+  "sourceRevisions": [
+    "c33d6e9312739ab15fd705a28e60e9f50c6e7b8b"
+  ],
+  "strictB0Valid": true,
+  "comparisonAdmissible": true
+}

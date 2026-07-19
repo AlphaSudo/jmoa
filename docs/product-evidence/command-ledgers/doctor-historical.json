@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "jmoa-command-ledger-v1",
+  "service": "doctor",
+  "era": "historical",
+  "classification": [
+    "HISTORICAL_COMMANDS_COMPLETE",
+    "HISTORICAL_ARTIFACT_COMPLETE",
+    "HISTORICAL_RUNTIME_REPRODUCIBLE"
+  ],
+  "notes": "D2 is the corrected historical optimized comparator, not a strict B0.",
+  "commands": [
+    {
+      "logicalPath": "historical/doctor/build-d2-fixed.ps1",
+      "exists": true,
+      "sha256": "CF07A907C00561001ED4CF1B55D581EE5FC0FBC8D4323EEBF8731C239C267226",
+      "bytes": 6765
+    },
+    {
+      "logicalPath": "historical/doctor/train-cds.ps1",
+      "exists": true,
+      "sha256": "714F1A4BCA29FAEAB053ECF915B38C42DE00185D262F750A3A2EBDD484B52278",
+      "bytes": 11750
+    },
+    {
+      "logicalPath": "historical/doctor/measure-32i.ps1",
+      "exists": true,
+      "sha256": "F663D679BBAEC026E099C1DDF77257159911BA7EEC53D10B0638940CB529429B",
+      "bytes": 8493
+    }
+  ],
+  "artifacts": [
+    {
+      "logicalPath": "artifact/doctor/doctor-baseline.jar",
+      "exists": true,
+      "sha256": "0B44E107A4699D090D22CF3C6FAFF52630AA803345DF7775510F22FA3FD10F7B",
+      "bytes": 101677278
+    },
+    {
+      "logicalPath": "artifact/doctor/d2-fixed.jar",
+      "exists": true,
+      "sha256": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+      "bytes": 101906981
+    },
+    {
+      "logicalPath": "artifact/doctor/baseline-app-cds.jsa",
+      "exists": true,
+      "sha256": "3EC503C87E232AB32B8638FED8696058F85F9DC3D9FEF63CD09BBD9DC7F8770C",
+      "bytes": 119812096
+    },
+    {
+      "logicalPath": "artifact/doctor/d2-fixed-app-cds.jsa",
+      "exists": true,
+      "sha256": "02955A369BB9F675706E4715E28437220A95637294FC23D07D0A381AD216F6D2",
+      "bytes": 120123392
+    }
+  ]
+}

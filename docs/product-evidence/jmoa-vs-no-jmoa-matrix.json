@@ -2,7 +2,8 @@
   "metadataVersion": "jmoa-vs-no-jmoa-matrix-v1",
   "generatedAt": "2026-07-19T00:15:21.1325824Z",
   "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
-  "overallState": "ONE_SERVICE_PRODUCT_WIN",
+  "overallState": "DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION",
+  "previousProvisionalState": "ONE_SERVICE_PRODUCT_WIN",
   "substantialProductWins": 1,
   "evaluatedServices": 3,
   "services": [
@@ -11,7 +12,7 @@
       "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
       "launchMode": "EXPLODED_BOOT_APP",
       "runtimePolicy": "NO_CDS_LOW_DIRTY",
-      "status": "SCREEN_FAILED",
+      "status": "HISTORICAL_RUNTIME_DRIFT",
       "validRuns": 2,
       "pairedWins": 0,
       "pairs": 1,
@@ -39,7 +40,7 @@
         "anonymousRwPssDeltaKb": -1504,
         "interpretation": "The candidate loaded fewer classes but dirtied more heap pages. The direct screen did not promote."
       },
-      "claimBoundary": "This is a valid single-pair screen failure, not a confirmation result. The historical PetClinic V1 and V1-to-V2 wins remain separate evidence.",
+      "claimBoundary": "This is a valid single-pair screen failure, not a confirmation result. Replaying the frozen Phase 33M protocol produced 0/3 wins and reversed the accepted median direction, so no new three-arm campaign is admissible until runtime drift is isolated.",
       "substantialProductGatePassed": false
     },
     {
@@ -106,7 +107,7 @@
       "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
       "launchMode": "SPRING_BOOT_FAT_JAR",
       "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
-      "status": "SCREEN_FAILED",
+      "status": "SCREEN_ARTIFACT_MISMATCH",
       "validRuns": 2,
       "pairedWins": 0,
       "pairs": 1,
@@ -126,6 +127,10 @@
       "candidateArtifact": {
         "sha256": "FB4E6295364EC564AEEC1123F5D72EB8C7C4C5A47B677C57909EFEA2E678618C",
         "bytes": 95770035
+      },
+      "acceptedV2Artifact": {
+        "sha256": "4CFC40ADBD559066071A65BAC4A0D6836411BDBF4BB69E9162C0D2E7C65569E3",
+        "bytes": 95770204
       },
       "runtimeProof": {
         "sameStockJdkArchive": true,
@@ -148,9 +153,9 @@
           "memoryCurrentBytes": 3244032
         }
       ],
-      "claimBoundary": "Both bounded screens failed. No confirmation or direct product memory claim is permitted for Patient. Historical Patient V1 and V1-to-V2 wins remain separate evidence.",
+      "claimBoundary": "Both bounded screens are valid for candidate FB4E..., but the accepted corrected V2 is 4CFC.... The final Patient direct verdict remains open.",
       "substantialProductGatePassed": false
     }
   ],
-  "claimBoundary": "Direct measured comparisons only. No B0-to-V1 and V1-to-V2 arithmetic is used."
+  "claimBoundary": "Direct measurements are retained. Aggregate adoption status is provisional pending runtime-equivalence and artifact-lineage reconciliation."
 }

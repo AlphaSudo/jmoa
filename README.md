@@ -19,26 +19,41 @@ classfile metadata, materializes optimized bytecode into the real deployment
 shape, proves which artifacts the JVM loaded, and validates memory effects with
 paired PSS, Private_Dirty, cgroup, NMT, and class-level evidence.
 
-## Direct Product Result
+## Direct Product Reconciliation
 
-The primary adoption comparison is a clean no-JMOA `B0` artifact versus final
-JMOA V2 under a frozen service-specific protocol. One service cleared the
-substantial product gate; two valid screens did not promote.
+The direct clean no-JMOA `B0` versus final V2 matrix is currently
+`DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION`. The measurements remain valid
+records, but source lineage, dependency identity, historical runtime replay,
+and same-artifact variance are being audited before the aggregate adoption
+verdict is finalized.
 
 | Service | Deployment and policy | Direct B0 to V2 result | State |
 | --- | --- | ---: | --- |
-| Doctor | Fat JAR, artifact-specific application CDS | **-5,809 KB median PSS**, 3/3 wins | Confirmed substantial win |
-| PetClinic customers | Exploded Boot, `NO_CDS_LOW_DIRTY` | +5,446 KB PSS | Screen failed |
-| Patient | Fat JAR, stock JDK base CDS | +3,290 KB PSS on corrected screen | Screen failed |
+| Doctor | Fat JAR, artifact-specific application CDS | **-5,809 KB median PSS**, 3/3 wins | Confirmed; coherent lineage proved, variance qualification still open |
+| PetClinic customers | Exploded Boot, `NO_CDS_LOW_DIRTY` | +5,446 KB PSS | Screen regressed; historical replay now shows runtime drift |
+| Patient | Fat JAR, stock JDK base CDS | +3,290 KB PSS for attempted candidate | Screen used a non-accepted V2 SHA; accepted comparison remains open |
 
-Overall state: `ONE_SERVICE_PRODUCT_WIN`. This is not a universal-win claim.
-The Doctor result has six valid runs, zero workload errors, V2-C
-`CONFIRMED_WIN`, and V2-D attribution. PetClinic and Patient stopped at the
-frozen screen gate and were not promoted to confirmation.
+The previous `ONE_SERVICE_PRODUCT_WIN` aggregate is provisional during this
+audit. Doctor retains its confirmed measured result. PetClinic retains a valid
+losing screen and now has a historical replay reversal. Patient's two screens
+remain valid only for the attempted `FB4E...` candidate, not the accepted
+corrected `4CFC...` V2 artifact. No older three-service baseline claim has been
+restored, and no new three-arm campaign was run after the qualification gates
+failed.
 
 Read the [direct matrix](docs/product-evidence/jmoa-vs-no-jmoa-matrix.md),
 [evidence contract](docs/product-evidence/jmoa-vs-no-jmoa-contract.md), and
-[service records](docs/product-evidence/doctor-direct-result.md).
+[runtime-equivalence contract](docs/product-evidence/runtime-equivalence-investigation-contract.md).
+
+Start the audited public workflow with:
+
+```powershell
+pwsh ./scripts/run-public-jmoa-evaluation.ps1 -Mode Audit -Service petclinic
+```
+
+This captures an exact command ledger and runtime fingerprint before replay or
+comparison. Later modes require an admitted service campaign config. See the
+[runtime consistency report](docs/product-evidence/runtime-consistency-report.md).
 
 ## V1 To V2 Engineering Evolution
 

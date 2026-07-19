@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "jmoa-historical-runtime-replay-v1",
+  "petclinic": {
+    "status": "HISTORICAL_RUNTIME_DRIFT",
+    "runner": "phase33m/run-33m-integrated-nocds-confirmation.ps1",
+    "baselineArtifactSha256": "4952EF9306C732846BFAE0FAE6A67BE2F9B8509644B3396B8247215A03E5589D",
+    "candidateArtifactSha256": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C",
+    "baselineImageId": "fb1f34ad575ddfe44e92b52d9f976876b5687bc0f36960236ffd606fcb92fe37",
+    "candidateImageId": "79b29f0c3f98068cbd09bd77ee25a4f2c2a8507089c02242682bff3763ee620f",
+    "original": {"pairedWins": 3, "medianPssDeltaKb": -4758, "medianPrivateDirtyDeltaKb": -4904, "medianMemoryCurrentDeltaBytes": -4849664},
+    "replay": {"pairedWins": 0, "medianPssDeltaKb": 8647, "medianPrivateDirtyDeltaKb": 8780, "medianMemoryCurrentDeltaBytes": 2166784},
+    "nextGate": "ISOLATE_RUNTIME_DRIFT_BEFORE_THREE_ARM"
+  },
+  "doctor": {
+    "status": "ACCEPTED_CURRENT_REPLAY_PATH",
+    "comparison": "D2_TO_D2R",
+    "d2IsStrictB0": false,
+    "pairedWins": 3,
+    "medianPssDeltaKb": -5156
+  },
+  "patient": {
+    "status": "ACCEPTED_V1_V2_ARTIFACTS_PRESENT",
+    "acceptedV1Sha256": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+    "acceptedV2Sha256": "4CFC40ADBD559066071A65BAC4A0D6836411BDBF4BB69E9162C0D2E7C65569E3",
+    "directScreenCandidateSha256": "FB4E6295364EC564AEEC1123F5D72EB8C7C4C5A47B677C57909EFEA2E678618C",
+    "directScreenMatchesAcceptedV2": false
+  }
+}

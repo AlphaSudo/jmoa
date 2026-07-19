@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "jmoa-same-artifact-noise-summary-v1",
+  "status": "NOT_QUALIFIED",
+  "thresholds": {"pssKb": 1024, "privateDirtyKb": 1024, "memoryCurrentBytes": 1048576},
+  "controls": [
+    {"service": "doctor-service", "artifact": "B0", "pssAbsKb": 2343, "privateDirtyAbsKb": 2556, "memoryCurrentAbsBytes": 2600960, "qualified": false},
+    {"service": "patient-service", "artifact": "B0", "pssAbsKb": 6414, "privateDirtyAbsKb": 6204, "memoryCurrentAbsBytes": 6311936, "qualified": false}
+  ],
+  "claimBoundary": "Retrospective controls are diagnostic. Dedicated predeclared controls are required before a three-arm product campaign."
+}

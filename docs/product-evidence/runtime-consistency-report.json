@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "jmoa-runtime-consistency-report-v2",
+  "status": "RECONCILIATION_GATES_BLOCKED",
+  "aggregateState": "DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION",
+  "threeArmCampaignExecuted": false,
+  "threeArmBlockReasons": [
+    "PETCLINIC_HISTORICAL_RUNTIME_DRIFT",
+    "SAME_ARTIFACT_NOISE_NOT_QUALIFIED",
+    "PATIENT_DIRECT_SCREEN_ARTIFACT_MISMATCH"
+  ],
+  "services": {
+    "petclinic": {
+      "lineageGate": "PASS",
+      "historicalReplayGate": "FAIL_RUNTIME_DRIFT",
+      "originalMedianPssDeltaKb": -4758,
+      "replayMedianPssDeltaKb": 8647,
+      "replayPairedWins": 0,
+      "nextGate": "ISOLATE_RUNTIME_DRIFT"
+    },
+    "doctor": {
+      "lineageGate": "PASS",
+      "directResult": "CONFIRMED_3_OF_3",
+      "medianPssDeltaKb": -5809,
+      "retrospectiveNoiseGate": "FAIL",
+      "d2Classification": "OPTIMIZED_COMPARATOR_NOT_B0"
+    },
+    "patient": {
+      "lineageGate": "PASS",
+      "directScreenGate": "ARTIFACT_MISMATCH",
+      "attemptedCandidateSha256": "FB4E6295364EC564AEEC1123F5D72EB8C7C4C5A47B677C57909EFEA2E678618C",
+      "acceptedV2Sha256": "4CFC40ADBD559066071A65BAC4A0D6836411BDBF4BB69E9162C0D2E7C65569E3",
+      "retrospectiveNoiseGate": "FAIL"
+    }
+  },
+  "toolchainRisk": {
+    "javaHomeMajor": 17,
+    "pathJavaMajor": 26,
+    "pathJavacMajor": 26,
+    "bareMavenAvailable": false,
+    "podmanVersion": "5.7.1"
+  },
+  "claimBoundary": "No reconciled aggregate verdict or new three-arm result is permitted until historical drift and dedicated same-artifact noise gates pass."
+}
