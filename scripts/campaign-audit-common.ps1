@@ -32,6 +32,19 @@ function ConvertTo-CampaignAuditIndented {
     return (($Value -split '\r?\n') | ForEach-Object { "    $_" }) -join "`n"
 }
 
+function ConvertTo-CampaignHttpBodyText {
+    param($Content)
+    if ($null -eq $Content) { return '' }
+    if ($Content -is [byte[]]) {
+        return [Text.Encoding]::UTF8.GetString([byte[]]$Content)
+    }
+    if ($Content -is [System.IO.Stream]) {
+        $reader = [IO.StreamReader]::new($Content, [Text.Encoding]::UTF8, $true, 1024, $true)
+        try { return $reader.ReadToEnd() } finally { $reader.Dispose() }
+    }
+    return [string]$Content
+}
+
 # Deterministic content hash of a directory tree (relative path + file bytes). Reused for the config
 # repository freeze and for child-ledger integrity of the raw/ directory.
 function Get-CampaignTreeSha256 {
@@ -253,7 +266,7 @@ function Invoke-AuditedHttp {
         }
         $response = Invoke-WebRequest @params
         $status = [int]$response.StatusCode
-        $responseBody = [string]$response.Content
+        $responseBody = ConvertTo-CampaignHttpBodyText -Content $response.Content
     } catch {
         $requestError = $_.Exception.Message
     }

@@ -93,6 +93,12 @@ Add-FixtureResult -Name 'canonical-json-preserves-array-order' `
     -Passed ($arrayA.sha256 -ne $arrayB.sha256) `
     -Details "A=$($arrayA.sha256), B=$($arrayB.sha256)"
 
+$healthBytes = [Text.Encoding]::UTF8.GetBytes('{"status":"UP"}')
+$decodedHealth = ConvertTo-CampaignHttpBodyText -Content $healthBytes
+Add-FixtureResult -Name 'audited-http-decodes-byte-array-as-utf8' -Passed (
+    $decodedHealth -eq '{"status":"UP"}' -and $decodedHealth -match '"status"\s*:\s*"UP"'
+) -Details $decodedHealth
+
 $semanticBaseline = Join-Path $work 'semantic-baseline.json'
 $semanticEqual = Join-Path $work 'semantic-equal.json'
 $semanticDrift = Join-Path $work 'semantic-drift.json'
