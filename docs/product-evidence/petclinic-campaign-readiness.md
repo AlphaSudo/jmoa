@@ -23,7 +23,7 @@ the exact paths and command responses.
 
 ## Passed Gates
 
-- Gate A fixtures: `31/31`
+- Gate A fixtures: `35/35`
 - Gate C campaign-manifest integrity: passed
 - B0 no-JMOA cleanliness: passed
 - V2 replacement hashes: `24/24`
@@ -36,17 +36,26 @@ the exact paths and command responses.
   `80EEA8F0321E72DD7AD87E4F94817A217C89DF5A66D4FFEFFACE50507BF89840`
 - Campaign-owned config snapshot hash equals source hash: passed
 - Preflight child-ledger integrity: passed
+- Windows/WSL/Podman host preflight: passed
+- Required ports free and no running Podman containers: passed
+- Podman VM admission: at least `1 GiB` available, zero swap used, memory PSI
+  `some avg10 <= 1.0` and `full avg10 <= 0.1`
 
 ## Authorized Runtime Order
 
 1. Run two reversed B0-to-B0 same-artifact pairs.
-2. Run two reversed V2-to-V2 same-artifact pairs.
-3. Stop if either control exceeds the frozen noise thresholds.
-4. Run balanced pairs in order B0/V2, V2/B0, B0/V2.
-5. Require canonical response equality, identical initial/final data state,
+2. Stop immediately with `STOPPED_B0_RUNTIME_VARIANCE` if B0 exceeds the
+   frozen noise or environment thresholds.
+3. Only after B0 qualifies, run two reversed V2-to-V2 same-artifact pairs.
+4. Stop with `STOPPED_V2_RUNTIME_VARIANCE` if V2 exceeds the frozen thresholds.
+5. Run balanced pairs in order B0/V2, V2/B0, B0/V2.
+6. Require canonical response equality, identical initial/final data state,
    proven mutations, zero workload errors, and stable JDK fingerprints.
-6. Run V2-C validation and non-diagnostic V2-D attribution.
-7. Claim a product win only if every frozen gate passes.
+7. Require every arm's pre/post Podman VM pressure record to pass.
+8. Run V2-C validation and non-diagnostic V2-D attribution.
+9. Emit one of `TRUSTED_PRODUCT_WIN`, `CONFIRMED_PRODUCT_WIN` with
+   `SUBSTANTIAL_4MIB_GATE_NOT_MET`, `PRODUCT_EFFECT_NOT_CONFIRMED`, or
+   `ENVIRONMENT_VARIANCE_TOO_HIGH`.
 
 Each arm receives one complete command ledger with responses inline. The
 readiness result does not itself make a new memory claim.

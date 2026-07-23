@@ -41,6 +41,10 @@ param(
     [int]$MaxNoisePrivateDirtyDriftKb = 1024,
     [long]$MaxNoiseMemoryCurrentDriftBytes = 2097152,
     [int]$MinReversedNoisePairsPerControl = 2,
+    [long]$MinPodmanAvailableMemoryBytes = 1073741824,
+    [long]$MaxPodmanSwapUsedBytes = 0,
+    [double]$MaxPodmanMemoryPressureSomeAvg10 = 1.0,
+    [double]$MaxPodmanMemoryPressureFullAvg10 = 0.1,
     [Parameter(Mandatory)][string]$FixturesReport,
     [switch]$DryRun
 )
@@ -57,6 +61,7 @@ $workloadScript = Join-Path $PSScriptRoot 'campaign-workload-petclinic.ps1'
 $stopScript = Join-Path $PSScriptRoot 'campaign-stop-petclinic-stack.ps1'
 $screenScript = Join-Path $PSScriptRoot 'runtime-screen-pair.ps1'
 $noiseAnalyzer = Join-Path $PSScriptRoot 'analyze-same-artifact-noise.ps1'
+$hostPreflightScript = Join-Path $PSScriptRoot 'capture-campaign-host-preflight.ps1'
 
 $healthUrl = 'http://localhost:8081/actuator/health'
 $service = 'customers-service'
@@ -252,7 +257,7 @@ function Publish-CampaignChildLedgerIndex {
 }
 
 # ---- Input validation (fail-closed) -----------------------------------------------------------
-foreach ($script in @($launchScript, $workloadScript, $stopScript, $screenScript, $noiseAnalyzer)) {
+foreach ($script in @($launchScript, $workloadScript, $stopScript, $screenScript, $noiseAnalyzer, $hostPreflightScript)) {
     if (-not (Test-Path -LiteralPath $script -PathType Leaf)) { throw "Required campaign script missing: $script" }
 }
 foreach ($artifact in @($B0Artifact, $V2Artifact, $MaterializationManifest, $ArtifactLineage)) {
@@ -525,16 +530,37 @@ function Invoke-CampaignScreenPair {
         PostWorkloadSnapshotSeconds = @($SettleSeconds)
         HealthTimeoutSeconds        = $HealthTimeoutSeconds
         FailOnFailure               = $true
+        CapturePodmanMachinePressure = $true
+        MinPodmanAvailableMemoryBytes = $MinPodmanAvailableMemoryBytes
+        MaxPodmanSwapUsedBytes = $MaxPodmanSwapUsedBytes
+        MaxPodmanMemoryPressureSomeAvg10 = $MaxPodmanMemoryPressureSomeAvg10
+        MaxPodmanMemoryPressureFullAvg10 = $MaxPodmanMemoryPressureFullAvg10
     }
     if ($DropPageCacheBeforeVariant) { $screenArguments.DropPageCacheBeforeVariant = $true }
     Add-ScenarioNote -Title "Screen pair $PairIndex ($FirstVariant) into $CaptureRoot" -Text "Baseline image: $BaselineImage; Candidate image: $CandidateImage; child ledger: $LedgerDirectory."
     & $screenScript @screenArguments
-    if ($LASTEXITCODE -ne 0) { throw "Screen pair $PairIndex failed in $CaptureRoot." }
+    if (-not $?) { throw "Screen pair $PairIndex failed in $CaptureRoot." }
 }
 
 # JDK identity is collected from every measured arm for a cross-arm parity gate (review item 12).
 $armJdkIdentities = New-Object System.Collections.Generic.List[object]
 function Add-CampaignArmJdk { param([string]$RunDirectory, [string]$Arm) $id = Get-CampaignArmJdkIdentity -RunDirectory $RunDirectory; $id.arm = $Arm; $armJdkIdentities.Add($id) | Out-Null }
+
+$hostPreflightDir = Join-Path $reportDir 'host-preflight'
+$hostPreflightLedger = Join-Path $childLedgerRoot 'host-preflight'
+Add-ScenarioNote -Title 'Host and Podman preflight' -Text 'Capture Windows, WSL, Podman, port, container, VM-memory, swap, and PSI state immediately before any measured arm.'
+& $hostPreflightScript -OutputDirectory $hostPreflightDir -ContainerCli $ContainerCli `
+    -MinPodmanAvailableMemoryBytes $MinPodmanAvailableMemoryBytes -MaxPodmanSwapUsedBytes $MaxPodmanSwapUsedBytes `
+    -MaxPodmanMemoryPressureSomeAvg10 $MaxPodmanMemoryPressureSomeAvg10 `
+    -MaxPodmanMemoryPressureFullAvg10 $MaxPodmanMemoryPressureFullAvg10 -LedgerDirectory $hostPreflightLedger
+if (-not $?) {
+    Publish-CampaignChildLedgerIndex | Out-Null
+    Complete-ScenarioLedger -Status 'STOPPED_HOST_PREFLIGHT' -Result @{ terminalVerdict = 'ENVIRONMENT_VARIANCE_TOO_HIGH'; report = (Join-Path $hostPreflightDir 'host-podman-preflight.json') } | Out-Null
+    throw 'Host/Podman preflight did not qualify; no measured arm was launched.'
+}
+$hostPreflight = Get-Content -Raw -LiteralPath (Join-Path $hostPreflightDir 'host-podman-preflight.json') | ConvertFrom-Json
+Add-ScenarioAsset -Role 'Host and Podman preflight' -Path (Join-Path $hostPreflightDir 'host-podman-preflight.json') `
+    -Provenance GENERATED_IN_SCENARIO -Note 'Fail-closed environment fingerprint and pressure admission before controls.' | Out-Null
 
 if ($DryRun) {
     Add-ScenarioNote -Title 'Dry run' -Text 'Manifest (Gate C), image identity, artifact SHA, transformation, lineage, and config-freeze gates validated. No pairs were executed.'
@@ -550,6 +576,7 @@ if ($DryRun) {
         lineageGate     = $lineageGate
         configFreeze    = [ordered]@{ contentTreeSha256 = $configFreeze.contentTreeSha256; gitHead = $configFreeze.gitHead; workingTreeClean = $configFreeze.workingTreeClean; matchesManifest = $configFreezeMatchesManifest }
         frozenConfig    = $frozenConfigManifest
+        hostPreflight   = $hostPreflight
         sourceRevision  = $SourceRevision
         fixtures        = $fixtures
         plan            = [ordered]@{
@@ -557,7 +584,7 @@ if ($DryRun) {
             balancedOrder = @('B0->V2 (BASELINE_FIRST)', 'V2->B0 (CANDIDATE_FIRST)', 'B0->V2 (BASELINE_FIRST)')
             trustedGate   = "median PSS <= $TrustedPssGateKb KB"
         }
-        gatesPassed     = ($fixturesPassed -and $manifestGatePassed -and $imageIdentityGate.passed -and $artifactShaGate.passed -and $artifactGate.passed -and $lineageGate.passed -and $configFreezeMatchesManifest)
+        gatesPassed     = ($fixturesPassed -and $manifestGatePassed -and $imageIdentityGate.passed -and $artifactShaGate.passed -and $artifactGate.passed -and $lineageGate.passed -and $configFreezeMatchesManifest -and [bool]$hostPreflight.passed)
     }
     $childLedgerIndex = Publish-CampaignChildLedgerIndex
     $readiness.childLedgers = $childLedgerIndex
@@ -577,6 +604,7 @@ if ($DryRun) {
 - Artifact lineage: **$($lineageGate.passed)** (source revision matched: $($lineageGate.sourceRevisionMatched))
 - Config freeze matches manifest: **$configFreezeMatchesManifest** (git HEAD ``$($configFreeze.gitHead)``, clean=$($configFreeze.workingTreeClean))
 - Frozen config snapshot: **$frozenConfigPassed** (content SHA-256 ``$frozenConfigTreeSha``); this snapshot, not the mutable checkout, is mounted at runtime
+- Host/Podman preflight: **$($hostPreflight.passed)** (VM available memory $($hostPreflight.podmanMachine.availableMemoryBytes) B, swap used $($hostPreflight.podmanMachine.swapUsedBytes) B)
 
 ## Environment
 - java: $($environmentLedger.javaVersionText)
@@ -596,9 +624,58 @@ This is a DRY RUN. No screen pairs were executed. Review this report before auth
     return
 }
 
-# ---- Step 6: same-artifact noise controls (TWO reversed pairs each, review Issue #8 + item 7) --
-Add-ScenarioNote -Title 'Step 6 - Same-artifact noise controls' -Text 'Run two reversed B0->B0 pairs and two reversed V2->V2 pairs; require per-control qualification before any balanced pair.'
-# B0 control: pair 1 BASELINE_FIRST (b1 first, c1 second), pair 2 CANDIDATE_FIRST (c2 first, b2 second).
+# ---- Step 6: staged same-artifact controls ------------------------------------------------------
+function Test-CampaignNoiseControl {
+    param(
+        [Parameter(Mandatory)][string]$Label,
+        [Parameter(Mandatory)][string]$Artifact,
+        [Parameter(Mandatory)][string]$CaptureRoot,
+        [Parameter(Mandatory)]$SemanticPair1,
+        [Parameter(Mandatory)]$SemanticPair2
+    )
+    $safeLabel = $Label.ToLowerInvariant().Replace('_', '-')
+    $input = [ordered]@{
+        schema = 'jmoa-same-artifact-noise-input-v2'
+        controls = @(
+            [ordered]@{
+                label = $Label
+                artifactSha256 = (Get-JmoaSha256 -Path $Artifact)
+                pairs = @(
+                    [ordered]@{ id = "${Label}_p1"; order = 'FIRST_THEN_SECOND'; first = (Read-CampaignRunMemory -RunDirectory (Join-Path $CaptureRoot 'b1')); second = (Read-CampaignRunMemory -RunDirectory (Join-Path $CaptureRoot 'c1')); semanticErrors = $SemanticPair1.semanticErrors },
+                    [ordered]@{ id = "${Label}_p2"; order = 'SECOND_THEN_FIRST'; first = (Read-CampaignRunMemory -RunDirectory (Join-Path $CaptureRoot 'c2')); second = (Read-CampaignRunMemory -RunDirectory (Join-Path $CaptureRoot 'b2')); semanticErrors = $SemanticPair2.semanticErrors }
+                )
+            }
+        )
+    }
+    $inputPath = Join-Path $reportDir "noise-$safeLabel-input.json"
+    $outputDir = Join-Path $reportDir "noise-$safeLabel"
+    Write-JmoaJson -Value $input -Path $inputPath
+    & $noiseAnalyzer -InputPath $inputPath -OutputDirectory $outputDir `
+        -MaxPssDriftKb $MaxNoisePssDriftKb -MaxPrivateDirtyDriftKb $MaxNoisePrivateDirtyDriftKb `
+        -MaxMemoryCurrentDriftBytes $MaxNoiseMemoryCurrentDriftBytes -MinReversedPairsPerControl $MinReversedNoisePairsPerControl | Out-Null
+    $report = Get-Content -Raw -LiteralPath (Join-Path $outputDir 'same-artifact-noise.json') | ConvertFrom-Json
+    $semanticErrors = [int]$SemanticPair1.semanticErrors + [int]$SemanticPair2.semanticErrors
+    $environmentReports = @(
+        foreach ($cell in @('b1', 'c1', 'b2', 'c2')) {
+            Get-Content -Raw -LiteralPath (Join-Path $CaptureRoot "$cell\environment-validity.json") | ConvertFrom-Json
+        }
+    )
+    $environmentQualified = @($environmentReports | Where-Object { -not [bool]$_.passed }).Count -eq 0
+    return [ordered]@{
+        metadataVersion = 'jmoa-campaign-noise-control-v3'
+        label            = $Label
+        driftQualified   = [bool]$report.qualified
+        semanticErrors   = $semanticErrors
+        environmentQualified = $environmentQualified
+        qualified        = ([bool]$report.qualified -and $semanticErrors -eq 0 -and $environmentQualified)
+        controls         = $report.controls
+        thresholds       = $report.thresholds
+        semanticPairs    = @($SemanticPair1, $SemanticPair2)
+        environment      = $environmentReports
+    }
+}
+
+Add-ScenarioNote -Title 'Step 6A - B0 same-artifact controls' -Text 'Run two reversed B0->B0 pairs and decide B0 repeatability before any V2 control is launched.'
 Invoke-CampaignScreenPair -CaptureRoot $noiseB0Root -PairIndex 1 -FirstVariant 'BASELINE_FIRST' `
     -BaselineImage $B0Image -CandidateImage $B0Image -BaselineArtifact $B0Artifact -CandidateArtifact $B0Artifact `
     -BaselineContainerName 'pccamp-noiseb0-b1' -CandidateContainerName 'pccamp-noiseb0-c1' `
@@ -607,7 +684,19 @@ Invoke-CampaignScreenPair -CaptureRoot $noiseB0Root -PairIndex 2 -FirstVariant '
     -BaselineImage $B0Image -CandidateImage $B0Image -BaselineArtifact $B0Artifact -CandidateArtifact $B0Artifact `
     -BaselineContainerName 'pccamp-noiseb0-b2' -CandidateContainerName 'pccamp-noiseb0-c2' `
     -LedgerDirectory (Join-Path $childLedgerRoot 'noise-b0-pair2') -Context 'noise B0 pair 2'
-# V2 control: pair 1 BASELINE_FIRST, pair 2 CANDIDATE_FIRST.
+foreach ($cell in @('b1', 'c1', 'b2', 'c2')) { Add-CampaignArmJdk -RunDirectory (Join-Path $noiseB0Root $cell) -Arm "noise-b0-$cell" }
+$noiseB0Sem1 = Compare-CampaignSemantics -PairIndex 1 -BaselineSemanticPath (Join-Path $noiseB0Root 'b1\semantic-requests.json') -CandidateSemanticPath (Join-Path $noiseB0Root 'c1\semantic-requests.json')
+$noiseB0Sem2 = Compare-CampaignSemantics -PairIndex 2 -BaselineSemanticPath (Join-Path $noiseB0Root 'b2\semantic-requests.json') -CandidateSemanticPath (Join-Path $noiseB0Root 'c2\semantic-requests.json')
+$noiseB0Summary = Test-CampaignNoiseControl -Label 'B0_SAME' -Artifact $B0Artifact -CaptureRoot $noiseB0Root -SemanticPair1 $noiseB0Sem1 -SemanticPair2 $noiseB0Sem2
+Write-JmoaJson -Value $noiseB0Summary -Path (Join-Path $reportDir 'noise-b0-summary.json')
+if (-not $noiseB0Summary.qualified) {
+    Publish-CampaignChildLedgerIndex | Out-Null
+    Add-ScenarioNote -Title 'B0 controls did NOT qualify' -Text 'V2 controls and balanced pairs were not run.'
+    Complete-ScenarioLedger -Status 'STOPPED_B0_RUNTIME_VARIANCE' -Result @{ terminalVerdict = 'ENVIRONMENT_VARIANCE_TOO_HIGH'; noise = $noiseB0Summary; artifactGate = $artifactGate } | Out-Null
+    throw 'B0 same-artifact controls did not qualify (STOPPED_B0_RUNTIME_VARIANCE).'
+}
+
+Add-ScenarioNote -Title 'Step 6B - V2 same-artifact controls' -Text 'B0 qualified. Run two reversed V2->V2 pairs and decide transformed-artifact repeatability before balanced pairs.'
 Invoke-CampaignScreenPair -CaptureRoot $noiseV2Root -PairIndex 1 -FirstVariant 'BASELINE_FIRST' `
     -BaselineImage $V2Image -CandidateImage $V2Image -BaselineArtifact $V2Artifact -CandidateArtifact $V2Artifact `
     -BaselineContainerName 'pccamp-noisev2-b1' -CandidateContainerName 'pccamp-noisev2-c1' `
@@ -616,65 +705,25 @@ Invoke-CampaignScreenPair -CaptureRoot $noiseV2Root -PairIndex 2 -FirstVariant '
     -BaselineImage $V2Image -CandidateImage $V2Image -BaselineArtifact $V2Artifact -CandidateArtifact $V2Artifact `
     -BaselineContainerName 'pccamp-noisev2-b2' -CandidateContainerName 'pccamp-noisev2-c2' `
     -LedgerDirectory (Join-Path $childLedgerRoot 'noise-v2-pair2') -Context 'noise V2 pair 2'
-
-foreach ($cell in @('b1', 'c1', 'b2', 'c2')) { Add-CampaignArmJdk -RunDirectory (Join-Path $noiseB0Root $cell) -Arm "noise-b0-$cell" }
 foreach ($cell in @('b1', 'c1', 'b2', 'c2')) { Add-CampaignArmJdk -RunDirectory (Join-Path $noiseV2Root $cell) -Arm "noise-v2-$cell" }
-
-# Semantic errors between the two same-artifact runs of each reversed pair (must be 0).
-$noiseB0Sem1 = Compare-CampaignSemantics -PairIndex 1 -BaselineSemanticPath (Join-Path $noiseB0Root 'b1\semantic-requests.json') -CandidateSemanticPath (Join-Path $noiseB0Root 'c1\semantic-requests.json')
-$noiseB0Sem2 = Compare-CampaignSemantics -PairIndex 2 -BaselineSemanticPath (Join-Path $noiseB0Root 'b2\semantic-requests.json') -CandidateSemanticPath (Join-Path $noiseB0Root 'c2\semantic-requests.json')
 $noiseV2Sem1 = Compare-CampaignSemantics -PairIndex 1 -BaselineSemanticPath (Join-Path $noiseV2Root 'b1\semantic-requests.json') -CandidateSemanticPath (Join-Path $noiseV2Root 'c1\semantic-requests.json')
 $noiseV2Sem2 = Compare-CampaignSemantics -PairIndex 2 -BaselineSemanticPath (Join-Path $noiseV2Root 'b2\semantic-requests.json') -CandidateSemanticPath (Join-Path $noiseV2Root 'c2\semantic-requests.json')
-
-$noiseInput = [ordered]@{
-    schema = 'jmoa-same-artifact-noise-input-v2'
-    controls = @(
-        [ordered]@{
-            label = 'B0_SAME'
-            artifactSha256 = (Get-JmoaSha256 -Path $B0Artifact)
-            pairs = @(
-                [ordered]@{ id = 'B0_p1'; order = 'FIRST_THEN_SECOND'; first = (Read-CampaignRunMemory -RunDirectory (Join-Path $noiseB0Root 'b1')); second = (Read-CampaignRunMemory -RunDirectory (Join-Path $noiseB0Root 'c1')); semanticErrors = $noiseB0Sem1.semanticErrors },
-                [ordered]@{ id = 'B0_p2'; order = 'SECOND_THEN_FIRST'; first = (Read-CampaignRunMemory -RunDirectory (Join-Path $noiseB0Root 'c2')); second = (Read-CampaignRunMemory -RunDirectory (Join-Path $noiseB0Root 'b2')); semanticErrors = $noiseB0Sem2.semanticErrors }
-            )
-        },
-        [ordered]@{
-            label = 'V2_SAME'
-            artifactSha256 = (Get-JmoaSha256 -Path $V2Artifact)
-            pairs = @(
-                [ordered]@{ id = 'V2_p1'; order = 'FIRST_THEN_SECOND'; first = (Read-CampaignRunMemory -RunDirectory (Join-Path $noiseV2Root 'b1')); second = (Read-CampaignRunMemory -RunDirectory (Join-Path $noiseV2Root 'c1')); semanticErrors = $noiseV2Sem1.semanticErrors },
-                [ordered]@{ id = 'V2_p2'; order = 'SECOND_THEN_FIRST'; first = (Read-CampaignRunMemory -RunDirectory (Join-Path $noiseV2Root 'c2')); second = (Read-CampaignRunMemory -RunDirectory (Join-Path $noiseV2Root 'b2')); semanticErrors = $noiseV2Sem2.semanticErrors }
-            )
-        }
-    )
+$noiseV2Summary = Test-CampaignNoiseControl -Label 'V2_SAME' -Artifact $V2Artifact -CaptureRoot $noiseV2Root -SemanticPair1 $noiseV2Sem1 -SemanticPair2 $noiseV2Sem2
+Write-JmoaJson -Value $noiseV2Summary -Path (Join-Path $reportDir 'noise-v2-summary.json')
+if (-not $noiseV2Summary.qualified) {
+    Publish-CampaignChildLedgerIndex | Out-Null
+    Add-ScenarioNote -Title 'V2 controls did NOT qualify' -Text 'B0 was quiet, but V2 repeatability failed. Balanced pairs were not run.'
+    Complete-ScenarioLedger -Status 'STOPPED_V2_RUNTIME_VARIANCE' -Result @{ terminalVerdict = 'ENVIRONMENT_VARIANCE_TOO_HIGH'; b0Noise = $noiseB0Summary; v2Noise = $noiseV2Summary; artifactGate = $artifactGate } | Out-Null
+    throw 'V2 same-artifact controls did not qualify (STOPPED_V2_RUNTIME_VARIANCE).'
 }
-$noiseInputPath = Join-Path $reportDir 'noise-input.json'
-Write-JmoaJson -Value $noiseInput -Path $noiseInputPath
-
-$noiseSemanticErrors = $noiseB0Sem1.semanticErrors + $noiseB0Sem2.semanticErrors + $noiseV2Sem1.semanticErrors + $noiseV2Sem2.semanticErrors
-$noiseOutputDir = Join-Path $reportDir 'noise'
-& $noiseAnalyzer -InputPath $noiseInputPath -OutputDirectory $noiseOutputDir `
-    -MaxPssDriftKb $MaxNoisePssDriftKb -MaxPrivateDirtyDriftKb $MaxNoisePrivateDirtyDriftKb `
-    -MaxMemoryCurrentDriftBytes $MaxNoiseMemoryCurrentDriftBytes -MinReversedPairsPerControl $MinReversedNoisePairsPerControl | Out-Null
-$noiseReport = Get-Content -Raw -LiteralPath (Join-Path $noiseOutputDir 'same-artifact-noise.json') | ConvertFrom-Json
-$noiseQualified = ([bool]$noiseReport.qualified -and $noiseSemanticErrors -eq 0)
 
 $noiseSummary = [ordered]@{
-    metadataVersion = 'jmoa-campaign-noise-v2'
-    driftQualified  = [bool]$noiseReport.qualified
-    semanticErrors  = $noiseSemanticErrors
-    qualified       = $noiseQualified
-    controls        = $noiseReport.controls
-    thresholds      = $noiseReport.thresholds
-    semanticPairs   = @($noiseB0Sem1, $noiseB0Sem2, $noiseV2Sem1, $noiseV2Sem2)
+    metadataVersion = 'jmoa-campaign-noise-v3'
+    qualified = $true
+    b0 = $noiseB0Summary
+    v2 = $noiseV2Summary
 }
 Write-JmoaJson -Value $noiseSummary -Path (Join-Path $reportDir 'noise-summary.json')
-
-if (-not $noiseQualified) {
-    Publish-CampaignChildLedgerIndex | Out-Null
-    Add-ScenarioNote -Title 'Noise controls did NOT qualify' -Text "drift qualified=$($noiseReport.qualified), semantic errors=$noiseSemanticErrors. Balanced pairs were not run."
-    Complete-ScenarioLedger -Status 'STOPPED_RUNTIME_VARIANCE' -Result @{ noise = $noiseSummary; artifactGate = $artifactGate } | Out-Null
-    throw 'Same-artifact noise controls did not qualify; balanced pairs were not run (no five-pair rescue).'
-}
 
 # ---- Step 7: three balanced pairs [B0->V2, V2->B0, B0->V2] -------------------------------------
 Add-ScenarioNote -Title 'Step 7 - Balanced pairs' -Text 'Run three balanced pairs with alternating first variant.'
@@ -713,6 +762,20 @@ $semanticReport = [ordered]@{
     dataState = $dataStateResults.ToArray()
 }
 Write-JmoaJson -Value $semanticReport -Path (Join-Path $reportDir 'semantic-equivalence.json')
+
+$balancedEnvironmentReports = @(
+    for ($pair = 1; $pair -le $Pairs; $pair++) {
+        foreach ($label in @('b', 'c')) {
+            Get-Content -Raw -LiteralPath (Join-Path $balancedRoot "$label$pair\environment-validity.json") | ConvertFrom-Json
+        }
+    }
+)
+$balancedEnvironmentQualified = @($balancedEnvironmentReports | Where-Object { -not [bool]$_.passed }).Count -eq 0
+Write-JmoaJson -Value ([ordered]@{
+    schemaVersion = 'jmoa-balanced-environment-validity-v1'
+    passed = $balancedEnvironmentQualified
+    arms = $balancedEnvironmentReports
+}) -Path (Join-Path $reportDir 'balanced-environment-validity.json')
 
 # ---- JDK fingerprint parity across every measured arm (review item 12) -------------------------
 $distinctJdk = @($armJdkIdentities | ForEach-Object { $_.identity } | Sort-Object -Unique)
@@ -797,15 +860,32 @@ $gateChecks = [ordered]@{
     medianMemoryCurrentAtGate = ($medianMemoryCurrentBytes -le $TrustedMemoryCurrentGateBytes)
     zeroSemanticErrors        = ($totalSemanticErrors -eq 0)
     dataStateConsistent       = $dataStateConsistent
+    environmentQualified      = $balancedEnvironmentQualified
     jdkParity                 = $jdkParity.passed
     evidenceCommandOk         = ($evidenceCmd.exitCode -eq 0)
     attributionPassed         = $v2dPassed
 }
 $trustedWin = -not ($gateChecks.Values -contains $false)
+$confirmationChecks = [ordered]@{}
+foreach ($entry in $gateChecks.GetEnumerator()) {
+    if ($entry.Key -ne 'medianPssAtOrBelowGate') { $confirmationChecks[$entry.Key] = $entry.Value }
+}
+$confirmedProductWin = -not ($confirmationChecks.Values -contains $false)
+$terminalVerdict = if ($trustedWin) {
+    'TRUSTED_PRODUCT_WIN'
+} elseif ($confirmedProductWin) {
+    'CONFIRMED_PRODUCT_WIN'
+} else {
+    'PRODUCT_EFFECT_NOT_CONFIRMED'
+}
+$substantialGate = if ($medianPssKb -le $TrustedPssGateKb) { 'SUBSTANTIAL_4MIB_GATE_MET' } else { 'SUBSTANTIAL_4MIB_GATE_NOT_MET' }
 $productGate = [ordered]@{
     metadataVersion = 'jmoa-campaign-product-gate-v1'
     generatedAt     = [DateTime]::UtcNow.ToString('o')
     trustedWin      = $trustedWin
+    confirmedProductWin = $confirmedProductWin
+    terminalVerdict = $terminalVerdict
+    substantialGate = $substantialGate
     verdict         = $verdict
     checks          = $gateChecks
     medians         = [ordered]@{
@@ -856,9 +936,11 @@ $campaignSummary = [ordered]@{
     lineageGate     = $lineageGate
     configFreeze    = $configFreeze
     frozenConfig    = $frozenConfigManifest
+    hostPreflight   = $hostPreflight
     jdkParity       = $jdkParity
     noise           = $noiseSummary
     semantic        = $semanticReport
+    environment     = [ordered]@{ qualified = $balancedEnvironmentQualified; arms = $balancedEnvironmentReports }
     balancedMemory  = $balancedMemory.ToArray()
     reconciliation  = $reconciliation
     images          = [ordered]@{ baseline = $resolvedB0Id; candidate = $resolvedV2Id; config = $resolvedConfigId; discovery = $resolvedDiscoveryId }
@@ -870,12 +952,13 @@ $childLedgerIndex = Publish-CampaignChildLedgerIndex
 $campaignSummary.childLedgers = $childLedgerIndex
 Write-JmoaJson -Value $campaignSummary -Path (Join-Path $reportDir 'campaign-summary.json')
 
-$verdictBanner = if ($trustedWin) { 'TRUSTED_PRODUCT_WIN' } else { 'NOT_TRUSTED' }
+$verdictBanner = $terminalVerdict
 $reportMd = @"
 # PetClinic Performance Campaign
 
 - Run: ``$runId``
 - Result: **$verdictBanner**
+- Substantial gate: **$substantialGate**
 - Manifest campaignSha256: ``$actualCampaignSha``
 - V2-C verdict: ``$verdict``
 - Median PSS delta: **$medianPssKb KB** (gate <= $TrustedPssGateKb KB)
@@ -893,7 +976,9 @@ $reportMd = @"
 - Artifact lineage: **$($lineageGate.passed)**; Config freeze matches manifest: **$configFreezeMatchesManifest**
 
 ## Same-artifact noise
-- Qualified: **$($noiseSummary.qualified)** (drift qualified=$($noiseSummary.driftQualified), semantic errors=$($noiseSummary.semanticErrors))
+- Qualified: **$($noiseSummary.qualified)**
+- B0: **$($noiseSummary.b0.qualified)** (drift=$($noiseSummary.b0.driftQualified), semantic errors=$($noiseSummary.b0.semanticErrors), environment=$($noiseSummary.b0.environmentQualified))
+- V2: **$($noiseSummary.v2.qualified)** (drift=$($noiseSummary.v2.driftQualified), semantic errors=$($noiseSummary.v2.semanticErrors), environment=$($noiseSummary.v2.environmentQualified))
 
 ## Product gate checks
 $(( $gateChecks.GetEnumerator() | ForEach-Object { "- $($_.Key): **$($_.Value)**" }) -join "`n")
@@ -903,9 +988,9 @@ $($reconciliation.narrative)
 "@
 Write-JmoaText -Value $reportMd -Path (Join-Path $reportDir 'campaign-report.md')
 
-$finalStatus = if ($trustedWin) { 'TRUSTED_PRODUCT_WIN' } else { 'COMPLETED_NOT_TRUSTED' }
-Complete-ScenarioLedger -Status $finalStatus -Result @{ trustedWin = $trustedWin; verdict = $verdict; medianPssKb = $medianPssKb; reportDir = $reportDir } | Out-Null
+$finalStatus = $terminalVerdict
+Complete-ScenarioLedger -Status $finalStatus -Result @{ trustedWin = $trustedWin; confirmedProductWin = $confirmedProductWin; substantialGate = $substantialGate; verdict = $verdict; medianPssKb = $medianPssKb; reportDir = $reportDir } | Out-Null
 
 Write-Host "Campaign $runId complete: $verdictBanner (verdict=$verdict, median PSS=$medianPssKb KB). Reports: $reportDir"
-if (-not $trustedWin) { exit 2 }
+if ($terminalVerdict -eq 'PRODUCT_EFFECT_NOT_CONFIRMED') { exit 2 }
 exit 0

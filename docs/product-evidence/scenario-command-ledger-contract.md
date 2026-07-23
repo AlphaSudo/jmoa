@@ -74,9 +74,20 @@ uses a two-level ledger without weakening the one-ledger-per-arm requirement:
   SHA-256-addressed raw files;
 - `child-ledger-index.json` verifies every stage ledger, raw file, and
   consolidated arm ledger and is itself hashed by the parent campaign ledger.
+- the campaign host preflight has its own hashed command ledger containing the
+  Windows, WSL, Podman, process, power, port, guest-memory, swap, and PSI
+  commands with complete responses;
+- every measured arm records Podman-machine `free`, `/proc/meminfo`,
+  `/proc/swaps`, memory/cpu PSI, and cgroup controllers before and after the
+  arm; a pressure or swap violation invalidates the arm before it can enter a
+  median.
 
 The long campaign does not rebuild artifacts. It consumes a signed manifest
 that pins source revision, B0/V2 artifact hashes, all four image identities,
 materialization manifest, artifact lineage, config revision/content hash, JDK,
 Maven, runtime policy, and plugin coordinates. The runtime mounts a
 campaign-owned frozen config snapshot, not the mutable checkout.
+
+The same-artifact admission is staged. Two reversed B0 controls are evaluated
+first. V2 controls are not launched after a B0 variance failure. Balanced B0/V2
+pairs are launched only after both B0 and V2 controls independently qualify.

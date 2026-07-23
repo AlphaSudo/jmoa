@@ -46,6 +46,11 @@ param(
     [switch]$DeferHistogramUntilFinalSnapshot,
     [switch]$DiagnosticOnly,
     [switch]$DropPageCacheBeforeVariant,
+    [switch]$CapturePodmanMachinePressure,
+    [long]$MinPodmanAvailableMemoryBytes = 1073741824,
+    [long]$MaxPodmanSwapUsedBytes = 0,
+    [double]$MaxPodmanMemoryPressureSomeAvg10 = 1.0,
+    [double]$MaxPodmanMemoryPressureFullAvg10 = 0.1,
     [int]$HealthTimeoutSeconds = 90,
     [switch]$FailOnFailure,
     [string]$LedgerDirectory = ''
@@ -111,7 +116,7 @@ function Stop-VariantContainer {
             $stopLedgerArgs = @('-LedgerDirectory', $LedgerDirectory, '-LedgerStage', 'teardown', '-LedgerVariant', $Variant)
         }
         & $StopScript -RunDirectory $RunDirectory -ContainerName $ContainerName -Variant $Variant @StopScriptArguments @stopLedgerArgs
-        if ($LASTEXITCODE -ne 0) { throw "Stop script failed for $Variant ($ContainerName)." }
+        if (-not $?) { throw "Stop script failed for $Variant ($ContainerName)." }
         return
     }
     if (-not [string]::IsNullOrWhiteSpace($LedgerDirectory)) {
@@ -328,6 +333,100 @@ function Reset-PageCache {
     throw "Could not establish a cold page-cache precondition after 3 attempts: $failureText"
 }
 
+function Get-PodmanMachineMemoryValue {
+    param([string]$Text, [string]$Name)
+    $match = [regex]::Match($Text, "(?m)^$([regex]::Escape($Name)):\s+(\d+)\s+kB\s*$")
+    if (-not $match.Success) { throw "Podman machine /proc/meminfo is missing $Name." }
+    return [long]$match.Groups[1].Value * 1024
+}
+
+function Get-PodmanMachinePressureValue {
+    param([string]$Text, [ValidateSet('some', 'full')][string]$Kind, [string]$Metric)
+    $line = @($Text -split '\r?\n' | Where-Object { $_ -match "^$Kind\s" } | Select-Object -First 1)
+    if ($line.Count -ne 1) { throw "Podman machine PSI output is missing the '$Kind' line." }
+    $match = [regex]::Match([string]$line[0], "(?:^|\s)$([regex]::Escape($Metric))=([0-9.]+)(?:\s|$)")
+    if (-not $match.Success) { throw "Podman machine PSI '$Kind' line is missing $Metric." }
+    return [double]::Parse($match.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture)
+}
+
+function Capture-PodmanMachinePressure {
+    param(
+        [Parameter(Mandatory)][ValidateSet('PRE_ARM', 'POST_ARM')][string]$Point,
+        [Parameter(Mandatory)][string]$Directory
+    )
+    if (-not $CapturePodmanMachinePressure) {
+        return [ordered]@{ point = $Point; requested = $false; passed = $true; reasons = @() }
+    }
+    $prefix = if ($Point -eq 'PRE_ARM') { 'environment-pre-arm' } else { 'environment-post-arm' }
+    $captures = [ordered]@{}
+    foreach ($spec in @(
+        @{ key = 'meminfo'; command = 'cat /proc/meminfo' },
+        @{ key = 'swaps'; command = 'cat /proc/swaps' },
+        @{ key = 'memoryPressure'; command = 'cat /proc/pressure/memory' },
+        @{ key = 'cpuPressure'; command = 'cat /proc/pressure/cpu' },
+        @{ key = 'free'; command = 'free -b' },
+        @{ key = 'controllers'; command = 'cat /sys/fs/cgroup/cgroup.controllers' }
+    )) {
+        $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
+            'machine', 'ssh', "sh -lc '$($spec.command)'"
+        ) -LedgerDirectory $script:CurrentCaptureLedger -Step "$prefix $($spec.key)"
+        $path = Join-Path $Directory "$prefix-$($spec.key).txt"
+        Write-JmoaText -Value $result.stdout -Path $path
+        $captures[$spec.key] = $result.stdout
+    }
+
+    $availableBytes = Get-PodmanMachineMemoryValue -Text $captures.meminfo -Name 'MemAvailable'
+    $swapTotalBytes = Get-PodmanMachineMemoryValue -Text $captures.meminfo -Name 'SwapTotal'
+    $swapFreeBytes = Get-PodmanMachineMemoryValue -Text $captures.meminfo -Name 'SwapFree'
+    $swapUsedBytes = $swapTotalBytes - $swapFreeBytes
+    $someAvg10 = Get-PodmanMachinePressureValue -Text $captures.memoryPressure -Kind 'some' -Metric 'avg10'
+    $fullAvg10 = Get-PodmanMachinePressureValue -Text $captures.memoryPressure -Kind 'full' -Metric 'avg10'
+    $someTotal = Get-PodmanMachinePressureValue -Text $captures.memoryPressure -Kind 'some' -Metric 'total'
+    $fullTotal = Get-PodmanMachinePressureValue -Text $captures.memoryPressure -Kind 'full' -Metric 'total'
+    $reasons = New-Object System.Collections.Generic.List[string]
+    if ($Point -eq 'PRE_ARM' -and $availableBytes -lt $MinPodmanAvailableMemoryBytes) {
+        $reasons.Add("MemAvailable $availableBytes is below $MinPodmanAvailableMemoryBytes bytes") | Out-Null
+    }
+    if ($swapUsedBytes -gt $MaxPodmanSwapUsedBytes) {
+        $reasons.Add("swap used $swapUsedBytes exceeds $MaxPodmanSwapUsedBytes bytes") | Out-Null
+    }
+    if ($someAvg10 -gt $MaxPodmanMemoryPressureSomeAvg10) {
+        $reasons.Add("memory PSI some avg10 $someAvg10 exceeds $MaxPodmanMemoryPressureSomeAvg10") | Out-Null
+    }
+    if ($fullAvg10 -gt $MaxPodmanMemoryPressureFullAvg10) {
+        $reasons.Add("memory PSI full avg10 $fullAvg10 exceeds $MaxPodmanMemoryPressureFullAvg10") | Out-Null
+    }
+    $report = [ordered]@{
+        schemaVersion       = 'jmoa-podman-machine-pressure-v1'
+        point               = $Point
+        capturedAt          = [DateTime]::UtcNow.ToString('o')
+        requested           = $true
+        availableMemoryBytes = $availableBytes
+        swapTotalBytes      = $swapTotalBytes
+        swapFreeBytes       = $swapFreeBytes
+        swapUsedBytes       = $swapUsedBytes
+        memoryPressure      = [ordered]@{
+            someAvg10 = $someAvg10
+            fullAvg10 = $fullAvg10
+            someTotal = $someTotal
+            fullTotal = $fullTotal
+        }
+        thresholds          = [ordered]@{
+            minPreArmAvailableMemoryBytes = $MinPodmanAvailableMemoryBytes
+            maxSwapUsedBytes              = $MaxPodmanSwapUsedBytes
+            maxMemorySomeAvg10            = $MaxPodmanMemoryPressureSomeAvg10
+            maxMemoryFullAvg10            = $MaxPodmanMemoryPressureFullAvg10
+        }
+        passed              = ($reasons.Count -eq 0)
+        reasons             = $reasons.ToArray()
+    }
+    Write-JmoaJson -Value $report -Path (Join-Path $Directory "$prefix.json")
+    if (-not $report.passed) {
+        throw "Podman machine environment invalid at $Point`: $($reasons -join '; ')"
+    }
+    return $report
+}
+
 function Invoke-Variant {
     param(
         [ValidateSet('BASELINE', 'CANDIDATE')][string]$Variant,
@@ -362,8 +461,9 @@ function Invoke-Variant {
         }
         $pageCache = Reset-PageCache
         Write-JmoaText -Value $pageCache.output -Path (Join-Path $runDirectory 'page-cache-reset.txt')
+        $preArmEnvironment = Capture-PodmanMachinePressure -Point 'PRE_ARM' -Directory $runDirectory
         & $LaunchScript -RunDirectory $runDirectory -ContainerName $ContainerName -Variant $Variant @LaunchArguments @launchLedgerArgs
-        if ($LASTEXITCODE -ne 0) { throw "Launch script returned $LASTEXITCODE." }
+        if (-not $?) { throw 'Launch script failed.' }
         $runtimeJdkFingerprint = $null
         $jdkFingerprintPath = Join-Path $runDirectory 'runtime-jdk-fingerprint.json'
         if (Test-Path -LiteralPath $jdkFingerprintPath -PathType Leaf) {
@@ -386,7 +486,7 @@ function Invoke-Variant {
 
         $workloadPath = Join-Path $runDirectory 'workload-result.json'
         & $WorkloadScript -OutputPath $workloadPath -BaseUrl $HealthUrl.TrimEnd('/') -ContainerName $ContainerName -Variant $Variant @WorkloadArguments @workloadLedgerArgs
-        if ($LASTEXITCODE -ne 0) { throw "Workload script returned $LASTEXITCODE." }
+        if (-not $?) { throw 'Workload script failed.' }
         if (-not (Test-Path -LiteralPath $workloadPath -PathType Leaf)) { throw 'Workload script did not emit workload-result.json.' }
         $workloadResult = Get-Content -Raw -LiteralPath $workloadPath | ConvertFrom-Json
         $mutationProperty = $workloadResult.PSObject.Properties['mutationsProven']
@@ -429,6 +529,14 @@ function Invoke-Variant {
             }
             Copy-Item -LiteralPath $RuntimeVerificationPath -Destination (Join-Path $runDirectory 'runtime-verification.json') -Force
         }
+        $postArmEnvironment = Capture-PodmanMachinePressure -Point 'POST_ARM' -Directory $runDirectory
+        $environmentValidity = [ordered]@{
+            schemaVersion = 'jmoa-arm-environment-validity-v1'
+            passed        = ([bool]$preArmEnvironment.passed -and [bool]$postArmEnvironment.passed)
+            preArm        = $preArmEnvironment
+            postArm       = $postArmEnvironment
+        }
+        Write-JmoaJson -Value $environmentValidity -Path (Join-Path $runDirectory 'environment-validity.json')
         $ended = [DateTime]::UtcNow
         $manifest = [ordered]@{
             runId = ("{0}{1}" -f $Label, $PairIndex)
@@ -469,6 +577,7 @@ function Invoke-Variant {
             postGcSnapshot = $postGc
             runtimePolicyProof = $runtimePolicyProof
             noCdsStateProof = if ($Policy.kind -eq 'OFF') { $runtimePolicyProof } else { $null }
+            environmentValidity = $environmentValidity
         }
         Write-JmoaJson -Value $manifest -Path (Join-Path $runDirectory 'run-manifest.json')
         $containerLog = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('logs', $ContainerName) -LedgerDirectory $script:CurrentCaptureLedger -Step 'capture container logs' -AllowFailure
