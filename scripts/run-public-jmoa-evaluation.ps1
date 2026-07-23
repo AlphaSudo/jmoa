@@ -11,7 +11,7 @@ $ErrorActionPreference='Stop'
 if($Service-ne'petclinic'-and-not$AcknowledgePrivateService){throw 'Doctor and Patient require private service assets. Pass -AcknowledgePrivateService only after provisioning them.'}
 New-JmoaDirectory $OutputDirectory
 $auditDir=Join-Path $OutputDirectory 'audit'
-& (Join-Path $PSScriptRoot 'invoke-audited-command.ps1') -CommandId "$Service-command-ledger" -Executable (Get-Command pwsh).Source -ArgumentList @('-NoProfile','-File',(Join-Path $PSScriptRoot 'recover-historical-command-ledgers.ps1')) -WorkingDirectory (Resolve-Path (Join-Path $PSScriptRoot '..')).Path -AuditDirectory $auditDir
+& (Join-Path $PSScriptRoot 'invoke-audited-command.ps1') -CommandId "$Service-protocol-inventory" -Executable (Get-Command pwsh).Source -ArgumentList @('-NoProfile','-File',(Join-Path $PSScriptRoot 'recover-historical-protocol-inventories.ps1')) -WorkingDirectory (Resolve-Path (Join-Path $PSScriptRoot '..')).Path -AuditDirectory $auditDir
 & (Join-Path $PSScriptRoot 'capture-runtime-fingerprint.ps1') -OutputDirectory (Join-Path $OutputDirectory 'fingerprint') -WorkloadScript $(if($ConfigPath){$ConfigPath}else{''}) | Out-Null
 if($Mode-eq'Audit'){return}
 if(-not$ConfigPath-or-not(Test-Path $ConfigPath-PathType Leaf)){throw "$Mode requires -ConfigPath with the service's audited campaign configuration."}

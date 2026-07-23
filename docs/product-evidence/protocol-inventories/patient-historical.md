@@ -1,10 +1,12 @@
-# patient historical Command Ledger
+# patient historical Protocol Inventory
+
+This is an inventory of recovered scripts and artifacts. It is not an executed command ledger and does not contain command responses.
 
 Classification: **HISTORICAL_COMMANDS_COMPLETE, HISTORICAL_ARTIFACT_MISSING, HISTORICAL_RUNTIME_NOT_REPRODUCIBLE**
 
 Phase 31D used expanded classpath and artifact-specific application CDS. Original baseline/C2 application artifacts are not frozen as standalone JARs in Phase 31D.
 
-## Commands
+## Scripts
 
 | Logical path | Present | SHA-256 |
 |---|---:|---|

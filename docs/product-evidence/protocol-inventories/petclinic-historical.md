@@ -1,10 +1,12 @@
-# petclinic historical Command Ledger
+# petclinic historical Protocol Inventory
+
+This is an inventory of recovered scripts and artifacts. It is not an executed command ledger and does not contain command responses.
 
 Classification: **HISTORICAL_COMMANDS_COMPLETE, HISTORICAL_ARTIFACT_COMPLETE, HISTORICAL_RUNTIME_NOT_REPRODUCIBLE**
 
 Phase 33M is the authoritative exploded-Boot, no-CDS full-P2 protocol. Its frozen 2026-07-19 replay reversed direction and is classified as historical runtime drift.
 
-## Commands
+## Scripts
 
 | Logical path | Present | SHA-256 |
 |---|---:|---|

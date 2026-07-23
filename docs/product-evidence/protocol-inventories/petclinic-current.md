@@ -1,10 +1,12 @@
-# petclinic current Command Ledger
+# petclinic current Protocol Inventory
+
+This is an inventory of recovered scripts and artifacts. It is not an executed command ledger and does not contain command responses.
 
 Classification: **CURRENT_COMMANDS_COMPLETE, CURRENT_ARTIFACT_COMPLETE**
 
 Current direct screen used a newly rebuilt strict B0 against a historically frozen V2; source-universe reconciliation is open.
 
-## Commands
+## Scripts
 
 | Logical path | Present | SHA-256 |
 |---|---:|---|

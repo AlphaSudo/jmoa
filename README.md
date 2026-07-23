@@ -45,15 +45,41 @@ Read the [direct matrix](docs/product-evidence/jmoa-vs-no-jmoa-matrix.md),
 [evidence contract](docs/product-evidence/jmoa-vs-no-jmoa-contract.md), and
 [runtime-equivalence contract](docs/product-evidence/runtime-equivalence-investigation-contract.md).
 
-Start the audited public workflow with:
+Run a full baseline-to-V2 audited scenario with:
 
 ```powershell
-pwsh ./scripts/run-public-jmoa-evaluation.ps1 -Mode Audit -Service petclinic
+pwsh ./scripts/run-petclinic-audited-baseline-v2-scenario.ps1 `
+  -PetclinicSource <petclinic-source> `
+  -ConfigRepository <petclinic-config-repository> `
+  -BuildJavaHome <build-jdk> `
+  -RuntimeJavaHome <runtime-jdk> `
+  -Maven <mvn-command>
 ```
 
-This captures an exact command ledger and runtime fingerprint before replay or
-comparison. Later modes require an admitted service campaign config. See the
-[runtime consistency report](docs/product-evidence/runtime-consistency-report.md).
+This emits one exact command ledger containing the baseline launch, auxiliary
+services, warmup, every workload response, memory captures, JMOA transform,
+V2 launch, and teardown. See the [ledger contract](docs/product-evidence/scenario-command-ledger-contract.md)
+and [fresh PetClinic screen](docs/product-evidence/petclinic-fresh-baseline-v2-scenario.md).
+
+For the balanced product gate, first run the campaign fixtures and readiness
+check against a signed manifest:
+
+```powershell
+pwsh ./scripts/run-campaign-fixtures.ps1 -OutputDirectory target/campaign-fixtures
+
+pwsh ./scripts/run-petclinic-performance-campaign.ps1 `
+  -CampaignManifest <signed-campaign-manifest.json> `
+  -FixturesReport ./target/campaign-fixtures/campaign-fixtures.json `
+  -RunRoot <private-output-root> `
+  -DryRun
+```
+
+Remove `-DryRun` only after reviewing the readiness report. The full campaign
+runs two reversed B0 same-artifact pairs, two reversed V2 same-artifact pairs,
+then three balanced B0/V2 pairs. Every measured B0 and V2 arm receives one
+chronological Markdown ledger with commands and responses inline, backed by
+hashed stage ledgers and raw files. See the
+[campaign readiness result](docs/product-evidence/petclinic-campaign-readiness.md).
 
 ## V1 To V2 Engineering Evolution
 
