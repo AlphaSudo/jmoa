@@ -1,7 +1,7 @@
 {
   "schemaVersion": "jmoa-public-campaign-readiness-v1",
   "service": "spring-petclinic-customers-service",
-  "status": "READY_DRY_RUN_ONLY",
+  "status": "COMPLETED_RUNTIME_STOPPED_AT_B0_NOISE",
   "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
   "campaignSha256": "90CBB67E866F251164BA052C20EFC9F15DB0BC4A594D370DF32240836C5CA6C9",
   "artifacts": {
@@ -11,7 +11,7 @@
     "artifactLineageSha256": "4EDB212001FD4869F3F0981E8440A358712282421113A7DC5ED847AE4D6173E7"
   },
   "gates": {
-    "fixturesPassed": 35,
+    "fixturesPassed": 37,
     "manifestIntegrity": true,
     "baselineClean": true,
     "candidateReplacementHashesMatched": 24,
@@ -34,6 +34,8 @@
     "maxMemoryPressureFullAvg10": 0.1
   },
   "configContentSha256": "80EEA8F0321E72DD7AD87E4F94817A217C89DF5A66D4FFEFFACE50507BF89840",
-  "runtimeExecuted": false,
-  "claimBoundary": "Readiness only. No new memory claim."
+  "runtimeExecuted": true,
+  "runtimeTerminalVerdict": "ENVIRONMENT_VARIANCE_TOO_HIGH",
+  "runtimeResult": "petclinic-performance-campaign-result.json",
+  "claimBoundary": "Readiness passed. Runtime stopped before B0/V2 product pairs because same-artifact B0 noise exceeded the frozen thresholds twice."
 }

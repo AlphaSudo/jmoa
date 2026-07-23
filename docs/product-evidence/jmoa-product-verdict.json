@@ -1,12 +1,12 @@
 {
-  "verdict": "DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION",
+  "verdict": "DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED",
   "previousProvisionalVerdict": "ONE_SERVICE_PRODUCT_WIN",
   "substantialProductWins": 1,
   "evaluatedServices": 3,
   "confirmedServices": ["doctor-service"],
-  "screenFailedServices": ["petclinic-customers"],
+  "environmentBlockedServices": ["petclinic-customers"],
   "artifactMismatchServices": ["patient-service"],
-  "productPosture": "RUNTIME_EQUIVALENCE_RECONCILIATION",
+  "productPosture": "DEDICATED_LINUX_CONFIRMATION_REQUIRED",
   "universalWinClaim": false,
-  "claimBoundary": "Direct measurements are retained but the aggregate adoption verdict is provisional pending runtime and artifact-provenance reconciliation."
+  "claimBoundary": "Doctor is confirmed. PetClinic produced no new product delta because two same-artifact B0 campaigns failed the noise gate; Patient's accepted-artifact comparison remains open."
 }

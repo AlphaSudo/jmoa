@@ -31,6 +31,23 @@ V2-D attributes this mixed result primarily to heap-page-touch growth. The
 historical B0 -> V2 outcome is therefore retained for provenance but is **not a
 reproducible RC2 public performance claim**.
 
+## Audited Direct Campaign Gate
+
+The final signed PetClinic campaign started with the runtime baseline, auxiliary
+services, warmup, workload, and memory capture before admitting any V2 arm.
+Two unchanged B0 same-artifact executions produced:
+
+| Campaign | Valid B0 arms | Median absolute PSS noise | Median absolute Private_Dirty noise | Median absolute memory.current noise | Verdict |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `20260723T190749Z` | 4/4 | 4,849.5 KB | 4,772 KB | 4,964,352 B | `STOPPED_B0_RUNTIME_VARIANCE` |
+| `20260723T192107Z` | 4/4 | 5,580.5 KB | 5,300 KB | 5,181,440 B | `STOPPED_B0_RUNTIME_VARIANCE` |
+
+All eight arms completed 81 requests with zero errors and passed the frozen
+swap and PSI gates. The positional direction reversed between executions. The
+campaign therefore emitted `ENVIRONMENT_VARIANCE_TOO_HIGH` and did not run V2
+controls or B0/V2 pairs. No direct PetClinic product delta is reported from
+this campaign.
+
 ## Scope-Bound Confirmations
 
 | Comparison | Paired wins | Median PSS | Median Private_Dirty | Median memory.current | Boundary |

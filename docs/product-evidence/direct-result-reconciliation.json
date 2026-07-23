@@ -1,7 +1,7 @@
 {
-  "metadataVersion": "direct-result-reconciliation-v1",
+  "metadataVersion": "direct-result-reconciliation-v2",
   "buyerComparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
-  "buyerResult": "ONE_SERVICE_PRODUCT_WIN",
+  "buyerResult": "DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED",
   "engineeringComparison": "ACCEPTED_V1_TO_FINAL_V2",
   "matricesMustNotBeAdded": true,
   "petclinicHistoricalBaseline": {
@@ -11,7 +11,15 @@
   },
   "currentDirectServices": {
     "doctor": "CONFIRMED_SUBSTANTIAL_WIN",
-    "petclinic": "SCREEN_FAILED",
-    "patient": "SCREEN_FAILED"
+    "petclinic": "ENVIRONMENT_VARIANCE_TOO_HIGH_NO_PRODUCT_PAIR",
+    "patient": "ACCEPTED_ARTIFACT_COMPARISON_OPEN"
+  },
+  "petclinicLatestCampaign": {
+    "validBaselineControlArms": 8,
+    "requests": 648,
+    "workloadErrors": 0,
+    "candidateControlsRun": false,
+    "productPairsRun": false,
+    "nextEnvironment": "DEDICATED_LINUX_HOST"
   }
 }

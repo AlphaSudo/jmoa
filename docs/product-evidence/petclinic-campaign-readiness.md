@@ -1,7 +1,10 @@
 # PetClinic Balanced Campaign Readiness
 
-Status: **READY**, dry-run only. No balanced memory pairs were launched by this
-readiness pass.
+Status: **COMPLETED**, readiness passed and the runtime campaign executed.
+
+The readiness pass admitted the frozen campaign. Runtime subsequently stopped
+at the B0 same-artifact noise gate in two complete executions. See the
+[terminal campaign result](petclinic-performance-campaign-result.md).
 
 ## Frozen Inputs
 
@@ -23,7 +26,7 @@ the exact paths and command responses.
 
 ## Passed Gates
 
-- Gate A fixtures: `35/35`
+- Gate A fixtures: `37/37`
 - Gate C campaign-manifest integrity: passed
 - B0 no-JMOA cleanliness: passed
 - V2 replacement hashes: `24/24`
@@ -58,4 +61,6 @@ the exact paths and command responses.
    `ENVIRONMENT_VARIANCE_TOO_HIGH`.
 
 Each arm receives one complete command ledger with responses inline. The
-readiness result does not itself make a new memory claim.
+readiness result does not itself make a memory claim. The executed campaign's
+terminal verdict is `ENVIRONMENT_VARIANCE_TOO_HIGH`; no balanced B0/V2 product
+pair was admitted.

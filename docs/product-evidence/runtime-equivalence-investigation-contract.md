@@ -1,6 +1,6 @@
 # Runtime Equivalence Investigation Contract
 
-Status: frozen before reconciliation execution.
+Status: closed on the current host with `ENVIRONMENT_VARIANCE_TOO_HIGH`.
 
 ## Objective
 
@@ -8,8 +8,9 @@ Determine whether the clean no-JMOA `B0` and final V2 artifacts were built and
 measured inside runtime-equivalent source, dependency, JVM, image, archive,
 support-stack, workload, and capture lineages.
 
-The existing direct results are retained, but the aggregate adoption verdict is
-`DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION` until this contract is closed.
+The existing direct results are retained. This contract closed the current
+PetClinic host as environment blocked; the aggregate state is
+`DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED`.
 
 ## Invariants
 

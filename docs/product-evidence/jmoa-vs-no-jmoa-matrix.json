@@ -1,8 +1,8 @@
 {
-  "metadataVersion": "jmoa-vs-no-jmoa-matrix-v1",
-  "generatedAt": "2026-07-19T00:15:21.1325824Z",
+  "metadataVersion": "jmoa-vs-no-jmoa-matrix-v2",
+  "generatedAt": "2026-07-23T19:35:00Z",
   "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
-  "overallState": "DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION",
+  "overallState": "DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED",
   "previousProvisionalState": "ONE_SERVICE_PRODUCT_WIN",
   "substantialProductWins": 1,
   "evaluatedServices": 3,
@@ -12,35 +12,45 @@
       "comparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
       "launchMode": "EXPLODED_BOOT_APP",
       "runtimePolicy": "NO_CDS_LOW_DIRTY",
-      "status": "HISTORICAL_RUNTIME_DRIFT",
-      "validRuns": 2,
-      "pairedWins": 0,
-      "pairs": 1,
-      "medianPssDeltaKb": 5446,
-      "medianPssPercent": 1.62,
-      "medianPrivateDirtyDeltaKb": 5580,
-      "medianMemoryCurrentDeltaBytes": 3059712,
+      "status": "ENVIRONMENT_VARIANCE_TOO_HIGH",
+      "validRuns": 0,
+      "validBaselineControlArms": 8,
+      "pairedWins": null,
+      "pairs": 0,
+      "medianPssDeltaKb": null,
+      "medianPssPercent": null,
+      "medianPrivateDirtyDeltaKb": null,
+      "medianMemoryCurrentDeltaBytes": null,
       "workloadErrors": 0,
       "semanticErrors": 0,
-      "v2cVerdict": "NOT_RUN_SCREEN_FAILED",
+      "v2cVerdict": "NOT_RUN_PRODUCT_PAIRS_NOT_ADMITTED",
       "v2dPassed": false,
       "baselineArtifact": {
-        "sha256": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
-        "bytes": 92557714,
+        "sha256": "88D4BC9F000A22041F8FD521A0442B85F9FC49966948FA11F642CBBABE0D6AE7",
         "jmoaEntries": 0
       },
       "candidateArtifact": {
-        "sha256": "007F1796B83FCC2217A57A6975EF5CAFD7494A5EF050A7F5261C088B63C6CC2F"
+        "sha256": "338F5D44431E66B3EEC9B2CFAD6D9769D70D08E3C351B6FA221AE883D8E5A34B"
       },
-      "diagnosis": {
-        "heapPssDeltaKb": 7020,
-        "heapUsedDeltaKb": 20,
-        "classHistogramBytesDelta": 27336,
-        "loadedClassDelta": -154,
-        "anonymousRwPssDeltaKb": -1504,
-        "interpretation": "The candidate loaded fewer classes but dirtied more heap pages. The direct screen did not promote."
+      "campaign": {
+        "campaignSha256": "90CBB67E866F251164BA052C20EFC9F15DB0BC4A594D370DF32240836C5CA6C9",
+        "executions": 2,
+        "validBaselineControlArms": 8,
+        "requests": 648,
+        "execution1MedianAbsolutePssKb": 4849.5,
+        "execution2MedianAbsolutePssKb": 5580.5,
+        "frozenMaxMedianAbsolutePssKb": 1024,
+        "positionalDirectionReversed": true,
+        "guestPressurePassed": true,
+        "candidateControlsRun": false,
+        "productPairsRun": false
       },
-      "claimBoundary": "This is a valid single-pair screen failure, not a confirmation result. Replaying the frozen Phase 33M protocol produced 0/3 wins and reversed the accepted median direction, so no new three-arm campaign is admissible until runtime drift is isolated.",
+      "historicalEvidence": {
+        "directScreenMedianPssDeltaKb": 5446,
+        "directScreenStatus": "SCREEN_REGRESSION",
+        "disposition": "Retained for history; superseded as the current campaign authority by the audited same-artifact noise stop."
+      },
+      "claimBoundary": "No new PetClinic B0-to-V2 product delta was measured. The frozen campaign stopped after the same B0 artifact failed the noise gate twice. Authoritative confirmation requires the unchanged campaign on a dedicated Linux host.",
       "substantialProductGatePassed": false
     },
     {
@@ -157,5 +167,5 @@
       "substantialProductGatePassed": false
     }
   ],
-  "claimBoundary": "Direct measurements are retained. Aggregate adoption status is provisional pending runtime-equivalence and artifact-lineage reconciliation."
+  "claimBoundary": "Doctor is the only confirmed direct product win. PetClinic is environment blocked before product comparison, and Patient's accepted-artifact comparison remains open."
 }

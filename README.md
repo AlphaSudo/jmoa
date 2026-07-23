@@ -22,28 +22,28 @@ paired PSS, Private_Dirty, cgroup, NMT, and class-level evidence.
 ## Direct Product Reconciliation
 
 The direct clean no-JMOA `B0` versus final V2 matrix is currently
-`DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION`. The measurements remain valid
-records, but source lineage, dependency identity, historical runtime replay,
-and same-artifact variance are being audited before the aggregate adoption
-verdict is finalized.
+`DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED`. Doctor retains a
+confirmed direct win. PetClinic's frozen campaign stopped before product pairs
+after the same B0 artifact failed the noise gate twice. Patient's accepted
+artifact comparison remains open.
 
 | Service | Deployment and policy | Direct B0 to V2 result | State |
 | --- | --- | ---: | --- |
-| Doctor | Fat JAR, artifact-specific application CDS | **-5,809 KB median PSS**, 3/3 wins | Confirmed; coherent lineage proved, variance qualification still open |
-| PetClinic customers | Exploded Boot, `NO_CDS_LOW_DIRTY` | +5,446 KB PSS | Screen regressed; historical replay now shows runtime drift |
+| Doctor | Fat JAR, artifact-specific application CDS | **-5,809 KB median PSS**, 3/3 wins | Confirmed |
+| PetClinic customers | Exploded Boot, `NO_CDS_LOW_DIRTY` | Not measured by the audited campaign | Environment blocked: 8 valid B0 control arms, same-artifact median absolute PSS noise 4.85-5.58 MB |
 | Patient | Fat JAR, stock JDK base CDS | +3,290 KB PSS for attempted candidate | Screen used a non-accepted V2 SHA; accepted comparison remains open |
 
-The previous `ONE_SERVICE_PRODUCT_WIN` aggregate is provisional during this
-audit. Doctor retains its confirmed measured result. PetClinic retains a valid
-losing screen and now has a historical replay reversal. Patient's two screens
-remain valid only for the attempted `FB4E...` candidate, not the accepted
-corrected `4CFC...` V2 artifact. No older three-service baseline claim has been
-restored, and no new three-arm campaign was run after the qualification gates
-failed.
+Doctor's result is the only confirmed direct product win. PetClinic's older
+screen and replay remain historical evidence, but the latest audited campaign
+does not classify V2 as a win or regression: it never admitted V2 after the B0
+control failed. Patient's two screens remain valid only for the attempted
+`FB4E...` candidate, not the accepted corrected `4CFC...` V2 artifact.
 
 Read the [direct matrix](docs/product-evidence/jmoa-vs-no-jmoa-matrix.md),
 [evidence contract](docs/product-evidence/jmoa-vs-no-jmoa-contract.md), and
 [runtime-equivalence contract](docs/product-evidence/runtime-equivalence-investigation-contract.md).
+The exact PetClinic terminal result is in the
+[campaign result](docs/product-evidence/petclinic-performance-campaign-result.md).
 
 Run a full baseline-to-V2 audited scenario with:
 
@@ -79,7 +79,8 @@ runs two reversed B0 same-artifact pairs, two reversed V2 same-artifact pairs,
 then three balanced B0/V2 pairs. Every measured B0 and V2 arm receives one
 chronological Markdown ledger with commands and responses inline, backed by
 hashed stage ledgers and raw files. See the
-[campaign readiness result](docs/product-evidence/petclinic-campaign-readiness.md).
+[campaign readiness result](docs/product-evidence/petclinic-campaign-readiness.md)
+and [executed campaign result](docs/product-evidence/petclinic-performance-campaign-result.md).
 
 ## V1 To V2 Engineering Evolution
 

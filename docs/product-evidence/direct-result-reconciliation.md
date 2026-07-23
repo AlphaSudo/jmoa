@@ -6,8 +6,10 @@ different questions.
 ## Buyer Comparison
 
 The direct matrix compares a clean no-JMOA `B0` artifact with final JMOA V2.
-The result is `ONE_SERVICE_PRODUCT_WIN`: Doctor passed confirmation; PetClinic
-and Patient failed their bounded screens.
+The current state is `DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED`.
+Doctor passed confirmation. PetClinic's latest campaign did not admit a product
+comparison because the same B0 artifact failed the noise gate twice. Patient's
+accepted-artifact comparison remains open.
 
 ## Engineering Evolution
 
@@ -23,11 +25,13 @@ no-JMOA baseline. A source-frozen B0 JAR was rebuilt with zero JMOA entries and
 used for the published direct screen.
 
 This correction does not invalidate the historical full-P2 or V1-to-V2
-experiments. It narrows what they can answer. The clean B0 screen is the current
-source for the buyer comparison.
+experiments. It narrows what they can answer. The latest clean-B0 campaign is
+the current PetClinic buyer-comparison authority, and its terminal result is
+`ENVIRONMENT_VARIANCE_TOO_HIGH`, with no product pair admitted.
 
 ## Claim Rule
 
 Never arithmetically combine `B0 -> V1` and `V1 -> V2` medians. Never use a
-screen as a confirmed win. Cite the direct matrix for adoption claims and the
-evolution matrix for engineering progress.
+screen as a confirmed win. Never turn a failed same-artifact noise gate into a
+product delta. Cite the direct matrix for adoption claims and the evolution
+matrix for engineering progress.

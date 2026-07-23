@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "jmoa-runtime-consistency-report-v2",
-  "status": "RECONCILIATION_GATES_BLOCKED",
-  "aggregateState": "DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION",
+  "schemaVersion": "jmoa-runtime-consistency-report-v3",
+  "status": "DEDICATED_LINUX_CONFIRMATION_REQUIRED",
+  "aggregateState": "DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED",
   "threeArmCampaignExecuted": false,
   "threeArmBlockReasons": [
     "PETCLINIC_HISTORICAL_RUNTIME_DRIFT",
@@ -15,7 +15,14 @@
       "originalMedianPssDeltaKb": -4758,
       "replayMedianPssDeltaKb": 8647,
       "replayPairedWins": 0,
-      "nextGate": "ISOLATE_RUNTIME_DRIFT"
+      "auditedNoiseCampaign": {
+        "executions": 2,
+        "validBaselineControlArms": 8,
+        "execution1MedianAbsolutePssKb": 4849.5,
+        "execution2MedianAbsolutePssKb": 5580.5,
+        "terminalVerdict": "ENVIRONMENT_VARIANCE_TOO_HIGH"
+      },
+      "nextGate": "DEDICATED_LINUX_SAME_ARTIFACT_CONTROLS"
     },
     "doctor": {
       "lineageGate": "PASS",
@@ -39,5 +46,5 @@
     "bareMavenAvailable": false,
     "podmanVersion": "5.7.1"
   },
-  "claimBoundary": "No reconciled aggregate verdict or new three-arm result is permitted until historical drift and dedicated same-artifact noise gates pass."
+  "claimBoundary": "No PetClinic product delta was admitted. The unchanged signed campaign must pass same-artifact controls on a dedicated Linux host before balanced product pairs."
 }

@@ -1,7 +1,7 @@
 {
   "metadataVersion": "runtime-equivalence-contract-v1",
-  "status": "FROZEN",
-  "aggregateAdoptionState": "DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION",
+  "status": "CLOSED_CURRENT_HOST_ENVIRONMENT_VARIANCE_TOO_HIGH",
+  "aggregateAdoptionState": "DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED",
   "objective": "Audit source, artifact, runtime, archive, support-stack, workload, and capture equivalence before finalizing direct product claims.",
   "forbidden": [
     "OPTIMIZER_CHANGE",

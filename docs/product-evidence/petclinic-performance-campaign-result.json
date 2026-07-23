@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "jmoa-petclinic-performance-campaign-result-v1",
+  "service": "spring-petclinic-customers-service",
+  "terminalVerdict": "ENVIRONMENT_VARIANCE_TOO_HIGH",
+  "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+  "campaignSha256": "90CBB67E866F251164BA052C20EFC9F15DB0BC4A594D370DF32240836C5CA6C9",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "artifacts": {
+    "baselineSha256": "88D4BC9F000A22041F8FD521A0442B85F9FC49966948FA11F642CBBABE0D6AE7",
+    "candidateSha256": "338F5D44431E66B3EEC9B2CFAD6D9769D70D08E3C351B6FA221AE883D8E5A34B"
+  },
+  "noiseThresholds": {
+    "maxMedianAbsolutePssKb": 1024,
+    "maxMedianAbsolutePrivateDirtyKb": 1024,
+    "maxMedianAbsoluteMemoryCurrentBytes": 2097152,
+    "reversedPairsPerExecution": 2
+  },
+  "executions": [
+    {
+      "runId": "petclinic-performance-campaign-20260723T190749Z",
+      "status": "STOPPED_B0_RUNTIME_VARIANCE",
+      "validBaselineArms": 4,
+      "requests": 324,
+      "workloadErrors": 0,
+      "semanticErrors": 0,
+      "pairAbsolutePssKb": [5095, 4604],
+      "medianAbsolutePssKb": 4849.5,
+      "medianAbsolutePrivateDirtyKb": 4772,
+      "medianAbsoluteMemoryCurrentBytes": 4964352,
+      "medianPssSecondMinusFirstKb": 4849.5,
+      "environmentQualified": true
+    },
+    {
+      "runId": "petclinic-performance-campaign-20260723T192107Z",
+      "status": "STOPPED_B0_RUNTIME_VARIANCE",
+      "validBaselineArms": 4,
+      "requests": 324,
+      "workloadErrors": 0,
+      "semanticErrors": 0,
+      "pairAbsolutePssKb": [4311, 6850],
+      "medianAbsolutePssKb": 5580.5,
+      "medianAbsolutePrivateDirtyKb": 5300,
+      "medianAbsoluteMemoryCurrentBytes": 5181440,
+      "medianPssSecondMinusFirstKb": -5580.5,
+      "environmentQualified": true
+    }
+  ],
+  "totals": {
+    "validBaselineArms": 8,
+    "requests": 648,
+    "workloadErrors": 0,
+    "semanticErrors": 0
+  },
+  "stages": {
+    "baselineNoiseControl": "FAILED_TWICE",
+    "candidateNoiseControl": "NOT_ADMITTED",
+    "balancedProductPairs": "NOT_ADMITTED",
+    "productV2C": "NOT_RUN",
+    "productV2D": "NOT_RUN"
+  },
+  "diagnosis": {
+    "guestPressurePassed": true,
+    "swapUsedBytes": 0,
+    "maxMemoryPressureSomeAvg10": 0,
+    "maxMemoryPressureFullAvg10": 0,
+    "positionalDirectionReversedBetweenExecutions": true,
+    "interpretation": "The Windows-to-WSL-to-Podman environment could not hold same-artifact B0 noise below the frozen product threshold."
+  },
+  "nextRequiredEnvironment": "DEDICATED_LINUX_HOST",
+  "claimBoundary": "No B0-to-V2 product delta was measured. The campaign stopped before candidate controls or product pairs because the same B0 artifact failed the frozen noise gate twice."
+}

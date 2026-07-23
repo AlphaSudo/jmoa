@@ -1,12 +1,13 @@
 # Runtime Consistency Report
 
-Status: **RECONCILIATION_GATES_BLOCKED**
-Aggregate claim state: `DIRECT_PRODUCT_MATRIX_UNDER_RECONCILIATION`
+Status: **DEDICATED_LINUX_CONFIRMATION_REQUIRED**
+Aggregate claim state: `DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED`
 
 The investigation reached its predeclared stop conditions. Artifact lineage is
-coherent for the accepted B0/V1/V2 triplets, but the historical replay and
-same-artifact variance gates do not admit a new three-arm product campaign.
-No invalid comparison was substituted for the blocked campaign.
+coherent for the accepted B0/V1/V2 triplets. The subsequent audited PetClinic
+campaign ran eight valid B0 control arms across two complete executions, but
+same-artifact variance exceeded the frozen threshold both times. No invalid
+comparison was substituted for the blocked product campaign.
 
 ## Gate Results
 
@@ -15,7 +16,7 @@ No invalid comparison was substituted for the blocked campaign.
 | Strict B0 proof | Pass | Pass | Pass |
 | Coherent source lineage | Pass | Pass | Pass |
 | Historical/current replay | **Drift: 0/3, +8,647 KB PSS** | Accepted D2 to D2R replay; D2 is not B0 | Accepted artifacts present; direct screen used another V2 SHA |
-| Same-artifact noise | Dedicated control not run after replay stop | Retrospective control fails 1 MiB gate | Retrospective control fails 1 MiB gate |
+| Same-artifact noise | **Two audited executions failed: 4.85 MB and 5.58 MB median absolute PSS** | Retrospective control fails 1 MiB gate | Retrospective control fails 1 MiB gate |
 | Rotated B0/V1/V2 block | Not admitted | Not admitted | Not admitted |
 
 ## Concrete Findings
@@ -34,11 +35,15 @@ No invalid comparison was substituted for the blocked campaign.
 4. The current host exposes JDK 17 through `JAVA_HOME` but JDK 26 through
    `PATH` (`java` and `javac`). Bare `mvn` is unavailable in this shell. This
    toolchain split is recorded as a reproducibility risk, not guessed away.
+5. The signed PetClinic campaign corrected the toolchain invocation, ran B0
+   before V2, logged every command and response, and passed all per-arm
+   swap/PSI gates. Its two executions produced opposite positional directions,
+   so the product comparison was correctly not admitted.
 
 ## Decision
 
-The direct records are preserved, but the aggregate product verdict stays under
-reconciliation. A new three-arm run is allowed only after the historical drift
-is isolated and dedicated same-artifact controls pass the frozen thresholds.
+The direct records are preserved, but the aggregate matrix is incomplete.
+PetClinic must run the unchanged signed campaign on a dedicated Linux host.
+Only passing same-artifact B0 and V2 controls may admit balanced product pairs.
 The public workflow records exact argv, environment, hashes, and fingerprints
 so that the next attempt cannot silently change the protocol.
