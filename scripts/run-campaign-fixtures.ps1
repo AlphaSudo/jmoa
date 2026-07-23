@@ -47,6 +47,7 @@ $testedScriptNames = @(
     'campaign-audit-common.ps1',
     'campaign-canonical-json.ps1',
     'campaign-common.ps1',
+    'capture-campaign-host-preflight.ps1',
     'campaign-launch-petclinic-stack.ps1',
     'campaign-stop-petclinic-stack.ps1',
     'campaign-workload-petclinic.ps1',
@@ -299,6 +300,24 @@ $noisePass = Get-Content -Raw -LiteralPath (Join-Path $noisePassDir 'same-artifa
 $noiseFail = Get-Content -Raw -LiteralPath (Join-Path $noiseFailDir 'same-artifact-noise.json') | ConvertFrom-Json
 Add-FixtureResult -Name 'same-artifact-noise-qualifies-low-reversed-drift' -Passed ([bool]$noisePass.qualified)
 Add-FixtureResult -Name 'same-artifact-noise-rejects-large-drift' -Passed (-not [bool]$noiseFail.qualified)
+
+$campaignSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-petclinic-performance-campaign.ps1')
+$runtimeScreenSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'runtime-screen-pair.ps1')
+Add-FixtureResult -Name 'campaign-stops-b0-before-v2-controls' -Passed (
+    $campaignSource.IndexOf("STOPPED_B0_RUNTIME_VARIANCE", [StringComparison]::Ordinal) -ge 0 -and
+    $campaignSource.IndexOf("STOPPED_B0_RUNTIME_VARIANCE", [StringComparison]::Ordinal) -lt
+        $campaignSource.IndexOf("Step 6B - V2 same-artifact controls", [StringComparison]::Ordinal)
+)
+Add-FixtureResult -Name 'campaign-has-distinct-final-product-verdicts' -Passed (
+    $campaignSource -match 'TRUSTED_PRODUCT_WIN' -and
+    $campaignSource -match 'CONFIRMED_PRODUCT_WIN' -and
+    $campaignSource -match 'PRODUCT_EFFECT_NOT_CONFIRMED'
+)
+Add-FixtureResult -Name 'runtime-screen-gates-per-arm-podman-pressure' -Passed (
+    $runtimeScreenSource -match 'Capture-PodmanMachinePressure' -and
+    $runtimeScreenSource -match 'environment-validity\.json' -and
+    $runtimeScreenSource -match 'MaxPodmanSwapUsedBytes'
+)
 
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{
