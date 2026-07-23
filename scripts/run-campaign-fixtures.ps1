@@ -318,6 +318,13 @@ Add-FixtureResult -Name 'runtime-screen-gates-per-arm-podman-pressure' -Passed (
     $runtimeScreenSource -match 'environment-validity\.json' -and
     $runtimeScreenSource -match 'MaxPodmanSwapUsedBytes'
 )
+Add-FixtureResult -Name 'runtime-child-scripts-use-named-parameter-maps' -Passed (
+    $campaignSource -match 'BaselineLaunchParameters' -and
+    $campaignSource -match 'CandidateLaunchParameters' -and
+    $runtimeScreenSource -match '& \$LaunchScript @launchParametersForArm' -and
+    $runtimeScreenSource -match '& \$WorkloadScript @workloadParametersForArm' -and
+    $runtimeScreenSource -match '& \$StopScript @stopParameters'
+)
 
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{

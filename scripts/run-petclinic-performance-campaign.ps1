@@ -503,8 +503,20 @@ function Invoke-CampaignScreenPair {
         [Parameter(Mandatory)][string]$Context
     )
     Assert-CampaignConfigUnchanged -Context $Context | Out-Null
-    $baseArgs = @('-Image', $BaselineImage, '-ConfigImage', $ConfigImageId, '-DiscoveryImage', $DiscoveryImageId, '-ConfigRepo', $frozenConfigRepo, '-CustomerReadyTimeoutSeconds', [string]$HealthTimeoutSeconds)
-    $candArgs = @('-Image', $CandidateImage, '-ConfigImage', $ConfigImageId, '-DiscoveryImage', $DiscoveryImageId, '-ConfigRepo', $frozenConfigRepo, '-CustomerReadyTimeoutSeconds', [string]$HealthTimeoutSeconds)
+    $baseParameters = @{
+        Image = $BaselineImage
+        ConfigImage = $ConfigImageId
+        DiscoveryImage = $DiscoveryImageId
+        ConfigRepo = $frozenConfigRepo
+        CustomerReadyTimeoutSeconds = $HealthTimeoutSeconds
+    }
+    $candidateParameters = @{
+        Image = $CandidateImage
+        ConfigImage = $ConfigImageId
+        DiscoveryImage = $DiscoveryImageId
+        ConfigRepo = $frozenConfigRepo
+        CustomerReadyTimeoutSeconds = $HealthTimeoutSeconds
+    }
     $screenArguments = @{
         BaselineLaunchScript        = $launchScript
         CandidateLaunchScript       = $launchScript
@@ -517,8 +529,8 @@ function Invoke-CampaignScreenPair {
         RuntimePolicy               = $RuntimePolicy
         BaselineArtifactPath        = $BaselineArtifact
         CandidateArtifactPath       = $CandidateArtifact
-        BaselineLaunchArguments     = $baseArgs
-        CandidateLaunchArguments    = $candArgs
+        BaselineLaunchParameters    = $baseParameters
+        CandidateLaunchParameters   = $candidateParameters
         StopScript                  = $stopScript
         ContainerCli                = $ContainerCli
         PairIndex                   = $PairIndex

@@ -13,8 +13,12 @@ param(
     [string[]]$BaselineLaunchArguments = @(),
     [string[]]$CandidateLaunchArguments = @(),
     [string[]]$WorkloadArguments = @(),
+    [hashtable]$BaselineLaunchParameters = @{},
+    [hashtable]$CandidateLaunchParameters = @{},
+    [hashtable]$WorkloadParameters = @{},
     [string]$StopScript = "",
     [string[]]$StopScriptArguments = @(),
+    [hashtable]$StopScriptParameters = @{},
     [string]$ContainerCli = "podman",
     [string]$JcmdExecutable = "jcmd",
     [string]$JavaProcessPattern = "java",
@@ -115,7 +119,16 @@ function Stop-VariantContainer {
         if (-not [string]::IsNullOrWhiteSpace($LedgerDirectory)) {
             $stopLedgerArgs = @('-LedgerDirectory', $LedgerDirectory, '-LedgerStage', 'teardown', '-LedgerVariant', $Variant)
         }
-        & $StopScript -RunDirectory $RunDirectory -ContainerName $ContainerName -Variant $Variant @StopScriptArguments @stopLedgerArgs
+        $stopParameters = @{} + $StopScriptParameters
+        $stopParameters.RunDirectory = $RunDirectory
+        $stopParameters.ContainerName = $ContainerName
+        $stopParameters.Variant = $Variant
+        if (-not [string]::IsNullOrWhiteSpace($LedgerDirectory)) {
+            $stopParameters.LedgerDirectory = $LedgerDirectory
+            $stopParameters.LedgerStage = 'teardown'
+            $stopParameters.LedgerVariant = $Variant
+        }
+        & $StopScript @stopParameters @StopScriptArguments
         if (-not $?) { throw "Stop script failed for $Variant ($ContainerName)." }
         return
     }
@@ -433,6 +446,7 @@ function Invoke-Variant {
         [string]$Label,
         [string]$LaunchScript,
         [string[]]$LaunchArguments,
+        [hashtable]$LaunchParameters,
         [string]$ContainerName,
         [string]$ArtifactPath,
         [string]$RuntimeVerificationPath,
@@ -462,7 +476,16 @@ function Invoke-Variant {
         $pageCache = Reset-PageCache
         Write-JmoaText -Value $pageCache.output -Path (Join-Path $runDirectory 'page-cache-reset.txt')
         $preArmEnvironment = Capture-PodmanMachinePressure -Point 'PRE_ARM' -Directory $runDirectory
-        & $LaunchScript -RunDirectory $runDirectory -ContainerName $ContainerName -Variant $Variant @LaunchArguments @launchLedgerArgs
+        $launchParametersForArm = @{} + $LaunchParameters
+        $launchParametersForArm.RunDirectory = $runDirectory
+        $launchParametersForArm.ContainerName = $ContainerName
+        $launchParametersForArm.Variant = $Variant
+        if (-not [string]::IsNullOrWhiteSpace($launchLedger)) {
+            $launchParametersForArm.LedgerDirectory = $launchLedger
+            $launchParametersForArm.LedgerStage = 'launch'
+            $launchParametersForArm.LedgerVariant = $Variant
+        }
+        & $LaunchScript @launchParametersForArm @LaunchArguments
         if (-not $?) { throw 'Launch script failed.' }
         $runtimeJdkFingerprint = $null
         $jdkFingerprintPath = Join-Path $runDirectory 'runtime-jdk-fingerprint.json'
@@ -485,7 +508,16 @@ function Invoke-Variant {
         }
 
         $workloadPath = Join-Path $runDirectory 'workload-result.json'
-        & $WorkloadScript -OutputPath $workloadPath -BaseUrl $HealthUrl.TrimEnd('/') -ContainerName $ContainerName -Variant $Variant @WorkloadArguments @workloadLedgerArgs
+        $workloadParametersForArm = @{} + $WorkloadParameters
+        $workloadParametersForArm.OutputPath = $workloadPath
+        $workloadParametersForArm.BaseUrl = $HealthUrl.TrimEnd('/')
+        $workloadParametersForArm.ContainerName = $ContainerName
+        $workloadParametersForArm.Variant = $Variant
+        if (-not [string]::IsNullOrWhiteSpace($workloadLedger)) {
+            $workloadParametersForArm.LedgerDirectory = $workloadLedger
+            $workloadParametersForArm.LedgerStage = 'workload'
+        }
+        & $WorkloadScript @workloadParametersForArm @WorkloadArguments
         if (-not $?) { throw 'Workload script failed.' }
         if (-not (Test-Path -LiteralPath $workloadPath -PathType Leaf)) { throw 'Workload script did not emit workload-result.json.' }
         $workloadResult = Get-Content -Raw -LiteralPath $workloadPath | ConvertFrom-Json
@@ -729,17 +761,17 @@ $baseline = $null
 $candidate = $null
 if ($FirstVariant -eq 'BASELINE_FIRST') {
     $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
-        -LaunchArguments $BaselineLaunchArguments -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
+        -LaunchArguments $BaselineLaunchArguments -LaunchParameters $BaselineLaunchParameters -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
         -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
     $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
-        -LaunchArguments $CandidateLaunchArguments -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
+        -LaunchArguments $CandidateLaunchArguments -LaunchParameters $CandidateLaunchParameters -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
         -RuntimeVerificationPath $CandidateRuntimeVerificationPath -Policy $candidatePolicy -RuntimeArtifactPath $CandidateRuntimeArtifactPath
 } else {
     $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
-        -LaunchArguments $CandidateLaunchArguments -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
+        -LaunchArguments $CandidateLaunchArguments -LaunchParameters $CandidateLaunchParameters -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
         -RuntimeVerificationPath $CandidateRuntimeVerificationPath -Policy $candidatePolicy -RuntimeArtifactPath $CandidateRuntimeArtifactPath
     $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
-        -LaunchArguments $BaselineLaunchArguments -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
+        -LaunchArguments $BaselineLaunchArguments -LaunchParameters $BaselineLaunchParameters -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
         -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
 }
 $armLedgers = if ([string]::IsNullOrWhiteSpace($LedgerDirectory)) { $null } else {
