@@ -19,7 +19,7 @@ function Add-ScenarioMarkdown {
 function ConvertTo-IndentedLog {
     param([AllowEmptyString()][string]$Value)
     if ([string]::IsNullOrEmpty($Value)) { return '    <empty>' }
-    return (($Value -split "`r?`n") | ForEach-Object { "    $_" }) -join "`n"
+    return (($Value -split '\r?\n') | ForEach-Object { "    $_" }) -join "`n"
 }
 
 function Start-ScenarioLedger {
@@ -29,12 +29,16 @@ function Start-ScenarioLedger {
         [Parameter(Mandatory)][string]$Description
     )
     New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
+    $rawDirectory = Join-Path $OutputDirectory 'raw'
+    New-Item -ItemType Directory -Force -Path $rawDirectory | Out-Null
     $script:ScenarioLedger = [ordered]@{
         scenarioId = $ScenarioId
         outputDirectory = [IO.Path]::GetFullPath($OutputDirectory)
         markdownPath = Join-Path $OutputDirectory "$ScenarioId-command-ledger.md"
         ndjsonPath = Join-Path $OutputDirectory "$ScenarioId-commands.ndjson"
         summaryPath = Join-Path $OutputDirectory "$ScenarioId-summary.json"
+        integrityPath = Join-Path $OutputDirectory "$ScenarioId-ledger-integrity.json"
+        rawDirectory = [IO.Path]::GetFullPath($rawDirectory)
         startedUtc = [DateTime]::UtcNow
         sequence = 0
         commandCount = 0
@@ -122,6 +126,17 @@ function Invoke-ScenarioCommand {
         if ($failureAllowed) { $script:ScenarioLedger.allowedNonZeroCommands++ }
         else { $script:ScenarioLedger.hardFailedCommands++ }
     }
+    # Raw preservation: persist verbatim stdout (for curl steps this is the HTTP response body)
+    # and stderr as separate files, each with its own SHA-256, linked from the ndjson and Markdown.
+    $rawPrefix = 'cmd-{0:D4}' -f $sequence
+    $stdoutFileName = "$rawPrefix-stdout.txt"
+    $stderrFileName = "$rawPrefix-stderr.txt"
+    $stdoutRawPath = Join-Path $script:ScenarioLedger.rawDirectory $stdoutFileName
+    $stderrRawPath = Join-Path $script:ScenarioLedger.rawDirectory $stderrFileName
+    [IO.File]::WriteAllText($stdoutRawPath, [string]$stdout, [Text.UTF8Encoding]::new($false))
+    [IO.File]::WriteAllText($stderrRawPath, [string]$stderr, [Text.UTF8Encoding]::new($false))
+    $stdoutSha256 = (Get-FileHash -LiteralPath $stdoutRawPath -Algorithm SHA256).Hash
+    $stderrSha256 = (Get-FileHash -LiteralPath $stderrRawPath -Algorithm SHA256).Hash
     $record = [ordered]@{
         sequence = $sequence
         step = $Step
@@ -138,6 +153,10 @@ function Invoke-ScenarioCommand {
         hardFailure = ($exitCode -ne 0 -and -not $failureAllowed)
         stdout = $stdout
         stderr = $stderr
+        rawStdoutPath = $stdoutRawPath
+        rawStdoutSha256 = $stdoutSha256
+        rawStderrPath = $stderrRawPath
+        rawStderrSha256 = $stderrSha256
     }
     Add-Content -LiteralPath $script:ScenarioLedger.ndjsonPath -Value ($record | ConvertTo-Json -Depth 8 -Compress) -Encoding utf8
     $markdown = @"
@@ -156,6 +175,11 @@ Command:
 
     $($record.commandLine)
 
+Raw artifacts:
+
+- stdout: raw/$stdoutFileName (SHA-256: $stdoutSha256)
+- stderr: raw/$stderrFileName (SHA-256: $stderrSha256)
+
 stdout:
 
 $(ConvertTo-IndentedLog $stdout)
@@ -172,6 +196,33 @@ $(ConvertTo-IndentedLog $stderr)
 function Complete-ScenarioLedger {
     param([string]$Status = 'COMPLETE',[hashtable]$Result = @{})
     $ended = [DateTime]::UtcNow
+    # Finalize the Markdown ledger first so its hash covers the complete document.
+    Add-ScenarioMarkdown "`n## Scenario Result`n`n- Status: **$Status**`n- Commands: $($script:ScenarioLedger.commandCount)`n- Hard failed commands: $($script:ScenarioLedger.hardFailedCommands)`n- Allowed nonzero commands: $($script:ScenarioLedger.allowedNonZeroCommands)`n- Ended UTC: $($ended.ToString('o'))`n"
+
+    # Ledger integrity: SHA-256 of the Markdown ledger, the ndjson ledger, and every raw file, plus an index.
+    $integrityEntries = New-Object System.Collections.Generic.List[object]
+    foreach ($core in @(
+        @{ path = $script:ScenarioLedger.markdownPath; kind = 'markdown-ledger' },
+        @{ path = $script:ScenarioLedger.ndjsonPath; kind = 'ndjson-ledger' }
+    )) {
+        if (Test-Path -LiteralPath $core.path -PathType Leaf) {
+            $integrityEntries.Add([ordered]@{ path = [IO.Path]::GetFullPath($core.path); kind = $core.kind; sha256 = (Get-FileHash -LiteralPath $core.path -Algorithm SHA256).Hash; bytes = (Get-Item -LiteralPath $core.path).Length }) | Out-Null
+        }
+    }
+    if (Test-Path -LiteralPath $script:ScenarioLedger.rawDirectory -PathType Container) {
+        foreach ($rawFile in (Get-ChildItem -LiteralPath $script:ScenarioLedger.rawDirectory -File | Sort-Object Name)) {
+            $integrityEntries.Add([ordered]@{ path = $rawFile.FullName; kind = 'raw'; sha256 = (Get-FileHash -LiteralPath $rawFile.FullName -Algorithm SHA256).Hash; bytes = $rawFile.Length }) | Out-Null
+        }
+    }
+    $integrity = [ordered]@{
+        schemaVersion = 'jmoa-ledger-integrity-v1'
+        scenarioId = $script:ScenarioLedger.scenarioId
+        generatedUtc = $ended.ToString('o')
+        fileCount = $integrityEntries.Count
+        files = $integrityEntries.ToArray()
+    }
+    $integrity | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $script:ScenarioLedger.integrityPath -Encoding utf8
+
     $summary = [ordered]@{
         schemaVersion = 'jmoa-scenario-ledger-v1'
         scenarioId = $script:ScenarioLedger.scenarioId
@@ -184,9 +235,10 @@ function Complete-ScenarioLedger {
         allowedNonZeroCommands = $script:ScenarioLedger.allowedNonZeroCommands
         markdownLedger = $script:ScenarioLedger.markdownPath
         ndjsonLedger = $script:ScenarioLedger.ndjsonPath
+        rawDirectory = $script:ScenarioLedger.rawDirectory
+        integrityIndex = $script:ScenarioLedger.integrityPath
         result = $Result
     }
     $summary | ConvertTo-Json -Depth 10 | Set-Content -LiteralPath $script:ScenarioLedger.summaryPath -Encoding utf8
-    Add-ScenarioMarkdown "`n## Scenario Result`n`n- Status: **$Status**`n- Commands: $($summary.commandCount)`n- Hard failed commands: $($summary.hardFailedCommands)`n- Allowed nonzero commands: $($summary.allowedNonZeroCommands)`n- Ended UTC: $($summary.endedUtc)`n"
     return [pscustomobject]$summary
 }

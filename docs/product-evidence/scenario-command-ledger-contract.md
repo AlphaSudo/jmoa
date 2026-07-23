@@ -59,3 +59,24 @@ paths, full logs, and large evidence.
 The files under [`protocol-inventories`](protocol-inventories/) only index
 recovered scripts and artifacts. They are deliberately not called command
 ledgers.
+
+## Balanced Campaign Ledgers
+
+[`run-petclinic-performance-campaign.ps1`](../../scripts/run-petclinic-performance-campaign.ps1)
+uses a two-level ledger without weakening the one-ledger-per-arm requirement:
+
+- each measured B0 or V2 arm emits one chronological `bN-command-ledger.md` or
+  `cN-command-ledger.md`;
+- that Markdown includes every launch, health, workload, capture, log, and
+  teardown command in execution order, with stdout, stderr, or HTTP response
+  body inline;
+- launch, workload, capture, and teardown also retain stage-specific NDJSON and
+  SHA-256-addressed raw files;
+- `child-ledger-index.json` verifies every stage ledger, raw file, and
+  consolidated arm ledger and is itself hashed by the parent campaign ledger.
+
+The long campaign does not rebuild artifacts. It consumes a signed manifest
+that pins source revision, B0/V2 artifact hashes, all four image identities,
+materialization manifest, artifact lineage, config revision/content hash, JDK,
+Maven, runtime policy, and plugin coordinates. The runtime mounts a
+campaign-owned frozen config snapshot, not the mutable checkout.

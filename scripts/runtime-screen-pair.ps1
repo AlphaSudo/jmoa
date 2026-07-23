@@ -47,11 +47,17 @@ param(
     [switch]$DiagnosticOnly,
     [switch]$DropPageCacheBeforeVariant,
     [int]$HealthTimeoutSeconds = 90,
-    [switch]$FailOnFailure
+    [switch]$FailOnFailure,
+    [string]$LedgerDirectory = ''
 )
 
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'runtime-automation-common.ps1')
+. (Join-Path $PSScriptRoot 'campaign-audit-common.ps1')
+
+# When the campaign supplies -LedgerDirectory this holds the current arm's capture child-ledger so
+# every podman exec / cat / jcmd capture is audited (review Issue #1). Empty => standalone (unaudited).
+$script:CurrentCaptureLedger = ''
 
 foreach ($path in @($BaselineLaunchScript, $CandidateLaunchScript, $WorkloadScript, $BaselineArtifactPath, $CandidateArtifactPath)) {
     if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Required path does not exist: $path" }
@@ -98,21 +104,75 @@ $candidatePolicy = Resolve-VariantPolicy -PolicyOverride $CandidateRuntimePolicy
     -ArchivePath $CandidateCdsArchivePath -MallocOverride $CandidateMallocArenaMax
 
 function Stop-VariantContainer {
-    param([string]$ContainerName, [string]$Variant, [string]$RunDirectory)
+    param([string]$ContainerName, [string]$Variant, [string]$RunDirectory, [string]$LedgerDirectory = '')
     if (-not [string]::IsNullOrWhiteSpace($StopScript)) {
-        & $StopScript -RunDirectory $RunDirectory -ContainerName $ContainerName -Variant $Variant @StopScriptArguments
+        $stopLedgerArgs = @()
+        if (-not [string]::IsNullOrWhiteSpace($LedgerDirectory)) {
+            $stopLedgerArgs = @('-LedgerDirectory', $LedgerDirectory, '-LedgerStage', 'teardown', '-LedgerVariant', $Variant)
+        }
+        & $StopScript -RunDirectory $RunDirectory -ContainerName $ContainerName -Variant $Variant @StopScriptArguments @stopLedgerArgs
         if ($LASTEXITCODE -ne 0) { throw "Stop script failed for $Variant ($ContainerName)." }
         return
     }
-    $result = Invoke-JmoaExternal -Executable $ContainerCli -Arguments @('rm', '-f', $ContainerName)
+    if (-not [string]::IsNullOrWhiteSpace($LedgerDirectory)) {
+        $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('rm', '-f', $ContainerName) `
+            -LedgerDirectory $LedgerDirectory -Step "remove $Variant container $ContainerName" -AllowFailure
+    } else {
+        $result = Invoke-JmoaExternal -Executable $ContainerCli -Arguments @('rm', '-f', $ContainerName)
+    }
     if ($result.exitCode -ne 0 -and $result.output -notmatch 'no container') {
         throw "Could not remove $Variant container ${ContainerName}: $($result.output)"
     }
 }
 
+function Wait-AuditedPairHealth {
+    param([string]$HealthUrl, [int]$TimeoutSeconds)
+    $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+    $probe = 0
+    $lastStatus = 0
+    $lastError = ''
+    while ([DateTime]::UtcNow -lt $deadline) {
+        $probe++
+        $response = Invoke-AuditedHttp -Method 'GET' -Uri $HealthUrl -LedgerDirectory $script:CurrentCaptureLedger `
+            -Step "pair health confirmation $probe" -TimeoutSeconds 10
+        $lastStatus = [int]$response.status
+        $lastError = [string]$response.error
+        if ($lastStatus -eq 200 -and [string]$response.body -match '"status"\s*:\s*"UP"') {
+            return [pscustomobject]@{ passed = $true; statusCode = $lastStatus; probes = $probe; error = '' }
+        }
+        Start-Sleep -Seconds 2
+    }
+    return [pscustomobject]@{ passed = $false; statusCode = $lastStatus; probes = $probe; error = $lastError }
+}
+
+function Get-AuditedJavaPid {
+    param([string]$ContainerName)
+    $escaped = $JavaProcessPattern.Replace("'", "'`"'`"'")
+    $command = "ps -eo pid,args | grep -F -- '$escaped' | grep -v grep | awk '{print `$1; exit}'"
+    $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('exec', $ContainerName, 'sh', '-lc', $command) `
+        -LedgerDirectory $script:CurrentCaptureLedger -Step 'locate Java PID'
+    $pidText = ($result.output -split '\s+' | Select-Object -First 1).Trim()
+    if ($pidText -notmatch '^\d+$') { return '' }
+    return $pidText
+}
+
+function Get-AuditedContainerIdentity {
+    param([string]$ContainerName, [ValidateSet('Id', 'Image')][string]$Field)
+    $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('inspect', '--format', "{{.$Field}}", $ContainerName) `
+        -LedgerDirectory $script:CurrentCaptureLedger -Step "capture live container $Field"
+    $identity = $result.output.Trim()
+    if ([string]::IsNullOrWhiteSpace($identity)) { throw "Container $Field is empty for $ContainerName." }
+    return $identity
+}
+
 function Capture-Command {
-    param([string]$ContainerName, [string]$ShellCommand, [string]$OutputPath)
-    $result = Invoke-JmoaContainerShell -ContainerCli $ContainerCli -ContainerName $ContainerName -Command $ShellCommand
+    param([string]$ContainerName, [string]$ShellCommand, [string]$OutputPath, [string]$Classification = 'SUPPORTING_EVIDENCE')
+    if (-not [string]::IsNullOrWhiteSpace($script:CurrentCaptureLedger)) {
+        $captureName = [IO.Path]::GetFileName($OutputPath)
+        $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('exec', $ContainerName, 'sh', '-lc', $ShellCommand) -LedgerDirectory $script:CurrentCaptureLedger -Step "capture $captureName [$Classification]" -AllowFailure
+    } else {
+        $result = Invoke-JmoaContainerShell -ContainerCli $ContainerCli -ContainerName $ContainerName -Command $ShellCommand
+    }
     Write-JmoaText -Value $result.output -Path $OutputPath
     return $result
 }
@@ -126,23 +186,34 @@ function Capture-RuntimeState {
     )
     New-JmoaDirectory -Path $Directory
     $cleanJcmd = "env -u JAVA_TOOL_OPTIONS -u JDK_JAVA_OPTIONS $JcmdExecutable"
-    $captures = @(
-        (Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$JavaPid/smaps_rollup" -OutputPath (Join-Path $Directory 'smaps_rollup.txt')),
-        (Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$JavaPid/smaps" -OutputPath (Join-Path $Directory 'smaps.txt')),
-        (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/memory.current' -OutputPath (Join-Path $Directory 'memory.current')),
-        (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/memory.stat' -OutputPath (Join-Path $Directory 'memory.stat')),
-        (Capture-Command -ContainerName $ContainerName -ShellCommand 'cat /sys/fs/cgroup/io.stat' -OutputPath (Join-Path $Directory 'io.stat')),
-        (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid VM.native_memory summary" -OutputPath (Join-Path $Directory 'nmt-summary.txt')),
-        (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid GC.heap_info" -OutputPath (Join-Path $Directory 'heap-info.txt')),
-        (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid VM.metaspace" -OutputPath (Join-Path $Directory 'metaspace.txt')),
-        (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid VM.classloader_stats" -OutputPath (Join-Path $Directory 'classloader-stats.txt')),
-        (Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid VM.flags" -OutputPath (Join-Path $Directory 'vm-flags.txt'))
+    # Capture-order classification (review Issue #11): claim metrics are captured BEFORE any perturbing
+    # diagnostic. The product medians consume only CLAIM_EVIDENCE captures.
+    $plan = @(
+        @{ file = 'smaps_rollup.txt';     cmd = "cat /proc/$JavaPid/smaps_rollup";                class = 'CLAIM_EVIDENCE' },
+        @{ file = 'smaps.txt';            cmd = "cat /proc/$JavaPid/smaps";                        class = 'CLAIM_EVIDENCE' },
+        @{ file = 'memory.current';       cmd = 'cat /sys/fs/cgroup/memory.current';               class = 'CLAIM_EVIDENCE' },
+        @{ file = 'memory.stat';          cmd = 'cat /sys/fs/cgroup/memory.stat';                  class = 'CLAIM_EVIDENCE' },
+        @{ file = 'io.stat';              cmd = 'cat /sys/fs/cgroup/io.stat';                      class = 'CLAIM_EVIDENCE' },
+        @{ file = 'nmt-summary.txt';      cmd = "$cleanJcmd $JavaPid VM.native_memory summary";    class = 'SUPPORTING_EVIDENCE' },
+        @{ file = 'heap-info.txt';        cmd = "$cleanJcmd $JavaPid GC.heap_info";               class = 'SUPPORTING_EVIDENCE' },
+        @{ file = 'metaspace.txt';        cmd = "$cleanJcmd $JavaPid VM.metaspace";               class = 'SUPPORTING_EVIDENCE' },
+        @{ file = 'classloader-stats.txt';cmd = "$cleanJcmd $JavaPid VM.classloader_stats";        class = 'SUPPORTING_EVIDENCE' },
+        @{ file = 'vm-flags.txt';         cmd = "$cleanJcmd $JavaPid VM.flags";                   class = 'SUPPORTING_EVIDENCE' }
     )
+    $captures = New-Object System.Collections.Generic.List[object]
+    $order = 0
+    foreach ($item in $plan) {
+        $order++
+        $r = Capture-Command -ContainerName $ContainerName -ShellCommand $item.cmd -OutputPath (Join-Path $Directory $item.file) -Classification $item.class
+        $captures.Add([ordered]@{ order = $order; file = $item.file; classification = $item.class; exitCode = $r.exitCode }) | Out-Null
+    }
     if ($IncludeHistogram) {
-        $captures += Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid GC.class_histogram" -OutputPath (Join-Path $Directory 'class-histogram.txt')
+        $order++
+        $r = Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid GC.class_histogram" -OutputPath (Join-Path $Directory 'class-histogram.txt') -Classification 'PERTURBING_DIAGNOSTIC'
+        $captures.Add([ordered]@{ order = $order; file = 'class-histogram.txt'; classification = 'PERTURBING_DIAGNOSTIC'; exitCode = $r.exitCode }) | Out-Null
     }
     if ($captures | Where-Object { $_.exitCode -ne 0 }) { throw 'One or more required runtime captures failed.' }
-    [ordered]@{ capturedAt = [DateTime]::UtcNow.ToString('o'); histogramIncluded = $IncludeHistogram; directory = $Directory }
+    [ordered]@{ capturedAt = [DateTime]::UtcNow.ToString('o'); histogramIncluded = $IncludeHistogram; directory = $Directory; captureOrderVersion = 'v2-claim-first-1'; captures = $captures.ToArray() }
 }
 
 function Capture-And-VerifyRuntimePolicy {
@@ -178,7 +249,7 @@ function Capture-And-VerifyRuntimePolicy {
     $mapsCapture = Capture-Command -ContainerName $ContainerName -ShellCommand "cat /proc/$JavaPid/maps" -OutputPath (Join-Path $Directory 'runtime-cds-maps.txt')
     if ($mapsCapture.exitCode -ne 0) { throw 'Could not capture live JVM mappings for CDS policy proof.' }
     $jsaMappings = @()
-    foreach ($line in ($mapsCapture.output -split "`r?`n")) {
+    foreach ($line in ($mapsCapture.output -split '\r?\n')) {
         if ($line -match '^([0-9a-f]+)-([0-9a-f]+)\s+(\S+)\s+([0-9a-f]+)\s+(\S+)\s+(\d+)\s+(.+\.jsa)\s*$') {
             $jsaMappings += [ordered]@{ start=$Matches[1]; end=$Matches[2]; permissions=$Matches[3]; offset=$Matches[4]; device=$Matches[5]; inode=$Matches[6]; path=$Matches[7].Trim() }
         }
@@ -239,9 +310,9 @@ function Reset-PageCache {
     }
     $attempts = @()
     for ($attempt = 1; $attempt -le 3; $attempt++) {
-        $result = Invoke-JmoaExternal -Executable $ContainerCli -Arguments @(
+        $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
             'machine', 'ssh', "sudo sh -c 'sync; echo 3 > /proc/sys/vm/drop_caches' && echo DROP_OK"
-        )
+        ) -LedgerDirectory $script:CurrentCaptureLedger -Step "drop page cache (attempt $attempt)" -AllowFailure
         $attempts += [ordered]@{
             attempt = $attempt
             exitCode = $result.exitCode
@@ -273,16 +344,36 @@ function Invoke-Variant {
     New-JmoaDirectory -Path $runDirectory
     $started = [DateTime]::UtcNow
     $launchError = ''
+    # Per-arm child ledgers (review Issue #1). Empty base => standalone/unaudited.
+    $launchLedger = ''; $workloadLedger = ''; $captureLedger = ''; $teardownLedger = ''
+    $launchLedgerArgs = @(); $workloadLedgerArgs = @()
+    if (-not [string]::IsNullOrWhiteSpace($LedgerDirectory)) {
+        $launchLedger = Join-Path $LedgerDirectory ("{0}{1}-launch" -f $Label, $PairIndex)
+        $workloadLedger = Join-Path $LedgerDirectory ("{0}{1}-workload" -f $Label, $PairIndex)
+        $captureLedger = Join-Path $LedgerDirectory ("{0}{1}-capture" -f $Label, $PairIndex)
+        $teardownLedger = Join-Path $LedgerDirectory ("{0}{1}-teardown" -f $Label, $PairIndex)
+        $launchLedgerArgs = @('-LedgerDirectory', $launchLedger, '-LedgerStage', 'launch', '-LedgerVariant', $Variant)
+        $workloadLedgerArgs = @('-LedgerDirectory', $workloadLedger, '-LedgerStage', 'workload')
+    }
     try {
+        $script:CurrentCaptureLedger = $captureLedger
+        if (-not [string]::IsNullOrWhiteSpace($captureLedger)) {
+            Initialize-CampaignAuditLedger -LedgerDirectory $captureLedger -Stage 'capture' -Variant $Variant -Description "Host page-cache drop + in-container smaps/cgroup/jcmd captures + container logs for $Variant pair $PairIndex." | Out-Null
+        }
         $pageCache = Reset-PageCache
         Write-JmoaText -Value $pageCache.output -Path (Join-Path $runDirectory 'page-cache-reset.txt')
-        & $LaunchScript -RunDirectory $runDirectory -ContainerName $ContainerName -Variant $Variant @LaunchArguments
+        & $LaunchScript -RunDirectory $runDirectory -ContainerName $ContainerName -Variant $Variant @LaunchArguments @launchLedgerArgs
         if ($LASTEXITCODE -ne 0) { throw "Launch script returned $LASTEXITCODE." }
-        $health = Wait-JmoaHttpHealth -HealthUrl $HealthUrl -TimeoutSeconds $HealthTimeoutSeconds
+        $runtimeJdkFingerprint = $null
+        $jdkFingerprintPath = Join-Path $runDirectory 'runtime-jdk-fingerprint.json'
+        if (Test-Path -LiteralPath $jdkFingerprintPath -PathType Leaf) {
+            try { $runtimeJdkFingerprint = Get-Content -Raw -LiteralPath $jdkFingerprintPath | ConvertFrom-Json } catch { $runtimeJdkFingerprint = $null }
+        }
+        $health = Wait-AuditedPairHealth -HealthUrl $HealthUrl -TimeoutSeconds $HealthTimeoutSeconds
         if (-not $health.passed) { throw "Health check did not pass: $($health.error)" }
         $healthyAt = [DateTime]::UtcNow
         if ($WarmupSeconds -gt 0) { Start-Sleep -Seconds $WarmupSeconds }
-        $javaPid = Get-JmoaJavaPid -ContainerCli $ContainerCli -ContainerName $ContainerName -JavaProcessPattern $JavaProcessPattern
+        $javaPid = Get-AuditedJavaPid -ContainerName $ContainerName
         if ([string]::IsNullOrWhiteSpace($javaPid)) { throw 'Could not locate the Java PID in the running container.' }
         $runtimePolicyProof = Capture-And-VerifyRuntimePolicy -ContainerName $ContainerName -JavaPid $javaPid -Directory $runDirectory -Policy $Policy
         $runtimeArtifactSha256 = $null
@@ -294,9 +385,18 @@ function Invoke-Variant {
         }
 
         $workloadPath = Join-Path $runDirectory 'workload-result.json'
-        & $WorkloadScript -OutputPath $workloadPath -BaseUrl $HealthUrl.TrimEnd('/') -ContainerName $ContainerName -Variant $Variant @WorkloadArguments
+        & $WorkloadScript -OutputPath $workloadPath -BaseUrl $HealthUrl.TrimEnd('/') -ContainerName $ContainerName -Variant $Variant @WorkloadArguments @workloadLedgerArgs
         if ($LASTEXITCODE -ne 0) { throw "Workload script returned $LASTEXITCODE." }
         if (-not (Test-Path -LiteralPath $workloadPath -PathType Leaf)) { throw 'Workload script did not emit workload-result.json.' }
+        $workloadResult = Get-Content -Raw -LiteralPath $workloadPath | ConvertFrom-Json
+        $mutationProperty = $workloadResult.PSObject.Properties['mutationsProven']
+        $workloadMutations = if ($null -eq $mutationProperty) { $null } else { $mutationProperty.Value }
+        if ([string]$workloadResult.health -ne 'UP' -or [int]$workloadResult.errors -ne 0 -or [string]$workloadResult.status -ne 'COMPLETED') {
+            throw "Workload validity gate failed: health=$($workloadResult.health), errors=$($workloadResult.errors), status=$($workloadResult.status)."
+        }
+        if ($null -ne $workloadMutations -and -not [bool]$workloadMutations) {
+            throw 'Workload validity gate failed: mutations were not proven.'
+        }
 
         $snapshotOffsets = @($PostWorkloadSnapshotSeconds | Where-Object { $_ -ge 0 } | Sort-Object -Unique)
         if ($snapshotOffsets.Count -eq 0) { $snapshotOffsets = @(0) }
@@ -339,8 +439,8 @@ function Invoke-Variant {
             artifactSha256 = Get-JmoaSha256 -Path $ArtifactPath
             expectedArtifactSha256 = Get-JmoaSha256 -Path $ArtifactPath
             runtimeArtifactSha256 = $runtimeArtifactSha256
-            imageId = Get-JmoaContainerImageId -ContainerCli $ContainerCli -ContainerName $ContainerName
-            containerId = Get-JmoaContainerId -ContainerCli $ContainerCli -ContainerName $ContainerName
+            imageId = Get-AuditedContainerIdentity -ContainerName $ContainerName -Field 'Image'
+            containerId = Get-AuditedContainerIdentity -ContainerName $ContainerName -Field 'Id'
             pid = [int]$javaPid
             launchMode = $LaunchMode
             runtimePolicy = $Policy.policy
@@ -350,7 +450,9 @@ function Invoke-Variant {
             leyden = $LeydenEnabled
             javaagentPresent = $JavaagentPresent
             mallocArenaMax = if ([string]::IsNullOrWhiteSpace($Policy.mallocArenaMax)) { $null } else { $Policy.mallocArenaMax }
-            javaVersion = (Invoke-JmoaContainerShell -ContainerCli $ContainerCli -ContainerName $ContainerName -Command 'java -version 2>&1 | head -n 1').output
+            javaVersion = if ($null -ne $runtimeJdkFingerprint) { [string]$runtimeJdkFingerprint.javaVersionRaw } else { '' }
+            runtimeJdkFingerprint = $runtimeJdkFingerprint
+            captureOrderVersion = 'v2-claim-first-1'
             workloadId = $WorkloadId
             timestampStart = $started.ToString('o')
             timestampPost = $ended.ToString('o')
@@ -369,12 +471,15 @@ function Invoke-Variant {
             noCdsStateProof = if ($Policy.kind -eq 'OFF') { $runtimePolicyProof } else { $null }
         }
         Write-JmoaJson -Value $manifest -Path (Join-Path $runDirectory 'run-manifest.json')
-        $containerLog = Invoke-JmoaExternal -Executable $ContainerCli -Arguments @('logs', $ContainerName)
+        $containerLog = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('logs', $ContainerName) -LedgerDirectory $script:CurrentCaptureLedger -Step 'capture container logs' -AllowFailure
         Write-JmoaText -Value $containerLog.output -Path (Join-Path $runDirectory 'runtime-container.log')
         if ($containerLog.exitCode -ne 0) { throw 'Could not capture runtime container logs.' }
         $linkagePatterns = '(?i)(VerifyError|ClassFormatError|NoSuchMethodError|NoClassDefFoundError|ExceptionInInitializerError|LinkageError)'
-        $linkageMatches = @($containerLog.output -split "`r?`n" | Where-Object { $_ -match $linkagePatterns })
+        $linkageMatches = @($containerLog.output -split '\r?\n' | Where-Object { $_ -match $linkagePatterns })
         if ($linkageMatches.Count -ne 0) { throw "Runtime semantic/linkage error detected: $($linkageMatches[0])" }
+        if (-not [string]::IsNullOrWhiteSpace($captureLedger)) {
+            Complete-CampaignAuditLedger -LedgerDirectory $captureLedger -Status 'COMPLETE' -Stage 'capture' -Variant $Variant | Out-Null
+        }
         return [ordered]@{
             variant = $Variant
             runDirectory = $runDirectory
@@ -385,12 +490,130 @@ function Invoke-Variant {
         }
     } catch {
         $launchError = $_.Exception.Message
+        if (-not [string]::IsNullOrWhiteSpace($captureLedger) -and (Test-Path -LiteralPath (Join-Path $captureLedger 'command-ledger.md') -PathType Leaf) -and -not (Test-Path -LiteralPath (Join-Path $captureLedger 'child-ledger-summary.json') -PathType Leaf)) {
+            Complete-CampaignAuditLedger -LedgerDirectory $captureLedger -Status 'FAILED' -Stage 'capture' -Variant $Variant | Out-Null
+        }
         $failure = [ordered]@{ health = 'DOWN'; errors = 1; requests = 0; status = 'FAILED'; error = $launchError }
         Write-JmoaJson -Value $failure -Path (Join-Path $runDirectory 'workload-result.json')
         return [ordered]@{ variant = $Variant; runDirectory = $runDirectory; status = 'FAILED'; error = $launchError }
     } finally {
-        Stop-VariantContainer -ContainerName $ContainerName -Variant $Variant -RunDirectory $runDirectory
+        if (-not [string]::IsNullOrWhiteSpace($captureLedger) -and (Test-Path -LiteralPath (Join-Path $captureLedger 'command-ledger.md') -PathType Leaf) -and -not (Test-Path -LiteralPath (Join-Path $captureLedger 'child-ledger-summary.json') -PathType Leaf)) {
+            Complete-CampaignAuditLedger -LedgerDirectory $captureLedger -Status 'FAILED' -Stage 'capture' -Variant $Variant | Out-Null
+        }
+        $script:CurrentCaptureLedger = ''
+        Stop-VariantContainer -ContainerName $ContainerName -Variant $Variant -RunDirectory $runDirectory -LedgerDirectory $teardownLedger
     }
+}
+
+function Write-CampaignArmCommandLedger {
+    param(
+        [Parameter(Mandatory)][ValidateSet('b', 'c')][string]$Label,
+        [Parameter(Mandatory)][string]$Variant
+    )
+    if ([string]::IsNullOrWhiteSpace($LedgerDirectory)) { return $null }
+    $armId = "$Label$PairIndex"
+    $sourceDirectories = @(
+        Join-Path $LedgerDirectory "$armId-launch"
+        Join-Path $LedgerDirectory "$armId-workload"
+        Join-Path $LedgerDirectory "$armId-capture"
+        Join-Path $LedgerDirectory "$armId-teardown"
+    )
+    $records = New-Object System.Collections.Generic.List[object]
+    $sources = New-Object System.Collections.Generic.List[object]
+    $reasons = New-Object System.Collections.Generic.List[string]
+    foreach ($sourceDirectory in $sourceDirectories) {
+        $summaryPath = Join-Path $sourceDirectory 'child-ledger-summary.json'
+        $ndjsonPath = Join-Path $sourceDirectory 'commands.ndjson'
+        if (-not (Test-Path -LiteralPath $summaryPath -PathType Leaf) -or -not (Test-Path -LiteralPath $ndjsonPath -PathType Leaf)) {
+            $reasons.Add("incomplete source ledger: $sourceDirectory") | Out-Null
+            continue
+        }
+        $summary = Get-Content -Raw -LiteralPath $summaryPath | ConvertFrom-Json
+        $sources.Add([ordered]@{
+            ledgerDirectory = $sourceDirectory
+            stage = [string]$summary.stage
+            status = [string]$summary.status
+            commandCount = [int]$summary.commandCount
+            integritySha256 = ([string]$summary.integritySha256).ToUpperInvariant()
+        }) | Out-Null
+        foreach ($line in @(Get-Content -LiteralPath $ndjsonPath | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })) {
+            $record = $line | ConvertFrom-Json
+            $records.Add([pscustomobject]@{ sourceDirectory = $sourceDirectory; sourceStage = [string]$summary.stage; record = $record }) | Out-Null
+        }
+    }
+    $orderedRecords = @($records | Sort-Object { [datetime]$_.record.startedUtc }, { [int]$_.record.sequence })
+    $armDirectory = Join-Path $LedgerDirectory "arm-ledgers\$armId"
+    New-JmoaDirectory -Path $armDirectory
+    $markdownPath = Join-Path $armDirectory "$armId-command-ledger.md"
+    $builder = [Text.StringBuilder]::new()
+    [void]$builder.AppendLine("# $Variant Arm Command Ledger")
+    [void]$builder.AppendLine()
+    [void]$builder.AppendLine("- Arm: $armId")
+    [void]$builder.AppendLine("- Pair: $PairIndex")
+    [void]$builder.AppendLine("- Variant: $Variant")
+    [void]$builder.AppendLine("- Generated UTC: $([DateTime]::UtcNow.ToString('o'))")
+    [void]$builder.AppendLine()
+    [void]$builder.AppendLine('This is the single chronological ledger for the complete arm: launch, health, workload, runtime capture, logs, and teardown. Raw files remain in the hashed source stage ledgers.')
+    $globalSequence = 0
+    foreach ($entry in $orderedRecords) {
+        $globalSequence++
+        $record = $entry.record
+        $kind = [string]$record.kind
+        [void]$builder.AppendLine()
+        [void]$builder.AppendLine("## $globalSequence. $($record.step)")
+        [void]$builder.AppendLine()
+        [void]$builder.AppendLine("- Stage: $($entry.sourceStage)")
+        [void]$builder.AppendLine("- Started UTC: $($record.startedUtc)")
+        [void]$builder.AppendLine("- Duration: $($record.durationMilliseconds) ms")
+        if ($kind -eq 'PROCESS') {
+            $stdoutPath = Join-Path $entry.sourceDirectory (([string]$record.rawStdoutPath) -replace '/', '\')
+            $stderrPath = Join-Path $entry.sourceDirectory (([string]$record.rawStderrPath) -replace '/', '\')
+            $stdout = if (Test-Path -LiteralPath $stdoutPath -PathType Leaf) { Get-Content -Raw -LiteralPath $stdoutPath } else { '<missing raw stdout>' }
+            $stderr = if (Test-Path -LiteralPath $stderrPath -PathType Leaf) { Get-Content -Raw -LiteralPath $stderrPath } else { '<missing raw stderr>' }
+            [void]$builder.AppendLine("- Command: ``$($record.commandLine)``")
+            [void]$builder.AppendLine("- Exit code: $($record.exitCode) (nonzero allowed: $($record.failureAllowed))")
+            [void]$builder.AppendLine("- stdout SHA-256: $($record.rawStdoutSha256)")
+            [void]$builder.AppendLine("- stderr SHA-256: $($record.rawStderrSha256)")
+            [void]$builder.AppendLine()
+            [void]$builder.AppendLine('stdout:')
+            [void]$builder.AppendLine()
+            [void]$builder.AppendLine((ConvertTo-CampaignAuditIndented -Value $stdout))
+            [void]$builder.AppendLine()
+            [void]$builder.AppendLine('stderr:')
+            [void]$builder.AppendLine()
+            [void]$builder.AppendLine((ConvertTo-CampaignAuditIndented -Value $stderr))
+        } elseif ($kind -eq 'HTTP') {
+            $bodyPath = Join-Path $entry.sourceDirectory (([string]$record.rawBodyPath) -replace '/', '\')
+            $responseBody = if (Test-Path -LiteralPath $bodyPath -PathType Leaf) { Get-Content -Raw -LiteralPath $bodyPath } else { '<missing raw response body>' }
+            [void]$builder.AppendLine("- Request: ``$($record.method) $($record.uri)``")
+            if (-not [string]::IsNullOrEmpty([string]$record.requestBody)) { [void]$builder.AppendLine("- Request body: ``$($record.requestBody)``") }
+            [void]$builder.AppendLine("- HTTP status: $($record.status)")
+            [void]$builder.AppendLine("- Error: $($record.error)")
+            [void]$builder.AppendLine("- Response SHA-256: $($record.rawBodySha256)")
+            [void]$builder.AppendLine()
+            [void]$builder.AppendLine('response body:')
+            [void]$builder.AppendLine()
+            [void]$builder.AppendLine((ConvertTo-CampaignAuditIndented -Value $responseBody))
+        }
+    }
+    [IO.File]::WriteAllText($markdownPath, $builder.ToString(), [Text.UTF8Encoding]::new($false))
+    $summary = [ordered]@{
+        schemaVersion = 'jmoa-arm-command-ledger-v1'
+        arm = $armId
+        pairIndex = $PairIndex
+        variant = $Variant
+        generatedAt = [DateTime]::UtcNow.ToString('o')
+        commandCount = $orderedRecords.Count
+        markdownPath = [IO.Path]::GetFileName($markdownPath)
+        markdownSha256 = (Get-JmoaSha256 -Path $markdownPath).ToUpperInvariant()
+        sourceLedgers = $sources.ToArray()
+        passed = ($reasons.Count -eq 0 -and $sources.Count -eq 4)
+        reasons = $reasons.ToArray()
+    }
+    $summaryPath = Join-Path $armDirectory 'arm-ledger-summary.json'
+    Write-JmoaJson -Value $summary -Path $summaryPath
+    if (-not $summary.passed) { throw "Could not produce complete arm command ledger for $armId`: $($reasons -join '; ')" }
+    return $summary
 }
 
 $baseline = $null
@@ -409,6 +632,12 @@ if ($FirstVariant -eq 'BASELINE_FIRST') {
     $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
         -LaunchArguments $BaselineLaunchArguments -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
         -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
+}
+$armLedgers = if ([string]::IsNullOrWhiteSpace($LedgerDirectory)) { $null } else {
+    [ordered]@{
+        baseline = Write-CampaignArmCommandLedger -Label 'b' -Variant 'BASELINE'
+        candidate = Write-CampaignArmCommandLedger -Label 'c' -Variant 'CANDIDATE'
+    }
 }
 $status = if ($baseline.status -eq 'CAPTURED' -and $candidate.status -eq 'CAPTURED') { 'CAPTURED' } else { 'FAILED' }
 $baseArchiveIdentity = $null
@@ -441,6 +670,7 @@ $pair = [ordered]@{
     pageCachePolicy = if ($DropPageCacheBeforeVariant) { 'DROP_CACHES_BEFORE_EACH_VARIANT' } else { 'NOT_REQUESTED' }
     baseline = $baseline
     candidate = $candidate
+    armCommandLedgers = $armLedgers
     baseArchiveIdentity = $baseArchiveIdentity
     claimBoundary = 'One paired screen only. Run V2-C and V2-D after three valid pairs before making a runtime claim.'
     diagnosticOnly = [bool]$DiagnosticOnly

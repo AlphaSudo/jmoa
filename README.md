@@ -60,8 +60,26 @@ This emits one exact command ledger containing the baseline launch, auxiliary
 services, warmup, every workload response, memory captures, JMOA transform,
 V2 launch, and teardown. See the [ledger contract](docs/product-evidence/scenario-command-ledger-contract.md)
 and [fresh PetClinic screen](docs/product-evidence/petclinic-fresh-baseline-v2-scenario.md).
-The separate public-evaluation workflow remains available for admitted campaign
-configuration and consistency auditing.
+
+For the balanced product gate, first run the campaign fixtures and readiness
+check against a signed manifest:
+
+```powershell
+pwsh ./scripts/run-campaign-fixtures.ps1 -OutputDirectory target/campaign-fixtures
+
+pwsh ./scripts/run-petclinic-performance-campaign.ps1 `
+  -CampaignManifest <signed-campaign-manifest.json> `
+  -FixturesReport ./target/campaign-fixtures/campaign-fixtures.json `
+  -RunRoot <private-output-root> `
+  -DryRun
+```
+
+Remove `-DryRun` only after reviewing the readiness report. The full campaign
+runs two reversed B0 same-artifact pairs, two reversed V2 same-artifact pairs,
+then three balanced B0/V2 pairs. Every measured B0 and V2 arm receives one
+chronological Markdown ledger with commands and responses inline, backed by
+hashed stage ledgers and raw files. See the
+[campaign readiness result](docs/product-evidence/petclinic-campaign-readiness.md).
 
 ## V1 To V2 Engineering Evolution
 

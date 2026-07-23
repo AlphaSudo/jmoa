@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "jmoa-public-campaign-readiness-v1",
+  "service": "spring-petclinic-customers-service",
+  "status": "READY_DRY_RUN_ONLY",
+  "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+  "campaignSha256": "90CBB67E866F251164BA052C20EFC9F15DB0BC4A594D370DF32240836C5CA6C9",
+  "artifacts": {
+    "baselineSha256": "88D4BC9F000A22041F8FD521A0442B85F9FC49966948FA11F642CBBABE0D6AE7",
+    "candidateSha256": "338F5D44431E66B3EEC9B2CFAD6D9769D70D08E3C351B6FA221AE883D8E5A34B",
+    "materializationManifestSha256": "38CD11C52E996ABE4845E5078626432FDDE889252CB2D6AC897331B2A0E0B4DC",
+    "artifactLineageSha256": "4EDB212001FD4869F3F0981E8440A358712282421113A7DC5ED847AE4D6173E7"
+  },
+  "gates": {
+    "fixturesPassed": 31,
+    "manifestIntegrity": true,
+    "baselineClean": true,
+    "candidateReplacementHashesMatched": 24,
+    "candidateReplacementHashesExpected": 24,
+    "runtimeLibraryMatched": true,
+    "nonReplacedDependenciesUnchanged": true,
+    "loaderUnchanged": true,
+    "lineagePassed": true,
+    "configFreezePassed": true,
+    "frozenConfigSnapshotPassed": true,
+    "childLedgerIntegrityPassed": true
+  },
+  "configContentSha256": "80EEA8F0321E72DD7AD87E4F94817A217C89DF5A66D4FFEFFACE50507BF89840",
+  "runtimeExecuted": false,
+  "claimBoundary": "Readiness only. No new memory claim."
+}

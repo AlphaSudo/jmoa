@@ -33,6 +33,8 @@ $baselineImage = "localhost/jmoa-scenario-petclinic-b0:$($runId.ToLowerInvariant
 $v2Image = "localhost/jmoa-scenario-petclinic-v2:$($runId.ToLowerInvariant())"
 $configImage = 'localhost/pc33-config-server:latest'
 $discoveryImage = 'localhost/pc33-discovery-server:latest'
+$configImageRef = $configImage
+$discoveryImageRef = $discoveryImage
 $java17 = Join-Path $RuntimeJavaHome 'bin\java.exe'
 $buildEnvironment = @{ JAVA_HOME = $BuildJavaHome; PATH = "$(Join-Path $BuildJavaHome 'bin');$env:PATH" }
 $runtimeResult = [ordered]@{}
@@ -107,6 +109,41 @@ function Get-Metric {
     return [long]$match.Groups[1].Value
 }
 
+# Records an image's content-addressable identity (ID + first repo digest) rather than its mutable tag.
+function Add-ImageProvenance {
+    param([string]$Role,[string]$Reference)
+    $probe = Invoke-Step -Step "Record image ID and digest for $Role" -Executable 'podman' -Arguments @('image','inspect','--format','{{.Id}} {{if .RepoDigests}}{{index .RepoDigests 0}}{{else}}<none>{{end}}',$Reference)
+    $identity = $probe.stdout.Trim()
+    Add-ScenarioNote -Title "Image provenance: $Role" -Text "Reference: $Reference`n`nID + digest: $identity"
+    return $identity
+}
+
+# Resolves a (possibly :latest) reference to its immutable image ID so podman run pins the exact image.
+function Resolve-ImageId {
+    param([string]$Reference)
+    $probe = Invoke-Step -Step "Resolve image ID for $Reference" -Executable 'podman' -Arguments @('image','inspect','--format','{{.Id}}',$Reference)
+    return $probe.stdout.Trim()
+}
+
+# Deterministic content hash of a directory tree (path + file bytes), excluding the .git metadata dir.
+function Get-DirectoryContentHash {
+    param([string]$Root)
+    $sha = [Security.Cryptography.SHA256]::Create()
+    try {
+        $fullRoot = (Resolve-Path -LiteralPath $Root).Path
+        $files = Get-ChildItem -LiteralPath $fullRoot -Recurse -File | Where-Object { $_.FullName -notmatch '(\\|/)\.git(\\|/)' } | Sort-Object FullName
+        foreach ($file in $files) {
+            $rel = ($file.FullName.Substring($fullRoot.Length).TrimStart('\','/')) -replace '\\','/'
+            $relBytes = [Text.Encoding]::UTF8.GetBytes($rel)
+            [void]$sha.TransformBlock($relBytes,0,$relBytes.Length,$null,0)
+            $fileHash = [Convert]::FromHexString((Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash)
+            [void]$sha.TransformBlock($fileHash,0,$fileHash.Length,$null,0)
+        }
+        [void]$sha.TransformFinalBlock([byte[]]::new(0),0,0)
+        return [BitConverter]::ToString($sha.Hash).Replace('-','')
+    } finally { $sha.Dispose() }
+}
+
 function Measure-Variant {
     param([string]$Variant,[string]$Image)
     $prefix = "jmoa-ledger-$($Variant.ToLowerInvariant())-$([guid]::NewGuid().ToString('N').Substring(0,8))"
@@ -119,12 +156,15 @@ function Measure-Variant {
         $configFlags='-XX:+UseContainerSupport -XX:+UseSerialGC -Xms24m -Xmx80m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -Xshare:off'
         $discoveryFlags='-XX:+UseContainerSupport -XX:+UseSerialGC -Xms16m -Xmx96m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -Xshare:off'
         $customerFlags='-XX:+UseContainerSupport -XX:+UseSerialGC -Xms32m -Xmx256m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -XX:NativeMemoryTracking=summary -Xshare:off'
-        Invoke-Step -Step "$Variant start config server" -Executable 'podman' -Arguments @('run','-d','--name',"$prefix-config-server",'--network',$network,'--network-alias','config-server','-p','8888:8888','-v',"${ConfigRepository}:/app/config-repo:ro",'-e','SPRING_PROFILES_ACTIVE=native','-e','GIT_REPO=/app/config-repo','-e','MANAGEMENT_TRACING_ENABLED=false','-e','MANAGEMENT_METRICS_ENABLED=false','-e',"JAVA_TOOL_OPTIONS=$configFlags",$configImage) | Out-Null
+        Invoke-Step -Step "$Variant start config server" -Executable 'podman' -Arguments @('run','-d','--name',"$prefix-config-server",'--network',$network,'--network-alias','config-server','-p','8888:8888','-v',"${ConfigRepository}:/app/config-repo:ro",'-e','SPRING_PROFILES_ACTIVE=native','-e','GIT_REPO=/app/config-repo','-e','MANAGEMENT_TRACING_ENABLED=false','-e','MANAGEMENT_METRICS_ENABLED=false','-e',"JAVA_TOOL_OPTIONS=$configFlags",$configImageRef) | Out-Null
         Wait-Health -Label "$Variant config server" -Uri 'http://localhost:8888/actuator/health' -TimeoutSeconds 180
-        Invoke-Step -Step "$Variant start discovery server" -Executable 'podman' -Arguments @('run','-d','--name',"$prefix-discovery-server",'--network',$network,'--network-alias','discovery-server','-p','8761:8761','-e','SPRING_PROFILES_ACTIVE=docker','-e','CONFIG_SERVER_URI=http://config-server:8888','-e',"JAVA_TOOL_OPTIONS=$discoveryFlags",$discoveryImage) | Out-Null
+        Invoke-Step -Step "$Variant capture config-server in-container JDK" -Executable 'podman' -Arguments @('exec',"$prefix-config-server",'java','-version') | Out-Null
+        Invoke-Step -Step "$Variant start discovery server" -Executable 'podman' -Arguments @('run','-d','--name',"$prefix-discovery-server",'--network',$network,'--network-alias','discovery-server','-p','8761:8761','-e','SPRING_PROFILES_ACTIVE=docker','-e','CONFIG_SERVER_URI=http://config-server:8888','-e',"JAVA_TOOL_OPTIONS=$discoveryFlags",$discoveryImageRef) | Out-Null
         Wait-Health -Label "$Variant discovery server" -Uri 'http://localhost:8761/actuator/health' -TimeoutSeconds 180
+        Invoke-Step -Step "$Variant capture discovery-server in-container JDK" -Executable 'podman' -Arguments @('exec',"$prefix-discovery-server",'java','-version') | Out-Null
         Invoke-Step -Step "$Variant start customers service" -Executable 'podman' -Arguments @('run','-d','--name',$container,'--network',$network,'--network-alias','customers-service','-p','8081:8081','-e','SPRING_PROFILES_ACTIVE=docker','-e','CONFIG_SERVER_URI=http://config-server:8888','-e',"JAVA_TOOL_OPTIONS=$customerFlags",'-e','MALLOC_ARENA_MAX=1',$Image) | Out-Null
         Wait-Health -Label "$Variant customers service" -Uri 'http://localhost:8081/actuator/health' -TimeoutSeconds 900
+        Invoke-Step -Step "$Variant capture customers-service in-container JDK" -Executable 'podman' -Arguments @('exec',$container,'java','-version') | Out-Null
         Invoke-Step -Step "$Variant warmup $WarmupSeconds seconds" -Executable (Get-Command pwsh).Source -Arguments @('-NoProfile','-Command',"Start-Sleep -Seconds $WarmupSeconds") | Out-Null
         Invoke-PetclinicWorkload -Variant $Variant
         Invoke-Step -Step "$Variant post-workload settle $SettleSeconds seconds" -Executable (Get-Command pwsh).Source -Arguments @('-NoProfile','-Command',"Start-Sleep -Seconds $SettleSeconds") | Out-Null
@@ -168,7 +208,8 @@ EXPOSE 8081
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
 '@
     [IO.File]::WriteAllText((Join-Path $Root 'Dockerfile'),$dockerfile,[Text.UTF8Encoding]::new($false))
-    Add-ScenarioNote -Title "Generated Dockerfile for $Root" -Text "Generated in this scenario. SHA-256: `$((Get-FileHash -LiteralPath (Join-Path $Root 'Dockerfile') -Algorithm SHA256).Hash)`."
+    $dockerfileHash = (Get-FileHash -LiteralPath (Join-Path $Root 'Dockerfile') -Algorithm SHA256).Hash
+    Add-ScenarioNote -Title "Generated Dockerfile for $Root" -Text "Generated in this scenario. SHA-256: $dockerfileHash."
 }
 
 try {
@@ -180,6 +221,15 @@ try {
     Add-ScenarioAsset -Role 'Frozen additional safe SAM allowlist' -Path $SafeSamsPath -Provenance REUSED_FROZEN_INPUT -Note 'Accepted public-safe allowlist.' | Out-Null
     Invoke-Step -Step 'Inspect reused config support image' -Executable 'podman' -Arguments @('image','inspect',$configImage) | Out-Null
     Invoke-Step -Step 'Inspect reused discovery support image' -Executable 'podman' -Arguments @('image','inspect',$discoveryImage) | Out-Null
+    # Pin the :latest support images to immutable IDs and record ID + digest provenance.
+    $configImageRef = Resolve-ImageId -Reference $configImage
+    $discoveryImageRef = Resolve-ImageId -Reference $discoveryImage
+    Add-ImageProvenance -Role 'config support image (pinned)' -Reference $configImageRef | Out-Null
+    Add-ImageProvenance -Role 'discovery support image (pinned)' -Reference $discoveryImageRef | Out-Null
+    # Config-repo provenance: Git revision plus a deterministic content hash of the mounted tree.
+    $configRepoHead = (Invoke-Step -Step 'Record mounted config-repo git revision' -Executable 'git' -Arguments @('-C',$ConfigRepository,'rev-parse','HEAD') -AllowFailure).stdout.Trim()
+    $configRepoContentHash = Get-DirectoryContentHash -Root $ConfigRepository
+    Add-ScenarioNote -Title 'Config-repo provenance' -Text "Path: $ConfigRepository`n`nGit HEAD: $configRepoHead`n`nContent hash (excluding .git): $configRepoContentHash"
     Invoke-Step -Step 'Record Podman state before scenario' -Executable 'podman' -Arguments @('ps','-a') | Out-Null
     Invoke-Step -Step 'Record build JDK' -Executable (Join-Path $BuildJavaHome 'bin\java.exe') -Arguments @('-version') | Out-Null
     Invoke-Step -Step 'Record runtime JDK used for extraction' -Executable $java17 -Arguments @('-version') | Out-Null
@@ -201,6 +251,7 @@ try {
     Write-ExplodedDockerfile -Root $baselineExploded
     Invoke-Step -Step 'Build strict B0 runtime image' -Executable 'podman' -Arguments @('build','-t',$baselineImage,$baselineExploded) | Out-Null
     Invoke-Step -Step 'Inspect strict B0 runtime image' -Executable 'podman' -Arguments @('image','inspect',$baselineImage) | Out-Null
+    Add-ImageProvenance -Role 'strict B0 application image' -Reference $baselineImage | Out-Null
 
     Add-ScenarioNote -Title 'Baseline runtime starts before JMOA target transformation' -Text 'The following commands launch the auxiliary services and strict B0, execute the full 81-request workload, capture memory/JVM evidence, collect logs, and tear the stack down.'
     $runtimeResult.baseline = Measure-Variant -Variant 'B0' -Image $baselineImage
@@ -223,6 +274,7 @@ try {
     Write-ExplodedDockerfile -Root $v2Exploded
     Invoke-Step -Step 'Build V2 runtime image' -Executable 'podman' -Arguments @('build','-t',$v2Image,$v2Exploded) | Out-Null
     Invoke-Step -Step 'Inspect V2 runtime image' -Executable 'podman' -Arguments @('image','inspect',$v2Image) | Out-Null
+    Add-ImageProvenance -Role 'transformed V2 application image' -Reference $v2Image | Out-Null
 
     $runtimeResult.v2 = Measure-Variant -Variant 'V2' -Image $v2Image
     $runtimeResult.delta = [ordered]@{
@@ -230,6 +282,13 @@ try {
         privateDirtyKb = $runtimeResult.v2.privateDirtyKb - $runtimeResult.baseline.privateDirtyKb
         memoryCurrentBytes = $runtimeResult.v2.memoryCurrentBytes - $runtimeResult.baseline.memoryCurrentBytes
     }
+    # Emit the artifact-lineage.json the campaign gate requires (review Issue #4): source revision,
+    # artifact SHAs, transform/reducer/materialization report SHAs, and preservation failures. It is
+    # derived from this run's own ledger + reports so provenance is never reconstructed from the image.
+    $lineagePath = Join-Path $runRoot 'artifact-lineage.json'
+    Invoke-Step -Step 'Build artifact lineage document' -Executable (Get-Command pwsh).Source -Arguments @('-NoProfile','-File',(Join-Path $PSScriptRoot 'build-artifact-lineage.ps1'),'-RunRoot',$runRoot,'-SourceRevision',$Revision,'-OutputPath',$lineagePath) | Out-Null
+    $lineageAsset = Add-ScenarioAsset -Role 'Artifact lineage' -Path $lineagePath -Provenance GENERATED_IN_SCENARIO -Note 'B0/V2 build lineage consumed by the campaign artifact-lineage gate.'
+    $runtimeResult.artifactLineage = [ordered]@{ path = $lineagePath; sha256 = $lineageAsset.sha256 }
     Complete-ScenarioLedger -Status 'COMPLETE_SINGLE_SCREEN' -Result $runtimeResult | Out-Null
     $completed = $true
     $runtimeResult | ConvertTo-Json -Depth 8
