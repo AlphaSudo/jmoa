@@ -564,6 +564,11 @@ function Add-CampaignArmJdk { param([string]$RunDirectory, [string]$Arm) $id = G
 
 $hostPreflightDir = Join-Path $reportDir 'host-preflight'
 $hostPreflightLedger = Join-Path $childLedgerRoot 'host-preflight'
+$hostPreflightReportPath = Join-Path $hostPreflightDir $(if ($IsLinux) {
+    'host-linux-preflight.json'
+} else {
+    'host-podman-preflight.json'
+})
 Add-ScenarioNote -Title 'Host and Podman preflight' -Text 'Capture Windows, WSL, Podman, port, container, VM-memory, swap, and PSI state immediately before any measured arm.'
 & $hostPreflightScript -OutputDirectory $hostPreflightDir -ContainerCli $ContainerCli `
     -MinPodmanAvailableMemoryBytes $MinPodmanAvailableMemoryBytes -MaxPodmanSwapUsedBytes $MaxPodmanSwapUsedBytes `
@@ -571,11 +576,11 @@ Add-ScenarioNote -Title 'Host and Podman preflight' -Text 'Capture Windows, WSL,
     -MaxPodmanMemoryPressureFullAvg10 $MaxPodmanMemoryPressureFullAvg10 -LedgerDirectory $hostPreflightLedger
 if (-not $?) {
     Publish-CampaignChildLedgerIndex | Out-Null
-    Complete-ScenarioLedger -Status 'STOPPED_HOST_PREFLIGHT' -Result @{ terminalVerdict = 'ENVIRONMENT_VARIANCE_TOO_HIGH'; report = (Join-Path $hostPreflightDir 'host-podman-preflight.json') } | Out-Null
+    Complete-ScenarioLedger -Status 'STOPPED_HOST_PREFLIGHT' -Result @{ terminalVerdict = 'ENVIRONMENT_VARIANCE_TOO_HIGH'; report = $hostPreflightReportPath } | Out-Null
     throw 'Host/Podman preflight did not qualify; no measured arm was launched.'
 }
-$hostPreflight = Get-Content -Raw -LiteralPath (Join-Path $hostPreflightDir 'host-podman-preflight.json') | ConvertFrom-Json
-Add-ScenarioAsset -Role 'Host and Podman preflight' -Path (Join-Path $hostPreflightDir 'host-podman-preflight.json') `
+$hostPreflight = Get-Content -Raw -LiteralPath $hostPreflightReportPath | ConvertFrom-Json
+Add-ScenarioAsset -Role 'Host and Podman preflight' -Path $hostPreflightReportPath `
     -Provenance GENERATED_IN_SCENARIO -Note 'Fail-closed environment fingerprint and pressure admission before controls.' | Out-Null
 
 if ($DryRun) {
@@ -620,7 +625,7 @@ if ($DryRun) {
 - Artifact lineage: **$($lineageGate.passed)** (source revision matched: $($lineageGate.sourceRevisionMatched))
 - Config freeze matches manifest: **$configFreezeMatchesManifest** (git HEAD ``$($configFreeze.gitHead)``, clean=$($configFreeze.workingTreeClean))
 - Frozen config snapshot: **$frozenConfigPassed** (content SHA-256 ``$frozenConfigTreeSha``); this snapshot, not the mutable checkout, is mounted at runtime
-- Host/Podman preflight: **$($hostPreflight.passed)** (VM available memory $($hostPreflight.podmanMachine.availableMemoryBytes) B, swap used $($hostPreflight.podmanMachine.swapUsedBytes) B)
+- Host/Podman preflight: **$($hostPreflight.passed)** (available memory $(if ($IsLinux) { $hostPreflight.availableMemoryBytes } else { $hostPreflight.podmanMachine.availableMemoryBytes }) B, swap used $(if ($IsLinux) { $hostPreflight.swapUsedBytes } else { $hostPreflight.podmanMachine.swapUsedBytes }) B)
 
 ## Environment
 - java: $($environmentLedger.javaVersionText)

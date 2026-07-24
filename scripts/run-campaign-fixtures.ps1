@@ -357,6 +357,11 @@ Add-FixtureResult -Name 'campaign-has-distinct-final-product-verdicts' -Passed (
     $campaignSource -match 'CONFIRMED_PRODUCT_WIN' -and
     $campaignSource -match 'PRODUCT_EFFECT_NOT_CONFIRMED'
 )
+Add-FixtureResult -Name 'campaign-consumes-native-linux-preflight-schema' -Passed (
+    $campaignSource -match 'host-linux-preflight\.json' -and
+    $campaignSource -match '\$hostPreflight\.availableMemoryBytes' -and
+    $campaignSource -match '\$hostPreflight\.swapUsedBytes'
+)
 Add-FixtureResult -Name 'runtime-screen-gates-per-arm-podman-pressure' -Passed (
     $runtimeScreenSource -match 'Capture-PodmanMachinePressure' -and
     $runtimeScreenSource -match 'environment-validity\.json' -and
