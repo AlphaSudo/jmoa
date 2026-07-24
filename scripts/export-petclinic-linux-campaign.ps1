@@ -109,10 +109,12 @@ try {
     Write-JmoaJson -Value $portable -Path (Join-Path $bundle 'manifest/portable-campaign-manifest.json')
 
     New-JmoaDirectory -Path ([IO.Path]::GetDirectoryName($archiveFull))
-    if (Test-Path -LiteralPath $archiveFull) { Remove-Item -LiteralPath $archiveFull -Force }
-    $r = Invoke-AuditedExternal -Executable $tar -Arguments @('-a', '-cf', $archiveFull, '-C', $work, 'petclinic-linux-campaign') `
+    $stagedArchive = Join-Path $work 'petclinic-linux-campaign.tar.zst'
+    $r = Invoke-AuditedExternal -Executable $tar -Arguments @('-a', '-cf', $stagedArchive, '-C', $work, 'petclinic-linux-campaign') `
         -LedgerDirectory $ledger -Step 'create Linux campaign archive'
     if ($r.exitCode -ne 0) { throw 'Could not create Linux campaign archive.' }
+    if (Test-Path -LiteralPath $archiveFull) { Remove-Item -LiteralPath $archiveFull -Force }
+    Move-Item -LiteralPath $stagedArchive -Destination $archiveFull
     $result = [ordered]@{
         archive = $archiveFull
         sha256 = (Get-FileHash -LiteralPath $archiveFull -Algorithm SHA256).Hash
@@ -124,6 +126,9 @@ try {
     Write-JmoaJson -Value $result -Path "$archiveFull.json"
     Complete-CampaignAuditLedger -LedgerDirectory $ledger -Status 'COMPLETE' -Stage 'linux-campaign-export' -Variant 'FROZEN' | Out-Null
     $result | ConvertTo-Json -Depth 8
+} catch {
+    Complete-CampaignAuditLedger -LedgerDirectory $ledger -Status 'FAILED' -Stage 'linux-campaign-export' -Variant 'FROZEN' | Out-Null
+    throw
 } finally {
     if (Test-Path -LiteralPath $bundle) { Remove-Item -LiteralPath $bundle -Recurse -Force }
 }
