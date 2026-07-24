@@ -34,6 +34,12 @@ Initialize-CampaignAuditLedger -LedgerDirectory $ledger -Stage 'linux-campaign-e
     -Description 'Exports exact OCI images and immutable campaign inputs. No image or artifact rebuild is permitted.' | Out-Null
 
 try {
+    $git = (Get-Command git).Source
+    $revisionResult = Invoke-AuditedExternal -Executable $git -Arguments @('-C', $repo, 'rev-parse', 'HEAD') `
+        -LedgerDirectory $ledger -Step 'capture packaged campaign runner revision'
+    $runnerRevision = $revisionResult.stdout.Trim()
+    if ($runnerRevision -notmatch '^[0-9a-f]{40}$') { throw "Invalid runner revision: $runnerRevision" }
+
     Copy-Item -LiteralPath $manifestPath -Destination (Join-Path $bundle 'manifest/windows-campaign-manifest.json')
     Copy-Item -LiteralPath $fixturePath -Destination (Join-Path $bundle 'inputs/campaign-fixtures.json')
     Copy-Item -LiteralPath ([string]$manifest.artifacts.baseline.path) -Destination (Join-Path $bundle 'inputs/petclinic-customers-b0.jar')
@@ -93,6 +99,7 @@ try {
         packageSha256 = ''
         sourceCampaignSha256 = [string]$manifest.campaignSha256
         sourceRevision = [string]$manifest.sourceRevision
+        runnerRevision = $runnerRevision
         runtimePolicy = [string]$manifest.environment.runtimePolicy
         workload = [ordered]@{ id = 'petclinic-81-request'; endpoints = 27; rounds = 3; requestsPerArm = 81 }
         logicalArtifacts = [ordered]@{

@@ -212,6 +212,20 @@ Add-FixtureResult -Name 'campaign-manifest-detects-tampering' `
     -Passed ($manifestBefore -ne $manifestAfter) `
     -Details "before=$manifestBefore, after=$manifestAfter"
 
+$portableFixture = [pscustomobject][ordered]@{
+    schemaVersion = 'jmoa-portable-fixture-v1'
+    packageSha256 = ''
+    sourceCampaignSha256 = 'A' * 64
+}
+$portableHash = Get-CampaignManifestSha256 -ManifestObject $portableFixture
+$portableFixture.packageSha256 = $portableHash
+$portableExpected = $portableFixture.packageSha256
+$portableFixture.packageSha256 = ''
+$portableActual = Get-CampaignManifestSha256 -ManifestObject $portableFixture
+Add-FixtureResult -Name 'portable-package-self-hash-recomputes-with-empty-hash-field' `
+    -Passed ($portableExpected -eq $portableActual) `
+    -Details "expected=$portableExpected, actual=$portableActual"
+
 $lineagePath = Join-Path $work 'artifact-lineage.json'
 $lineage = [ordered]@{
     baseline = [ordered]@{

@@ -48,9 +48,12 @@ try {
     $commonPath = Join-Path (Split-Path -Parent $runtimeCommon) 'campaign-common.ps1'
     . $canonicalPath
     . $commonPath
+    $expectedPackageSha = ([string]$portable.packageSha256).ToUpperInvariant()
+    $portable.packageSha256 = ''
     $packageSha = Get-CampaignManifestSha256 -ManifestObject $portable
-    if ($packageSha -ne ([string]$portable.packageSha256).ToUpperInvariant()) {
-        throw "Portable package manifest hash mismatch: expected $($portable.packageSha256), actual $packageSha"
+    $portable.packageSha256 = $expectedPackageSha
+    if ($packageSha -ne $expectedPackageSha) {
+        throw "Portable package manifest hash mismatch: expected $expectedPackageSha, actual $packageSha"
     }
     foreach ($file in @($portable.files)) {
         $path = Join-Path $source ([string]$file.path)
