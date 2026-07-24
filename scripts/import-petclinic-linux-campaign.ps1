@@ -2,6 +2,7 @@ param(
     [Parameter(Mandatory)][string]$InputArchive,
     [Parameter(Mandatory)][string]$ExpectedArchiveSha256,
     [string]$InstallRoot = "$HOME/jmoa/petclinic-linux-campaign",
+    [string]$StagingRoot = '',
     [string]$JavaHome = '/opt/jdk-26',
     [string]$MavenExecutable = '/usr/bin/mvn',
     [string]$ContainerCli = '/usr/bin/podman'
@@ -15,8 +16,19 @@ if ($actualArchiveSha -ne $ExpectedArchiveSha256.ToUpperInvariant()) {
     throw "Linux campaign archive hash mismatch: expected $ExpectedArchiveSha256, actual $actualArchiveSha"
 }
 
-$temp = Join-Path ([IO.Path]::GetTempPath()) ('jmoa-linux-import-' + [guid]::NewGuid().ToString('N'))
+$installFull = [IO.Path]::GetFullPath($InstallRoot)
+if (Test-Path -LiteralPath $installFull) {
+    throw "Install root already exists; refusing destructive replacement: $installFull"
+}
+$stagingBase = if ([string]::IsNullOrWhiteSpace($StagingRoot)) {
+    [IO.Path]::GetDirectoryName($installFull)
+} else {
+    [IO.Path]::GetFullPath($StagingRoot)
+}
+New-Item -ItemType Directory -Force -Path $stagingBase | Out-Null
+$temp = Join-Path $stagingBase ('jmoa-linux-import-' + [guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Force -Path $temp | Out-Null
+$ledger = ''
 try {
     & tar -xf $archive -C $temp
     if ($LASTEXITCODE -ne 0) { throw 'Could not unpack campaign archive.' }
@@ -47,24 +59,23 @@ try {
         if ($sha -ne ([string]$file.sha256).ToUpperInvariant()) { throw "Package file hash mismatch: $($file.path)" }
     }
 
-    if (Test-Path -LiteralPath $InstallRoot) { Remove-Item -LiteralPath $InstallRoot -Recurse -Force }
-    New-Item -ItemType Directory -Force -Path $InstallRoot | Out-Null
-    Copy-Item -Path (Join-Path $source '*') -Destination $InstallRoot -Recurse -Force
-    $repoRoot = Join-Path $InstallRoot 'repo'
-    $configRoot = Join-Path $InstallRoot 'config'
+    New-Item -ItemType Directory -Path $installFull | Out-Null
+    Copy-Item -Path (Join-Path $source '*') -Destination $installFull -Recurse -Force
+    $repoRoot = Join-Path $installFull 'repo'
+    $configRoot = Join-Path $installFull 'config'
     New-Item -ItemType Directory -Force -Path $repoRoot,$configRoot | Out-Null
-    & tar -xf (Join-Path $InstallRoot 'inputs/jmoa-repository.tar') -C $repoRoot
+    & tar -xf (Join-Path $installFull 'inputs/jmoa-repository.tar') -C $repoRoot
     if ($LASTEXITCODE -ne 0) { throw 'Could not unpack JMOA repository.' }
-    & tar -xf (Join-Path $InstallRoot 'inputs/config-repository.tar') -C $configRoot
+    & tar -xf (Join-Path $installFull 'inputs/config-repository.tar') -C $configRoot
     if ($LASTEXITCODE -ne 0) { throw 'Could not unpack config repository.' }
     & chmod +x (Join-Path $repoRoot 'scripts/linux-podman-compat.sh')
 
-    $ledger = Join-Path $InstallRoot 'import-ledger'
+    $ledger = Join-Path $installFull 'import-ledger'
     . (Join-Path $repoRoot 'scripts/campaign-audit-common.ps1')
     Initialize-CampaignAuditLedger -LedgerDirectory $ledger -Stage 'linux-campaign-import' -Variant 'FROZEN' `
         -Description 'Verifies the exported package and imports exact OCI images. No image rebuild.' | Out-Null
     foreach ($image in @($portable.images)) {
-        $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('load', '-i', (Join-Path $InstallRoot ([string]$image.archive))) `
+        $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('load', '-i', (Join-Path $installFull ([string]$image.archive))) `
             -LedgerDirectory $ledger -Step "load $($image.role) OCI archive"
         if ($result.exitCode -ne 0) { throw "Could not load $($image.role) image." }
         $inspect = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('image', 'inspect', '--format', '{{.Id}}', [string]$image.reference) `
@@ -74,12 +85,12 @@ try {
         if ($loaded -ne $expected) { throw "Loaded $($image.role) image ID $loaded does not match $expected." }
     }
 
-    $windowsManifest = Get-Content -LiteralPath (Join-Path $InstallRoot 'manifest/windows-campaign-manifest.json') -Raw | ConvertFrom-Json
+    $windowsManifest = Get-Content -LiteralPath (Join-Path $installFull 'manifest/windows-campaign-manifest.json') -Raw | ConvertFrom-Json
     $configRepo = Get-ChildItem -LiteralPath $configRoot -Directory | Select-Object -First 1
-    $windowsManifest.artifacts.baseline.path = Join-Path $InstallRoot 'inputs/petclinic-customers-b0.jar'
-    $windowsManifest.artifacts.candidate.path = Join-Path $InstallRoot 'inputs/petclinic-customers-v2.jar'
-    $windowsManifest.artifacts.materializationManifest.path = Join-Path $InstallRoot 'inputs/jmoa-materialization-manifest.json'
-    $windowsManifest.artifactLineage.path = Join-Path $InstallRoot 'inputs/artifact-lineage.json'
+    $windowsManifest.artifacts.baseline.path = Join-Path $installFull 'inputs/petclinic-customers-b0.jar'
+    $windowsManifest.artifacts.candidate.path = Join-Path $installFull 'inputs/petclinic-customers-v2.jar'
+    $windowsManifest.artifacts.materializationManifest.path = Join-Path $installFull 'inputs/jmoa-materialization-manifest.json'
+    $windowsManifest.artifactLineage.path = Join-Path $installFull 'inputs/artifact-lineage.json'
     $windowsManifest.configRepo.path = $configRepo.FullName
     $windowsManifest.environment.javaHome = $JavaHome
     $windowsManifest.environment.mavenExecutable = $MavenExecutable
@@ -91,16 +102,21 @@ try {
         $windowsManifest | Add-Member -NotePropertyName portablePackageSha256 -NotePropertyValue ([string]$portable.packageSha256)
     }
     $windowsManifest.campaignSha256 = Get-CampaignManifestSha256 -ManifestObject $windowsManifest
-    $hostManifest = Join-Path $InstallRoot 'manifest/linux-campaign-manifest.json'
+    $hostManifest = Join-Path $installFull 'manifest/linux-campaign-manifest.json'
     Write-JmoaJson -Value $windowsManifest -Path $hostManifest
     Complete-CampaignAuditLedger -LedgerDirectory $ledger -Status 'COMPLETE' -Stage 'linux-campaign-import' -Variant 'FROZEN' | Out-Null
     [ordered]@{
-        installRoot = $InstallRoot
+        installRoot = $installFull
         hostManifest = $hostManifest
         sourceCampaignSha256 = $portable.sourceCampaignSha256
         hostBindingCampaignSha256 = $windowsManifest.campaignSha256
         loadedImages = @($portable.images).Count
     } | ConvertTo-Json -Depth 8
+} catch {
+    if (-not [string]::IsNullOrWhiteSpace($ledger) -and (Test-Path -LiteralPath $ledger -PathType Container)) {
+        Complete-CampaignAuditLedger -LedgerDirectory $ledger -Status 'FAILED' -Stage 'linux-campaign-import' -Variant 'FROZEN' | Out-Null
+    }
+    throw
 } finally {
     if (Test-Path -LiteralPath $temp) { Remove-Item -LiteralPath $temp -Recurse -Force }
 }
