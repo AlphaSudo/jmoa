@@ -23,7 +23,9 @@ cgroup: v2
 minimum fixed RAM: 8 GiB
 fixed vCPU: 4
 dynamic memory: disabled
-swap used: 0
+automatic checkpoints: disabled
+swap configured: 0 bytes
+swap used: 0 bytes
 ```
 
 The VM is admissible only if its measured conditions satisfy the gates. Hyper-V

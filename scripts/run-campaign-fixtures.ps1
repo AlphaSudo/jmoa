@@ -62,11 +62,30 @@ $testedScriptNames = @(
     'run-linux-host-calibration.ps1',
     'export-petclinic-linux-campaign.ps1',
     'import-petclinic-linux-campaign.ps1',
+    'configure-linux-campaign-host.sh',
     'run-campaign-fixtures.ps1'
 )
 $testedFiles = New-Object System.Collections.Generic.List[object]
 foreach ($name in $testedScriptNames) {
     $path = Join-Path $PSScriptRoot $name
+    if ([IO.Path]::GetExtension($path) -eq '.sh') {
+        if ($IsWindows) {
+            $linuxPath = (& wsl.exe wslpath -a $path 2>&1 | Out-String).Trim()
+            if ($LASTEXITCODE -ne 0 -or [string]::IsNullOrWhiteSpace($linuxPath)) {
+                Add-FixtureResult -Name "parse:$name" -Passed $false -Details "wslpath failed: $linuxPath"
+                continue
+            }
+            $bashParse = & wsl.exe bash -n $linuxPath 2>&1
+        } else {
+            $bashParse = & /bin/bash -n $path 2>&1
+        }
+        Add-FixtureResult -Name "parse:$name" -Passed ($LASTEXITCODE -eq 0) -Details ($bashParse -join ' | ')
+        $testedFiles.Add([ordered]@{
+            logicalPath = "scripts/$name"
+            sha256      = (Get-JmoaSha256 -Path $path).ToUpperInvariant()
+        }) | Out-Null
+        continue
+    }
     $tokens = $null
     $errors = $null
     [Management.Automation.Language.Parser]::ParseFile($path, [ref]$tokens, [ref]$errors) | Out-Null

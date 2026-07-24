@@ -2,7 +2,10 @@ param(
     [Parameter(Mandatory)][string]$OutputDirectory,
     [string]$ContainerCli = '/usr/bin/podman',
     [int[]]$RequiredFreePorts = @(8081, 8761, 8888),
+    [long]$MinTotalMemoryBytes = 8589934592,
     [long]$MinPodmanAvailableMemoryBytes = 1073741824,
+    [int]$MinLogicalProcessorCount = 4,
+    [bool]$RequireSwapDisabled = $true,
     [long]$MaxPodmanSwapUsedBytes = 0,
     [double]$MaxPodmanMemoryPressureSomeAvg10 = 1.0,
     [double]$MaxPodmanMemoryPressureFullAvg10 = 0.1,
@@ -71,6 +74,7 @@ try {
         $results[$entry.Key] = Invoke-LinuxCheck -Step $entry.Key -Command $entry.Value
     }
 
+    $totalMemoryBytes = Read-MemInfoBytes -Text $results.meminfo.stdout -Name 'MemTotal'
     $availableBytes = Read-MemInfoBytes -Text $results.meminfo.stdout -Name 'MemAvailable'
     $swapTotalBytes = Read-MemInfoBytes -Text $results.meminfo.stdout -Name 'SwapTotal'
     $swapFreeBytes = Read-MemInfoBytes -Text $results.meminfo.stdout -Name 'SwapFree'
@@ -79,12 +83,18 @@ try {
     $fullAvg10 = Read-Psi -Text $results.memoryPsi.stdout -Kind 'full' -Metric 'avg10'
     $containerObjects = if ([string]::IsNullOrWhiteSpace($results.runningContainers.stdout)) { @() } else { @($results.runningContainers.stdout | ConvertFrom-Json) }
     $portLines = @($results.listeningPorts.stdout -split '\r?\n' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    $processorMatch = [regex]::Match([string]$results.cpu.stdout, '(?m)^CPU\(s\):\s+(\d+)\s*$')
+    if (-not $processorMatch.Success) { throw 'lscpu output is missing the logical CPU count.' }
+    $logicalProcessorCount = [int]$processorMatch.Groups[1].Value
     $reasons = [Collections.Generic.List[string]]::new()
     if (([string]$results.virtualization.stdout).Trim() -ne 'microsoft') { $reasons.Add('systemd-detect-virt did not report microsoft') }
     if (([string]$results.cgroup.stdout) -notmatch 'cgroup2fs') { $reasons.Add('cgroup v2 is not mounted') }
     if ($containerObjects.Count -ne 0) { $reasons.Add("$($containerObjects.Count) running container(s) found") }
     if ($portLines.Count -ne 0) { $reasons.Add('one or more required ports are already listening') }
+    if ($totalMemoryBytes -lt $MinTotalMemoryBytes) { $reasons.Add("MemTotal $totalMemoryBytes is below $MinTotalMemoryBytes bytes") }
     if ($availableBytes -lt $MinPodmanAvailableMemoryBytes) { $reasons.Add("MemAvailable $availableBytes is below $MinPodmanAvailableMemoryBytes bytes") }
+    if ($logicalProcessorCount -lt $MinLogicalProcessorCount) { $reasons.Add("logical processor count $logicalProcessorCount is below $MinLogicalProcessorCount") }
+    if ($RequireSwapDisabled -and $swapTotalBytes -ne 0) { $reasons.Add("swap is configured ($swapTotalBytes bytes); authoritative campaign requires swap disabled") }
     if ($swapUsedBytes -gt $MaxPodmanSwapUsedBytes) { $reasons.Add("swap used $swapUsedBytes exceeds $MaxPodmanSwapUsedBytes bytes") }
     if ($someAvg10 -gt $MaxPodmanMemoryPressureSomeAvg10) { $reasons.Add("memory PSI some avg10 $someAvg10 exceeds $MaxPodmanMemoryPressureSomeAvg10") }
     if ($fullAvg10 -gt $MaxPodmanMemoryPressureFullAvg10) { $reasons.Add("memory PSI full avg10 $fullAvg10 exceeds $MaxPodmanMemoryPressureFullAvg10") }
@@ -95,7 +105,9 @@ try {
         passed = ($reasons.Count -eq 0)
         reasons = $reasons.ToArray()
         virtualization = ([string]$results.virtualization.stdout).Trim()
+        totalMemoryBytes = $totalMemoryBytes
         availableMemoryBytes = $availableBytes
+        logicalProcessorCount = $logicalProcessorCount
         swapTotalBytes = $swapTotalBytes
         swapUsedBytes = $swapUsedBytes
         memoryPressureSomeAvg10 = $someAvg10
@@ -103,7 +115,10 @@ try {
         runningContainerCount = $containerObjects.Count
         occupiedRequiredPorts = $portLines
         thresholds = [ordered]@{
+            minTotalMemoryBytes = $MinTotalMemoryBytes
             minAvailableMemoryBytes = $MinPodmanAvailableMemoryBytes
+            minLogicalProcessorCount = $MinLogicalProcessorCount
+            requireSwapDisabled = $RequireSwapDisabled
             maxSwapUsedBytes = $MaxPodmanSwapUsedBytes
             maxMemoryPressureSomeAvg10 = $MaxPodmanMemoryPressureSomeAvg10
             maxMemoryPressureFullAvg10 = $MaxPodmanMemoryPressureFullAvg10
@@ -116,7 +131,9 @@ try {
 
 - Passed: **$($report.passed)**
 - Virtualization: $($report.virtualization)
+- Total memory: $totalMemoryBytes bytes
 - Available memory: $availableBytes bytes
+- Logical processors: $logicalProcessorCount
 - Swap used: $swapUsedBytes bytes
 - Memory PSI some/full avg10: $someAvg10 / $fullAvg10
 - Running containers: $($containerObjects.Count)
