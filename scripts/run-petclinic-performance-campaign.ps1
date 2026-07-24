@@ -61,7 +61,11 @@ $workloadScript = Join-Path $PSScriptRoot 'campaign-workload-petclinic.ps1'
 $stopScript = Join-Path $PSScriptRoot 'campaign-stop-petclinic-stack.ps1'
 $screenScript = Join-Path $PSScriptRoot 'runtime-screen-pair.ps1'
 $noiseAnalyzer = Join-Path $PSScriptRoot 'analyze-same-artifact-noise.ps1'
-$hostPreflightScript = Join-Path $PSScriptRoot 'capture-campaign-host-preflight.ps1'
+$hostPreflightScript = Join-Path $PSScriptRoot $(if ($IsLinux) {
+    'capture-linux-campaign-host-preflight.ps1'
+} else {
+    'capture-campaign-host-preflight.ps1'
+})
 
 $healthUrl = 'http://localhost:8081/actuator/health'
 $service = 'customers-service'

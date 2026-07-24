@@ -48,6 +48,8 @@ $testedScriptNames = @(
     'campaign-canonical-json.ps1',
     'campaign-common.ps1',
     'capture-campaign-host-preflight.ps1',
+    'capture-linux-campaign-host-preflight.ps1',
+    'capture-linux-host-fingerprint.ps1',
     'campaign-launch-petclinic-stack.ps1',
     'campaign-stop-petclinic-stack.ps1',
     'campaign-workload-petclinic.ps1',
@@ -57,6 +59,9 @@ $testedScriptNames = @(
     'build-artifact-lineage.ps1',
     'new-petclinic-campaign-manifest.ps1',
     'run-petclinic-performance-campaign.ps1',
+    'run-linux-host-calibration.ps1',
+    'export-petclinic-linux-campaign.ps1',
+    'import-petclinic-linux-campaign.ps1',
     'run-campaign-fixtures.ps1'
 )
 $testedFiles = New-Object System.Collections.Generic.List[object]
