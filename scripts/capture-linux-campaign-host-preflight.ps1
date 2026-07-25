@@ -61,7 +61,7 @@ try {
         podmanVersion = "$ContainerCli version"
         podmanInfo = "$ContainerCli info"
         runningContainers = "$ContainerCli ps --format json"
-        java = 'java -version'
+        java = 'if [ -n "${JAVA_HOME:-}" ] && [ -x "$JAVA_HOME/bin/java" ]; then "$JAVA_HOME/bin/java" -version; else java -version; fi'
         maven = 'mvn -version'
         powershell = 'pwsh --version'
         filesystems = 'findmnt'
@@ -81,7 +81,11 @@ try {
     $swapUsedBytes = $swapTotalBytes - $swapFreeBytes
     $someAvg10 = Read-Psi -Text $results.memoryPsi.stdout -Kind 'some' -Metric 'avg10'
     $fullAvg10 = Read-Psi -Text $results.memoryPsi.stdout -Kind 'full' -Metric 'avg10'
-    $containerObjects = if ([string]::IsNullOrWhiteSpace($results.runningContainers.stdout)) { @() } else { @($results.runningContainers.stdout | ConvertFrom-Json) }
+    $containerObjects = @()
+    if (-not [string]::IsNullOrWhiteSpace($results.runningContainers.stdout)) {
+        $parsedContainers = $results.runningContainers.stdout | ConvertFrom-Json
+        if ($null -ne $parsedContainers) { $containerObjects = @($parsedContainers) }
+    }
     $portLines = @($results.listeningPorts.stdout -split '\r?\n' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
     $processorMatch = [regex]::Match([string]$results.cpu.stdout, '(?m)^CPU\(s\):\s+(\d+)\s*$')
     if (-not $processorMatch.Success) { throw 'lscpu output is missing the logical CPU count.' }

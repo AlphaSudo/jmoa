@@ -212,6 +212,19 @@ Add-FixtureResult -Name 'campaign-manifest-detects-tampering' `
     -Passed ($manifestBefore -ne $manifestAfter) `
     -Details "before=$manifestBefore, after=$manifestAfter"
 
+$treeHashFixture = Join-Path $work 'tree-hash-order'
+New-JmoaDirectory -Path (Join-Path $treeHashFixture 'alpha')
+New-JmoaDirectory -Path (Join-Path $treeHashFixture 'zeta')
+Set-Content -LiteralPath (Join-Path $treeHashFixture '.gitignore') -Value 'target/' -Encoding utf8 -NoNewline
+Set-Content -LiteralPath (Join-Path $treeHashFixture 'LICENSE') -Value 'license' -Encoding utf8 -NoNewline
+Set-Content -LiteralPath (Join-Path $treeHashFixture 'README.md') -Value 'readme' -Encoding utf8 -NoNewline
+Set-Content -LiteralPath (Join-Path (Join-Path $treeHashFixture 'alpha') 'application.yml') -Value 'alpha' -Encoding utf8 -NoNewline
+Set-Content -LiteralPath (Join-Path (Join-Path $treeHashFixture 'zeta') 'application.yml') -Value 'zeta' -Encoding utf8 -NoNewline
+$treeHash = Get-CampaignTreeSha256 -Root $treeHashFixture
+Add-FixtureResult -Name 'tree-hash-is-cross-platform-and-case-stable' `
+    -Passed ($treeHash -eq '5A7C00AABEAC3DCF9BA6A5CECA34C7C7205645E57FB92599E05BB9CD742DCBB0') `
+    -Details "actual=$treeHash"
+
 $portableFixture = [pscustomobject][ordered]@{
     schemaVersion = 'jmoa-portable-fixture-v1'
     packageSha256 = ''
@@ -225,6 +238,20 @@ $portableActual = Get-CampaignManifestSha256 -ManifestObject $portableFixture
 Add-FixtureResult -Name 'portable-package-self-hash-recomputes-with-empty-hash-field' `
     -Passed ($portableExpected -eq $portableActual) `
     -Details "expected=$portableExpected, actual=$portableActual"
+
+Add-FixtureResult -Name 'portable-manifest-path-basename-handles-windows-and-linux' -Passed (
+    (Get-CampaignPortableFileName -Path 'C:\materialized\BOOT-INF\lib\jmoa-runtime-lib.jar') -eq 'jmoa-runtime-lib.jar' -and
+    (Get-CampaignPortableFileName -Path '/application/BOOT-INF/lib/jmoa-runtime-lib.jar') -eq 'jmoa-runtime-lib.jar'
+)
+
+$exportScriptText = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'export-petclinic-linux-campaign.ps1')
+$importScriptText = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'import-petclinic-linux-campaign.ps1')
+Add-FixtureResult -Name 'portable-package-preserves-config-checkout-policy' -Passed (
+    $exportScriptText -match 'configCheckout' -and
+    $exportScriptText -match 'coreAutoCrlf' -and
+    $importScriptText -match "config', 'core\.autocrlf" -and
+    $importScriptText -match "config', 'core\.filemode"
+)
 
 $lineagePath = Join-Path $work 'artifact-lineage.json'
 $lineage = [ordered]@{
@@ -347,6 +374,7 @@ Add-FixtureResult -Name 'same-artifact-noise-rejects-large-drift' -Passed (-not 
 
 $campaignSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-petclinic-performance-campaign.ps1')
 $runtimeScreenSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'runtime-screen-pair.ps1')
+$linuxPreflightSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'capture-linux-campaign-host-preflight.ps1')
 Add-FixtureResult -Name 'campaign-stops-b0-before-v2-controls' -Passed (
     $campaignSource.IndexOf("STOPPED_B0_RUNTIME_VARIANCE", [StringComparison]::Ordinal) -ge 0 -and
     $campaignSource.IndexOf("STOPPED_B0_RUNTIME_VARIANCE", [StringComparison]::Ordinal) -lt
@@ -361,6 +389,14 @@ Add-FixtureResult -Name 'campaign-consumes-native-linux-preflight-schema' -Passe
     $campaignSource -match 'host-linux-preflight\.json' -and
     $campaignSource -match '\$hostPreflight\.availableMemoryBytes' -and
     $campaignSource -match '\$hostPreflight\.swapUsedBytes'
+)
+Add-FixtureResult -Name 'campaign-resolves-java-and-path-separator-per-platform' -Passed (
+    $campaignSource.Contains('$javaExecutableName = if ($IsWindows)') -and
+    $campaignSource.Contains('[IO.Path]::PathSeparator')
+)
+Add-FixtureResult -Name 'linux-preflight-handles-empty-container-array-and-pinned-java' -Passed (
+    $linuxPreflightSource -match '\$null -ne \$parsedContainers' -and
+    $linuxPreflightSource -match '\$JAVA_HOME/bin/java'
 )
 Add-FixtureResult -Name 'runtime-screen-gates-per-arm-podman-pressure' -Passed (
     $runtimeScreenSource -match 'Capture-PodmanMachinePressure' -and

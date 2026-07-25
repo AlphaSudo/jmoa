@@ -53,14 +53,29 @@ function Get-CampaignTreeSha256 {
     $sha = [Security.Cryptography.SHA256]::Create()
     try {
         $fullRoot = (Resolve-Path -LiteralPath $Root).Path
-        $files = Get-ChildItem -LiteralPath $fullRoot -Recurse -File |
+        $records = @(Get-ChildItem -LiteralPath $fullRoot -Recurse -File -Force |
             Where-Object { $f = $_.FullName; -not ($ExcludeRegex | Where-Object { $f -match $_ }) } |
-            Sort-Object FullName
-        foreach ($file in $files) {
-            $rel = ($file.FullName.Substring($fullRoot.Length).TrimStart('\', '/')) -replace '\\', '/'
+            ForEach-Object {
+                [pscustomobject]@{
+                    File = $_
+                    RelativePath = ($_.FullName.Substring($fullRoot.Length).TrimStart('\', '/')) -replace '\\', '/'
+                }
+            })
+        $comparer = [Collections.Generic.Comparer[object]]::Create(
+            [Comparison[object]] {
+                param($left, $right)
+                return [StringComparer]::OrdinalIgnoreCase.Compare(
+                    [string]$left.RelativePath,
+                    [string]$right.RelativePath
+                )
+            }
+        )
+        [Array]::Sort([object[]]$records, $comparer)
+        foreach ($record in $records) {
+            $rel = [string]$record.RelativePath
             $relBytes = [Text.Encoding]::UTF8.GetBytes($rel)
             [void]$sha.TransformBlock($relBytes, 0, $relBytes.Length, $null, 0)
-            $fileHash = [Convert]::FromHexString((Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash)
+            $fileHash = [Convert]::FromHexString((Get-FileHash -LiteralPath $record.File.FullName -Algorithm SHA256).Hash)
             [void]$sha.TransformBlock($fileHash, 0, $fileHash.Length, $null, 0)
         }
         [void]$sha.TransformFinalBlock([byte[]]::new(0), 0, 0)

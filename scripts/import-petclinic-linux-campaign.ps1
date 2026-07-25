@@ -77,6 +77,23 @@ try {
     . (Join-Path $repoRoot 'scripts/campaign-audit-common.ps1')
     Initialize-CampaignAuditLedger -LedgerDirectory $ledger -Stage 'linux-campaign-import' -Variant 'FROZEN' `
         -Description 'Verifies the exported package and imports exact OCI images. No image rebuild.' | Out-Null
+    $configRepo = Get-ChildItem -LiteralPath $configRoot -Directory | Select-Object -First 1
+    if ($null -eq $configRepo) { throw 'Imported package does not contain a config repository.' }
+    if ($portable.PSObject.Properties['configCheckout']) {
+        $autoCrlf = ([string]$portable.configCheckout.coreAutoCrlf).ToLowerInvariant()
+        $fileMode = ([string]$portable.configCheckout.coreFileMode).ToLowerInvariant()
+        if ($autoCrlf -notin @('true', 'false', 'input')) {
+            throw "Portable package has unsupported config core.autocrlf value: $autoCrlf"
+        }
+        if ($fileMode -notin @('true', 'false')) {
+            throw "Portable package has unsupported config core.filemode value: $fileMode"
+        }
+        $git = (Get-Command git).Source
+        Invoke-AuditedExternal -Executable $git -Arguments @('-C', $configRepo.FullName, 'config', 'core.autocrlf', $autoCrlf) `
+            -LedgerDirectory $ledger -Step 'restore frozen config checkout core.autocrlf' | Out-Null
+        Invoke-AuditedExternal -Executable $git -Arguments @('-C', $configRepo.FullName, 'config', 'core.filemode', $fileMode) `
+            -LedgerDirectory $ledger -Step 'restore frozen config checkout core.filemode' | Out-Null
+    }
     foreach ($image in @($portable.images)) {
         $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('load', '-i', (Join-Path $installFull ([string]$image.archive))) `
             -LedgerDirectory $ledger -Step "load $($image.role) OCI archive"
@@ -89,7 +106,6 @@ try {
     }
 
     $windowsManifest = Get-Content -LiteralPath (Join-Path $installFull 'manifest/windows-campaign-manifest.json') -Raw | ConvertFrom-Json
-    $configRepo = Get-ChildItem -LiteralPath $configRoot -Directory | Select-Object -First 1
     $windowsManifest.artifacts.baseline.path = Join-Path $installFull 'inputs/petclinic-customers-b0.jar'
     $windowsManifest.artifacts.candidate.path = Join-Path $installFull 'inputs/petclinic-customers-v2.jar'
     $windowsManifest.artifacts.materializationManifest.path = Join-Path $installFull 'inputs/jmoa-materialization-manifest.json'

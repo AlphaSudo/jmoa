@@ -39,6 +39,19 @@ try {
         -LedgerDirectory $ledger -Step 'capture packaged campaign runner revision'
     $runnerRevision = $revisionResult.stdout.Trim()
     if ($runnerRevision -notmatch '^[0-9a-f]{40}$') { throw "Invalid runner revision: $runnerRevision" }
+    $configRepoPath = [string]$manifest.configRepo.path
+    $autoCrlfResult = Invoke-AuditedExternal -Executable $git -Arguments @('-C', $configRepoPath, 'config', '--get', 'core.autocrlf') `
+        -LedgerDirectory $ledger -Step 'capture frozen config checkout core.autocrlf' -AllowFailure
+    $fileModeResult = Invoke-AuditedExternal -Executable $git -Arguments @('-C', $configRepoPath, 'config', '--get', 'core.filemode') `
+        -LedgerDirectory $ledger -Step 'capture frozen config checkout core.filemode' -AllowFailure
+    $configCoreAutoCrlf = if ($autoCrlfResult.exitCode -eq 0) { $autoCrlfResult.stdout.Trim().ToLowerInvariant() } else { 'false' }
+    $configCoreFileMode = if ($fileModeResult.exitCode -eq 0) { $fileModeResult.stdout.Trim().ToLowerInvariant() } else { 'true' }
+    if ($configCoreAutoCrlf -notin @('true', 'false', 'input')) {
+        throw "Unsupported frozen config core.autocrlf value: $configCoreAutoCrlf"
+    }
+    if ($configCoreFileMode -notin @('true', 'false')) {
+        throw "Unsupported frozen config core.filemode value: $configCoreFileMode"
+    }
 
     Copy-Item -LiteralPath $manifestPath -Destination (Join-Path $bundle 'manifest/windows-campaign-manifest.json')
     Copy-Item -LiteralPath $fixturePath -Destination (Join-Path $bundle 'inputs/campaign-fixtures.json')
@@ -102,6 +115,10 @@ try {
         runnerRevision = $runnerRevision
         runtimePolicy = [string]$manifest.environment.runtimePolicy
         workload = [ordered]@{ id = 'petclinic-81-request'; endpoints = 27; rounds = 3; requestsPerArm = 81 }
+        configCheckout = [ordered]@{
+            coreAutoCrlf = $configCoreAutoCrlf
+            coreFileMode = $configCoreFileMode
+        }
         logicalArtifacts = [ordered]@{
             baselineSha256 = [string]$manifest.artifacts.baseline.sha256
             candidateSha256 = [string]$manifest.artifacts.candidate.sha256

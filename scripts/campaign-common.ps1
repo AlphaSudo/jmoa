@@ -22,6 +22,13 @@ function Get-CampaignJsonProp {
     return $null
 }
 
+function Get-CampaignPortableFileName {
+    param([Parameter(Mandatory)][string]$Path)
+    $normalized = $Path.Replace('\', '/').TrimEnd('/')
+    if ([string]::IsNullOrWhiteSpace($normalized)) { return '' }
+    return ($normalized -split '/')[-1]
+}
+
 function Get-CampaignMedian {
     param([double[]]$Values)
     $sorted = @($Values | Sort-Object)
@@ -215,7 +222,7 @@ function Test-CampaignCandidateTransformed {
         if (-not $manifestRuntimeLibraryPresent) { $reasons.Add('materialization manifest has no runtime library record') | Out-Null }
         if ($manifestRuntimeLibraryPresent) {
             $expectedRuntimeLibSha = ([string]$manifest.runtimeLibrary.targetSha256).ToUpperInvariant()
-            $runtimeLibraryName = [IO.Path]::GetFileName([string]$manifest.runtimeLibrary.target)
+            $runtimeLibraryName = Get-CampaignPortableFileName -Path ([string]$manifest.runtimeLibrary.target)
             $runtimeLibSha256Match = ($imageRuntimeLibSha -eq $expectedRuntimeLibSha)
             if (-not $runtimeLibSha256Match) { $reasons.Add("runtime-lib SHA in image ($imageRuntimeLibSha) does not match manifest ($expectedRuntimeLibSha)") | Out-Null }
         }

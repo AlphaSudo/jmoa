@@ -141,10 +141,11 @@ foreach ($pair in @(
 }
 if (-not (Test-Path -LiteralPath $JavaHome -PathType Container)) { throw "JavaHome (manifest) does not exist: $JavaHome" }
 $resolvedJavaHome = (Resolve-Path -LiteralPath $JavaHome).Path
-$javaExecutable = Join-Path $resolvedJavaHome 'bin/java.exe'
-if (-not (Test-Path -LiteralPath $javaExecutable -PathType Leaf)) { throw "java.exe not found under JavaHome: $javaExecutable" }
+$javaExecutableName = if ($IsWindows) { 'java.exe' } else { 'java' }
+$javaExecutable = Join-Path $resolvedJavaHome "bin/$javaExecutableName"
+if (-not (Test-Path -LiteralPath $javaExecutable -PathType Leaf)) { throw "$javaExecutableName not found under JavaHome: $javaExecutable" }
 $env:JAVA_HOME = $resolvedJavaHome
-$env:Path = "$(Join-Path $resolvedJavaHome 'bin');$env:Path"
+$env:Path = "$(Join-Path $resolvedJavaHome 'bin')$([IO.Path]::PathSeparator)$env:Path"
 
 $runId = 'petclinic-performance-campaign-' + [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssZ')
 $resolvedRunRoot = if ([IO.Path]::IsPathRooted($RunRoot)) { [IO.Path]::GetFullPath($RunRoot) } else { [IO.Path]::GetFullPath((Join-Path $repositoryRoot $RunRoot)) }
