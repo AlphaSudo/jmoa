@@ -4,8 +4,9 @@ param(
     [Parameter(Mandatory)][string]$DiscoveryImage,
     [Parameter(Mandatory)][string]$ConfigRepo,
     [string]$ContainerCli = '/usr/bin/podman',
-    [int]$Samples = 3,
-    [int]$SettleSeconds = 20,
+    [ValidateSet('STANDARD_FIXED_8G', 'HYPERV_DEBIAN_FIXED_2G')][string]$HostProfile = 'STANDARD_FIXED_8G',
+    [int]$Samples = 10,
+    [int]$SampleIntervalSeconds = 7,
     [long]$MaxAggregateMemoryCurrentDriftBytes = 2097152
 )
 
@@ -13,15 +14,21 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'runtime-automation-common.ps1')
 . (Join-Path $PSScriptRoot 'campaign-audit-common.ps1')
+. (Join-Path $PSScriptRoot 'campaign-linux-host-profiles.ps1')
 
+$profile = Get-CampaignLinuxHostProfile -Name $HostProfile
 New-JmoaDirectory -Path $OutputDirectory
 $ledger = Join-Path $OutputDirectory 'command-ledger'
 Initialize-CampaignAuditLedger -LedgerDirectory $ledger -Stage 'linux-support-stack-calibration' -Variant 'SUPPORT_ONLY' `
-    -Description 'Three fresh support-stack-only samples. No target JVM is launched.' | Out-Null
+    -Description "One frozen config/discovery support stack, sampled $Samples times over at least $(($Samples - 1) * $SampleIntervalSeconds) seconds. No target JVM." | Out-Null
 
 function Invoke-Cli {
     param([string]$Step, [string[]]$Arguments, [switch]$AllowFailure)
-    Invoke-AuditedExternal -Executable $ContainerCli -Arguments $Arguments -LedgerDirectory $ledger -Step $Step -AllowFailure:$AllowFailure
+    return Invoke-AuditedExternal -Executable $ContainerCli -Arguments $Arguments -LedgerDirectory $ledger -Step $Step -AllowFailure:$AllowFailure
+}
+function Invoke-Host {
+    param([string]$Step, [string]$Command)
+    return Invoke-AuditedExternal -Executable '/bin/bash' -Arguments @('-lc', $Command) -LedgerDirectory $ledger -Step $Step
 }
 function Wait-Health {
     param([string]$Role, [string]$Uri, [int]$TimeoutSeconds = 240)
@@ -35,91 +42,149 @@ function Wait-Health {
     }
     throw "$Role did not become healthy."
 }
-function Get-MemoryCurrent {
+function Read-MemInfoBytes {
+    param([string]$Text, [string]$Name)
+    $match = [regex]::Match($Text, "(?m)^$([regex]::Escape($Name)):\s+(\d+)\s+kB\s*$")
+    if (-not $match.Success) { throw "/proc/meminfo is missing $Name." }
+    return [long]$match.Groups[1].Value * 1024
+}
+function Read-Psi {
+    param([string]$Text, [string]$Kind)
+    $match = [regex]::Match($Text, "(?m)^$Kind\s+avg10=([0-9.]+)")
+    if (-not $match.Success) { throw "Memory PSI output is missing $Kind avg10." }
+    return [double]::Parse($match.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture)
+}
+function Get-ContainerPid {
+    param([string]$Name)
+    $result = Invoke-Cli -Step "capture $Name host PID" -Arguments @('inspect', '--format', '{{.State.Pid}}', $Name)
+    return [int]$result.stdout.Trim()
+}
+function Get-ContainerRestartCount {
+    param([string]$Name)
+    $result = Invoke-Cli -Step "capture $Name restart count" -Arguments @('inspect', '--format', '{{.RestartCount}}', $Name)
+    return [int]$result.stdout.Trim()
+}
+function Get-ContainerMemoryCurrent {
     param([string]$Name)
     $result = Invoke-Cli -Step "capture $Name memory.current" -Arguments @('exec', $Name, 'sh', '-lc', 'cat /sys/fs/cgroup/memory.current')
     return [long]$result.stdout.Trim()
 }
-function Read-MemAvailable {
-    $result = Invoke-AuditedExternal -Executable '/bin/bash' -Arguments @('-lc', "awk '/^MemAvailable:/ {print `$2 * 1024}' /proc/meminfo") -LedgerDirectory $ledger -Step 'capture host MemAvailable'
-    return [long]$result.stdout.Trim()
+function Get-SmapsRollup {
+    param([int]$Pid, [string]$Name)
+    $result = Invoke-Host -Step "capture $Name smaps_rollup" -Command "cat /proc/$Pid/smaps_rollup"
+    $pss = [regex]::Match($result.stdout, '(?m)^Pss:\s+(\d+)\s+kB$')
+    $dirty = [regex]::Match($result.stdout, '(?m)^Private_Dirty:\s+(\d+)\s+kB$')
+    if (-not $pss.Success -or -not $dirty.Success) { throw "Could not parse $Name smaps_rollup." }
+    return [pscustomobject]@{ pssKb = [long]$pss.Groups[1].Value; privateDirtyKb = [long]$dirty.Groups[1].Value }
 }
 
+$network = 'jmoa-cal-support-net'
+$config = 'jmoa-cal-support-cfg'
+$discovery = 'jmoa-cal-support-disc'
 $rows = [Collections.Generic.List[object]]::new()
+$finalStatus = 'FAILED'
 try {
+    foreach ($name in @($discovery, $config)) { Invoke-Cli -Step "pre-clean $name" -Arguments @('rm', '-f', $name) -AllowFailure | Out-Null }
+    Invoke-Cli -Step "pre-clean $network" -Arguments @('network', 'rm', $network) -AllowFailure | Out-Null
+    Invoke-Cli -Step "create $network" -Arguments @('network', 'create', $network) | Out-Null
+    Invoke-Cli -Step 'start frozen config support service' -Arguments @(
+        'run','-d','--name',$config,'--network',$network,'--network-alias','config-server','-p','8888:8888',
+        '-v',"${ConfigRepo}:/app/config-repo:ro",'-e','SPRING_PROFILES_ACTIVE=native','-e','GIT_REPO=/app/config-repo',
+        '-e','MANAGEMENT_TRACING_ENABLED=false','-e','MANAGEMENT_METRICS_ENABLED=false',
+        '-e','JAVA_TOOL_OPTIONS=-XX:+UseContainerSupport -XX:+UseSerialGC -Xms24m -Xmx80m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -Xshare:off',
+        $ConfigImage
+    ) | Out-Null
+    Wait-Health -Role 'config' -Uri 'http://localhost:8888/actuator/health'
+    Invoke-Cli -Step 'start frozen discovery support service' -Arguments @(
+        'run','-d','--name',$discovery,'--network',$network,'--network-alias','discovery-server','-p','8761:8761',
+        '-e','SPRING_PROFILES_ACTIVE=docker','-e','CONFIG_SERVER_URI=http://config-server:8888',
+        '-e','JAVA_TOOL_OPTIONS=-XX:+UseContainerSupport -XX:+UseSerialGC -Xms16m -Xmx96m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -Xshare:off',
+        $DiscoveryImage
+    ) | Out-Null
+    Wait-Health -Role 'discovery' -Uri 'http://localhost:8761/actuator/health'
+    $configPid = Get-ContainerPid -Name $config
+    $discoveryPid = Get-ContainerPid -Name $discovery
+
     for ($sample = 1; $sample -le $Samples; $sample++) {
-        $prefix = "jmoa-cal-$sample"
-        $network = "$prefix-net"
-        $config = "$prefix-cfg"
-        $discovery = "$prefix-disc"
-        foreach ($name in @($discovery, $config)) { Invoke-Cli -Step "pre-clean $name" -Arguments @('rm', '-f', $name) -AllowFailure | Out-Null }
-        Invoke-Cli -Step "pre-clean $network" -Arguments @('network', 'rm', $network) -AllowFailure | Out-Null
-        Invoke-Cli -Step "create $network" -Arguments @('network', 'create', $network) | Out-Null
-        Invoke-Cli -Step "start config sample $sample" -Arguments @(
-            'run','-d','--name',$config,'--network',$network,'--network-alias','config-server','-p','8888:8888',
-            '-v',"${ConfigRepo}:/app/config-repo:ro",'-e','SPRING_PROFILES_ACTIVE=native','-e','GIT_REPO=/app/config-repo',
-            '-e','MANAGEMENT_TRACING_ENABLED=false','-e','MANAGEMENT_METRICS_ENABLED=false',
-            '-e','JAVA_TOOL_OPTIONS=-XX:+UseContainerSupport -XX:+UseSerialGC -Xms24m -Xmx80m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -Xshare:off',
-            $ConfigImage
-        ) | Out-Null
-        Wait-Health -Role 'config' -Uri 'http://localhost:8888/actuator/health'
-        Invoke-Cli -Step "start discovery sample $sample" -Arguments @(
-            'run','-d','--name',$discovery,'--network',$network,'--network-alias','discovery-server','-p','8761:8761',
-            '-e','SPRING_PROFILES_ACTIVE=docker','-e','CONFIG_SERVER_URI=http://config-server:8888',
-            '-e','JAVA_TOOL_OPTIONS=-XX:+UseContainerSupport -XX:+UseSerialGC -Xms16m -Xmx96m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -Xshare:off',
-            $DiscoveryImage
-        ) | Out-Null
-        Wait-Health -Role 'discovery' -Uri 'http://localhost:8761/actuator/health'
-        Start-Sleep -Seconds $SettleSeconds
-        $configMemory = Get-MemoryCurrent -Name $config
-        $discoveryMemory = Get-MemoryCurrent -Name $discovery
-        $memoryPsi = Invoke-AuditedExternal -Executable '/bin/cat' -Arguments @('/proc/pressure/memory') -LedgerDirectory $ledger -Step "sample $sample memory PSI"
-        $swap = Invoke-AuditedExternal -Executable '/bin/cat' -Arguments @('/proc/swaps') -LedgerDirectory $ledger -Step "sample $sample swaps"
+        $configHealth = Invoke-AuditedHttp -Method GET -Uri 'http://localhost:8888/actuator/health' -LedgerDirectory $ledger -Step "sample $sample config health"
+        $discoveryHealth = Invoke-AuditedHttp -Method GET -Uri 'http://localhost:8761/actuator/health' -LedgerDirectory $ledger -Step "sample $sample discovery health"
+        $meminfo = Invoke-Host -Step "sample $sample meminfo" -Command 'cat /proc/meminfo'
+        $psi = Invoke-Host -Step "sample $sample memory PSI" -Command 'cat /proc/pressure/memory'
+        $events = Invoke-Host -Step "sample $sample memory events" -Command 'cat /sys/fs/cgroup/memory.events'
+        $swapCurrent = Invoke-Host -Step "sample $sample cgroup swap current" -Command 'cat /sys/fs/cgroup/memory.swap.current 2>/dev/null || echo 0'
+        $configSmaps = Get-SmapsRollup -Pid $configPid -Name $config
+        $discoverySmaps = Get-SmapsRollup -Pid $discoveryPid -Name $discovery
+        $configMemory = Get-ContainerMemoryCurrent -Name $config
+        $discoveryMemory = Get-ContainerMemoryCurrent -Name $discovery
         $rows.Add([ordered]@{
             sample = $sample
-            configMemoryCurrentBytes = $configMemory
-            discoveryMemoryCurrentBytes = $discoveryMemory
+            configHealthStatus = $configHealth.status
+            discoveryHealthStatus = $discoveryHealth.status
+            configRestartCount = Get-ContainerRestartCount -Name $config
+            discoveryRestartCount = Get-ContainerRestartCount -Name $discovery
+            aggregatePssKb = $configSmaps.pssKb + $discoverySmaps.pssKb
+            aggregatePrivateDirtyKb = $configSmaps.privateDirtyKb + $discoverySmaps.privateDirtyKb
             aggregateMemoryCurrentBytes = $configMemory + $discoveryMemory
-            hostAvailableMemoryBytes = Read-MemAvailable
-            memoryPressure = $memoryPsi.stdout.Trim()
-            swaps = $swap.stdout.Trim()
-        })
-        foreach ($name in @($discovery, $config)) { Invoke-Cli -Step "stop $name" -Arguments @('rm', '-f', $name) -AllowFailure | Out-Null }
-        Invoke-Cli -Step "remove $network" -Arguments @('network', 'rm', $network) -AllowFailure | Out-Null
+            hostAvailableMemoryBytes = Read-MemInfoBytes -Text $meminfo.stdout -Name 'MemAvailable'
+            swapTotalBytes = Read-MemInfoBytes -Text $meminfo.stdout -Name 'SwapTotal'
+            cgroupSwapCurrentBytes = [long]$swapCurrent.stdout.Trim()
+            memoryPressureSomeAvg10 = Read-Psi -Text $psi.stdout -Kind 'some'
+            memoryPressureFullAvg10 = Read-Psi -Text $psi.stdout -Kind 'full'
+            oomEvents = Get-CampaignMemoryEventValue -Text $events.stdout -Name 'oom'
+            oomKillEvents = Get-CampaignMemoryEventValue -Text $events.stdout -Name 'oom_kill'
+        }) | Out-Null
+        if ($sample -lt $Samples -and $SampleIntervalSeconds -gt 0) { Start-Sleep -Seconds $SampleIntervalSeconds }
     }
-    $values = @($rows | ForEach-Object aggregateMemoryCurrentBytes)
-    $drift = ([long]($values | Measure-Object -Maximum).Maximum) - ([long]($values | Measure-Object -Minimum).Minimum)
-    $swapActive = @($rows | Where-Object { ($_.swaps -split '\r?\n').Count -gt 1 }).Count -gt 0
-    $psiNonZero = @($rows | Where-Object { $_.memoryPressure -match '(some|full) avg10=(?!0\.00)' }).Count -gt 0
+
+    $memoryValues = @($rows | ForEach-Object aggregateMemoryCurrentBytes)
+    $drift = ([long]($memoryValues | Measure-Object -Maximum).Maximum) - ([long]($memoryValues | Measure-Object -Minimum).Minimum)
+    $minimumAvailable = [long](@($rows | Measure-Object -Property hostAvailableMemoryBytes -Minimum).Minimum)
+    $reasons = [Collections.Generic.List[string]]::new()
+    if ($drift -gt $MaxAggregateMemoryCurrentDriftBytes) { $reasons.Add("support aggregate memory.current drift $drift exceeds $MaxAggregateMemoryCurrentDriftBytes bytes") | Out-Null }
+    if ($minimumAvailable -lt $profile.minSupportReadyMemoryBytes) { $reasons.Add("minimum MemAvailable $minimumAvailable is below $($profile.minSupportReadyMemoryBytes) bytes") | Out-Null }
+    if (@($rows | Where-Object { $_.configHealthStatus -ne 200 -or $_.discoveryHealthStatus -ne 200 }).Count -ne 0) { $reasons.Add('support health failed') | Out-Null }
+    if (@($rows | Where-Object { $_.configRestartCount -ne 0 -or $_.discoveryRestartCount -ne 0 }).Count -ne 0) { $reasons.Add('support container restarted') | Out-Null }
+    if (@($rows | Where-Object { $_.swapTotalBytes -ne 0 -or $_.cgroupSwapCurrentBytes -ne 0 }).Count -ne 0) { $reasons.Add('swap was configured or used') | Out-Null }
+    if (@($rows | Where-Object { $_.memoryPressureSomeAvg10 -gt 0 -or $_.memoryPressureFullAvg10 -gt 0 }).Count -ne 0) { $reasons.Add('memory PSI some/full avg10 was nonzero') | Out-Null }
+    if (@($rows | Where-Object { $_.oomEvents -ne 0 -or $_.oomKillEvents -ne 0 }).Count -ne 0) { $reasons.Add('OOM counters were nonzero') | Out-Null }
     $report = [ordered]@{
-        schemaVersion = 'jmoa-linux-support-calibration-v1'
+        schemaVersion = 'jmoa-linux-support-calibration-v2'
+        hostProfile = $profile.name
+        resourceClass = $profile.resourceClass
         samples = $rows.ToArray()
         aggregateMemoryCurrentDriftBytes = $drift
         maxAggregateMemoryCurrentDriftBytes = $MaxAggregateMemoryCurrentDriftBytes
-        swapActive = $swapActive
-        sustainedMemoryPressure = $psiNonZero
-        passed = ($drift -le $MaxAggregateMemoryCurrentDriftBytes -and -not $swapActive -and -not $psiNonZero)
+        minimumAvailableMemoryBytes = $minimumAvailable
+        minRequiredAvailableMemoryBytes = $profile.minSupportReadyMemoryBytes
+        passed = ($reasons.Count -eq 0)
+        terminalVerdict = if ($reasons.Count -eq 0) { 'SUPPORT_STACK_CALIBRATION_PASSED' } else { 'STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM' }
+        reasons = $reasons.ToArray()
     }
     Write-JmoaJson -Value $report -Path (Join-Path $OutputDirectory 'linux-host-calibration.json')
     Write-JmoaText -Path (Join-Path $OutputDirectory 'linux-host-calibration.md') -Value @"
 # Linux Support-Stack Calibration
 
+- Host profile: $($profile.name)
 - Samples: $Samples
+- Sampling duration: at least $(($Samples - 1) * $SampleIntervalSeconds) seconds
 - Aggregate memory.current drift: $drift bytes
-- Frozen limit: $MaxAggregateMemoryCurrentDriftBytes bytes
-- Swap active: $swapActive
-- Sustained memory PSI: $psiNonZero
+- Frozen drift limit: $MaxAggregateMemoryCurrentDriftBytes bytes
+- Minimum MemAvailable: $minimumAvailable bytes
+- Required support-ready MemAvailable: $($profile.minSupportReadyMemoryBytes) bytes
 - Passed: **$($report.passed)**
+- Terminal verdict: $($report.terminalVerdict)
+
+## Reasons
+$(if ($reasons.Count -eq 0) { '- none' } else { ($reasons | ForEach-Object { "- $_" }) -join "`n" })
 "@
-    Complete-CampaignAuditLedger -LedgerDirectory $ledger -Status $(if ($report.passed) {'COMPLETE'} else {'FAILED'}) -Stage 'linux-support-stack-calibration' -Variant 'SUPPORT_ONLY' | Out-Null
+    $finalStatus = if ($report.passed) { 'COMPLETE' } else { 'FAILED' }
     if (-not $report.passed) { exit 2 }
+} catch {
+    $finalStatus = 'FAILED'
+    throw
 } finally {
-    $containers = Invoke-Cli -Step 'final calibration container inventory' -Arguments @('ps','-aq','--filter','name=jmoa-cal-') -AllowFailure
-    foreach ($id in @($containers.stdout -split '\r?\n' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })) {
-        Invoke-Cli -Step "final remove calibration container $id" -Arguments @('rm','-f',$id) -AllowFailure | Out-Null
-    }
-    $networks = Invoke-Cli -Step 'final calibration network inventory' -Arguments @('network','ls','--format','{{.Name}}') -AllowFailure
-    foreach ($name in @($networks.stdout -split '\r?\n' | Where-Object { $_ -like 'jmoa-cal-*-net' })) {
-        Invoke-Cli -Step "final remove calibration network $name" -Arguments @('network','rm',$name) -AllowFailure | Out-Null
-    }
+    foreach ($name in @($discovery, $config)) { Invoke-Cli -Step "final remove $name" -Arguments @('rm', '-f', $name) -AllowFailure | Out-Null }
+    Invoke-Cli -Step "final remove $network" -Arguments @('network', 'rm', $network) -AllowFailure | Out-Null
+    Complete-CampaignAuditLedger -LedgerDirectory $ledger -Status $finalStatus `
+        -Stage 'linux-support-stack-calibration' -Variant 'SUPPORT_ONLY' | Out-Null
 }

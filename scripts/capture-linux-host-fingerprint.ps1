@@ -1,5 +1,6 @@
 param(
     [Parameter(Mandatory)][string]$OutputDirectory,
+    [ValidateSet('STANDARD_FIXED_8G', 'HYPERV_DEBIAN_FIXED_2G')][string]$HostProfile = 'STANDARD_FIXED_8G',
     [string]$LedgerDirectory = ''
 )
 
@@ -7,16 +8,24 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'runtime-automation-common.ps1')
 . (Join-Path $PSScriptRoot 'campaign-audit-common.ps1')
+. (Join-Path $PSScriptRoot 'campaign-linux-host-profiles.ps1')
 
 New-JmoaDirectory -Path $OutputDirectory
+$profile = Get-CampaignLinuxHostProfile -Name $HostProfile
 if ([string]::IsNullOrWhiteSpace($LedgerDirectory)) { $LedgerDirectory = Join-Path $OutputDirectory 'command-ledger' }
 Initialize-CampaignAuditLedger -LedgerDirectory $LedgerDirectory -Stage 'linux-host-fingerprint' -Variant 'SHARED' `
     -Description 'Immutable Linux/Hyper-V campaign host fingerprint captured before image import and runtime.' | Out-Null
 
 $specs = [ordered]@{
     uname = 'uname -a'
+    bootId = 'cat /proc/sys/kernel/random/boot_id'
+    uptime = 'cat /proc/uptime'
     osRelease = 'cat /etc/os-release'
     virtualization = 'systemd-detect-virt'
+    processors = 'nproc'
+    meminfo = "grep -E '^(MemTotal|MemAvailable|SwapTotal|SwapFree):' /proc/meminfo"
+    memoryEvents = 'cat /sys/fs/cgroup/memory.events'
+    memorySwapCurrent = 'cat /sys/fs/cgroup/memory.swap.current 2>/dev/null || echo UNAVAILABLE'
     hypervDmesg = 'dmesg | grep -i hyper-v || true'
     hypervModules = "lsmod | grep '^hv_' || true"
     cpu = 'lscpu'
@@ -48,8 +57,11 @@ foreach ($entry in $specs.GetEnumerator()) {
     }
 }
 $fingerprint = [ordered]@{
-    schemaVersion = 'jmoa-linux-host-fingerprint-v1'
+    schemaVersion = 'jmoa-linux-host-fingerprint-v2'
     capturedAt = [DateTime]::UtcNow.ToString('o')
+    hostProfile = $profile.name
+    resourceClass = $profile.resourceClass
+    admissionThresholds = $profile
     records = $records
 }
 $canonical = $fingerprint | ConvertTo-Json -Depth 12 -Compress
@@ -60,6 +72,8 @@ $markdown = @"
 
 - Captured UTC: $($fingerprint.capturedAt)
 - Fingerprint SHA-256: `$($fingerprint.fingerprintSha256)`
+- Host profile: **$($profile.name)**
+- Resource class: **$($profile.resourceClass)**
 - Kernel: $($records.uname.stdout)
 - Virtualization: $($records.virtualization.stdout)
 - Clocksource: $($records.clocksource.stdout -replace "`n", '; ')

@@ -120,6 +120,9 @@ try {
     if (-not $windowsManifest.PSObject.Properties['portablePackageSha256']) {
         $windowsManifest | Add-Member -NotePropertyName portablePackageSha256 -NotePropertyValue ([string]$portable.packageSha256)
     }
+    if (-not $windowsManifest.PSObject.Properties['runnerRevision']) {
+        $windowsManifest | Add-Member -NotePropertyName runnerRevision -NotePropertyValue ([string]$portable.runnerRevision)
+    }
     $windowsManifest.campaignSha256 = Get-CampaignManifestSha256 -ManifestObject $windowsManifest
     $hostManifest = Join-Path $installFull 'manifest/linux-campaign-manifest.json'
     Write-JmoaJson -Value $windowsManifest -Path $hostManifest
@@ -128,6 +131,7 @@ try {
         installRoot = $installFull
         hostManifest = $hostManifest
         sourceCampaignSha256 = $portable.sourceCampaignSha256
+        runnerRevision = $portable.runnerRevision
         hostBindingCampaignSha256 = $windowsManifest.campaignSha256
         loadedImages = @($portable.images).Count
     } | ConvertTo-Json -Depth 8

@@ -36,6 +36,7 @@ param(
     [int]$ConfigReadyTimeoutSeconds = 180,
     [int]$DiscoveryReadyTimeoutSeconds = 180,
     [int]$CustomerReadyTimeoutSeconds = 900,
+    [long]$MinAvailableMemoryBeforeTargetBytes = 0,
     [string]$ContainerCli = 'podman',
     [string]$LedgerDirectory = '',
     [string]$LedgerStage = 'launch',
@@ -180,6 +181,7 @@ function Wait-AuditedHealth {
 # Pre-clean any residual containers/network with the derived names.
 Remove-StackResiduals
 
+$availableBeforeTarget = $null
 try {
     # ---- Resolve all four images to immutable IDs ONCE (Issue #2) --------------------------------
     $configInfo = Resolve-ImageInfo -Reference $ConfigImage -Role 'config'
@@ -221,6 +223,16 @@ try {
     if (-not $discoveryHealth.passed) { throw "discovery-server did not become healthy: $($discoveryHealth.error)" }
     $discoveryLiveImageId = Assert-LiveImageId -Name $discoveryName -ExpectedImageId $discoveryInfo.resolvedImageId -Role 'discovery'
 
+    if ($MinAvailableMemoryBeforeTargetBytes -gt 0) {
+        $headroom = Invoke-Cli -Description 'capture MemAvailable before customers-service launch' -CliArguments @(
+            'machine', 'ssh', "awk '/^MemAvailable:/ {print `$2 * 1024}' /proc/meminfo"
+        )
+        $availableBeforeTarget = [long]$headroom.stdout.Trim()
+        if ($availableBeforeTarget -lt $MinAvailableMemoryBeforeTargetBytes) {
+            throw "MemAvailable $availableBeforeTarget is below the pre-target requirement $MinAvailableMemoryBeforeTargetBytes bytes."
+        }
+    }
+
     Invoke-Cli -Description 'start customers-service' -CliArguments @(
         'run', '-d',
         '--name', $ContainerName,
@@ -256,6 +268,8 @@ try {
         configRepo      = (Resolve-Path -LiteralPath $ConfigRepo).Path
         port            = $Port
         customerFlags   = $customerFlags
+        availableMemoryBeforeTargetBytes = if ($MinAvailableMemoryBeforeTargetBytes -gt 0) { $availableBeforeTarget } else { $null }
+        minAvailableMemoryBeforeTargetBytes = $MinAvailableMemoryBeforeTargetBytes
         mallocArenaMax  = '1'
         jdkFingerprint  = $jdkFingerprint
         healthProbes    = [ordered]@{ config = $configHealth.probes; discovery = $discoveryHealth.probes; customers = $customerHealth.probes }

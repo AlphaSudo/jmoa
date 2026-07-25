@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "jmoa-hyperv-debian-fixed-2g-contract-v1",
+  "hostProfile": "HYPERV_DEBIAN_FIXED_2G",
+  "resourceClass": "CONSTRAINED_FIXED_MEMORY",
+  "configuredHostAssumptions": {
+    "fixedRamMiB": 2038,
+    "logicalProcessors": 4,
+    "dynamicMemory": false,
+    "automaticCheckpoints": false
+  },
+  "admission": {
+    "minTotalMemoryBytes": 1992294400,
+    "minPreflightAvailableMemoryBytes": 1415577600,
+    "minSupportReadyMemoryBytes": 734003200,
+    "minPreTargetMemoryBytes": 629145600,
+    "minInArmMemoryBytes": 314572800,
+    "requireSwapDisabled": true,
+    "maxSwapUsedBytes": 0,
+    "maxMemoryPressureSomeAvg10": 0.0,
+    "maxMemoryPressureFullAvg10": 0.0,
+    "requireZeroOomEvents": true
+  },
+  "scientificGatesChanged": false,
+  "capacityQualificationIncludedInMedians": false,
+  "hostInterruptionClassification": "HOST_HIBERNATION_INTERRUPTION",
+  "outOfScopeUntilPetClinicTerminal": [
+    "Doctor",
+    "Patient"
+  ]
+}

@@ -15,6 +15,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'campaign-canonical-json.ps1')
 . (Join-Path $PSScriptRoot 'campaign-audit-common.ps1')
 . (Join-Path $PSScriptRoot 'campaign-common.ps1')
+. (Join-Path $PSScriptRoot 'campaign-linux-host-profiles.ps1')
 
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $resolvedOutput = if ([IO.Path]::IsPathRooted($OutputDirectory)) {
@@ -47,6 +48,7 @@ $testedScriptNames = @(
     'campaign-audit-common.ps1',
     'campaign-canonical-json.ps1',
     'campaign-common.ps1',
+    'campaign-linux-host-profiles.ps1',
     'capture-campaign-host-preflight.ps1',
     'capture-linux-campaign-host-preflight.ps1',
     'capture-linux-host-fingerprint.ps1',
@@ -59,7 +61,10 @@ $testedScriptNames = @(
     'build-artifact-lineage.ps1',
     'new-petclinic-campaign-manifest.ps1',
     'run-petclinic-performance-campaign.ps1',
+    'run-linux-idle-calibration.ps1',
     'run-linux-host-calibration.ps1',
+    'run-petclinic-capacity-qualification.ps1',
+    'reconnect-linux-campaign-host.ps1',
     'export-petclinic-linux-campaign.ps1',
     'import-petclinic-linux-campaign.ps1',
     'configure-linux-campaign-host.sh',
@@ -398,10 +403,89 @@ Add-FixtureResult -Name 'linux-preflight-handles-empty-container-array-and-pinne
     $linuxPreflightSource -match '\$null -ne \$parsedContainers' -and
     $linuxPreflightSource -match '\$JAVA_HOME/bin/java'
 )
+
+function New-ConstrainedHostSnapshot {
+    return [pscustomobject][ordered]@{
+        virtualization = 'microsoft'
+        cgroupV2 = $true
+        runningContainerCount = 0
+        occupiedRequiredPortCount = 0
+        totalMemoryBytes = 2050000000L
+        availableMemoryBytes = 1500000000L
+        logicalProcessorCount = 4
+        swapTotalBytes = 0L
+        swapUsedBytes = 0L
+        cgroupSwapCurrentBytes = 0L
+        memoryPressureSomeAvg10 = 0.0
+        memoryPressureFullAvg10 = 0.0
+        oomEvents = 0L
+        oomKillEvents = 0L
+    }
+}
+$standardHostProfile = Get-CampaignLinuxHostProfile -Name 'STANDARD_FIXED_8G'
+$constrainedHostProfile = Get-CampaignLinuxHostProfile -Name 'HYPERV_DEBIAN_FIXED_2G'
+Add-FixtureResult -Name 'standard-8g-host-profile-remains-unchanged' -Passed (
+    $standardHostProfile.minTotalMemoryBytes -eq 8589934592L -and
+    $standardHostProfile.minPreflightAvailableMemoryBytes -eq 1073741824L -and
+    $standardHostProfile.minLogicalProcessorCount -eq 4 -and
+    $standardHostProfile.maxMemoryPressureSomeAvg10 -eq 1.0 -and
+    $standardHostProfile.maxMemoryPressureFullAvg10 -eq 0.1
+)
+Add-FixtureResult -Name 'constrained-2g-host-profile-accepts-valid-fixed-host' -Passed (
+    (Test-CampaignLinuxHostAdmission -Profile $constrainedHostProfile -Snapshot (New-ConstrainedHostSnapshot)).passed
+)
+$lowTotalSnapshot = New-ConstrainedHostSnapshot
+$lowTotalSnapshot.totalMemoryBytes = 1900000000L
+Add-FixtureResult -Name 'constrained-2g-host-profile-rejects-low-total-memory' -Passed (
+    -not (Test-CampaignLinuxHostAdmission -Profile $constrainedHostProfile -Snapshot $lowTotalSnapshot).passed
+)
+$lowCpuSnapshot = New-ConstrainedHostSnapshot
+$lowCpuSnapshot.logicalProcessorCount = 2
+Add-FixtureResult -Name 'constrained-2g-host-profile-rejects-fewer-than-four-cpus' -Passed (
+    -not (Test-CampaignLinuxHostAdmission -Profile $constrainedHostProfile -Snapshot $lowCpuSnapshot).passed
+)
+$swapSnapshot = New-ConstrainedHostSnapshot
+$swapSnapshot.swapTotalBytes = 1073741824L
+$swapSnapshot.swapUsedBytes = 4096L
+$swapSnapshot.cgroupSwapCurrentBytes = 4096L
+Add-FixtureResult -Name 'constrained-2g-host-profile-rejects-swap' -Passed (
+    -not (Test-CampaignLinuxHostAdmission -Profile $constrainedHostProfile -Snapshot $swapSnapshot).passed
+)
+$lowAvailableSnapshot = New-ConstrainedHostSnapshot
+$lowAvailableSnapshot.availableMemoryBytes = 1300000000L
+Add-FixtureResult -Name 'constrained-2g-host-profile-rejects-low-preflight-headroom' -Passed (
+    -not (Test-CampaignLinuxHostAdmission -Profile $constrainedHostProfile -Snapshot $lowAvailableSnapshot).passed
+)
+$pressureSnapshot = New-ConstrainedHostSnapshot
+$pressureSnapshot.memoryPressureSomeAvg10 = 0.01
+Add-FixtureResult -Name 'constrained-2g-host-profile-rejects-memory-pressure' -Passed (
+    -not (Test-CampaignLinuxHostAdmission -Profile $constrainedHostProfile -Snapshot $pressureSnapshot).passed
+)
+$oomSnapshot = New-ConstrainedHostSnapshot
+$oomSnapshot.oomEvents = 1
+Add-FixtureResult -Name 'constrained-2g-host-profile-rejects-oom-events' -Passed (
+    -not (Test-CampaignLinuxHostAdmission -Profile $constrainedHostProfile -Snapshot $oomSnapshot).passed
+)
 Add-FixtureResult -Name 'runtime-screen-gates-per-arm-podman-pressure' -Passed (
     $runtimeScreenSource -match 'Capture-PodmanMachinePressure' -and
     $runtimeScreenSource -match 'environment-validity\.json' -and
-    $runtimeScreenSource -match 'MaxPodmanSwapUsedBytes'
+    $runtimeScreenSource -match 'MaxPodmanSwapUsedBytes' -and
+    $runtimeScreenSource -match 'RequireSwapDisabled' -and
+    $runtimeScreenSource -match 'RequireZeroOomEvents' -and
+    $runtimeScreenSource -match 'MinPostArmAvailableMemoryBytes'
+)
+Add-FixtureResult -Name 'constrained-2g-runner-orders-calibration-before-controls' -Passed (
+    $campaignSource.IndexOf('Constrained host idle calibration', [StringComparison]::Ordinal) -ge 0 -and
+    $campaignSource.IndexOf('Constrained host idle calibration', [StringComparison]::Ordinal) -lt
+        $campaignSource.IndexOf('Step 6: staged same-artifact controls', [StringComparison]::Ordinal) -and
+    $campaignSource -match 'run-linux-host-calibration\.ps1' -and
+    $campaignSource -match 'run-petclinic-capacity-qualification\.ps1'
+)
+Add-FixtureResult -Name 'constrained-2g-runner-has-exact-terminal-outcomes' -Passed (
+    $campaignSource -match 'ENVIRONMENT_VARIANCE_TOO_HIGH_2G' -and
+    $campaignSource -match 'V2_ARTIFACT_RUNTIME_VARIANCE' -and
+    $campaignSource -match 'CAMPAIGN_INTERRUPTED_BY_HOST_POWER_EVENT' -and
+    $campaignSource -match 'CONFIRMED_PRODUCT_WIN_BELOW_4MIB'
 )
 Add-FixtureResult -Name 'runtime-child-scripts-use-named-parameter-maps' -Passed (
     $campaignSource -match 'BaselineLaunchParameters' -and

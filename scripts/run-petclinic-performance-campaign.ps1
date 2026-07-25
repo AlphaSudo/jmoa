@@ -45,6 +45,7 @@ param(
     [long]$MaxPodmanSwapUsedBytes = 0,
     [double]$MaxPodmanMemoryPressureSomeAvg10 = 1.0,
     [double]$MaxPodmanMemoryPressureFullAvg10 = 0.1,
+    [ValidateSet('STANDARD_FIXED_8G', 'HYPERV_DEBIAN_FIXED_2G')][string]$HostProfile = 'STANDARD_FIXED_8G',
     [Parameter(Mandatory)][string]$FixturesReport,
     [switch]$DryRun
 )
@@ -54,6 +55,7 @@ $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'runtime-automation-common.ps1')
 . (Join-Path $PSScriptRoot 'campaign-common.ps1')
 . (Join-Path $PSScriptRoot 'scenario-ledger-common.ps1')
+. (Join-Path $PSScriptRoot 'campaign-linux-host-profiles.ps1')
 
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
 $launchScript = Join-Path $PSScriptRoot 'campaign-launch-petclinic-stack.ps1'
@@ -61,6 +63,9 @@ $workloadScript = Join-Path $PSScriptRoot 'campaign-workload-petclinic.ps1'
 $stopScript = Join-Path $PSScriptRoot 'campaign-stop-petclinic-stack.ps1'
 $screenScript = Join-Path $PSScriptRoot 'runtime-screen-pair.ps1'
 $noiseAnalyzer = Join-Path $PSScriptRoot 'analyze-same-artifact-noise.ps1'
+$idleCalibrationScript = Join-Path $PSScriptRoot 'run-linux-idle-calibration.ps1'
+$supportCalibrationScript = Join-Path $PSScriptRoot 'run-linux-host-calibration.ps1'
+$capacityQualificationScript = Join-Path $PSScriptRoot 'run-petclinic-capacity-qualification.ps1'
 $hostPreflightScript = Join-Path $PSScriptRoot $(if ($IsLinux) {
     'capture-linux-campaign-host-preflight.ps1'
 } else {
@@ -128,6 +133,25 @@ $ContainerCli = [string](Get-CampaignJsonProp $mEnv 'containerCli')
 $PluginCoordinates = [string](Get-CampaignJsonProp $mEnv 'pluginCoordinates')
 $RuntimePolicy = [string](Get-CampaignJsonProp $mEnv 'runtimePolicy')
 $SourceRevision = [string](Get-CampaignJsonProp $manifest 'sourceRevision')
+$RunnerRevision = [string](Get-CampaignJsonProp $manifest 'runnerRevision')
+$runnerRevisionPath = Join-Path (Split-Path -Parent $resolvedManifestPath) 'runner-revision.txt'
+$runnerRevisionGatePassed = $true
+if (-not [string]::IsNullOrWhiteSpace($RunnerRevision)) {
+    $runnerRevisionGatePassed = (
+        (Test-Path -LiteralPath $runnerRevisionPath -PathType Leaf) -and
+        ((Get-Content -Raw -LiteralPath $runnerRevisionPath).Trim().ToLowerInvariant() -eq $RunnerRevision.ToLowerInvariant())
+    )
+    if (-not $runnerRevisionGatePassed) {
+        throw "Package runnerRevision does not match the imported runner revision file: $RunnerRevision"
+    }
+}
+$linuxHostProfile = if ($IsLinux) { Get-CampaignLinuxHostProfile -Name $HostProfile } else { $null }
+if ($IsLinux -and $HostProfile -eq 'HYPERV_DEBIAN_FIXED_2G') {
+    $MinPodmanAvailableMemoryBytes = [long]$linuxHostProfile.minPreTargetMemoryBytes
+    $MaxPodmanSwapUsedBytes = [long]$linuxHostProfile.maxSwapUsedBytes
+    $MaxPodmanMemoryPressureSomeAvg10 = [double]$linuxHostProfile.maxMemoryPressureSomeAvg10
+    $MaxPodmanMemoryPressureFullAvg10 = [double]$linuxHostProfile.maxMemoryPressureFullAvg10
+}
 
 # ---- Mandatory environment (review Issue #9): no defaults, must resolve from the manifest --------
 foreach ($pair in @(
@@ -262,7 +286,7 @@ function Publish-CampaignChildLedgerIndex {
 }
 
 # ---- Input validation (fail-closed) -----------------------------------------------------------
-foreach ($script in @($launchScript, $workloadScript, $stopScript, $screenScript, $noiseAnalyzer, $hostPreflightScript)) {
+foreach ($script in @($launchScript, $workloadScript, $stopScript, $screenScript, $noiseAnalyzer, $hostPreflightScript, $idleCalibrationScript, $supportCalibrationScript, $capacityQualificationScript)) {
     if (-not (Test-Path -LiteralPath $script -PathType Leaf)) { throw "Required campaign script missing: $script" }
 }
 foreach ($artifact in @($B0Artifact, $V2Artifact, $MaterializationManifest, $ArtifactLineage)) {
@@ -550,6 +574,9 @@ function Invoke-CampaignScreenPair {
         CapturePodmanMachinePressure = $true
         MinPodmanAvailableMemoryBytes = $MinPodmanAvailableMemoryBytes
         MaxPodmanSwapUsedBytes = $MaxPodmanSwapUsedBytes
+        MinPostArmAvailableMemoryBytes = if ($IsLinux -and $null -ne $linuxHostProfile) { [long]$linuxHostProfile.minInArmMemoryBytes } else { 0L }
+        RequireSwapDisabled = if ($IsLinux -and $null -ne $linuxHostProfile) { [bool]$linuxHostProfile.requireSwapDisabled } else { $false }
+        RequireZeroOomEvents = if ($IsLinux -and $null -ne $linuxHostProfile) { [bool]$linuxHostProfile.requireZeroOomEvents } else { $false }
         MaxPodmanMemoryPressureSomeAvg10 = $MaxPodmanMemoryPressureSomeAvg10
         MaxPodmanMemoryPressureFullAvg10 = $MaxPodmanMemoryPressureFullAvg10
     }
@@ -563,6 +590,41 @@ function Invoke-CampaignScreenPair {
 $armJdkIdentities = New-Object System.Collections.Generic.List[object]
 function Add-CampaignArmJdk { param([string]$RunDirectory, [string]$Arm) $id = Get-CampaignArmJdkIdentity -RunDirectory $RunDirectory; $id.arm = $Arm; $armJdkIdentities.Add($id) | Out-Null }
 
+$hostContinuityOrigin = $null
+function Assert-CampaignHostContinuity {
+    param([Parameter(Mandatory)][string]$Context)
+    if (-not $IsLinux) { return }
+    $capture = Invoke-ScenarioCommand -Step "Host continuity: $Context" -Executable '/bin/bash' -Arguments @(
+        '-lc', 'printf "%s|%s\n" "$(cat /proc/sys/kernel/random/boot_id)" "$(cut -d" " -f1 /proc/uptime)"'
+    )
+    $parts = $capture.stdout.Trim() -split '\|'
+    if ($parts.Count -ne 2) { throw "Could not parse host continuity capture for $Context." }
+    $snapshot = [ordered]@{
+        context = $Context
+        capturedUtc = [DateTime]::UtcNow
+        bootId = $parts[0]
+        uptimeSeconds = [double]::Parse($parts[1], [Globalization.CultureInfo]::InvariantCulture)
+    }
+    if ($null -eq $script:hostContinuityOrigin) {
+        $script:hostContinuityOrigin = $snapshot
+        return
+    }
+    $wallElapsed = ($snapshot.capturedUtc - $script:hostContinuityOrigin.capturedUtc).TotalSeconds
+    $uptimeElapsed = $snapshot.uptimeSeconds - $script:hostContinuityOrigin.uptimeSeconds
+    $suspendGap = $wallElapsed - $uptimeElapsed
+    if ($snapshot.bootId -ne $script:hostContinuityOrigin.bootId -or $suspendGap -gt 30) {
+        Publish-CampaignChildLedgerIndex | Out-Null
+        Complete-ScenarioLedger -Status 'CAMPAIGN_INTERRUPTED_BY_HOST_POWER_EVENT' -Result @{
+            terminalVerdict = 'CAMPAIGN_INTERRUPTED_BY_HOST_POWER_EVENT'
+            context = $Context
+            original = $script:hostContinuityOrigin
+            current = $snapshot
+            suspendGapSeconds = $suspendGap
+        } | Out-Null
+        throw "Host reboot/pause/hibernation detected during campaign at $Context."
+    }
+}
+
 $hostPreflightDir = Join-Path $reportDir 'host-preflight'
 $hostPreflightLedger = Join-Path $childLedgerRoot 'host-preflight'
 $hostPreflightReportPath = Join-Path $hostPreflightDir $(if ($IsLinux) {
@@ -571,13 +633,21 @@ $hostPreflightReportPath = Join-Path $hostPreflightDir $(if ($IsLinux) {
     'host-podman-preflight.json'
 })
 Add-ScenarioNote -Title 'Host and Podman preflight' -Text 'Capture Windows, WSL, Podman, port, container, VM-memory, swap, and PSI state immediately before any measured arm.'
-& $hostPreflightScript -OutputDirectory $hostPreflightDir -ContainerCli $ContainerCli `
-    -MinPodmanAvailableMemoryBytes $MinPodmanAvailableMemoryBytes -MaxPodmanSwapUsedBytes $MaxPodmanSwapUsedBytes `
-    -MaxPodmanMemoryPressureSomeAvg10 $MaxPodmanMemoryPressureSomeAvg10 `
-    -MaxPodmanMemoryPressureFullAvg10 $MaxPodmanMemoryPressureFullAvg10 -LedgerDirectory $hostPreflightLedger
+$hostPreflightArguments = @{
+    OutputDirectory = $hostPreflightDir
+    ContainerCli = $ContainerCli
+    MinPodmanAvailableMemoryBytes = $MinPodmanAvailableMemoryBytes
+    MaxPodmanSwapUsedBytes = $MaxPodmanSwapUsedBytes
+    MaxPodmanMemoryPressureSomeAvg10 = $MaxPodmanMemoryPressureSomeAvg10
+    MaxPodmanMemoryPressureFullAvg10 = $MaxPodmanMemoryPressureFullAvg10
+    LedgerDirectory = $hostPreflightLedger
+}
+if ($IsLinux) { $hostPreflightArguments.HostProfile = $HostProfile }
+& $hostPreflightScript @hostPreflightArguments
 if (-not $?) {
     Publish-CampaignChildLedgerIndex | Out-Null
-    Complete-ScenarioLedger -Status 'STOPPED_HOST_PREFLIGHT' -Result @{ terminalVerdict = 'ENVIRONMENT_VARIANCE_TOO_HIGH'; report = $hostPreflightReportPath } | Out-Null
+    $preflightStop = if ($HostProfile -eq 'HYPERV_DEBIAN_FIXED_2G') { 'STOPPED_CONSTRAINED_HOST_NOT_IDLE' } else { 'STOPPED_HOST_PREFLIGHT' }
+    Complete-ScenarioLedger -Status $preflightStop -Result @{ terminalVerdict = $preflightStop; report = $hostPreflightReportPath } | Out-Null
     throw 'Host/Podman preflight did not qualify; no measured arm was launched.'
 }
 $hostPreflight = Get-Content -Raw -LiteralPath $hostPreflightReportPath | ConvertFrom-Json
@@ -599,6 +669,9 @@ if ($DryRun) {
         configFreeze    = [ordered]@{ contentTreeSha256 = $configFreeze.contentTreeSha256; gitHead = $configFreeze.gitHead; workingTreeClean = $configFreeze.workingTreeClean; matchesManifest = $configFreezeMatchesManifest }
         frozenConfig    = $frozenConfigManifest
         hostPreflight   = $hostPreflight
+        hostProfile     = $HostProfile
+        resourceClass   = if ($null -ne $linuxHostProfile) { $linuxHostProfile.resourceClass } else { 'WINDOWS_PODMAN_MACHINE' }
+        runnerRevision  = [ordered]@{ expected = $RunnerRevision; path = $runnerRevisionPath; passed = $runnerRevisionGatePassed }
         sourceRevision  = $SourceRevision
         fixtures        = $fixtures
         plan            = [ordered]@{
@@ -618,6 +691,8 @@ if ($DryRun) {
 - Run (dry): ``$runId``
 - Manifest: ``$resolvedManifestPath`` (Gate C: **$manifestGatePassed**, campaignSha256 ``$actualCampaignSha``)
 - Source revision: ``$SourceRevision``
+- Runner revision: ``$RunnerRevision`` (gate: **$runnerRevisionGatePassed**)
+- Host profile: **$HostProfile**
 
 ## Pre-flight gates
 - Image identity: **$($imageIdentityGate.passed)**
@@ -644,6 +719,66 @@ This is a DRY RUN. No screen pairs were executed. Review this report before auth
     Complete-ScenarioLedger -Status 'DRY_RUN_OK' -Result @{ readiness = $readiness } | Out-Null
     Write-Host "Dry run complete: readiness report at $(Join-Path $reportDir 'campaign-readiness.md') (ready=$($readiness.gatesPassed))."
     return
+}
+
+Assert-CampaignHostContinuity -Context 'full-run admission start'
+
+# ---- Constrained-host calibration and non-evidence capacity admission -------------------------
+$hostCalibration = $null
+if ($IsLinux -and $HostProfile -eq 'HYPERV_DEBIAN_FIXED_2G') {
+    $idleCalibrationDir = Join-Path $childLedgerRoot 'idle-calibration'
+    Add-ScenarioNote -Title 'Constrained host idle calibration' -Text 'Ten audited idle samples; no campaign containers may run and no sample may cross the 2 GiB profile pressure, swap, OOM, or available-memory gates.'
+    & $idleCalibrationScript -OutputDirectory $idleCalibrationDir -HostProfile $HostProfile
+    $idleCommandPassed = $?
+    $idleCalibrationPath = Join-Path $idleCalibrationDir 'linux-idle-calibration.json'
+    $idleCalibration = if (Test-Path -LiteralPath $idleCalibrationPath -PathType Leaf) {
+        Get-Content -Raw -LiteralPath $idleCalibrationPath | ConvertFrom-Json
+    } else { $null }
+    if (-not $idleCommandPassed -or $null -eq $idleCalibration -or -not [bool]$idleCalibration.passed) {
+        Publish-CampaignChildLedgerIndex | Out-Null
+        Complete-ScenarioLedger -Status 'STOPPED_CONSTRAINED_HOST_NOT_IDLE' -Result @{ terminalVerdict = 'STOPPED_CONSTRAINED_HOST_NOT_IDLE'; report = $idleCalibrationPath } | Out-Null
+        throw 'Constrained-host idle calibration failed; no control arm was launched.'
+    }
+    Assert-CampaignHostContinuity -Context 'after idle calibration'
+
+    $supportCalibrationDir = Join-Path $childLedgerRoot 'support-calibration'
+    Add-ScenarioNote -Title 'Support-stack-only calibration' -Text 'Start only frozen config/discovery services and require at least 700 MiB available, zero pressure/swap/OOM/restarts, healthy services, and <=2 MiB memory.current drift.'
+    & $supportCalibrationScript -OutputDirectory $supportCalibrationDir -ConfigImage $ConfigImageId `
+        -DiscoveryImage $DiscoveryImageId -ConfigRepo $frozenConfigRepo -ContainerCli $ContainerCli -HostProfile $HostProfile
+    $supportCommandPassed = $?
+    $supportCalibrationPath = Join-Path $supportCalibrationDir 'linux-host-calibration.json'
+    $supportCalibration = if (Test-Path -LiteralPath $supportCalibrationPath -PathType Leaf) {
+        Get-Content -Raw -LiteralPath $supportCalibrationPath | ConvertFrom-Json
+    } else { $null }
+    if (-not $supportCommandPassed -or $null -eq $supportCalibration -or -not [bool]$supportCalibration.passed) {
+        Publish-CampaignChildLedgerIndex | Out-Null
+        Complete-ScenarioLedger -Status 'STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM' -Result @{ terminalVerdict = 'STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM'; report = $supportCalibrationPath } | Out-Null
+        throw 'Support-stack-only calibration failed; no target arm was launched.'
+    }
+    Assert-CampaignHostContinuity -Context 'after support calibration'
+
+    $capacityDir = Join-Path $childLedgerRoot 'capacity-qualification'
+    Add-ScenarioNote -Title 'Non-evidence B0 capacity qualification' -Text 'Run one frozen B0 arm with the official workload solely to prove 2 GiB capacity. This arm is excluded from every control and product median.'
+    & $capacityQualificationScript -OutputDirectory $capacityDir -B0Image $B0Image -ConfigImage $ConfigImageId `
+        -DiscoveryImage $DiscoveryImageId -ConfigRepo $frozenConfigRepo -ContainerCli $ContainerCli `
+        -HostProfile $HostProfile -WarmupSeconds $WarmupSeconds -SettleSeconds $SettleSeconds `
+        -HealthTimeoutSeconds $HealthTimeoutSeconds
+    $capacityCommandPassed = $?
+    $capacityPath = Join-Path $capacityDir 'capacity-qualification.json'
+    $capacity = if (Test-Path -LiteralPath $capacityPath -PathType Leaf) {
+        Get-Content -Raw -LiteralPath $capacityPath | ConvertFrom-Json
+    } else { $null }
+    if (-not $capacityCommandPassed -or $null -eq $capacity -or -not [bool]$capacity.passed) {
+        Publish-CampaignChildLedgerIndex | Out-Null
+        Complete-ScenarioLedger -Status 'STOPPED_INSUFFICIENT_2G_CAPACITY' -Result @{ terminalVerdict = 'STOPPED_INSUFFICIENT_2G_CAPACITY'; report = $capacityPath } | Out-Null
+        throw 'The non-evidence B0 capacity arm failed; official controls were not started.'
+    }
+    Assert-CampaignHostContinuity -Context 'after capacity qualification'
+    $hostCalibration = [ordered]@{
+        idle = $idleCalibration
+        support = $supportCalibration
+        capacity = $capacity
+    }
 }
 
 # ---- Step 6: staged same-artifact controls ------------------------------------------------------
@@ -702,10 +837,12 @@ Invoke-CampaignScreenPair -CaptureRoot $noiseB0Root -PairIndex 1 -FirstVariant '
     -BaselineImage $B0Image -CandidateImage $B0Image -BaselineArtifact $B0Artifact -CandidateArtifact $B0Artifact `
     -BaselineContainerName 'pccamp-noiseb0-b1' -CandidateContainerName 'pccamp-noiseb0-c1' `
     -LedgerDirectory (Join-Path $childLedgerRoot 'noise-b0-pair1') -Context 'noise B0 pair 1'
+Assert-CampaignHostContinuity -Context 'after B0 control pair 1'
 Invoke-CampaignScreenPair -CaptureRoot $noiseB0Root -PairIndex 2 -FirstVariant 'CANDIDATE_FIRST' `
     -BaselineImage $B0Image -CandidateImage $B0Image -BaselineArtifact $B0Artifact -CandidateArtifact $B0Artifact `
     -BaselineContainerName 'pccamp-noiseb0-b2' -CandidateContainerName 'pccamp-noiseb0-c2' `
     -LedgerDirectory (Join-Path $childLedgerRoot 'noise-b0-pair2') -Context 'noise B0 pair 2'
+Assert-CampaignHostContinuity -Context 'after B0 control pair 2'
 foreach ($cell in @('b1', 'c1', 'b2', 'c2')) { Add-CampaignArmJdk -RunDirectory (Join-Path $noiseB0Root $cell) -Arm "noise-b0-$cell" }
 $noiseB0Sem1 = Compare-CampaignSemantics -PairIndex 1 -BaselineSemanticPath (Join-Path $noiseB0Root 'b1\semantic-requests.json') -CandidateSemanticPath (Join-Path $noiseB0Root 'c1\semantic-requests.json')
 $noiseB0Sem2 = Compare-CampaignSemantics -PairIndex 2 -BaselineSemanticPath (Join-Path $noiseB0Root 'b2\semantic-requests.json') -CandidateSemanticPath (Join-Path $noiseB0Root 'c2\semantic-requests.json')
@@ -714,7 +851,8 @@ Write-JmoaJson -Value $noiseB0Summary -Path (Join-Path $reportDir 'noise-b0-summ
 if (-not $noiseB0Summary.qualified) {
     Publish-CampaignChildLedgerIndex | Out-Null
     Add-ScenarioNote -Title 'B0 controls did NOT qualify' -Text 'V2 controls and balanced pairs were not run.'
-    Complete-ScenarioLedger -Status 'STOPPED_B0_RUNTIME_VARIANCE' -Result @{ terminalVerdict = 'ENVIRONMENT_VARIANCE_TOO_HIGH'; noise = $noiseB0Summary; artifactGate = $artifactGate } | Out-Null
+    $b0VarianceVerdict = if ($HostProfile -eq 'HYPERV_DEBIAN_FIXED_2G') { 'ENVIRONMENT_VARIANCE_TOO_HIGH_2G' } else { 'STOPPED_B0_RUNTIME_VARIANCE' }
+    Complete-ScenarioLedger -Status $b0VarianceVerdict -Result @{ terminalVerdict = $b0VarianceVerdict; noise = $noiseB0Summary; artifactGate = $artifactGate } | Out-Null
     throw 'B0 same-artifact controls did not qualify (STOPPED_B0_RUNTIME_VARIANCE).'
 }
 
@@ -723,10 +861,12 @@ Invoke-CampaignScreenPair -CaptureRoot $noiseV2Root -PairIndex 1 -FirstVariant '
     -BaselineImage $V2Image -CandidateImage $V2Image -BaselineArtifact $V2Artifact -CandidateArtifact $V2Artifact `
     -BaselineContainerName 'pccamp-noisev2-b1' -CandidateContainerName 'pccamp-noisev2-c1' `
     -LedgerDirectory (Join-Path $childLedgerRoot 'noise-v2-pair1') -Context 'noise V2 pair 1'
+Assert-CampaignHostContinuity -Context 'after V2 control pair 1'
 Invoke-CampaignScreenPair -CaptureRoot $noiseV2Root -PairIndex 2 -FirstVariant 'CANDIDATE_FIRST' `
     -BaselineImage $V2Image -CandidateImage $V2Image -BaselineArtifact $V2Artifact -CandidateArtifact $V2Artifact `
     -BaselineContainerName 'pccamp-noisev2-b2' -CandidateContainerName 'pccamp-noisev2-c2' `
     -LedgerDirectory (Join-Path $childLedgerRoot 'noise-v2-pair2') -Context 'noise V2 pair 2'
+Assert-CampaignHostContinuity -Context 'after V2 control pair 2'
 foreach ($cell in @('b1', 'c1', 'b2', 'c2')) { Add-CampaignArmJdk -RunDirectory (Join-Path $noiseV2Root $cell) -Arm "noise-v2-$cell" }
 $noiseV2Sem1 = Compare-CampaignSemantics -PairIndex 1 -BaselineSemanticPath (Join-Path $noiseV2Root 'b1\semantic-requests.json') -CandidateSemanticPath (Join-Path $noiseV2Root 'c1\semantic-requests.json')
 $noiseV2Sem2 = Compare-CampaignSemantics -PairIndex 2 -BaselineSemanticPath (Join-Path $noiseV2Root 'b2\semantic-requests.json') -CandidateSemanticPath (Join-Path $noiseV2Root 'c2\semantic-requests.json')
@@ -735,7 +875,8 @@ Write-JmoaJson -Value $noiseV2Summary -Path (Join-Path $reportDir 'noise-v2-summ
 if (-not $noiseV2Summary.qualified) {
     Publish-CampaignChildLedgerIndex | Out-Null
     Add-ScenarioNote -Title 'V2 controls did NOT qualify' -Text 'B0 was quiet, but V2 repeatability failed. Balanced pairs were not run.'
-    Complete-ScenarioLedger -Status 'STOPPED_V2_RUNTIME_VARIANCE' -Result @{ terminalVerdict = 'ENVIRONMENT_VARIANCE_TOO_HIGH'; b0Noise = $noiseB0Summary; v2Noise = $noiseV2Summary; artifactGate = $artifactGate } | Out-Null
+    $v2VarianceVerdict = if ($HostProfile -eq 'HYPERV_DEBIAN_FIXED_2G') { 'V2_ARTIFACT_RUNTIME_VARIANCE' } else { 'STOPPED_V2_RUNTIME_VARIANCE' }
+    Complete-ScenarioLedger -Status $v2VarianceVerdict -Result @{ terminalVerdict = $v2VarianceVerdict; b0Noise = $noiseB0Summary; v2Noise = $noiseV2Summary; artifactGate = $artifactGate } | Out-Null
     throw 'V2 same-artifact controls did not qualify (STOPPED_V2_RUNTIME_VARIANCE).'
 }
 
@@ -755,6 +896,7 @@ for ($pair = 1; $pair -le $Pairs; $pair++) {
         -BaselineImage $B0Image -CandidateImage $V2Image -BaselineArtifact $B0Artifact -CandidateArtifact $V2Artifact `
         -BaselineContainerName "pccamp-p$pair-b" -CandidateContainerName "pccamp-p$pair-c" `
         -LedgerDirectory (Join-Path $childLedgerRoot "balanced-pair$pair") -Context "balanced pair $pair"
+    Assert-CampaignHostContinuity -Context "after balanced product pair $pair"
     Add-CampaignArmJdk -RunDirectory (Join-Path $balancedRoot "b$pair") -Arm "balanced-b$pair"
     Add-CampaignArmJdk -RunDirectory (Join-Path $balancedRoot "c$pair") -Arm "balanced-c$pair"
 }
@@ -896,7 +1038,7 @@ $confirmedProductWin = -not ($confirmationChecks.Values -contains $false)
 $terminalVerdict = if ($trustedWin) {
     'TRUSTED_PRODUCT_WIN'
 } elseif ($confirmedProductWin) {
-    'CONFIRMED_PRODUCT_WIN'
+    if ($HostProfile -eq 'HYPERV_DEBIAN_FIXED_2G') { 'CONFIRMED_PRODUCT_WIN_BELOW_4MIB' } else { 'CONFIRMED_PRODUCT_WIN' }
 } else {
     'PRODUCT_EFFECT_NOT_CONFIRMED'
 }
@@ -959,6 +1101,8 @@ $campaignSummary = [ordered]@{
     configFreeze    = $configFreeze
     frozenConfig    = $frozenConfigManifest
     hostPreflight   = $hostPreflight
+    hostProfile     = $HostProfile
+    hostCalibration = $hostCalibration
     jdkParity       = $jdkParity
     noise           = $noiseSummary
     semantic        = $semanticReport

@@ -52,7 +52,10 @@ param(
     [switch]$DropPageCacheBeforeVariant,
     [switch]$CapturePodmanMachinePressure,
     [long]$MinPodmanAvailableMemoryBytes = 1073741824,
+    [long]$MinPostArmAvailableMemoryBytes = 0,
     [long]$MaxPodmanSwapUsedBytes = 0,
+    [bool]$RequireSwapDisabled = $false,
+    [bool]$RequireZeroOomEvents = $false,
     [double]$MaxPodmanMemoryPressureSomeAvg10 = 1.0,
     [double]$MaxPodmanMemoryPressureFullAvg10 = 0.1,
     [int]$HealthTimeoutSeconds = 90,
@@ -362,6 +365,13 @@ function Get-PodmanMachinePressureValue {
     return [double]::Parse($match.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture)
 }
 
+function Get-CgroupMemoryEventValue {
+    param([string]$Text, [string]$Name)
+    $match = [regex]::Match($Text, "(?m)^$([regex]::Escape($Name))\s+(\d+)\s*$")
+    if (-not $match.Success) { return 0L }
+    return [long]$match.Groups[1].Value
+}
+
 function Capture-PodmanMachinePressure {
     param(
         [Parameter(Mandatory)][ValidateSet('PRE_ARM', 'POST_ARM')][string]$Point,
@@ -378,7 +388,9 @@ function Capture-PodmanMachinePressure {
         @{ key = 'memoryPressure'; command = 'cat /proc/pressure/memory' },
         @{ key = 'cpuPressure'; command = 'cat /proc/pressure/cpu' },
         @{ key = 'free'; command = 'free -b' },
-        @{ key = 'controllers'; command = 'cat /sys/fs/cgroup/cgroup.controllers' }
+        @{ key = 'controllers'; command = 'cat /sys/fs/cgroup/cgroup.controllers' },
+        @{ key = 'memoryEvents'; command = 'cat /sys/fs/cgroup/memory.events' },
+        @{ key = 'memorySwapCurrent'; command = 'cat /sys/fs/cgroup/memory.swap.current 2>/dev/null || echo UNAVAILABLE' }
     )) {
         $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
             'machine', 'ssh', "sh -lc '$($spec.command)'"
@@ -396,12 +408,31 @@ function Capture-PodmanMachinePressure {
     $fullAvg10 = Get-PodmanMachinePressureValue -Text $captures.memoryPressure -Kind 'full' -Metric 'avg10'
     $someTotal = Get-PodmanMachinePressureValue -Text $captures.memoryPressure -Kind 'some' -Metric 'total'
     $fullTotal = Get-PodmanMachinePressureValue -Text $captures.memoryPressure -Kind 'full' -Metric 'total'
+    $oomEvents = Get-CgroupMemoryEventValue -Text $captures.memoryEvents -Name 'oom'
+    $oomKillEvents = Get-CgroupMemoryEventValue -Text $captures.memoryEvents -Name 'oom_kill'
+    $cgroupSwapCurrentBytes = if ($captures.memorySwapCurrent.Trim() -match '^\d+$') {
+        [long]$captures.memorySwapCurrent.Trim()
+    } else {
+        $null
+    }
     $reasons = New-Object System.Collections.Generic.List[string]
     if ($Point -eq 'PRE_ARM' -and $availableBytes -lt $MinPodmanAvailableMemoryBytes) {
         $reasons.Add("MemAvailable $availableBytes is below $MinPodmanAvailableMemoryBytes bytes") | Out-Null
     }
+    if ($Point -eq 'POST_ARM' -and $MinPostArmAvailableMemoryBytes -gt 0 -and $availableBytes -lt $MinPostArmAvailableMemoryBytes) {
+        $reasons.Add("post-arm MemAvailable $availableBytes is below $MinPostArmAvailableMemoryBytes bytes") | Out-Null
+    }
+    if ($RequireSwapDisabled -and $swapTotalBytes -ne 0) {
+        $reasons.Add("swap is configured: SwapTotal=$swapTotalBytes bytes") | Out-Null
+    }
     if ($swapUsedBytes -gt $MaxPodmanSwapUsedBytes) {
         $reasons.Add("swap used $swapUsedBytes exceeds $MaxPodmanSwapUsedBytes bytes") | Out-Null
+    }
+    if ($RequireSwapDisabled -and $null -ne $cgroupSwapCurrentBytes -and $cgroupSwapCurrentBytes -ne 0) {
+        $reasons.Add("cgroup memory.swap.current is $cgroupSwapCurrentBytes bytes") | Out-Null
+    }
+    if ($RequireZeroOomEvents -and ($oomEvents -ne 0 -or $oomKillEvents -ne 0)) {
+        $reasons.Add("cgroup OOM history is nonzero: oom=$oomEvents oom_kill=$oomKillEvents") | Out-Null
     }
     if ($someAvg10 -gt $MaxPodmanMemoryPressureSomeAvg10) {
         $reasons.Add("memory PSI some avg10 $someAvg10 exceeds $MaxPodmanMemoryPressureSomeAvg10") | Out-Null
@@ -410,7 +441,7 @@ function Capture-PodmanMachinePressure {
         $reasons.Add("memory PSI full avg10 $fullAvg10 exceeds $MaxPodmanMemoryPressureFullAvg10") | Out-Null
     }
     $report = [ordered]@{
-        schemaVersion       = 'jmoa-podman-machine-pressure-v1'
+        schemaVersion       = 'jmoa-podman-machine-pressure-v2'
         point               = $Point
         capturedAt          = [DateTime]::UtcNow.ToString('o')
         requested           = $true
@@ -418,6 +449,9 @@ function Capture-PodmanMachinePressure {
         swapTotalBytes      = $swapTotalBytes
         swapFreeBytes       = $swapFreeBytes
         swapUsedBytes       = $swapUsedBytes
+        cgroupSwapCurrentBytes = $cgroupSwapCurrentBytes
+        oomEvents           = $oomEvents
+        oomKillEvents       = $oomKillEvents
         memoryPressure      = [ordered]@{
             someAvg10 = $someAvg10
             fullAvg10 = $fullAvg10
@@ -426,7 +460,10 @@ function Capture-PodmanMachinePressure {
         }
         thresholds          = [ordered]@{
             minPreArmAvailableMemoryBytes = $MinPodmanAvailableMemoryBytes
+            minPostArmAvailableMemoryBytes = $MinPostArmAvailableMemoryBytes
             maxSwapUsedBytes              = $MaxPodmanSwapUsedBytes
+            requireSwapDisabled           = $RequireSwapDisabled
+            requireZeroOomEvents          = $RequireZeroOomEvents
             maxMemorySomeAvg10            = $MaxPodmanMemoryPressureSomeAvg10
             maxMemoryFullAvg10            = $MaxPodmanMemoryPressureFullAvg10
         }

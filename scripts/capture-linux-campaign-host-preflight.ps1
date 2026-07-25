@@ -2,6 +2,7 @@ param(
     [Parameter(Mandatory)][string]$OutputDirectory,
     [string]$ContainerCli = '/usr/bin/podman',
     [int[]]$RequiredFreePorts = @(8081, 8761, 8888),
+    [ValidateSet('STANDARD_FIXED_8G', 'HYPERV_DEBIAN_FIXED_2G')][string]$HostProfile = 'STANDARD_FIXED_8G',
     [long]$MinTotalMemoryBytes = 8589934592,
     [long]$MinPodmanAvailableMemoryBytes = 1073741824,
     [int]$MinLogicalProcessorCount = 4,
@@ -16,6 +17,26 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'runtime-automation-common.ps1')
 . (Join-Path $PSScriptRoot 'campaign-audit-common.ps1')
+. (Join-Path $PSScriptRoot 'campaign-linux-host-profiles.ps1')
+
+$profile = Get-CampaignLinuxHostProfile -Name $HostProfile
+if ($profile.name -eq 'HYPERV_DEBIAN_FIXED_2G') {
+    $MinTotalMemoryBytes = $profile.minTotalMemoryBytes
+    $MinPodmanAvailableMemoryBytes = $profile.minPreflightAvailableMemoryBytes
+    $MinLogicalProcessorCount = $profile.minLogicalProcessorCount
+    $RequireSwapDisabled = $profile.requireSwapDisabled
+    $MaxPodmanSwapUsedBytes = $profile.maxSwapUsedBytes
+    $MaxPodmanMemoryPressureSomeAvg10 = $profile.maxMemoryPressureSomeAvg10
+    $MaxPodmanMemoryPressureFullAvg10 = $profile.maxMemoryPressureFullAvg10
+} else {
+    $profile.minTotalMemoryBytes = $MinTotalMemoryBytes
+    $profile.minPreflightAvailableMemoryBytes = $MinPodmanAvailableMemoryBytes
+    $profile.minLogicalProcessorCount = $MinLogicalProcessorCount
+    $profile.requireSwapDisabled = $RequireSwapDisabled
+    $profile.maxSwapUsedBytes = $MaxPodmanSwapUsedBytes
+    $profile.maxMemoryPressureSomeAvg10 = $MaxPodmanMemoryPressureSomeAvg10
+    $profile.maxMemoryPressureFullAvg10 = $MaxPodmanMemoryPressureFullAvg10
+}
 
 New-JmoaDirectory -Path $OutputDirectory
 if ([string]::IsNullOrWhiteSpace($LedgerDirectory)) {
@@ -47,6 +68,8 @@ function Read-Psi {
 try {
     $commands = [ordered]@{
         uname = 'uname -a'
+        bootId = 'cat /proc/sys/kernel/random/boot_id'
+        uptime = 'cat /proc/uptime'
         osRelease = 'cat /etc/os-release'
         virtualization = 'systemd-detect-virt'
         cpu = 'lscpu'
@@ -56,6 +79,8 @@ try {
         memoryPsi = 'cat /proc/pressure/memory'
         cpuPsi = 'cat /proc/pressure/cpu'
         cgroup = 'stat -fc %T /sys/fs/cgroup; cat /sys/fs/cgroup/cgroup.controllers'
+        memoryEvents = 'cat /sys/fs/cgroup/memory.events'
+        cgroupSwapCurrent = 'cat /sys/fs/cgroup/memory.swap.current 2>/dev/null || echo 0'
         clocksource = 'cat /sys/devices/system/clocksource/clocksource0/current_clocksource; cat /sys/devices/system/clocksource/clocksource0/available_clocksource'
         governors = 'found=0; for f in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do found=1; printf "%s=" "$f"; cat "$f"; done; [ "$found" -eq 0 ] && echo UNAVAILABLE || true'
         podmanVersion = "$ContainerCli version"
@@ -81,6 +106,9 @@ try {
     $swapUsedBytes = $swapTotalBytes - $swapFreeBytes
     $someAvg10 = Read-Psi -Text $results.memoryPsi.stdout -Kind 'some' -Metric 'avg10'
     $fullAvg10 = Read-Psi -Text $results.memoryPsi.stdout -Kind 'full' -Metric 'avg10'
+    $oomEvents = Get-CampaignMemoryEventValue -Text $results.memoryEvents.stdout -Name 'oom'
+    $oomKillEvents = Get-CampaignMemoryEventValue -Text $results.memoryEvents.stdout -Name 'oom_kill'
+    $cgroupSwapCurrentBytes = [long]$results.cgroupSwapCurrent.stdout.Trim()
     $containerObjects = @()
     if (-not [string]::IsNullOrWhiteSpace($results.runningContainers.stdout)) {
         $parsedContainers = $results.runningContainers.stdout | ConvertFrom-Json
@@ -90,30 +118,43 @@ try {
     $processorMatch = [regex]::Match([string]$results.cpu.stdout, '(?m)^CPU\(s\):\s+(\d+)\s*$')
     if (-not $processorMatch.Success) { throw 'lscpu output is missing the logical CPU count.' }
     $logicalProcessorCount = [int]$processorMatch.Groups[1].Value
+    $admission = Test-CampaignLinuxHostAdmission -Profile $profile -Snapshot ([pscustomobject]@{
+        virtualization = ([string]$results.virtualization.stdout).Trim()
+        cgroupV2 = (([string]$results.cgroup.stdout) -match 'cgroup2fs')
+        runningContainerCount = $containerObjects.Count
+        occupiedRequiredPortCount = $portLines.Count
+        totalMemoryBytes = $totalMemoryBytes
+        availableMemoryBytes = $availableBytes
+        logicalProcessorCount = $logicalProcessorCount
+        swapTotalBytes = $swapTotalBytes
+        swapUsedBytes = $swapUsedBytes
+        cgroupSwapCurrentBytes = $cgroupSwapCurrentBytes
+        memoryPressureSomeAvg10 = $someAvg10
+        memoryPressureFullAvg10 = $fullAvg10
+        oomEvents = $oomEvents
+        oomKillEvents = $oomKillEvents
+    })
     $reasons = [Collections.Generic.List[string]]::new()
-    if (([string]$results.virtualization.stdout).Trim() -ne 'microsoft') { $reasons.Add('systemd-detect-virt did not report microsoft') }
-    if (([string]$results.cgroup.stdout) -notmatch 'cgroup2fs') { $reasons.Add('cgroup v2 is not mounted') }
-    if ($containerObjects.Count -ne 0) { $reasons.Add("$($containerObjects.Count) running container(s) found") }
-    if ($portLines.Count -ne 0) { $reasons.Add('one or more required ports are already listening') }
-    if ($totalMemoryBytes -lt $MinTotalMemoryBytes) { $reasons.Add("MemTotal $totalMemoryBytes is below $MinTotalMemoryBytes bytes") }
-    if ($availableBytes -lt $MinPodmanAvailableMemoryBytes) { $reasons.Add("MemAvailable $availableBytes is below $MinPodmanAvailableMemoryBytes bytes") }
-    if ($logicalProcessorCount -lt $MinLogicalProcessorCount) { $reasons.Add("logical processor count $logicalProcessorCount is below $MinLogicalProcessorCount") }
-    if ($RequireSwapDisabled -and $swapTotalBytes -ne 0) { $reasons.Add("swap is configured ($swapTotalBytes bytes); authoritative campaign requires swap disabled") }
-    if ($swapUsedBytes -gt $MaxPodmanSwapUsedBytes) { $reasons.Add("swap used $swapUsedBytes exceeds $MaxPodmanSwapUsedBytes bytes") }
-    if ($someAvg10 -gt $MaxPodmanMemoryPressureSomeAvg10) { $reasons.Add("memory PSI some avg10 $someAvg10 exceeds $MaxPodmanMemoryPressureSomeAvg10") }
-    if ($fullAvg10 -gt $MaxPodmanMemoryPressureFullAvg10) { $reasons.Add("memory PSI full avg10 $fullAvg10 exceeds $MaxPodmanMemoryPressureFullAvg10") }
+    foreach ($reason in $admission.reasons) { $reasons.Add($reason) | Out-Null }
 
     $report = [ordered]@{
         schemaVersion = 'jmoa-linux-campaign-host-preflight-v1'
         capturedAt = [DateTime]::UtcNow.ToString('o')
         passed = ($reasons.Count -eq 0)
         reasons = $reasons.ToArray()
+        hostProfile = $profile.name
+        resourceClass = $profile.resourceClass
+        bootId = ([string]$results.bootId.stdout).Trim()
+        uptimeSeconds = [double](($results.uptime.stdout.Trim() -split '\s+')[0])
         virtualization = ([string]$results.virtualization.stdout).Trim()
         totalMemoryBytes = $totalMemoryBytes
         availableMemoryBytes = $availableBytes
         logicalProcessorCount = $logicalProcessorCount
         swapTotalBytes = $swapTotalBytes
         swapUsedBytes = $swapUsedBytes
+        cgroupSwapCurrentBytes = $cgroupSwapCurrentBytes
+        oomEvents = $oomEvents
+        oomKillEvents = $oomKillEvents
         memoryPressureSomeAvg10 = $someAvg10
         memoryPressureFullAvg10 = $fullAvg10
         runningContainerCount = $containerObjects.Count
@@ -134,11 +175,15 @@ try {
 # Linux Campaign Host Preflight
 
 - Passed: **$($report.passed)**
+- Host profile: $($report.hostProfile)
+- Resource class: $($report.resourceClass)
 - Virtualization: $($report.virtualization)
 - Total memory: $totalMemoryBytes bytes
 - Available memory: $availableBytes bytes
 - Logical processors: $logicalProcessorCount
 - Swap used: $swapUsedBytes bytes
+- cgroup swap current: $cgroupSwapCurrentBytes bytes
+- OOM / OOM-kill events: $oomEvents / $oomKillEvents
 - Memory PSI some/full avg10: $someAvg10 / $fullAvg10
 - Running containers: $($containerObjects.Count)
 - Occupied required ports: $($portLines -join '; ')

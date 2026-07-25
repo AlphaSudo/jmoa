@@ -39,6 +39,7 @@ try {
         -LedgerDirectory $ledger -Step 'capture packaged campaign runner revision'
     $runnerRevision = $revisionResult.stdout.Trim()
     if ($runnerRevision -notmatch '^[0-9a-f]{40}$') { throw "Invalid runner revision: $runnerRevision" }
+    Write-JmoaText -Value $runnerRevision -Path (Join-Path $bundle 'manifest/runner-revision.txt')
     $configRepoPath = [string]$manifest.configRepo.path
     $autoCrlfResult = Invoke-AuditedExternal -Executable $git -Arguments @('-C', $configRepoPath, 'config', '--get', 'core.autocrlf') `
         -LedgerDirectory $ledger -Step 'capture frozen config checkout core.autocrlf' -AllowFailure
