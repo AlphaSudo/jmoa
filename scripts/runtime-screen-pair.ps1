@@ -389,8 +389,8 @@ function Capture-PodmanMachinePressure {
         @{ key = 'cpuPressure'; command = 'cat /proc/pressure/cpu' },
         @{ key = 'free'; command = 'free -b' },
         @{ key = 'controllers'; command = 'cat /sys/fs/cgroup/cgroup.controllers' },
-        @{ key = 'memoryEvents'; command = 'cat /sys/fs/cgroup/memory.events' },
-        @{ key = 'memorySwapCurrent'; command = 'cat /sys/fs/cgroup/memory.swap.current 2>/dev/null || echo UNAVAILABLE' }
+        @{ key = 'memoryEvents'; command = 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.events' },
+        @{ key = 'memorySwapCurrent'; command = 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.swap.current' }
     )) {
         $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
             'machine', 'ssh', "sh -lc '$($spec.command)'"

@@ -38,9 +38,9 @@ cat /proc/meminfo
 printf '%s\n' '--- pressure ---'
 cat /proc/pressure/memory
 printf '%s\n' '--- events ---'
-cat /sys/fs/cgroup/memory.events
+cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.events
 printf '%s\n' '--- swap-current ---'
-cat /sys/fs/cgroup/memory.swap.current 2>/dev/null || echo 0
+cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.swap.current
 '@
     $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('machine', 'ssh', "sh -lc '$command'") `
         -LedgerDirectory $environmentLedger -Step "capture $Point constrained-host state"

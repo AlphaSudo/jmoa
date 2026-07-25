@@ -43,8 +43,8 @@ try {
         $cpuPsi = Invoke-IdleCheck -Step "sample $sample CPU PSI" -Command 'cat /proc/pressure/cpu'
         $ioPsi = Invoke-IdleCheck -Step "sample $sample IO PSI" -Command 'cat /proc/pressure/io'
         $meminfo = Invoke-IdleCheck -Step "sample $sample meminfo" -Command 'cat /proc/meminfo'
-        $events = Invoke-IdleCheck -Step "sample $sample memory events" -Command 'cat /sys/fs/cgroup/memory.events'
-        $swapCurrent = Invoke-IdleCheck -Step "sample $sample cgroup swap current" -Command 'cat /sys/fs/cgroup/memory.swap.current 2>/dev/null || echo 0'
+        $events = Invoke-IdleCheck -Step "sample $sample memory events" -Command 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.events'
+        $swapCurrent = Invoke-IdleCheck -Step "sample $sample cgroup swap current" -Command 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.swap.current'
         $processes = Invoke-IdleCheck -Step "sample $sample top processes" -Command 'ps -eo pid,comm,%cpu,%mem --sort=-%cpu | head -30'
         $containers = Invoke-IdleCheck -Step "sample $sample running containers" -Command 'podman ps --format json'
 

@@ -110,8 +110,8 @@ try {
         $discoveryHealth = Invoke-AuditedHttp -Method GET -Uri 'http://localhost:8761/actuator/health' -LedgerDirectory $ledger -Step "sample $sample discovery health"
         $meminfo = Invoke-Host -Step "sample $sample meminfo" -Command 'cat /proc/meminfo'
         $psi = Invoke-Host -Step "sample $sample memory PSI" -Command 'cat /proc/pressure/memory'
-        $events = Invoke-Host -Step "sample $sample memory events" -Command 'cat /sys/fs/cgroup/memory.events'
-        $swapCurrent = Invoke-Host -Step "sample $sample cgroup swap current" -Command 'cat /sys/fs/cgroup/memory.swap.current 2>/dev/null || echo 0'
+        $events = Invoke-Host -Step "sample $sample memory events" -Command 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.events'
+        $swapCurrent = Invoke-Host -Step "sample $sample cgroup swap current" -Command 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.swap.current'
         $configSmaps = Get-SmapsRollup -Pid $configPid -Name $config
         $discoverySmaps = Get-SmapsRollup -Pid $discoveryPid -Name $discovery
         $configMemory = Get-ContainerMemoryCurrent -Name $config

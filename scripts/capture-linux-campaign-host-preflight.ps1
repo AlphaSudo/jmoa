@@ -79,8 +79,8 @@ try {
         memoryPsi = 'cat /proc/pressure/memory'
         cpuPsi = 'cat /proc/pressure/cpu'
         cgroup = 'stat -fc %T /sys/fs/cgroup; cat /sys/fs/cgroup/cgroup.controllers'
-        memoryEvents = 'cat /sys/fs/cgroup/memory.events'
-        cgroupSwapCurrent = 'cat /sys/fs/cgroup/memory.swap.current 2>/dev/null || echo 0'
+        memoryEvents = 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.events'
+        cgroupSwapCurrent = 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.swap.current'
         clocksource = 'cat /sys/devices/system/clocksource/clocksource0/current_clocksource; cat /sys/devices/system/clocksource/clocksource0/available_clocksource'
         governors = 'found=0; for f in /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor; do found=1; printf "%s=" "$f"; cat "$f"; done; [ "$found" -eq 0 ] && echo UNAVAILABLE || true'
         podmanVersion = "$ContainerCli version"
