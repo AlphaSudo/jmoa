@@ -385,6 +385,7 @@ Add-FixtureResult -Name 'same-artifact-noise-rejects-large-drift' -Passed (-not 
 
 $campaignSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-petclinic-performance-campaign.ps1')
 $targetOnlyCampaignSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-petclinic-target-only-campaign.ps1')
+$scenarioLedgerSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'scenario-ledger-common.ps1')
 $targetOnlySupportSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'campaign-launch-petclinic-support.ps1')
 $targetOnlyTargetSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'campaign-launch-petclinic-target.ps1')
 $targetTransitionSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'campaign-verify-petclinic-target-transition.ps1')
@@ -643,6 +644,11 @@ Add-FixtureResult -Name 'target-only-scenario-ledger-preserves-http-responses-an
     $targetOnlyCampaignSource.Contains('$kind-eq''HTTP''') -and
     $targetOnlyCampaignSource.Contains('"HTTP $($record.status); error=$($record.error)"')
 ) -Details 'The one-file scenario ledger must include HTTP response bodies and safely render empty process streams.'
+
+Add-FixtureResult -Name 'scenario-ledger-accepts-structured-analysis-results' -Passed (
+    $scenarioLedgerSource.Contains("param([string]`$Status = 'COMPLETE',`$Result = @{})") -and
+    -not $scenarioLedgerSource.Contains('[hashtable]$Result')
+) -Details 'Terminal gate analyzers return PSCustomObject values; the root ledger must preserve them without a hashtable-only binding failure.'
 
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{
