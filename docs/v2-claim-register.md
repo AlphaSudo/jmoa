@@ -35,6 +35,23 @@ The claim is limited to public customers-service under `EXPLODED_BOOT_APP`,
 `NO_CDS_LOW_DIRTY`, `MALLOC_ARENA_MAX=1`, no CDS/AppCDS/Leyden/javaagent, and
 the balanced cold-page-cache protocol. It is not a universal or startup claim.
 
+### Final Direct B0-to-V2 Boundary
+
+`PETCLINIC_INDEPENDENT_SESSION_V1` was the final direct-product protocol
+authorized on the current Hyper-V VM. Three independently restarted B0
+sessions were valid but exceeded the frozen repeatability limits:
+
+```text
+PSS range: 3,038 KB (limit 1,024 KB)
+Private_Dirty range: 2,912 KB (limit 1,024 KB)
+memory.current range: 3,321,856 bytes (limit 2,097,152 bytes)
+terminal outcome: PETCLINIC_DIRECT_PRODUCT_UNMEASURABLE_ON_CURRENT_HOST
+```
+
+V2 was not run, so no new direct B0-to-V2 delta exists. This does not alter the
+separate finalized-V1-to-final-V2 confirmed claim. No further direct PetClinic
+protocol is authorized on this VM.
+
 ## Three-Service Acceptance
 
 The frozen final V1-to-V2 launch gate now passes under service-specific

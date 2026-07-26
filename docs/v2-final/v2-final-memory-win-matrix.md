@@ -48,6 +48,23 @@ campaign therefore emitted `ENVIRONMENT_VARIANCE_TOO_HIGH` and did not run V2
 controls or B0/V2 pairs. No direct PetClinic product delta is reported from
 this campaign.
 
+## Final Independent-Session Stop
+
+The preregistered `PETCLINIC_INDEPENDENT_SESSION_V1` protocol removed the
+within-support second-target position by running each B0 observation as the
+only target in a fresh support lifecycle. All three workloads passed, but the
+baseline still exceeded the frozen repeatability limits:
+
+| Valid B0 sessions | PSS range | Private_Dirty range | memory.current range | Verdict |
+| ---: | ---: | ---: | ---: | --- |
+| 3/3 | 3,038 KB | 2,912 KB | 3,321,856 B | `PETCLINIC_DIRECT_PRODUCT_UNMEASURABLE_ON_CURRENT_HOST` |
+
+The limits were `1,024 KB`, `1,024 KB`, and `2,097,152` bytes respectively.
+Per the permanent stop rule, V2 and the final direct product block did not run.
+This closes direct B0-to-V2 measurement on the current Hyper-V VM without
+creating a product delta. The confirmed finalized-V1-to-V2 result above is a
+separate comparison and remains unchanged.
+
 ## Scope-Bound Confirmations
 
 | Comparison | Paired wins | Median PSS | Median Private_Dirty | Median memory.current | Boundary |

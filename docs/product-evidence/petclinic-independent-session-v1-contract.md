@@ -4,6 +4,11 @@
 
 Pre-registered before any independent-session target result.
 
+Execution is now complete. The B0 qualification failed the frozen repeatability
+limits and terminated as
+`PETCLINIC_DIRECT_PRODUCT_UNMEASURABLE_ON_CURRENT_HOST`. See the
+[final result](petclinic-independent-session-v1-result.md).
+
 This is the final authorized PetClinic protocol on the current Hyper-V Debian
 VM. It follows the `PETCLINIC_TARGET_ONLY_V1` finding that a second target in
 one support lifecycle incurred a systematic same-artifact memory shift.

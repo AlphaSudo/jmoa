@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "jmoa-petclinic-independent-session-result-summary-v1",
+  "protocol": "PETCLINIC_INDEPENDENT_SESSION_V1",
+  "runnerCommit": "d603fc4",
+  "host": {
+    "os": "Debian 13",
+    "kernel": "6.12.74+deb13+1-amd64",
+    "cpuCount": 4,
+    "memoryTotalKb": 1953536,
+    "swapBytes": 0
+  },
+  "terminalOutcome": "PETCLINIC_DIRECT_PRODUCT_UNMEASURABLE_ON_CURRENT_HOST",
+  "periodAttribution": "SECOND_POSITION_NATIVE_ANON",
+  "excludedSharedSupportDiagnostic": {
+    "includedInProductEvidence": false,
+    "pattern": "RANDOM_OR_MIXED",
+    "pssKb": [350316, 349683, 354163],
+    "workloadErrors": 0
+  },
+  "b0Qualification": {
+    "validRuns": 3,
+    "workloadErrors": 0,
+    "observations": [
+      {"session": "B0-Q1", "pssKb": 350394, "privateDirtyKb": 341820, "memoryCurrentBytes": 454860800},
+      {"session": "B0-Q2", "pssKb": 347356, "privateDirtyKb": 338908, "memoryCurrentBytes": 451538944},
+      {"session": "B0-Q3", "pssKb": 348918, "privateDirtyKb": 340484, "memoryCurrentBytes": 453414912}
+    ],
+    "ranges": {"pssKb": 3038, "privateDirtyKb": 2912, "memoryCurrentBytes": 3321856},
+    "limits": {"pssKb": 1024, "privateDirtyKb": 1024, "memoryCurrentBytes": 2097152},
+    "passed": false
+  },
+  "v2Qualification": "NOT_RUN_BY_PERMANENT_STOP_RULE",
+  "productCampaign": "NOT_RUN_BY_PERMANENT_STOP_RULE",
+  "v2c": "NOT_RUN",
+  "v2d": "NOT_RUN",
+  "futurePetclinicProtocolOnThisVmAuthorized": false,
+  "audit": {
+    "scenarioLedgers": 4,
+    "commandAndHttpRecords": 1073,
+    "rawArchiveCommitted": false,
+    "rawArchiveBytes": 5868737,
+    "rawArchiveSha256": "F984B70649EF6A6527A98F79F1923FD09E6E67273FE7A380A71EFA4BDD54089A"
+  },
+  "claimBoundary": "No B0-to-V2 delta exists. This is a baseline reproducibility failure on the current Hyper-V VM, not a JMOA regression."
+}

@@ -59,6 +59,13 @@ median PSS `+585 KB`) and is explicitly non-claimable. The historical B0-to-V2
 record remains provenance only. See [V2 Final Audit](v2-final/README.md) and
 the [memory-win matrix](v2-final/v2-final-memory-win-matrix.md).
 
+The final `PETCLINIC_INDEPENDENT_SESSION_V1` campaign subsequently removed the
+shared-support second-target position effect, but three independent B0 sessions
+still failed the frozen repeatability limits. It terminated before V2 as
+`PETCLINIC_DIRECT_PRODUCT_UNMEASURABLE_ON_CURRENT_HOST`. No further direct
+PetClinic protocol is authorized on this Hyper-V VM; the incremental V1-to-V2
+release gate above remains the claimable PetClinic result.
+
 ## Final Three-Service Acceptance
 
 The stricter final launch contract compares final V1 with final V2 for exactly
