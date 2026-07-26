@@ -19,11 +19,15 @@ param(
     [string]$StopScript = "",
     [string[]]$StopScriptArguments = @(),
     [hashtable]$StopScriptParameters = @{},
+    [string]$TransitionScript = "",
+    [string[]]$TransitionScriptArguments = @(),
+    [hashtable]$TransitionScriptParameters = @{},
     [string]$ContainerCli = "podman",
     [string]$JcmdExecutable = "jcmd",
     [string]$JavaProcessPattern = "java",
     [int]$PairIndex = 1,
     [ValidateSet('BASELINE_FIRST', 'CANDIDATE_FIRST')][string]$FirstVariant = 'BASELINE_FIRST',
+    [ValidateSet('PAIR', 'BASELINE_ONLY', 'CANDIDATE_ONLY')][string]$ExecutionMode = 'PAIR',
     [string]$CaptureRoot = "target/jmoa-runtime-screen",
     [string]$BaselineRuntimeVerificationPath = "",
     [string]$CandidateRuntimeVerificationPath = "",
@@ -76,6 +80,9 @@ foreach ($path in @($BaselineLaunchScript, $CandidateLaunchScript, $WorkloadScri
 }
 if (-not [string]::IsNullOrWhiteSpace($StopScript) -and -not (Test-Path -LiteralPath $StopScript -PathType Leaf)) {
     throw "Stop script does not exist: $StopScript"
+}
+if (-not [string]::IsNullOrWhiteSpace($TransitionScript) -and -not (Test-Path -LiteralPath $TransitionScript -PathType Leaf)) {
+    throw "Transition script does not exist: $TransitionScript"
 }
 New-JmoaDirectory -Path $CaptureRoot
 function Resolve-VariantPolicy {
@@ -794,12 +801,51 @@ function Write-CampaignArmCommandLedger {
     return $summary
 }
 
+function Invoke-PairTransition {
+    param(
+        [Parameter(Mandatory)][string]$FirstContainerName,
+        [Parameter(Mandatory)][string]$FirstVariant,
+        [Parameter(Mandatory)][string]$SecondContainerName,
+        [Parameter(Mandatory)][string]$SecondVariant
+    )
+    if ([string]::IsNullOrWhiteSpace($TransitionScript)) { return $null }
+    $transitionLedger = if ([string]::IsNullOrWhiteSpace($LedgerDirectory)) { '' } else {
+        Join-Path $LedgerDirectory ("pair-{0}-transition" -f $PairIndex)
+    }
+    $parameters = @{} + $TransitionScriptParameters
+    $parameters.PairIndex = $PairIndex
+    $parameters.FirstContainerName = $FirstContainerName
+    $parameters.FirstVariant = $FirstVariant
+    $parameters.SecondContainerName = $SecondContainerName
+    $parameters.SecondVariant = $SecondVariant
+    $firstLabel = if ($FirstVariant -eq 'BASELINE') { 'b' } else { 'c' }
+    $parameters.FirstRunDirectory = Join-Path $CaptureRoot ("{0}{1}" -f $firstLabel, $PairIndex)
+    $parameters.OutputDirectory = Join-Path $CaptureRoot ("pair-{0}-transition" -f $PairIndex)
+    if (-not [string]::IsNullOrWhiteSpace($transitionLedger)) {
+        $parameters.LedgerDirectory = $transitionLedger
+        $parameters.LedgerStage = 'transition'
+    }
+    & $TransitionScript @parameters @TransitionScriptArguments
+    if (-not $?) { throw "Target transition proof failed after $FirstVariant arm." }
+    return Get-Content -Raw -LiteralPath (Join-Path $parameters.OutputDirectory 'target-transition-proof.json') | ConvertFrom-Json
+}
+
 $baseline = $null
 $candidate = $null
-if ($FirstVariant -eq 'BASELINE_FIRST') {
+$transition = $null
+if ($ExecutionMode -eq 'BASELINE_ONLY') {
     $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
         -LaunchArguments $BaselineLaunchArguments -LaunchParameters $BaselineLaunchParameters -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
         -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
+} elseif ($ExecutionMode -eq 'CANDIDATE_ONLY') {
+    $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
+        -LaunchArguments $CandidateLaunchArguments -LaunchParameters $CandidateLaunchParameters -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
+        -RuntimeVerificationPath $CandidateRuntimeVerificationPath -Policy $candidatePolicy -RuntimeArtifactPath $CandidateRuntimeArtifactPath
+} elseif ($FirstVariant -eq 'BASELINE_FIRST') {
+    $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
+        -LaunchArguments $BaselineLaunchArguments -LaunchParameters $BaselineLaunchParameters -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
+        -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
+    $transition = Invoke-PairTransition -FirstContainerName $BaselineContainerName -FirstVariant 'BASELINE' -SecondContainerName $CandidateContainerName -SecondVariant 'CANDIDATE'
     $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
         -LaunchArguments $CandidateLaunchArguments -LaunchParameters $CandidateLaunchParameters -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
         -RuntimeVerificationPath $CandidateRuntimeVerificationPath -Policy $candidatePolicy -RuntimeArtifactPath $CandidateRuntimeArtifactPath
@@ -807,19 +853,24 @@ if ($FirstVariant -eq 'BASELINE_FIRST') {
     $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
         -LaunchArguments $CandidateLaunchArguments -LaunchParameters $CandidateLaunchParameters -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
         -RuntimeVerificationPath $CandidateRuntimeVerificationPath -Policy $candidatePolicy -RuntimeArtifactPath $CandidateRuntimeArtifactPath
+    $transition = Invoke-PairTransition -FirstContainerName $CandidateContainerName -FirstVariant 'CANDIDATE' -SecondContainerName $BaselineContainerName -SecondVariant 'BASELINE'
     $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
         -LaunchArguments $BaselineLaunchArguments -LaunchParameters $BaselineLaunchParameters -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
         -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
 }
 $armLedgers = if ([string]::IsNullOrWhiteSpace($LedgerDirectory)) { $null } else {
     [ordered]@{
-        baseline = Write-CampaignArmCommandLedger -Label 'b' -Variant 'BASELINE'
-        candidate = Write-CampaignArmCommandLedger -Label 'c' -Variant 'CANDIDATE'
+        baseline = if ($null -eq $baseline) { $null } else { Write-CampaignArmCommandLedger -Label 'b' -Variant 'BASELINE' }
+        candidate = if ($null -eq $candidate) { $null } else { Write-CampaignArmCommandLedger -Label 'c' -Variant 'CANDIDATE' }
     }
 }
-$status = if ($baseline.status -eq 'CAPTURED' -and $candidate.status -eq 'CAPTURED') { 'CAPTURED' } else { 'FAILED' }
+$status = if (
+    ($ExecutionMode -eq 'PAIR' -and $baseline.status -eq 'CAPTURED' -and $candidate.status -eq 'CAPTURED') -or
+    ($ExecutionMode -eq 'BASELINE_ONLY' -and $baseline.status -eq 'CAPTURED') -or
+    ($ExecutionMode -eq 'CANDIDATE_ONLY' -and $candidate.status -eq 'CAPTURED')
+) { 'CAPTURED' } else { 'FAILED' }
 $baseArchiveIdentity = $null
-if ($status -eq 'CAPTURED' -and $baselinePolicy.kind -eq 'BASE' -and $candidatePolicy.kind -eq 'BASE') {
+if ($ExecutionMode -eq 'PAIR' -and $status -eq 'CAPTURED' -and $baselinePolicy.kind -eq 'BASE' -and $candidatePolicy.kind -eq 'BASE') {
     $sameHash = $baseline.runtimePolicyProof.defaultJdkArchiveSha256 -eq $candidate.runtimePolicyProof.defaultJdkArchiveSha256
     $samePath = $baseline.runtimePolicyProof.defaultJdkArchivePath -eq $candidate.runtimePolicyProof.defaultJdkArchivePath
     $sameDeviceInode = $baseline.runtimePolicyProof.defaultJdkArchiveDeviceInode -eq $candidate.runtimePolicyProof.defaultJdkArchiveDeviceInode
@@ -848,6 +899,8 @@ $pair = [ordered]@{
     pageCachePolicy = if ($DropPageCacheBeforeVariant) { 'DROP_CACHES_BEFORE_EACH_VARIANT' } else { 'NOT_REQUESTED' }
     baseline = $baseline
     candidate = $candidate
+    executionMode = $ExecutionMode
+    transitionProof = $transition
     armCommandLedgers = $armLedgers
     baseArchiveIdentity = $baseArchiveIdentity
     claimBoundary = 'One paired screen only. Run V2-C and V2-D after three valid pairs before making a runtime claim.'

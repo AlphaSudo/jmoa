@@ -54,6 +54,11 @@ $testedScriptNames = @(
     'capture-linux-host-fingerprint.ps1',
     'campaign-launch-petclinic-stack.ps1',
     'campaign-stop-petclinic-stack.ps1',
+    'campaign-launch-petclinic-support.ps1',
+    'campaign-stop-petclinic-support.ps1',
+    'campaign-launch-petclinic-target.ps1',
+    'campaign-stop-petclinic-target.ps1',
+    'campaign-verify-petclinic-target-transition.ps1',
     'campaign-workload-petclinic.ps1',
     'scenario-ledger-common.ps1',
     'runtime-screen-pair.ps1',
@@ -61,6 +66,7 @@ $testedScriptNames = @(
     'build-artifact-lineage.ps1',
     'new-petclinic-campaign-manifest.ps1',
     'run-petclinic-performance-campaign.ps1',
+    'run-petclinic-target-only-campaign.ps1',
     'run-linux-idle-calibration.ps1',
     'run-linux-host-calibration.ps1',
     'run-petclinic-capacity-qualification.ps1',
@@ -378,6 +384,10 @@ Add-FixtureResult -Name 'same-artifact-noise-qualifies-low-reversed-drift' -Pass
 Add-FixtureResult -Name 'same-artifact-noise-rejects-large-drift' -Passed (-not [bool]$noiseFail.qualified)
 
 $campaignSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-petclinic-performance-campaign.ps1')
+$targetOnlyCampaignSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-petclinic-target-only-campaign.ps1')
+$targetOnlySupportSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'campaign-launch-petclinic-support.ps1')
+$targetOnlyTargetSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'campaign-launch-petclinic-target.ps1')
+$targetTransitionSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'campaign-verify-petclinic-target-transition.ps1')
 $runtimeScreenSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'runtime-screen-pair.ps1')
 $linuxPreflightSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'capture-linux-campaign-host-preflight.ps1')
 $linuxIdleCalibrationSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-linux-idle-calibration.ps1')
@@ -539,6 +549,60 @@ Add-FixtureResult -Name 'runtime-child-scripts-use-named-parameter-maps' -Passed
     $runtimeScreenSource -match '& \$LaunchScript @launchParametersForArm' -and
     $runtimeScreenSource -match '& \$WorkloadScript @workloadParametersForArm' -and
     $runtimeScreenSource -match '& \$StopScript @stopParameters'
+)
+Add-FixtureResult -Name 'target-only-protocol-is-separately-named-and-pre-registered' -Passed (
+    $targetOnlyCampaignSource -match "PETCLINIC_TARGET_ONLY_V1" -and
+    $targetOnlyCampaignSource -match "redesignAfterTargetEvidence='FORBIDDEN'" -and
+    $targetOnlyCampaignSource -match "productOrders=@\('B0_TO_V2','V2_TO_B0','B0_TO_V2'\)"
+)
+Add-FixtureResult -Name 'target-only-support-uses-fixed-validity-admission-not-private-range' -Passed (
+    $targetOnlySupportSource -match '\[int\]\$SettleSeconds = 180' -and
+    $targetOnlySupportSource -match '\[long\]\$MinAvailableMemoryBytes = 734003200' -and
+    $targetOnlySupportSource -match 'psiFullAvg10' -and
+    $targetOnlySupportSource -notmatch 'MaxFinalWindowPssRangeKb|MaxFinalWindowPrivateDirtyRangeKb|MaxFinalWindowAnonRangeBytes'
+)
+Add-FixtureResult -Name 'target-only-pair-shares-support-and-tears-down-target-only-between-arms' -Passed (
+    $targetOnlyCampaignSource -match 'campaign-launch-petclinic-support\.ps1' -and
+    $targetOnlyCampaignSource -match 'campaign-stop-petclinic-support\.ps1' -and
+    $targetOnlyCampaignSource -match 'campaign-stop-petclinic-target\.ps1' -and
+    $runtimeScreenSource -match 'Invoke-PairTransition'
+)
+Add-FixtureResult -Name 'target-transition-proves-absence-health-and-registration-isolation' -Passed (
+    $targetTransitionSource -match 'firstContainerAbsent' -and
+    $targetTransitionSource -match 'residualPidAbsent' -and
+    $targetTransitionSource -match 'registrationRemoved' -and
+    $targetTransitionSource -match 'registrationIsolated' -and
+    $targetTransitionSource -match 'supportRestartCounts'
+)
+Add-FixtureResult -Name 'target-only-launch-keeps-frozen-runtime-policy-and-unique-eureka-id' -Passed (
+    $targetOnlyTargetSource -match 'EUREKA_INSTANCE_INSTANCE_ID' -and
+    $targetOnlyTargetSource -match 'MALLOC_ARENA_MAX=1' -and
+    $targetOnlyTargetSource -match 'NativeMemoryTracking=summary' -and
+    $targetOnlyTargetSource -match 'Xshare:off'
+)
+Add-FixtureResult -Name 'target-only-capacity-controls-and-product-order-are-frozen' -Passed (
+    $targetOnlyCampaignSource -match 'ExecutionMode BASELINE_ONLY' -and
+    $targetOnlyCampaignSource -match "control-b0-1.*BASELINE_FIRST" -and
+    $targetOnlyCampaignSource -match "control-b0-2.*CANDIDATE_FIRST" -and
+    $targetOnlyCampaignSource -match "control-v2-1.*BASELINE_FIRST" -and
+    $targetOnlyCampaignSource -match "control-v2-2.*CANDIDATE_FIRST" -and
+    $targetOnlyCampaignSource -match "product-1.*BASELINE_FIRST" -and
+    $targetOnlyCampaignSource -match "product-2.*CANDIDATE_FIRST" -and
+    $targetOnlyCampaignSource -match "product-3.*BASELINE_FIRST"
+)
+Add-FixtureResult -Name 'target-only-gates-use-target-metrics-and-exclude-support-memory' -Passed (
+    $targetOnlyCampaignSource -match 'supportMemoryIncluded=\$false' -and
+    $targetOnlyCampaignSource -match 'ConfirmedPssGateKb=-1024' -and
+    $targetOnlyCampaignSource -match 'ConfirmedPrivateDirtyGateKb=-1024' -and
+    $targetOnlyCampaignSource -match 'ConfirmedMemoryCurrentGateBytes=-1048576' -and
+    $targetOnlyCampaignSource -match 'TrustedPssGateKb=-4096'
+)
+Add-FixtureResult -Name 'target-only-every-scenario-has-one-chronological-command-response-ledger' -Passed (
+    $targetOnlyCampaignSource -match 'function Write-ScenarioCommandLedger' -and
+    $targetOnlyCampaignSource -match 'scenario-command-ledger\.md' -and
+    $targetOnlyCampaignSource -match 'rawStdoutPath' -and
+    $targetOnlyCampaignSource -match 'rawStderrPath' -and
+    $targetOnlyCampaignSource -match 'Sort-Object \{\[datetime\]\$_.startedUtc\}'
 )
 
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
