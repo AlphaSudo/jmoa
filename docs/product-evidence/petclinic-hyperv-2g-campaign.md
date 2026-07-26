@@ -89,3 +89,11 @@ The constrained campaign uses these evidence outcomes:
 A capacity, pressure, swap, OOM, or host-power stop is an environment outcome,
 not a JMOA regression. Doctor and Patient are out of scope until PetClinic
 reaches one terminal outcome.
+
+## Recorded Outcome
+
+The authoritative attempt reached
+`STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM`: idle calibration passed, but
+support aggregate `memory.current` drifted by 18,612,224 bytes against the
+frozen 2,097,152-byte limit. No target arm was launched. See
+[PetClinic Hyper-V 2 GiB Terminal Outcome](petclinic-hyperv-2g-terminal-outcome.md).

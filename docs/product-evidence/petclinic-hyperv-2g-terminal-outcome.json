@@ -1,0 +1,61 @@
+{
+  "schemaVersion": "jmoa-hyperv-debian-fixed-2g-outcome-v1",
+  "terminalVerdict": "STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM",
+  "environmentOutcome": true,
+  "jmoaRegression": false,
+  "runnerRevision": "4f26dd83dc4e9ef6d3d44202e8761bb217a67a9b",
+  "sourceCampaignSha256": "90CBB67E866F251164BA052C20EFC9F15DB0BC4A594D370DF32240836C5CA6C9",
+  "packageSha256": "AA4AE6F8A9C78B9B257A5CD15B093D8027D2C9C63CADB38DFEE4C5BC54CB0C24",
+  "archiveSha256": "6CDE457364500644E64595F2957F24A23A53A841A0EBF1204C5FB6B2A67A0D5A",
+  "gateA": {
+    "passed": true,
+    "passedCount": 66,
+    "failedCount": 0
+  },
+  "dryRunReady": true,
+  "idleCalibration": {
+    "passed": true,
+    "minimumAvailableMemoryBytes": 1542336512,
+    "swapUsedBytes": 0,
+    "maxMemoryPressureSomeAvg10": 0.0,
+    "maxMemoryPressureFullAvg10": 0.0,
+    "oomEvents": 0,
+    "oomKillEvents": 0
+  },
+  "supportCalibration": {
+    "passed": false,
+    "healthPassed": true,
+    "restartCount": 0,
+    "minimumAvailableMemoryBytes": 1121853440,
+    "minimumRequiredAvailableMemoryBytes": 734003200,
+    "minimumAggregateMemoryCurrentBytes": 450002944,
+    "maximumAggregateMemoryCurrentBytes": 468615168,
+    "aggregateMemoryCurrentDriftBytes": 18612224,
+    "maximumAllowedDriftBytes": 2097152,
+    "swapUsedBytes": 0,
+    "maxMemoryPressureSomeAvg10": 0.0,
+    "maxMemoryPressureFullAvg10": 0.0,
+    "oomEvents": 0,
+    "oomKillEvents": 0,
+    "failureReasons": [
+      "support aggregate memory.current drift 18612224 exceeds 2097152 bytes"
+    ]
+  },
+  "stagesNotRun": [
+    "CAPACITY_QUALIFICATION_ONLY",
+    "B0_SAME_ARTIFACT_CONTROLS",
+    "V2_SAME_ARTIFACT_CONTROLS",
+    "BALANCED_B0_V2_PRODUCT_PAIRS",
+    "V2_C",
+    "STRICT_4_MIB_GATE",
+    "V2_D"
+  ],
+  "productMemoryMatrixAvailable": false,
+  "audit": {
+    "childLedgerCount": 5,
+    "auditedCommandCount": 279,
+    "childLedgerIndexPassed": true,
+    "rawEvidenceCommitted": false
+  }
+}
+

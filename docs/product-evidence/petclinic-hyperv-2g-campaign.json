@@ -26,5 +26,10 @@
   "outOfScopeUntilPetClinicTerminal": [
     "Doctor",
     "Patient"
-  ]
+  ],
+  "recordedOutcome": {
+    "terminalVerdict": "STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM",
+    "targetArmsLaunched": false,
+    "details": "petclinic-hyperv-2g-terminal-outcome.json"
+  }
 }
