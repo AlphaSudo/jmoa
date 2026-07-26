@@ -39,7 +39,10 @@ function Invoke-Cli {
 }
 function Invoke-Host {
     param([string]$Step, [string]$Command, [switch]$AllowFailure)
-    return Invoke-AuditedExternal -Executable '/bin/bash' -Arguments @('-lc', $Command) -LedgerDirectory $ledger -Step $Step -AllowFailure:$AllowFailure
+    # Git archives can preserve CRLF in PowerShell here-strings. Bash treats the
+    # trailing CR as part of path arguments, so normalize at the shell boundary.
+    $normalizedCommand = $Command.Replace("`r`n", "`n").Replace("`r", "`n")
+    return Invoke-AuditedExternal -Executable '/bin/bash' -Arguments @('-lc', $normalizedCommand) -LedgerDirectory $ledger -Step $Step -AllowFailure:$AllowFailure
 }
 function Wait-Health {
     param([string]$Role, [string]$Uri, [int]$TimeoutSeconds = 240)

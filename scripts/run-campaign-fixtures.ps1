@@ -435,6 +435,10 @@ Add-FixtureResult -Name 'support-calibration-v2-separates-samples-from-diagnosti
     $linuxSupportCalibrationSource.LastIndexOf('Write-PostWindowDiagnostics -Identity', [StringComparison]::Ordinal) -gt
         $linuxSupportCalibrationSource.IndexOf('for ($sample = 1;', [StringComparison]::Ordinal)
 )
+Add-FixtureResult -Name 'support-calibration-v2-normalizes-crlf-before-bash' -Passed (
+    $linuxSupportCalibrationSource -match '\$normalizedCommand\s*=\s*\$Command\.Replace' -and
+    $linuxSupportCalibrationSource -match "-Arguments @\('-lc',\s*\`$normalizedCommand\)"
+)
 
 function New-ConstrainedHostSnapshot {
     return [pscustomobject][ordered]@{
