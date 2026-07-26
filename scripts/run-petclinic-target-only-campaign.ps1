@@ -50,7 +50,7 @@ if([string](Get-CampaignJsonProp $manifest 'schemaVersion')-ne 'jmoa-petclinic-c
 $recordedCampaignSha=[string](Get-CampaignJsonProp $manifest 'campaignSha256')
 $actualCampaignSha=Get-CampaignManifestSha256 -ManifestObject $manifest
 if($recordedCampaignSha.ToUpperInvariant()-ne $actualCampaignSha.ToUpperInvariant()){throw 'Campaign manifest integrity failed.'}
-$images=Get-CampaignJsonProp $manifest 'images';$artifacts=Get-CampaignJsonProp $manifest 'artifacts';$config=Get-CampaignJsonProp $manifest 'configRepo';$environment=Get-CampaignJsonProp $manifest 'environment'
+$images=Get-CampaignJsonProp $manifest 'images';$artifacts=Get-CampaignJsonProp $manifest 'artifacts';$config=Get-CampaignJsonProp $manifest 'configRepo';$environment=Get-CampaignJsonProp $manifest 'environment';$artifactLineage=Get-CampaignJsonProp $manifest 'artifactLineage'
 $b0Image=[string](Get-CampaignJsonProp (Get-CampaignJsonProp $images 'baseline') 'ref')
 $v2Image=[string](Get-CampaignJsonProp (Get-CampaignJsonProp $images 'candidate') 'ref')
 $configImage=[string](Get-CampaignJsonProp (Get-CampaignJsonProp $images 'config') 'ref')
@@ -65,6 +65,11 @@ $b0Artifact=[string](Get-CampaignJsonProp (Get-CampaignJsonProp $artifacts 'base
 $v2Artifact=[string](Get-CampaignJsonProp (Get-CampaignJsonProp $artifacts 'candidate') 'path')
 $b0Sha=[string](Get-CampaignJsonProp (Get-CampaignJsonProp $artifacts 'baseline') 'sha256')
 $v2Sha=[string](Get-CampaignJsonProp (Get-CampaignJsonProp $artifacts 'candidate') 'sha256')
+$materializationManifestAsset=Get-CampaignJsonProp $artifacts 'materializationManifest'
+$materializationManifest=[string](Get-CampaignJsonProp $materializationManifestAsset 'path')
+$materializationManifestSha=[string](Get-CampaignJsonProp $materializationManifestAsset 'sha256')
+$artifactLineagePath=[string](Get-CampaignJsonProp $artifactLineage 'path')
+$artifactLineageSha=[string](Get-CampaignJsonProp $artifactLineage 'sha256')
 $configRepo=[string](Get-CampaignJsonProp $config 'path')
 $configTreeSha=[string](Get-CampaignJsonProp $config 'contentTreeSha256')
 $maven=[string](Get-CampaignJsonProp $environment 'mavenExecutable')
@@ -74,9 +79,11 @@ $manifestContainerCli=[string](Get-CampaignJsonProp $environment 'containerCli')
 if([string]::IsNullOrWhiteSpace($ContainerCli)){$ContainerCli=$manifestContainerCli}
 if([string]::IsNullOrWhiteSpace($ContainerCli)){throw 'Campaign manifest does not define environment.containerCli.'}
 if($runtimePolicy-ne 'NO_CDS_LOW_DIRTY'){throw "Protocol requires NO_CDS_LOW_DIRTY, manifest says $runtimePolicy."}
-foreach($p in @($b0Artifact,$v2Artifact,$configRepo,$FixturesReport)){if(-not(Test-Path -LiteralPath $p)){throw "Frozen input missing: $p"}}
+foreach($p in @($b0Artifact,$v2Artifact,$materializationManifest,$artifactLineagePath,$configRepo,$FixturesReport)){if(-not(Test-Path -LiteralPath $p)){throw "Frozen input missing: $p"}}
 if((Get-JmoaSha256 $b0Artifact).ToUpperInvariant()-ne $b0Sha.ToUpperInvariant()){throw 'B0 artifact SHA mismatch.'}
 if((Get-JmoaSha256 $v2Artifact).ToUpperInvariant()-ne $v2Sha.ToUpperInvariant()){throw 'V2 artifact SHA mismatch.'}
+if((Get-JmoaSha256 $materializationManifest).ToUpperInvariant()-ne $materializationManifestSha.ToUpperInvariant()){throw 'Materialization manifest SHA mismatch.'}
+if((Get-JmoaSha256 $artifactLineagePath).ToUpperInvariant()-ne $artifactLineageSha.ToUpperInvariant()){throw 'Artifact lineage SHA mismatch.'}
 if((Get-CampaignTreeSha256 -Root $configRepo)-ne $configTreeSha){throw 'Config tree SHA mismatch.'}
 
 $fixtures=Get-Content -Raw -LiteralPath $FixturesReport|ConvertFrom-Json
@@ -94,6 +101,10 @@ foreach($d in @($runDir,$captures,$reports,$ledgers)){New-JmoaDirectory $d}
 Start-ScenarioLedger -ScenarioId $runId -OutputDirectory $runDir -Description 'PETCLINIC_TARGET_ONLY_V1 pre-registered target-only comparison. Pair-scoped config/discovery are validity dependencies; only customers-service process and exact target cgroup enter product deltas.'
 Add-ScenarioNote -Title 'Pre-registered protocol' -Text 'Artifacts, images, JMOA, flags, workload, warmup, settle, noise thresholds, V2-C thresholds, and strict 4 MiB gate are frozen. SUPPORT_CALIBRATION_V2 remains valid diagnostic history but is not an admission gate.'
 Add-ScenarioAsset -Role 'Frozen campaign manifest' -Path $CampaignManifest -Provenance REUSED_FROZEN_INPUT -Note "campaignSha256=$actualCampaignSha"|Out-Null
+Add-ScenarioAsset -Role 'Frozen B0 application jar' -Path $b0Artifact -Provenance REUSED_FROZEN_INPUT -Note "sha256=$b0Sha"|Out-Null
+Add-ScenarioAsset -Role 'Frozen V2 application jar' -Path $v2Artifact -Provenance REUSED_FROZEN_INPUT -Note "sha256=$v2Sha"|Out-Null
+Add-ScenarioAsset -Role 'Frozen V2 materialization manifest' -Path $materializationManifest -Provenance REUSED_FROZEN_INPUT -Note "sha256=$materializationManifestSha"|Out-Null
+Add-ScenarioAsset -Role 'Frozen artifact lineage' -Path $artifactLineagePath -Provenance REUSED_FROZEN_INPUT -Note "sha256=$artifactLineageSha"|Out-Null
 
 function Resolve-Image([string]$Ref,[string]$Role){
     (Invoke-ScenarioCommand -Step "resolve frozen $Role image" -Executable $ContainerCli -Arguments @('image','inspect','--format','{{.Id}}',$Ref)).stdout.Trim()
@@ -103,6 +114,21 @@ $imagePassed=$true
 foreach($key in @('b0','v2','config','discovery')){if(($resolvedImages[$key]-replace '^sha256:','')-ne($expectedImageIds[$key]-replace '^sha256:','')){$imagePassed=$false}}
 Write-JmoaJson ([ordered]@{schemaVersion='jmoa-target-only-image-gate-v1';expected=$expectedImageIds;resolved=$resolvedImages;passed=$imagePassed}) (Join-Path $reports 'image-identity-gate.json')
 if(-not$imagePassed){Complete-ScenarioLedger -Status STOPPED_ARTIFACT_GATE -Result @{reason='image mismatch'}|Out-Null;throw 'Image identity gate failed.'}
+
+$artifactPreflightLedger=Join-Path $ledgers 'preflight-artifact'
+Initialize-CampaignAuditLedger -LedgerDirectory $artifactPreflightLedger -Stage 'preflight-artifact' -Variant 'B0_V2' -Description 'Strict B0 cleanliness, complete V2 materialization, and runtime-library verification before target-only measurement.' | Out-Null
+$baselineFingerprints=Get-CampaignImageArtifactFingerprints -ContainerCli $ContainerCli -Image $b0Image -LedgerDirectory $artifactPreflightLedger -Step 'baseline gate: artifact fingerprints'
+$baselineGate=Test-CampaignBaselineClean -ContainerCli $ContainerCli -Image $b0Image -LedgerDirectory $artifactPreflightLedger
+$candidateGate=Test-CampaignCandidateTransformed -ContainerCli $ContainerCli -Image $v2Image -MaterializationManifestPath $materializationManifest -BaselineFingerprints $baselineFingerprints -LedgerDirectory $artifactPreflightLedger
+$artifactGate=[ordered]@{schemaVersion='jmoa-target-only-artifact-gate-v1';baseline=$baselineGate;candidate=$candidateGate;passed=($baselineGate.passed-and$candidateGate.passed)}
+Write-JmoaJson $artifactGate (Join-Path $reports 'artifact-gate.json')
+$artifactLedgerStatus=if($artifactGate.passed){'COMPLETE'}else{'FAILED'}
+Complete-CampaignAuditLedger -LedgerDirectory $artifactPreflightLedger -Status $artifactLedgerStatus -Stage 'preflight-artifact' -Variant 'B0_V2' | Out-Null
+if(-not$artifactGate.passed){Complete-ScenarioLedger -Status STOPPED_ARTIFACT_GATE -Result $artifactGate|Out-Null;throw 'B0/V2 transformation gate failed.'}
+
+$lineageGate=Test-CampaignArtifactLineage -LineagePath $artifactLineagePath -ExpectedB0Sha256 $b0Sha -ExpectedV2Sha256 $v2Sha -ExpectedMaterializationManifestSha256 $materializationManifestSha
+Write-JmoaJson $lineageGate (Join-Path $reports 'artifact-lineage-gate.json')
+if(-not$lineageGate.passed){Complete-ScenarioLedger -Status STOPPED_ARTIFACT_GATE -Result $lineageGate|Out-Null;throw 'Artifact lineage gate failed.'}
 
 $frozenConfig=Join-Path $runDir 'frozen-config-repo';New-JmoaDirectory $frozenConfig
 foreach($entry in @(Get-ChildItem -LiteralPath $configRepo -Force|Where-Object Name -ne '.git')){Copy-Item -LiteralPath $entry.FullName -Destination $frozenConfig -Recurse -Force}
@@ -121,7 +147,7 @@ $protocolDoc=[ordered]@{
 Write-JmoaJson $protocolDoc (Join-Path $reports 'petclinic-target-only-v1-protocol.json')
 
 if($DryRun){
-    $readiness=[ordered]@{schemaVersion='jmoa-petclinic-target-only-readiness-v1';protocol=$protocol;ready=$true;manifestSha256=$actualCampaignSha;images=$resolvedImages;artifactHashes=[ordered]@{b0=$b0Sha;v2=$v2Sha};configTreeSha256=$configTreeSha;protocolDefinition=$protocolDoc}
+    $readiness=[ordered]@{schemaVersion='jmoa-petclinic-target-only-readiness-v1';protocol=$protocol;ready=$true;manifestSha256=$actualCampaignSha;images=$resolvedImages;artifactHashes=[ordered]@{b0=$b0Sha;v2=$v2Sha;materializationManifest=$materializationManifestSha;artifactLineage=$artifactLineageSha};artifactGate=$artifactGate;lineageGate=$lineageGate;configTreeSha256=$configTreeSha;protocolDefinition=$protocolDoc}
     Write-JmoaJson $readiness (Join-Path $reports 'campaign-readiness.json')
     Complete-ScenarioLedger -Status READY -Result $readiness|Out-Null
     exit 0

@@ -33,11 +33,16 @@ $discoveryName = "jmoa-$safePair-disc"
 $configFlags = '-XX:+UseContainerSupport -XX:+UseSerialGC -Xms24m -Xmx80m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -Xshare:off'
 $discoveryFlags = '-XX:+UseContainerSupport -XX:+UseSerialGC -Xms16m -Xmx96m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -Xshare:off'
 
-function Invoke-Cli([string]$Step, [string[]]$Arguments, [switch]$AllowFailure) {
-    Invoke-AuditedExternal -Executable $ContainerCli -Arguments $Arguments -LedgerDirectory $LedgerDirectory -Step $Step -AllowFailure:$AllowFailure
+function Invoke-Cli {
+    param(
+        [Parameter(Mandatory)][string]$Step,
+        [Parameter(Mandatory)][string[]]$CliArguments,
+        [switch]$AllowFailure
+    )
+    Invoke-AuditedExternal -Executable $ContainerCli -Arguments $CliArguments -LedgerDirectory $LedgerDirectory -Step $Step -AllowFailure:$AllowFailure
 }
 function Resolve-Image([string]$Reference, [string]$Role) {
-    $r = Invoke-Cli "resolve $Role image" @('image', 'inspect', '--format', '{{.Id}}', $Reference)
+    $r = Invoke-Cli -Step "resolve $Role image" -CliArguments @('image', 'inspect', '--format', '{{.Id}}', $Reference)
     $id = $r.stdout.Trim()
     if ([string]::IsNullOrWhiteSpace($id)) { throw "Could not resolve $Role image $Reference." }
     $id
@@ -60,7 +65,7 @@ printf '%s\n' '---PRESSURE---'; cat /proc/pressure/memory
 printf '%s\n' '---USER_EVENTS---'; cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.events
 printf '%s\n' '---USER_SWAP---'; cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.swap.current
 '@.Replace("`r", '')
-    $r = Invoke-Cli "capture host validity $Point" @('machine', 'ssh', $cmd)
+    $r = Invoke-Cli -Step "capture host validity $Point" -CliArguments @('machine', 'ssh', $cmd)
     $text = $r.stdout
     $available = [long]([regex]::Match($text, '(?m)^MemAvailable:\s+(\d+)\s+kB$').Groups[1].Value) * 1024
     $swapTotal = [long]([regex]::Match($text, '(?m)^SwapTotal:\s+(\d+)\s+kB$').Groups[1].Value) * 1024
@@ -72,24 +77,37 @@ printf '%s\n' '---USER_SWAP---'; cat /sys/fs/cgroup/user.slice/user-$(id -u).sli
 }
 
 try {
-    foreach ($name in @($configName, $discoveryName)) { Invoke-Cli "pre-clean $name" @('rm','-f',$name) -AllowFailure | Out-Null }
-    Invoke-Cli "pre-clean $network" @('network','rm',$network) -AllowFailure | Out-Null
+    foreach ($name in @($configName, $discoveryName)) {
+        $preCleanResult = Invoke-Cli -Step "pre-clean $name" -CliArguments @('rm','-f',$name) -AllowFailure
+        $preCleanResult | Out-Null
+    }
+    $preCleanNetworkResult = Invoke-Cli -Step "pre-clean $network" -CliArguments @('network','rm',$network) -AllowFailure
+    $preCleanNetworkResult | Out-Null
     $configId = Resolve-Image $ConfigImage 'config'
     $discoveryId = Resolve-Image $DiscoveryImage 'discovery'
-    Invoke-Cli "create network $network" @('network','create',$network) | Out-Null
-    Invoke-Cli 'start config-server' @('run','-d','--name',$configName,'--network',$network,'--network-alias','config-server','-p','8888:8888','-v',"${ConfigRepo}:/app/config-repo:ro",'-e','SPRING_PROFILES_ACTIVE=native','-e','GIT_REPO=/app/config-repo','-e','MANAGEMENT_TRACING_ENABLED=false','-e','MANAGEMENT_METRICS_ENABLED=false','-e',"JAVA_TOOL_OPTIONS=$configFlags",$configId) | Out-Null
+    $networkResult = Invoke-Cli -Step "create network $network" -CliArguments @('network','create',$network)
+    $networkResult | Out-Null
+    $configStartResult = Invoke-Cli -Step 'start config-server' -CliArguments @('run','-d','--name',$configName,'--network',$network,'--network-alias','config-server','-p','8888:8888','-v',"${ConfigRepo}:/app/config-repo:ro",'-e','SPRING_PROFILES_ACTIVE=native','-e','GIT_REPO=/app/config-repo','-e','MANAGEMENT_TRACING_ENABLED=false','-e','MANAGEMENT_METRICS_ENABLED=false','-e',"JAVA_TOOL_OPTIONS=$configFlags",$configId)
+    $configStartResult | Out-Null
     $configProbes = Wait-Health 'config' 'http://localhost:8888/actuator/health' $ConfigReadyTimeoutSeconds
-    Invoke-Cli 'start discovery-server' @('run','-d','--name',$discoveryName,'--network',$network,'--network-alias','discovery-server','-p','8761:8761','-e','SPRING_PROFILES_ACTIVE=docker','-e','CONFIG_SERVER_URI=http://config-server:8888','-e',"JAVA_TOOL_OPTIONS=$discoveryFlags",$discoveryId) | Out-Null
+    $discoveryStartResult = Invoke-Cli -Step 'start discovery-server' -CliArguments @('run','-d','--name',$discoveryName,'--network',$network,'--network-alias','discovery-server','-p','8761:8761','-e','SPRING_PROFILES_ACTIVE=docker','-e','CONFIG_SERVER_URI=http://config-server:8888','-e',"JAVA_TOOL_OPTIONS=$discoveryFlags",$discoveryId)
+    $discoveryStartResult | Out-Null
     $discoveryProbes = Wait-Health 'discovery' 'http://localhost:8761/actuator/health' $DiscoveryReadyTimeoutSeconds
     $healthyAt = [DateTime]::UtcNow
     Start-Sleep -Seconds $SettleSeconds
     $validity = Capture-HostValidity 'POST_FIXED_SETTLE'
-    $configRestart = [int](Invoke-Cli 'config restart count' @('inspect','--format','{{.RestartCount}}',$configName)).stdout.Trim()
-    $discoveryRestart = [int](Invoke-Cli 'discovery restart count' @('inspect','--format','{{.RestartCount}}',$discoveryName)).stdout.Trim()
-    $configLive = (Invoke-Cli 'config live image' @('inspect','--format','{{.Image}}',$configName)).stdout.Trim()
-    $discoveryLive = (Invoke-Cli 'discovery live image' @('inspect','--format','{{.Image}}',$discoveryName)).stdout.Trim()
-    $configJdk = (Invoke-Cli 'config JDK fingerprint' @('exec',$configName,'java','-version')).output.Trim()
-    $discoveryJdk = (Invoke-Cli 'discovery JDK fingerprint' @('exec',$discoveryName,'java','-version')).output.Trim()
+    $configRestartResult = Invoke-Cli -Step 'config restart count' -CliArguments @('inspect','--format','{{.RestartCount}}',$configName)
+    $discoveryRestartResult = Invoke-Cli -Step 'discovery restart count' -CliArguments @('inspect','--format','{{.RestartCount}}',$discoveryName)
+    $configLiveResult = Invoke-Cli -Step 'config live image' -CliArguments @('inspect','--format','{{.Image}}',$configName)
+    $discoveryLiveResult = Invoke-Cli -Step 'discovery live image' -CliArguments @('inspect','--format','{{.Image}}',$discoveryName)
+    $configJdkResult = Invoke-Cli -Step 'config JDK fingerprint' -CliArguments @('exec',$configName,'java','-version')
+    $discoveryJdkResult = Invoke-Cli -Step 'discovery JDK fingerprint' -CliArguments @('exec',$discoveryName,'java','-version')
+    $configRestart = [int]$configRestartResult.stdout.Trim()
+    $discoveryRestart = [int]$discoveryRestartResult.stdout.Trim()
+    $configLive = $configLiveResult.stdout.Trim()
+    $discoveryLive = $discoveryLiveResult.stdout.Trim()
+    $configJdk = $configJdkResult.output.Trim()
+    $discoveryJdk = $discoveryJdkResult.output.Trim()
     $reasons = [Collections.Generic.List[string]]::new()
     if ($validity.availableMemoryBytes -lt $MinAvailableMemoryBytes) { $reasons.Add('MemAvailable below 700 MiB') }
     if ($validity.swapTotalBytes -ne 0 -or $validity.cgroupSwapCurrentBytes -ne 0) { $reasons.Add('swap is not zero') }

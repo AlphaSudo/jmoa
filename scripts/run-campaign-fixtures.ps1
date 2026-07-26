@@ -613,6 +613,12 @@ Add-FixtureResult -Name 'target-only-host-captures-use-single-command-linux-comp
     $targetOnlyTargetSource -notmatch "@\('machine','ssh','bash','-lc'" -and
     $targetTransitionSource -notmatch "@\('machine','ssh','bash','-lc'"
 )
+Add-FixtureResult -Name 'target-only-fails-closed-on-clean-transform-and-lineage-gates' -Passed (
+    $targetOnlyCampaignSource -match 'Test-CampaignBaselineClean' -and
+    $targetOnlyCampaignSource -match 'Test-CampaignCandidateTransformed' -and
+    $targetOnlyCampaignSource -match 'Test-CampaignArtifactLineage' -and
+    $targetOnlyCampaignSource -match 'STOPPED_ARTIFACT_GATE'
+)
 
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{
