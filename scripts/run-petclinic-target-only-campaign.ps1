@@ -196,11 +196,11 @@ function Write-ScenarioCommandLedger([string]$ScenarioId,[string]$OutputDirector
         [void]$builder.AppendLine()
         [void]$builder.AppendLine('stdout:')
         [void]$builder.AppendLine('```text')
-        [void]$builder.AppendLine($stdout.TrimEnd())
+        [void]$builder.AppendLine(([string]$stdout).TrimEnd())
         [void]$builder.AppendLine('```')
         [void]$builder.AppendLine('stderr:')
         [void]$builder.AppendLine('```text')
-        [void]$builder.AppendLine($stderr.TrimEnd())
+        [void]$builder.AppendLine(([string]$stderr).TrimEnd())
         [void]$builder.AppendLine('```')
     }
     New-JmoaDirectory $OutputDirectory

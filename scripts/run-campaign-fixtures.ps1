@@ -638,6 +638,8 @@ Add-FixtureResult -Name 'runtime-capture-contract-keeps-io-stat-optional-and-pro
 Add-FixtureResult -Name 'target-only-scenario-ledger-preserves-http-responses-and-empty-streams' -Passed (
     $targetOnlyCampaignSource.Contains("PSObject.Properties['rawBodyPath']") -and
     $targetOnlyCampaignSource.Contains('[string](Get-Content -Raw -LiteralPath') -and
+    $targetOnlyCampaignSource.Contains('([string]$stdout).TrimEnd()') -and
+    $targetOnlyCampaignSource.Contains('([string]$stderr).TrimEnd()') -and
     $targetOnlyCampaignSource.Contains('$kind-eq''HTTP''') -and
     $targetOnlyCampaignSource.Contains('"HTTP $($record.status); error=$($record.error)"')
 ) -Details 'The one-file scenario ledger must include HTTP response bodies and safely render empty process streams.'
