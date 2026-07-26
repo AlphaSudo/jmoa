@@ -29,7 +29,9 @@
   ],
   "recordedOutcome": {
     "terminalVerdict": "STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM",
+    "supersedingInterpretation": "STOPPED_SUPPORT_STACK_STABILITY_GATE",
     "targetArmsLaunched": false,
     "details": "petclinic-hyperv-2g-terminal-outcome.json"
-  }
+  },
+  "supportCalibrationContract": "SUPPORT_CALIBRATION_V2"
 }

@@ -411,8 +411,29 @@ Add-FixtureResult -Name 'linux-idle-calibration-samples-expose-properties-for-ag
 )
 Add-FixtureResult -Name 'linux-support-calibration-avoids-automatic-pid-and-exposes-sample-properties' -Passed (
     $linuxSupportCalibrationSource -notmatch '\[int\]\$Pid(?:\W|$)' -and
-    $linuxSupportCalibrationSource -match 'param\(\[int\]\$ProcessId, \[string\]\$Name\)' -and
+    $linuxSupportCalibrationSource -notmatch '(?m)^\s*\$host\s*=' -and
     $linuxSupportCalibrationSource -match '\$rows\.Add\(\[pscustomobject\]\[ordered\]@\{'
+)
+Add-FixtureResult -Name 'support-calibration-v2-uses-exact-cgroups-and-final-window' -Passed (
+    $linuxSupportCalibrationSource -match 'SUPPORT_CALIBRATION_V2' -and
+    $linuxSupportCalibrationSource -match '36' -and
+    $linuxSupportCalibrationSource -match 'FinalWindowSamples = 12' -and
+    $linuxSupportCalibrationSource -match '/proc/\$processId/cgroup' -and
+    $linuxSupportCalibrationSource -match 'memory\.stat' -and
+    $linuxSupportCalibrationSource -match 'INDIVIDUAL_CONTAINER_CGROUPS_CONFIRMED'
+)
+Add-FixtureResult -Name 'support-calibration-v2-gates-private-memory-not-total-current' -Passed (
+    $linuxSupportCalibrationSource -match 'MaxFinalWindowPssRangeKb = 2048' -and
+    $linuxSupportCalibrationSource -match 'MaxFinalWindowPrivateDirtyRangeKb = 2048' -and
+    $linuxSupportCalibrationSource -match 'MaxFinalWindowAnonRangeBytes = 2097152' -and
+    $linuxSupportCalibrationSource -match 'MaxPositiveSlopeBytesPerSecond = 65536' -and
+    $linuxSupportCalibrationSource -notmatch 'MaxAggregateMemoryCurrentDriftBytes'
+)
+Add-FixtureResult -Name 'support-calibration-v2-separates-samples-from-diagnostics' -Passed (
+    $linuxSupportCalibrationSource -match '\[STABILITY_SAMPLE\]' -and
+    $linuxSupportCalibrationSource -match '\[POST_WINDOW_DIAGNOSTIC\]' -and
+    $linuxSupportCalibrationSource.LastIndexOf('Write-PostWindowDiagnostics -Identity', [StringComparison]::Ordinal) -gt
+        $linuxSupportCalibrationSource.IndexOf('for ($sample = 1;', [StringComparison]::Ordinal)
 )
 
 function New-ConstrainedHostSnapshot {
@@ -496,7 +517,17 @@ Add-FixtureResult -Name 'constrained-2g-runner-has-exact-terminal-outcomes' -Pas
     $campaignSource -match 'ENVIRONMENT_VARIANCE_TOO_HIGH_2G' -and
     $campaignSource -match 'V2_ARTIFACT_RUNTIME_VARIANCE' -and
     $campaignSource -match 'CAMPAIGN_INTERRUPTED_BY_HOST_POWER_EVENT' -and
-    $campaignSource -match 'CONFIRMED_PRODUCT_WIN_BELOW_4MIB'
+    $campaignSource -match 'CONFIRMED_PRODUCT_WIN_BELOW_4MIB' -and
+    $campaignSource -match 'SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE' -and
+    $campaignSource -match 'SUPPORT_CGROUP_SCOPE_INVALID' -and
+    $campaignSource -match 'HOST_CAPACITY_INSUFFICIENT'
+)
+Add-FixtureResult -Name 'constrained-2g-runner-requires-three-stable-support-calibrations' -Passed (
+    $campaignSource -match '\$supportIndex -le 3' -and
+    $campaignSource -match 'requiredStableCalibrations = 3' -and
+    $campaignSource -match 'stableCalibrationCount' -and
+    $campaignSource.IndexOf('support-calibration-v2', [StringComparison]::Ordinal) -lt
+        $campaignSource.IndexOf('Non-evidence B0 capacity qualification', [StringComparison]::Ordinal)
 )
 Add-FixtureResult -Name 'runtime-child-scripts-use-named-parameter-maps' -Passed (
     $campaignSource -match 'BaselineLaunchParameters' -and

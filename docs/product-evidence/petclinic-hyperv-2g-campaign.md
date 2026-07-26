@@ -86,6 +86,15 @@ The constrained campaign uses these evidence outcomes:
 - `V2_ARTIFACT_RUNTIME_VARIANCE`
 - `CAMPAIGN_INTERRUPTED_BY_HOST_POWER_EVENT`
 
+`STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM` is retained only as a historical
+ledger value. `SUPPORT_CALIBRATION_V2` uses:
+
+- `SUPPORT_STACK_STABLE`
+- `SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE`
+- `SUPPORT_STACK_FILE_CACHE_VARIABLE`
+- `SUPPORT_CGROUP_SCOPE_INVALID`
+- `HOST_CAPACITY_INSUFFICIENT`
+
 A capacity, pressure, swap, OOM, or host-power stop is an environment outcome,
 not a JMOA regression. Doctor and Patient are out of scope until PetClinic
 reaches one terminal outcome.
@@ -97,3 +106,13 @@ The authoritative attempt reached
 support aggregate `memory.current` drifted by 18,612,224 bytes against the
 frozen 2,097,152-byte limit. No target arm was launched. See
 [PetClinic Hyper-V 2 GiB Terminal Outcome](petclinic-hyperv-2g-terminal-outcome.md).
+
+The historical label is superseded by
+`STOPPED_SUPPORT_STACK_STABILITY_GATE` because headroom passed. The original
+ledger remains unchanged. See
+[Support-Stability Reclassification](petclinic-hyperv-2g-support-stability-reclassification.md)
+and [Historical Drift Attribution](petclinic-hyperv-2g-support-memory-drift-attribution.md).
+
+Future constrained-host admission uses `SUPPORT_CALIBRATION_V2` with three
+fresh support stacks, exact individual container cgroups, a 180-second
+observation, and private-memory gates over the final 60 seconds.

@@ -741,19 +741,88 @@ if ($IsLinux -and $HostProfile -eq 'HYPERV_DEBIAN_FIXED_2G') {
     }
     Assert-CampaignHostContinuity -Context 'after idle calibration'
 
-    $supportCalibrationDir = Join-Path $childLedgerRoot 'support-calibration'
-    Add-ScenarioNote -Title 'Support-stack-only calibration' -Text 'Start only frozen config/discovery services and require at least 700 MiB available, zero pressure/swap/OOM/restarts, healthy services, and <=2 MiB memory.current drift.'
-    & $supportCalibrationScript -OutputDirectory $supportCalibrationDir -ConfigImage $ConfigImageId `
-        -DiscoveryImage $DiscoveryImageId -ConfigRepo $frozenConfigRepo -ContainerCli $ContainerCli -HostProfile $HostProfile
-    $supportCommandPassed = $?
-    $supportCalibrationPath = Join-Path $supportCalibrationDir 'linux-host-calibration.json'
-    $supportCalibration = if (Test-Path -LiteralPath $supportCalibrationPath -PathType Leaf) {
-        Get-Content -Raw -LiteralPath $supportCalibrationPath | ConvertFrom-Json
-    } else { $null }
-    if (-not $supportCommandPassed -or $null -eq $supportCalibration -or -not [bool]$supportCalibration.passed) {
+    $supportCalibrationDir = Join-Path $childLedgerRoot 'support-calibration-v2'
+    New-JmoaDirectory -Path $supportCalibrationDir
+    Add-ScenarioNote -Title 'Support calibration V2' -Text 'Run three fresh support stacks for 180 seconds each. Gate the final 60 seconds on exact-container PSS, Private Dirty, anonymous memory, slopes, capacity, and pressure. Total memory.current is decomposed supporting evidence.'
+    $supportRuns = [Collections.Generic.List[object]]::new()
+    for ($supportIndex = 1; $supportIndex -le 3; $supportIndex++) {
+        $calibrationId = "calibration-$supportIndex"
+        $calibrationDir = Join-Path $supportCalibrationDir $calibrationId
+        & $supportCalibrationScript -OutputDirectory $calibrationDir -ConfigImage $ConfigImageId `
+            -DiscoveryImage $DiscoveryImageId -ConfigRepo $frozenConfigRepo -ContainerCli $ContainerCli `
+            -HostProfile $HostProfile -CalibrationId $calibrationId
+        $commandPassed = $?
+        $calibrationPath = Join-Path $calibrationDir 'linux-host-calibration.json'
+        $calibration = if (Test-Path -LiteralPath $calibrationPath -PathType Leaf) {
+            Get-Content -Raw -LiteralPath $calibrationPath | ConvertFrom-Json
+        } else { $null }
+        $supportRuns.Add([pscustomobject][ordered]@{
+            calibrationId = $calibrationId
+            commandPassed = $commandPassed
+            reportPath = $calibrationPath
+            report = $calibration
+        }) | Out-Null
+        Assert-CampaignHostContinuity -Context "after support $calibrationId"
+    }
+    $supportOutcomes = @($supportRuns | ForEach-Object {
+        if ($null -eq $_.report) { 'SUPPORT_CGROUP_SCOPE_INVALID' } else { [string]$_.report.terminalOutcome }
+    })
+    $supportSuiteOutcome = if (@($supportOutcomes | Where-Object { $_ -eq 'SUPPORT_CGROUP_SCOPE_INVALID' }).Count -ne 0) {
+        'SUPPORT_CGROUP_SCOPE_INVALID'
+    } elseif (@($supportOutcomes | Where-Object { $_ -eq 'HOST_CAPACITY_INSUFFICIENT' }).Count -ne 0) {
+        'HOST_CAPACITY_INSUFFICIENT'
+    } elseif (@($supportOutcomes | Where-Object { $_ -eq 'SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE' }).Count -ne 0) {
+        'SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE'
+    } elseif (@($supportOutcomes | Where-Object { $_ -eq 'SUPPORT_STACK_STABLE' }).Count -eq 3) {
+        'SUPPORT_STACK_STABLE'
+    } else {
+        'SUPPORT_STACK_FILE_CACHE_VARIABLE'
+    }
+    $supportCalibration = [ordered]@{
+        schemaVersion = 'jmoa-support-calibration-suite-v2'
+        contract = 'SUPPORT_CALIBRATION_V2'
+        requiredStableCalibrations = 3
+        stableCalibrationCount = @($supportOutcomes | Where-Object { $_ -eq 'SUPPORT_STACK_STABLE' }).Count
+        passed = ($supportSuiteOutcome -eq 'SUPPORT_STACK_STABLE')
+        terminalOutcome = $supportSuiteOutcome
+        calibrations = @($supportRuns | ForEach-Object {
+            [ordered]@{
+                calibrationId = $_.calibrationId
+                commandPassed = $_.commandPassed
+                reportPath = $_.reportPath
+                terminalOutcome = if ($null -eq $_.report) { 'MISSING_REPORT' } else { [string]$_.report.terminalOutcome }
+                attribution = if ($null -eq $_.report) { 'INSUFFICIENT_CAPTURE' } else { [string]$_.report.attribution }
+                finalWindow = if ($null -eq $_.report) { $null } else { $_.report.finalWindow }
+            }
+        })
+    }
+    $supportCalibrationPath = Join-Path $supportCalibrationDir 'support-calibration-suite.json'
+    Write-JmoaJson -Value $supportCalibration -Path $supportCalibrationPath
+    Write-JmoaText -Path (Join-Path $supportCalibrationDir 'support-calibration-suite.md') -Value @"
+# Support Calibration V2 Suite
+
+- Required stable calibrations: 3
+- Stable calibrations: $($supportCalibration.stableCalibrationCount)
+- Outcome: **$supportSuiteOutcome**
+
+| Calibration | Outcome | Attribution |
+| --- | --- | --- |
+$(@($supportCalibration.calibrations | ForEach-Object { "| $($_.calibrationId) | $($_.terminalOutcome) | $($_.attribution) |" }) -join "`n")
+"@
+    if (-not $supportCalibration.passed) {
         Publish-CampaignChildLedgerIndex | Out-Null
-        Complete-ScenarioLedger -Status 'STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM' -Result @{ terminalVerdict = 'STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM'; report = $supportCalibrationPath } | Out-Null
-        throw 'Support-stack-only calibration failed; no target arm was launched.'
+        $runnerVerdict = switch ($supportSuiteOutcome) {
+            'SUPPORT_CGROUP_SCOPE_INVALID' { 'SUPPORT_CGROUP_SCOPE_INVALID' }
+            'HOST_CAPACITY_INSUFFICIENT' { 'HOST_CAPACITY_INSUFFICIENT' }
+            'SUPPORT_STACK_FILE_CACHE_VARIABLE' { 'SUPPORT_STACK_FILE_CACHE_VARIABLE' }
+            default { 'SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE' }
+        }
+        Complete-ScenarioLedger -Status $runnerVerdict -Result @{
+            terminalVerdict = $runnerVerdict
+            supportOutcome = $supportSuiteOutcome
+            report = $supportCalibrationPath
+        } | Out-Null
+        throw "Support calibration V2 did not qualify the host ($supportSuiteOutcome); no target arm was launched."
     }
     Assert-CampaignHostContinuity -Context 'after support calibration'
 

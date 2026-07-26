@@ -1,5 +1,10 @@
 # PetClinic Hyper-V 2 GiB Terminal Outcome
 
+> Historical record: the scenario ledger and figures below are preserved.
+> The interpretation is superseded by
+> `STOPPED_SUPPORT_STACK_STABILITY_GATE` because capacity/headroom passed.
+> See [Support-Stability Reclassification](petclinic-hyperv-2g-support-stability-reclassification.md).
+
 ## Verdict
 
 The authoritative constrained-host attempt ended with:
@@ -85,4 +90,3 @@ The support drift threshold was relaxed to obtain product evidence.
 
 The next authoritative product campaign requires a host on which the unchanged
 support stack reproduces within the frozen 2 MiB `memory.current` drift limit.
-

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "jmoa-support-stability-reclassification-v1",
+  "historicalLedgerVerdict": "STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM",
+  "supersedingInterpretation": "STOPPED_SUPPORT_STACK_STABILITY_GATE",
+  "historyRewritten": false,
+  "productEvidenceAdmitted": false,
+  "b0V2DeltaAvailable": false,
+  "capacity": {
+    "passed": true,
+    "minimumAvailableMemoryBytes": 1121853440,
+    "minimumRequiredAvailableMemoryBytes": 734003200,
+    "swapBytes": 0,
+    "maxMemoryPressureSomeAvg10": 0.0,
+    "maxMemoryPressureFullAvg10": 0.0,
+    "oomEvents": 0,
+    "oomKillEvents": 0,
+    "containerRestarts": 0,
+    "healthPassed": true
+  },
+  "stability": {
+    "qualified": false,
+    "historicalAggregateMemoryCurrentRangeBytes": 18612224,
+    "historicalConfiguredLimitBytes": 2097152,
+    "attribution": "INSUFFICIENT_CAPTURE"
+  },
+  "nextContract": "SUPPORT_CALIBRATION_V2"
+}
+
