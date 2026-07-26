@@ -635,6 +635,13 @@ Add-FixtureResult -Name 'runtime-capture-contract-keeps-io-stat-optional-and-pro
     $runtimeScreenSource.Contains('throw "Runtime screen pair $PairIndex failed."')
 ) -Details 'Rootless cgroups may omit io.stat; target memory and JVM captures remain required, and failed screens must throw into the parent runner.'
 
+Add-FixtureResult -Name 'target-only-scenario-ledger-preserves-http-responses-and-empty-streams' -Passed (
+    $targetOnlyCampaignSource.Contains("PSObject.Properties['rawBodyPath']") -and
+    $targetOnlyCampaignSource.Contains('[string](Get-Content -Raw -LiteralPath') -and
+    $targetOnlyCampaignSource.Contains('$kind-eq''HTTP''') -and
+    $targetOnlyCampaignSource.Contains('"HTTP $($record.status); error=$($record.error)"')
+) -Details 'The one-file scenario ledger must include HTTP response bodies and safely render empty process streams.'
+
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{
     schemaVersion = 'jmoa-campaign-fixtures-v1'

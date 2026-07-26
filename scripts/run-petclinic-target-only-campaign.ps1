@@ -172,13 +172,26 @@ function Write-ScenarioCommandLedger([string]$ScenarioId,[string]$OutputDirector
     [void]$builder.AppendLine()
     [void]$builder.AppendLine('Every support, target, workload, capture, transition, and teardown command is listed chronologically with its recorded response.')
     foreach($record in $ordered){
-        $stdout=if($record.rawStdoutPath){Get-Content -Raw -LiteralPath (Join-Path $record.sourceLedgerDirectory ([string]$record.rawStdoutPath))}else{''}
-        $stderr=if($record.rawStderrPath){Get-Content -Raw -LiteralPath (Join-Path $record.sourceLedgerDirectory ([string]$record.rawStderrPath))}else{''}
+        $stdoutProperty=$record.PSObject.Properties['rawStdoutPath']
+        $stderrProperty=$record.PSObject.Properties['rawStderrPath']
+        $bodyProperty=$record.PSObject.Properties['rawBodyPath']
+        $stdout=if($null-ne$stdoutProperty-and$stdoutProperty.Value){
+            [string](Get-Content -Raw -LiteralPath (Join-Path $record.sourceLedgerDirectory ([string]$stdoutProperty.Value)))
+        }elseif($null-ne$bodyProperty-and$bodyProperty.Value){
+            [string](Get-Content -Raw -LiteralPath (Join-Path $record.sourceLedgerDirectory ([string]$bodyProperty.Value)))
+        }else{''}
+        $stderr=if($null-ne$stderrProperty-and$stderrProperty.Value){
+            [string](Get-Content -Raw -LiteralPath (Join-Path $record.sourceLedgerDirectory ([string]$stderrProperty.Value)))
+        }else{''}
+        $kindProperty=$record.PSObject.Properties['kind']
+        $kind=if($null-eq$kindProperty){'PROCESS'}else{[string]$kindProperty.Value}
+        $commandText=if($kind-eq'HTTP'){"$($record.method) $($record.uri)"}else{[string]$record.commandLine}
+        $resultText=if($kind-eq'HTTP'){"HTTP $($record.status); error=$($record.error)"}else{"exitCode=$($record.exitCode)"}
         [void]$builder.AppendLine()
         [void]$builder.AppendLine("## $($record.startedUtc) - $($record.step)")
         [void]$builder.AppendLine()
-        [void]$builder.AppendLine("- Command: ``$($record.commandLine)``")
-        [void]$builder.AppendLine("- Exit code: $($record.exitCode)")
+        [void]$builder.AppendLine("- Command: ``$commandText``")
+        [void]$builder.AppendLine("- Result: $resultText")
         [void]$builder.AppendLine("- Source ledger: ``$($record.sourceLedgerDirectory)``")
         [void]$builder.AppendLine()
         [void]$builder.AppendLine('stdout:')
