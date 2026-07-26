@@ -58,7 +58,7 @@ try {
             $parsed = $containers.stdout | ConvertFrom-Json
             if ($null -ne $parsed) { $containerCount = @($parsed).Count }
         }
-        $rows.Add([ordered]@{
+        $rows.Add([pscustomobject][ordered]@{
             sample = $sample
             timestamp = $timestamp.stdout.Trim()
             availableMemoryBytes = Read-MemInfoBytes -Text $meminfo.stdout -Name 'MemAvailable'

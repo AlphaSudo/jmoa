@@ -380,6 +380,7 @@ Add-FixtureResult -Name 'same-artifact-noise-rejects-large-drift' -Passed (-not 
 $campaignSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-petclinic-performance-campaign.ps1')
 $runtimeScreenSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'runtime-screen-pair.ps1')
 $linuxPreflightSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'capture-linux-campaign-host-preflight.ps1')
+$linuxIdleCalibrationSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-linux-idle-calibration.ps1')
 Add-FixtureResult -Name 'campaign-stops-b0-before-v2-controls' -Passed (
     $campaignSource.IndexOf("STOPPED_B0_RUNTIME_VARIANCE", [StringComparison]::Ordinal) -ge 0 -and
     $campaignSource.IndexOf("STOPPED_B0_RUNTIME_VARIANCE", [StringComparison]::Ordinal) -lt
@@ -402,6 +403,10 @@ Add-FixtureResult -Name 'campaign-resolves-java-and-path-separator-per-platform'
 Add-FixtureResult -Name 'linux-preflight-handles-empty-container-array-and-pinned-java' -Passed (
     $linuxPreflightSource -match '\$null -ne \$parsedContainers' -and
     $linuxPreflightSource -match '\$JAVA_HOME/bin/java'
+)
+Add-FixtureResult -Name 'linux-idle-calibration-samples-expose-properties-for-aggregation' -Passed (
+    $linuxIdleCalibrationSource -match '\$rows\.Add\(\[pscustomobject\]\[ordered\]@\{' -and
+    $linuxIdleCalibrationSource -match 'Measure-Object -Property availableMemoryBytes -Minimum'
 )
 
 function New-ConstrainedHostSnapshot {
