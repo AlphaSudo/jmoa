@@ -681,6 +681,13 @@ Add-FixtureResult -Name 'independent-session-helper-does-not-assign-read-only-po
     $independentCommonSource -notmatch '(?im)^\s*\$(host|pid|input|args|error|home|matches)\s*='
 ) -Details 'PowerShell automatic variables are case-insensitive and several are read-only; orchestration locals must not reuse those names.'
 
+Add-FixtureResult -Name 'independent-session-runner-uses-powershell-boolean-literals' -Passed (
+    $independentRunnerSource -notmatch '(?im)=\s*(true|false)\s*$' -and
+    $independentRunnerSource.Contains('includedInProductEvidence = $false') -and
+    $independentRunnerSource.Contains('cds = $false') -and
+    $independentRunnerSource.Contains('javaagent = $false')
+) -Details 'Bare true/false tokens can resolve as native commands on Linux PowerShell and serialize as null; campaign reports require real Boolean values.'
+
 Add-FixtureResult -Name 'independent-session-campaign-has-final-stop-and-balanced-product-order' -Passed (
     $independentRunnerSource.Contains("`$productOrder = @('B0', 'V2', 'V2', 'B0', 'B0', 'V2')") -and
     $independentRunnerSource.Contains('MaxPssRangeKb = 1024') -and
@@ -688,7 +695,7 @@ Add-FixtureResult -Name 'independent-session-campaign-has-final-stop-and-balance
     $independentRunnerSource.Contains('MaxMemoryCurrentRangeBytes = 2097152') -and
     $independentRunnerSource.IndexOf('PETCLINIC_DIRECT_PRODUCT_UNMEASURABLE_ON_CURRENT_HOST', [StringComparison]::Ordinal) -lt
         $independentRunnerSource.IndexOf('$v2QualificationSessions', [StringComparison]::Ordinal) -and
-    $independentRunnerSource.Contains('futurePetclinicProtocolOnThisVmAuthorized = false')
+    $independentRunnerSource.Contains('futurePetclinicProtocolOnThisVmAuthorized = $false')
 ) -Details 'B0 failure must stop before V2 permanently, while an admitted product block uses the frozen balanced six-session order.'
 
 Add-FixtureResult -Name 'independent-session-adapter-links-captures-and-derives-only-manifests' -Passed (

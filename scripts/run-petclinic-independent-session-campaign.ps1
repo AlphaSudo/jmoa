@@ -197,8 +197,8 @@ $contract = [ordered]@{
         targetSettleSeconds = $SettleSeconds
         policy = 'NO_CDS_LOW_DIRTY'
         mallocArenaMax = '1'
-        cds = false
-        javaagent = false
+        cds = $false
+        javaagent = $false
     }
     qualification = [ordered]@{
         observations = 3
@@ -353,11 +353,11 @@ function Invoke-SequentialDiagnostic {
     }
     $report = [ordered]@{
         schemaVersion = 'jmoa-petclinic-b0-sequential-diagnostic-v1'
-        includedInProductEvidence = false
+        includedInProductEvidence = $false
         supportSessionId = $scenarioId
         results = $results.ToArray()
         pattern = $pattern
-        productThresholdApplied = false
+        productThresholdApplied = $false
     }
     Write-JmoaJson $report (Join-Path $reports 'petclinic-b0-sequential-diagnostic.json')
     $report
@@ -387,7 +387,7 @@ if (-not $b0Qualification.passed) {
         b0Qualification = $b0Qualification
         v2Qualification = 'NOT_RUN_BY_PERMANENT_STOP_RULE'
         productCampaign = 'NOT_RUN_BY_PERMANENT_STOP_RULE'
-        futurePetclinicProtocolOnThisVmAuthorized = false
+        futurePetclinicProtocolOnThisVmAuthorized = $false
     }
     Write-JmoaJson $closure (Join-Path $reports 'campaign-closure.json')
     Complete-ScenarioLedger -Status PETCLINIC_DIRECT_PRODUCT_UNMEASURABLE_ON_CURRENT_HOST -Result $closure | Out-Null
