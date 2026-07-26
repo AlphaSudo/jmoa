@@ -381,6 +381,7 @@ $campaignSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-pe
 $runtimeScreenSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'runtime-screen-pair.ps1')
 $linuxPreflightSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'capture-linux-campaign-host-preflight.ps1')
 $linuxIdleCalibrationSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-linux-idle-calibration.ps1')
+$linuxSupportCalibrationSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-linux-host-calibration.ps1')
 Add-FixtureResult -Name 'campaign-stops-b0-before-v2-controls' -Passed (
     $campaignSource.IndexOf("STOPPED_B0_RUNTIME_VARIANCE", [StringComparison]::Ordinal) -ge 0 -and
     $campaignSource.IndexOf("STOPPED_B0_RUNTIME_VARIANCE", [StringComparison]::Ordinal) -lt
@@ -407,6 +408,11 @@ Add-FixtureResult -Name 'linux-preflight-handles-empty-container-array-and-pinne
 Add-FixtureResult -Name 'linux-idle-calibration-samples-expose-properties-for-aggregation' -Passed (
     $linuxIdleCalibrationSource -match '\$rows\.Add\(\[pscustomobject\]\[ordered\]@\{' -and
     $linuxIdleCalibrationSource -match 'Measure-Object -Property availableMemoryBytes -Minimum'
+)
+Add-FixtureResult -Name 'linux-support-calibration-avoids-automatic-pid-and-exposes-sample-properties' -Passed (
+    $linuxSupportCalibrationSource -notmatch '\[int\]\$Pid(?:\W|$)' -and
+    $linuxSupportCalibrationSource -match 'param\(\[int\]\$ProcessId, \[string\]\$Name\)' -and
+    $linuxSupportCalibrationSource -match '\$rows\.Add\(\[pscustomobject\]\[ordered\]@\{'
 )
 
 function New-ConstrainedHostSnapshot {

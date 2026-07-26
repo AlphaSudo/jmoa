@@ -70,8 +70,8 @@ function Get-ContainerMemoryCurrent {
     return [long]$result.stdout.Trim()
 }
 function Get-SmapsRollup {
-    param([int]$Pid, [string]$Name)
-    $result = Invoke-Host -Step "capture $Name smaps_rollup" -Command "cat /proc/$Pid/smaps_rollup"
+    param([int]$ProcessId, [string]$Name)
+    $result = Invoke-Host -Step "capture $Name smaps_rollup" -Command "cat /proc/$ProcessId/smaps_rollup"
     $pss = [regex]::Match($result.stdout, '(?m)^Pss:\s+(\d+)\s+kB$')
     $dirty = [regex]::Match($result.stdout, '(?m)^Private_Dirty:\s+(\d+)\s+kB$')
     if (-not $pss.Success -or -not $dirty.Success) { throw "Could not parse $Name smaps_rollup." }
@@ -112,11 +112,11 @@ try {
         $psi = Invoke-Host -Step "sample $sample memory PSI" -Command 'cat /proc/pressure/memory'
         $events = Invoke-Host -Step "sample $sample memory events" -Command 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.events'
         $swapCurrent = Invoke-Host -Step "sample $sample cgroup swap current" -Command 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.swap.current'
-        $configSmaps = Get-SmapsRollup -Pid $configPid -Name $config
-        $discoverySmaps = Get-SmapsRollup -Pid $discoveryPid -Name $discovery
+        $configSmaps = Get-SmapsRollup -ProcessId $configPid -Name $config
+        $discoverySmaps = Get-SmapsRollup -ProcessId $discoveryPid -Name $discovery
         $configMemory = Get-ContainerMemoryCurrent -Name $config
         $discoveryMemory = Get-ContainerMemoryCurrent -Name $discovery
-        $rows.Add([ordered]@{
+        $rows.Add([pscustomobject][ordered]@{
             sample = $sample
             configHealthStatus = $configHealth.status
             discoveryHealthStatus = $discoveryHealth.status
