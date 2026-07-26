@@ -604,6 +604,10 @@ Add-FixtureResult -Name 'target-only-every-scenario-has-one-chronological-comman
     $targetOnlyCampaignSource -match 'rawStderrPath' -and
     $targetOnlyCampaignSource -match 'Sort-Object \{\[datetime\]\$_.startedUtc\}'
 )
+Add-FixtureResult -Name 'target-only-consumes-linux-podman-compat-path-from-host-bound-manifest' -Passed (
+    $targetOnlyCampaignSource -match 'Get-CampaignJsonProp \$environment ''containerCli''' -and
+    $targetOnlyCampaignSource -match 'if\(\[string\]::IsNullOrWhiteSpace\(\$ContainerCli\)\)\{\$ContainerCli=\$manifestContainerCli\}'
+)
 
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{

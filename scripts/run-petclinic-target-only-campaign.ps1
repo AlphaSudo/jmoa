@@ -22,7 +22,7 @@ param(
     [int]$MaxNoisePssDriftKb=1024,
     [int]$MaxNoisePrivateDirtyDriftKb=1024,
     [long]$MaxNoiseMemoryCurrentDriftBytes=2097152,
-    [string]$ContainerCli='/usr/bin/podman',
+    [string]$ContainerCli='',
     [switch]$DryRun
 )
 Set-StrictMode -Version Latest
@@ -70,6 +70,9 @@ $configTreeSha=[string](Get-CampaignJsonProp $config 'contentTreeSha256')
 $maven=[string](Get-CampaignJsonProp $environment 'mavenExecutable')
 $pluginCoordinates=[string](Get-CampaignJsonProp $environment 'pluginCoordinates')
 $runtimePolicy=[string](Get-CampaignJsonProp $environment 'runtimePolicy')
+$manifestContainerCli=[string](Get-CampaignJsonProp $environment 'containerCli')
+if([string]::IsNullOrWhiteSpace($ContainerCli)){$ContainerCli=$manifestContainerCli}
+if([string]::IsNullOrWhiteSpace($ContainerCli)){throw 'Campaign manifest does not define environment.containerCli.'}
 if($runtimePolicy-ne 'NO_CDS_LOW_DIRTY'){throw "Protocol requires NO_CDS_LOW_DIRTY, manifest says $runtimePolicy."}
 foreach($p in @($b0Artifact,$v2Artifact,$configRepo,$FixturesReport)){if(-not(Test-Path -LiteralPath $p)){throw "Frozen input missing: $p"}}
 if((Get-JmoaSha256 $b0Artifact).ToUpperInvariant()-ne $b0Sha.ToUpperInvariant()){throw 'B0 artifact SHA mismatch.'}
