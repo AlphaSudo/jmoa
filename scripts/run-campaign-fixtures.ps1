@@ -63,10 +63,14 @@ $testedScriptNames = @(
     'scenario-ledger-common.ps1',
     'runtime-screen-pair.ps1',
     'analyze-same-artifact-noise.ps1',
+    'analyze-petclinic-b0-period-effect.ps1',
     'build-artifact-lineage.ps1',
+    'new-independent-session-evidence-adapter.ps1',
     'new-petclinic-campaign-manifest.ps1',
+    'petclinic-independent-session-common.ps1',
     'run-petclinic-performance-campaign.ps1',
     'run-petclinic-target-only-campaign.ps1',
+    'run-petclinic-independent-session-campaign.ps1',
     'run-linux-idle-calibration.ps1',
     'run-linux-host-calibration.ps1',
     'run-petclinic-capacity-qualification.ps1',
@@ -649,6 +653,46 @@ Add-FixtureResult -Name 'scenario-ledger-accepts-structured-analysis-results' -P
     $scenarioLedgerSource.Contains("param([string]`$Status = 'COMPLETE',`$Result = @{})") -and
     -not $scenarioLedgerSource.Contains('[hashtable]$Result')
 ) -Details 'Terminal gate analyzers return PSCustomObject values; the root ledger must preserve them without a hashtable-only binding failure.'
+
+$periodAttributionSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'analyze-petclinic-b0-period-effect.ps1')
+$independentCommonSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'petclinic-independent-session-common.ps1')
+$independentRunnerSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-petclinic-independent-session-campaign.ps1')
+$independentAdapterSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'new-independent-session-evidence-adapter.ps1')
+Add-FixtureResult -Name 'period-attribution-reconciles-process-heap-cgroup-nmt-and-timing' -Passed (
+    $periodAttributionSource.Contains('Get-SmapsHeapMetrics') -and
+    $periodAttributionSource.Contains('cgroupAnonBytes') -and
+    $periodAttributionSource.Contains('nmtMetaspaceCommittedKb') -and
+    $periodAttributionSource.Contains('histogramBytes') -and
+    $periodAttributionSource.Contains('jvmAgeAtCaptureSeconds') -and
+    $periodAttributionSource.Contains('SECOND_POSITION_NATIVE_ANON') -and
+    $periodAttributionSource.Contains("evidenceMode = 'READ_ONLY_EXISTING_CAPTURES'")
+) -Details 'The final correction must first attribute the immutable four-arm B0 evidence without rerunning it.'
+
+Add-FixtureResult -Name 'independent-session-unit-has-one-support-one-target-and-full-teardown' -Passed (
+    $independentCommonSource.Contains('Invoke-PetclinicIndependentSession') -and
+    $independentCommonSource.Contains('campaign-launch-petclinic-support.ps1') -and
+    $independentCommonSource.Contains("ExecutionMode = `$executionMode") -and
+    $independentCommonSource.Contains('independentSupportSession = $true') -and
+    $independentCommonSource.Contains('campaign-stop-petclinic-support.ps1') -and
+    $independentCommonSource.Contains('Write-PetclinicScenarioCommandLedger')
+) -Details 'Every evidence observation must be the only target in a fresh support lifecycle with one consolidated command/response ledger.'
+
+Add-FixtureResult -Name 'independent-session-campaign-has-final-stop-and-balanced-product-order' -Passed (
+    $independentRunnerSource.Contains("`$productOrder = @('B0', 'V2', 'V2', 'B0', 'B0', 'V2')") -and
+    $independentRunnerSource.Contains('MaxPssRangeKb = 1024') -and
+    $independentRunnerSource.Contains('MaxPrivateDirtyRangeKb = 1024') -and
+    $independentRunnerSource.Contains('MaxMemoryCurrentRangeBytes = 2097152') -and
+    $independentRunnerSource.IndexOf('PETCLINIC_DIRECT_PRODUCT_UNMEASURABLE_ON_CURRENT_HOST', [StringComparison]::Ordinal) -lt
+        $independentRunnerSource.IndexOf('$v2QualificationSessions', [StringComparison]::Ordinal) -and
+    $independentRunnerSource.Contains('futurePetclinicProtocolOnThisVmAuthorized = false')
+) -Details 'B0 failure must stop before V2 permanently, while an admitted product block uses the frozen balanced six-session order.'
+
+Add-FixtureResult -Name 'independent-session-adapter-links-captures-and-derives-only-manifests' -Passed (
+    $independentAdapterSource.Contains('New-Item -ItemType SymbolicLink') -and
+    $independentAdapterSource.Contains("Where-Object Name -ne 'run-manifest.json'") -and
+    $independentAdapterSource.Contains('sourceRunManifestSha256') -and
+    $independentAdapterSource.Contains('capturesLinkedReadOnly = $true')
+) -Details 'V2-C pairing must not copy or mutate raw session captures; only derived pair manifests are permitted.'
 
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{

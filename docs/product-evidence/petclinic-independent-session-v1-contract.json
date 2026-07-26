@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "jmoa-petclinic-independent-session-contract-v1",
+  "protocol": "PETCLINIC_INDEPENDENT_SESSION_V1",
+  "status": "PRE_REGISTERED",
+  "finalProtocolOnCurrentVm": true,
+  "steps": [
+    "EXISTING_B0_PERIOD_ATTRIBUTION",
+    "EXCLUDED_THREE_TARGET_DIAGNOSTIC",
+    "INDEPENDENT_B0_AND_V2_QUALIFICATION",
+    "FINAL_SIX_SESSION_PRODUCT_BLOCK"
+  ],
+  "measurementUnit": {
+    "supportStacks": 1,
+    "targetJvms": 1,
+    "workloads": 1,
+    "claimCaptures": 1,
+    "completeTeardown": true,
+    "secondTargetInSupportSession": false
+  },
+  "runtime": {
+    "supportSettleSeconds": 180,
+    "targetWarmupSeconds": 20,
+    "requests": 81,
+    "targetSettleSeconds": 5,
+    "launchMode": "EXPLODED_BOOT_APP",
+    "policy": "NO_CDS_LOW_DIRTY",
+    "mallocArenaMax": "1",
+    "cds": false,
+    "appCds": false,
+    "leyden": false,
+    "javaagent": false,
+    "dropPageCacheBeforeTarget": true
+  },
+  "qualification": {
+    "observationsPerArtifact": 3,
+    "maximumPairwisePssKb": 1024,
+    "maximumPairwisePrivateDirtyKb": 1024,
+    "maximumPairwiseMemoryCurrentBytes": 2097152
+  },
+  "finalOrder": [
+    "B0",
+    "V2",
+    "V2",
+    "B0",
+    "B0",
+    "V2"
+  ],
+  "finalGate": {
+    "validSessions": 6,
+    "distinctSupportSessions": 6,
+    "minimumPairedWins": 2,
+    "medianPssKb": -4096,
+    "medianPrivateDirtyKb": -1024,
+    "medianMemoryCurrentBytes": -1048576,
+    "semanticErrors": 0,
+    "v2cVerdict": "CONFIRMED_WIN",
+    "v2dRequired": true
+  },
+  "b0FailureOutcome": "PETCLINIC_DIRECT_PRODUCT_UNMEASURABLE_ON_CURRENT_HOST",
+  "v2FailureOutcome": "V2_ARTIFACT_RUNTIME_VARIANCE",
+  "redesignAfterTargetEvidence": "FORBIDDEN"
+}
