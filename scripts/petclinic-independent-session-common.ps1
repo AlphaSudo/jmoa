@@ -88,8 +88,8 @@ printf '%s\n' '---MEMORY_PRESSURE---'; cat /proc/pressure/memory
 printf '%s\n' '---PODMAN_PS---'; podman ps --no-trunc
 printf '%s\n' '---PODMAN_MOUNTS---'; findmnt -rn -t overlay,fuse.overlayfs 2>/dev/null || true
 '@.Replace("`r", '')
-    $host = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('machine', 'ssh', $hostCommand) -LedgerDirectory $LedgerDirectory -Step "$Point host memory, pressure, and storage state"
-    Write-JmoaText $host.stdout (Join-Path $OutputDirectory 'host-state.txt')
+    $hostCapture = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('machine', 'ssh', $hostCommand) -LedgerDirectory $LedgerDirectory -Step "$Point host memory, pressure, and storage state"
+    Write-JmoaText $hostCapture.stdout (Join-Path $OutputDirectory 'host-state.txt')
     foreach ($entry in @(
         @{ role = 'config'; name = $ConfigContainer },
         @{ role = 'discovery'; name = $DiscoveryContainer }

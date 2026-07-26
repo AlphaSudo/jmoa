@@ -677,6 +677,10 @@ Add-FixtureResult -Name 'independent-session-unit-has-one-support-one-target-and
     $independentCommonSource.Contains('Write-PetclinicScenarioCommandLedger')
 ) -Details 'Every evidence observation must be the only target in a fresh support lifecycle with one consolidated command/response ledger.'
 
+Add-FixtureResult -Name 'independent-session-helper-does-not-assign-read-only-powershell-automatic-variables' -Passed (
+    $independentCommonSource -notmatch '(?im)^\s*\$(host|pid|input|args|error|home|matches)\s*='
+) -Details 'PowerShell automatic variables are case-insensitive and several are read-only; orchestration locals must not reuse those names.'
+
 Add-FixtureResult -Name 'independent-session-campaign-has-final-stop-and-balanced-product-order' -Passed (
     $independentRunnerSource.Contains("`$productOrder = @('B0', 'V2', 'V2', 'B0', 'B0', 'V2')") -and
     $independentRunnerSource.Contains('MaxPssRangeKb = 1024') -and
