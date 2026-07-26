@@ -628,6 +628,13 @@ Add-FixtureResult -Name 'target-only-cold-cache-and-required-output-contract-fai
     $targetOnlyCampaignSource.Contains("'class-histogram.txt'")
 ) -Details 'Target-only cold-cache reset must be non-interactive and every required target evidence file must be checked before analysis.'
 
+Add-FixtureResult -Name 'runtime-capture-contract-keeps-io-stat-optional-and-propagates-failure' -Passed (
+    $runtimeScreenSource.Contains("file = 'io.stat'") -and
+    $runtimeScreenSource.Contains("class = 'OPTIONAL_DIAGNOSTIC'; required = `$false") -and
+    $runtimeScreenSource.Contains('$_.required -and $_.exitCode -ne 0') -and
+    $runtimeScreenSource.Contains('throw "Runtime screen pair $PairIndex failed."')
+) -Details 'Rootless cgroups may omit io.stat; target memory and JVM captures remain required, and failed screens must throw into the parent runner.'
+
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{
     schemaVersion = 'jmoa-campaign-fixtures-v1'

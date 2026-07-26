@@ -217,30 +217,30 @@ function Capture-RuntimeState {
     # Capture-order classification (review Issue #11): claim metrics are captured BEFORE any perturbing
     # diagnostic. The product medians consume only CLAIM_EVIDENCE captures.
     $plan = @(
-        @{ file = 'smaps_rollup.txt';     cmd = "cat /proc/$JavaPid/smaps_rollup";                class = 'CLAIM_EVIDENCE' },
-        @{ file = 'smaps.txt';            cmd = "cat /proc/$JavaPid/smaps";                        class = 'CLAIM_EVIDENCE' },
-        @{ file = 'memory.current';       cmd = 'cat /sys/fs/cgroup/memory.current';               class = 'CLAIM_EVIDENCE' },
-        @{ file = 'memory.stat';          cmd = 'cat /sys/fs/cgroup/memory.stat';                  class = 'CLAIM_EVIDENCE' },
-        @{ file = 'io.stat';              cmd = 'cat /sys/fs/cgroup/io.stat';                      class = 'CLAIM_EVIDENCE' },
-        @{ file = 'nmt-summary.txt';      cmd = "$cleanJcmd $JavaPid VM.native_memory summary";    class = 'SUPPORTING_EVIDENCE' },
-        @{ file = 'heap-info.txt';        cmd = "$cleanJcmd $JavaPid GC.heap_info";               class = 'SUPPORTING_EVIDENCE' },
-        @{ file = 'metaspace.txt';        cmd = "$cleanJcmd $JavaPid VM.metaspace";               class = 'SUPPORTING_EVIDENCE' },
-        @{ file = 'classloader-stats.txt';cmd = "$cleanJcmd $JavaPid VM.classloader_stats";        class = 'SUPPORTING_EVIDENCE' },
-        @{ file = 'vm-flags.txt';         cmd = "$cleanJcmd $JavaPid VM.flags";                   class = 'SUPPORTING_EVIDENCE' }
+        @{ file = 'smaps_rollup.txt';     cmd = "cat /proc/$JavaPid/smaps_rollup";                class = 'CLAIM_EVIDENCE'; required = $true },
+        @{ file = 'smaps.txt';            cmd = "cat /proc/$JavaPid/smaps";                        class = 'CLAIM_EVIDENCE'; required = $true },
+        @{ file = 'memory.current';       cmd = 'cat /sys/fs/cgroup/memory.current';               class = 'CLAIM_EVIDENCE'; required = $true },
+        @{ file = 'memory.stat';          cmd = 'cat /sys/fs/cgroup/memory.stat';                  class = 'CLAIM_EVIDENCE'; required = $true },
+        @{ file = 'io.stat';              cmd = 'cat /sys/fs/cgroup/io.stat';                      class = 'OPTIONAL_DIAGNOSTIC'; required = $false },
+        @{ file = 'nmt-summary.txt';      cmd = "$cleanJcmd $JavaPid VM.native_memory summary";    class = 'SUPPORTING_EVIDENCE'; required = $true },
+        @{ file = 'heap-info.txt';        cmd = "$cleanJcmd $JavaPid GC.heap_info";               class = 'SUPPORTING_EVIDENCE'; required = $true },
+        @{ file = 'metaspace.txt';        cmd = "$cleanJcmd $JavaPid VM.metaspace";               class = 'SUPPORTING_EVIDENCE'; required = $true },
+        @{ file = 'classloader-stats.txt';cmd = "$cleanJcmd $JavaPid VM.classloader_stats";        class = 'SUPPORTING_EVIDENCE'; required = $true },
+        @{ file = 'vm-flags.txt';         cmd = "$cleanJcmd $JavaPid VM.flags";                   class = 'SUPPORTING_EVIDENCE'; required = $true }
     )
     $captures = New-Object System.Collections.Generic.List[object]
     $order = 0
     foreach ($item in $plan) {
         $order++
         $r = Capture-Command -ContainerName $ContainerName -ShellCommand $item.cmd -OutputPath (Join-Path $Directory $item.file) -Classification $item.class
-        $captures.Add([ordered]@{ order = $order; file = $item.file; classification = $item.class; exitCode = $r.exitCode }) | Out-Null
+        $captures.Add([ordered]@{ order = $order; file = $item.file; classification = $item.class; required = [bool]$item.required; exitCode = $r.exitCode }) | Out-Null
     }
     if ($IncludeHistogram) {
         $order++
         $r = Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid GC.class_histogram" -OutputPath (Join-Path $Directory 'class-histogram.txt') -Classification 'PERTURBING_DIAGNOSTIC'
-        $captures.Add([ordered]@{ order = $order; file = 'class-histogram.txt'; classification = 'PERTURBING_DIAGNOSTIC'; exitCode = $r.exitCode }) | Out-Null
+        $captures.Add([ordered]@{ order = $order; file = 'class-histogram.txt'; classification = 'PERTURBING_DIAGNOSTIC'; required = $true; exitCode = $r.exitCode }) | Out-Null
     }
-    if ($captures | Where-Object { $_.exitCode -ne 0 }) { throw 'One or more required runtime captures failed.' }
+    if ($captures | Where-Object { $_.required -and $_.exitCode -ne 0 }) { throw 'One or more required runtime captures failed.' }
     [ordered]@{ capturedAt = [DateTime]::UtcNow.ToString('o'); histogramIncluded = $IncludeHistogram; directory = $Directory; captureOrderVersion = 'v2-claim-first-1'; captures = $captures.ToArray() }
 }
 
@@ -908,5 +908,5 @@ $pair = [ordered]@{
 }
 Write-JmoaJson -Value $pair -Path (Join-Path $CaptureRoot ("v2o-runtime-screen-pair-{0}.json" -f $PairIndex))
 Write-Host "Runtime screen pair $PairIndex status: $status"
-if ($FailOnFailure -and $status -ne 'CAPTURED') { exit 1 }
+if ($FailOnFailure -and $status -ne 'CAPTURED') { throw "Runtime screen pair $PairIndex failed." }
 exit 0
