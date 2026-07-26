@@ -608,6 +608,11 @@ Add-FixtureResult -Name 'target-only-consumes-linux-podman-compat-path-from-host
     $targetOnlyCampaignSource -match 'Get-CampaignJsonProp \$environment ''containerCli''' -and
     $targetOnlyCampaignSource -match 'if\(\[string\]::IsNullOrWhiteSpace\(\$ContainerCli\)\)\{\$ContainerCli=\$manifestContainerCli\}'
 )
+Add-FixtureResult -Name 'target-only-host-captures-use-single-command-linux-compat-contract' -Passed (
+    $targetOnlySupportSource -match '@\(''machine'', ''ssh'', \$cmd\)' -and
+    $targetOnlyTargetSource -notmatch "@\('machine','ssh','bash','-lc'" -and
+    $targetTransitionSource -notmatch "@\('machine','ssh','bash','-lc'"
+)
 
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{

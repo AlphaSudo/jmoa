@@ -60,7 +60,7 @@ printf '%s\n' '---PRESSURE---'; cat /proc/pressure/memory
 printf '%s\n' '---USER_EVENTS---'; cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.events
 printf '%s\n' '---USER_SWAP---'; cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.swap.current
 '@.Replace("`r", '')
-    $r = Invoke-Cli "capture host validity $Point" @('machine', 'ssh', 'bash', '-lc', $cmd)
+    $r = Invoke-Cli "capture host validity $Point" @('machine', 'ssh', $cmd)
     $text = $r.stdout
     $available = [long]([regex]::Match($text, '(?m)^MemAvailable:\s+(\d+)\s+kB$').Groups[1].Value) * 1024
     $swapTotal = [long]([regex]::Match($text, '(?m)^SwapTotal:\s+(\d+)\s+kB$').Groups[1].Value) * 1024

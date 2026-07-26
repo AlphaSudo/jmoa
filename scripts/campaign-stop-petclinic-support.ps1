@@ -26,7 +26,7 @@ printf '%s\n' '---PRESSURE---'; cat /proc/pressure/memory
 printf '%s\n' '---EVENTS---'; cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.events
 printf '%s\n' '---SWAP---'; cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.swap.current
 '@.Replace("`r",'')
-    $host=(Cli 'final support host validity' @('machine','ssh','bash','-lc',$hostCmd)).stdout
+    $host=(Cli 'final support host validity' @('machine','ssh',$hostCmd)).stdout
     $full=[double]([regex]::Match($host,'(?m)^full\s+avg10=([0-9.]+)').Groups[1].Value)
     $oom=[long]([regex]::Match($host,'(?m)^oom\s+(\d+)$').Groups[1].Value)
     $oomKill=[long]([regex]::Match($host,'(?m)^oom_kill\s+(\d+)$').Groups[1].Value)

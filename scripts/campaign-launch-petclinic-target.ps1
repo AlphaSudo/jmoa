@@ -27,7 +27,7 @@ function Cli([string]$Step,[string[]]$Args,[switch]$AllowFailure) { Invoke-Audit
 try {
     Cli 'pre-clean target' @('rm','-f',$ContainerName) -AllowFailure | Out-Null
     $imageId=(Cli 'resolve target image' @('image','inspect','--format','{{.Id}}',$Image)).stdout.Trim()
-    $headroom=[long](Cli 'capture MemAvailable before target' @('machine','ssh','bash','-lc',"awk '/^MemAvailable:/ {print `$2 * 1024}' /proc/meminfo")).stdout.Trim()
+    $headroom=[long](Cli 'capture MemAvailable before target' @('machine','ssh',"awk '/^MemAvailable:/ {print `$2 * 1024}' /proc/meminfo")).stdout.Trim()
     if ($headroom -lt $MinAvailableMemoryBeforeTargetBytes) { throw "MemAvailable $headroom is below $MinAvailableMemoryBeforeTargetBytes." }
     $flags='-XX:+UseContainerSupport -XX:+UseSerialGC -Xms32m -Xmx256m -Xss256k -XX:ReservedCodeCacheSize=48m -XX:CICompilerCount=2 -XX:NativeMemoryTracking=summary -Xshare:off'
     Cli 'start customers-service target' @('run','-d','--name',$ContainerName,'--network',$SupportNetwork,'--network-alias','customers-service','-p',"${Port}:8081",'-e','SPRING_PROFILES_ACTIVE=docker','-e','CONFIG_SERVER_URI=http://config-server:8888','-e',"EUREKA_INSTANCE_INSTANCE_ID=$ContainerName",'-e',"JAVA_TOOL_OPTIONS=$flags",'-e','MALLOC_ARENA_MAX=1',$imageId) | Out-Null

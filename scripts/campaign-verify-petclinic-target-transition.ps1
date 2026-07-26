@@ -23,7 +23,7 @@ $teardownPath=Join-Path $FirstRunDirectory 'target-teardown-info.json'
 if(-not(Test-Path -LiteralPath $teardownPath -PathType Leaf)){throw "First target teardown proof missing: $teardownPath"}
 $teardown=Get-Content -Raw -LiteralPath $teardownPath|ConvertFrom-Json
 $firstPid=([string]$teardown.identityBeforeStop -split '\|')[0]
-$pidProbe=Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('machine','ssh','bash','-lc',"if [ -n '$firstPid' ] && [ -e '/proc/$firstPid' ]; then echo RESIDUAL_PID:$firstPid; fi") -LedgerDirectory $LedgerDirectory -Step 'prove no residual first target PID' -AllowFailure
+$pidProbe=Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('machine','ssh',"if [ -n '$firstPid' ] && [ -e '/proc/$firstPid' ]; then echo RESIDUAL_PID:$firstPid; fi") -LedgerDirectory $LedgerDirectory -Step 'prove no residual first target PID' -AllowFailure
 $configHealth=Invoke-AuditedHttp -Method GET -Uri 'http://localhost:8888/actuator/health' -LedgerDirectory $LedgerDirectory -Step 'verify config health during transition'
 $discoveryHealth=Invoke-AuditedHttp -Method GET -Uri 'http://localhost:8761/actuator/health' -LedgerDirectory $LedgerDirectory -Step 'verify discovery health during transition'
 $configRestart=[int](Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('inspect','--format','{{.RestartCount}}',$ConfigContainerName) -LedgerDirectory $LedgerDirectory -Step 'config restart count during transition').stdout.Trim()
