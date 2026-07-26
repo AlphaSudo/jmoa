@@ -76,3 +76,10 @@ Terminal outcomes are `TRUSTED_PRODUCT_WIN`,
 
 No threshold, pair-count, workload, warmup, settle, heap-policy, support
 topology, or artifact redesign is allowed after target evidence begins.
+
+## Authoritative Result
+
+The frozen protocol was executed on 2026-07-26. It terminated at the B0
+same-artifact reproducibility gate with `TARGET_B0_RUNTIME_VARIANCE`; V2
+controls and product pairs were not run. See
+[PETCLINIC_TARGET_ONLY_V1 Result](petclinic-target-only-v1-result.md).

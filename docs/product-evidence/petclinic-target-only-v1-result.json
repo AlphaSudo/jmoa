@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "jmoa-petclinic-target-only-result-v1",
+  "protocol": "PETCLINIC_TARGET_ONLY_V1",
+  "runId": "petclinic-target-only-20260726T035855Z",
+  "terminalOutcome": "TARGET_B0_RUNTIME_VARIANCE",
+  "runner": {
+    "revision": "153ec9c42182dff7248775a34ed5f8a418e09fc3",
+    "packageSha256": "941C2975316E872B2135706A4AB304FC4E930CFED4F448701ED45E2739117E40",
+    "sourceArchiveSha256": "22C23ADD433827D6B482039EA038DCDC5BC8172E2394641E566F3837E55DC966"
+  },
+  "artifacts": {
+    "baselineSha256": "88D4BC9F000A22041F8FD521A0442B85F9FC49966948FA11F642CBBABE0D6AE7"
+  },
+  "capacityQualification": {
+    "includedInMedians": false,
+    "passed": true,
+    "terminalOutcome": "CAPACITY_QUALIFICATION_PASSED",
+    "requests": 81,
+    "workloadErrors": 0,
+    "health": "UP",
+    "mutationsProven": true,
+    "completeTargetCaptures": true,
+    "preArmAvailableMemoryBytes": 1192226816,
+    "postArmAvailableMemoryBytes": 718135296,
+    "swapUsedBytes": 0,
+    "oomEvents": 0,
+    "oomKillEvents": 0,
+    "memoryPressureSomeAvg10": 0.0,
+    "memoryPressureFullAvg10": 0.0
+  },
+  "b0SameArtifactControl": {
+    "qualified": false,
+    "artifactSha256": "88D4BC9F000A22041F8FD521A0442B85F9FC49966948FA11F642CBBABE0D6AE7",
+    "thresholds": {
+      "maxPssDriftKb": 1024,
+      "maxPrivateDirtyDriftKb": 1024,
+      "maxMemoryCurrentDriftBytes": 2097152
+    },
+    "pairs": [
+      {
+        "id": "B0_p1",
+        "order": "A_TO_B",
+        "pssAbsKb": 5535.0,
+        "privateDirtyAbsKb": 5612.0,
+        "memoryCurrentAbsBytes": 5763072.0,
+        "pssSecondMinusFirstKb": 5535.0,
+        "semanticErrors": 0
+      },
+      {
+        "id": "B0_p2",
+        "order": "B_TO_A",
+        "pssAbsKb": 10169.0,
+        "privateDirtyAbsKb": 10200.0,
+        "memoryCurrentAbsBytes": 10932224.0,
+        "pssSecondMinusFirstKb": 10169.0,
+        "semanticErrors": 0
+      }
+    ],
+    "medians": {
+      "pssAbsKb": 7852.0,
+      "privateDirtyAbsKb": 7906.0,
+      "memoryCurrentAbsBytes": 8347648.0,
+      "pssSecondMinusFirstKb": 7852.0
+    },
+    "systematicSecondRunShift": true,
+    "semanticErrorsTotal": 0
+  },
+  "stages": {
+    "capacityQualification": "PASSED",
+    "b0SameArtifactControls": "FAILED_REPRODUCIBILITY_GATE",
+    "v2SameArtifactControls": "NOT_RUN_BY_PRE_REGISTERED_STOP_RULE",
+    "productPairs": "NOT_RUN_BY_PRE_REGISTERED_STOP_RULE",
+    "v2cConfirmation": "NOT_RUN",
+    "v2dAttribution": "NOT_RUN"
+  },
+  "commandLedgerProvenance": {
+    "root": {
+      "commandCount": 8,
+      "hardFailureCount": 0,
+      "markdownSha256": "B7B89DC3A40463E3AD0A8F2929701D1E2E02993AF70B5B4C4E76A8DFFD61832B"
+    },
+    "arms": [
+      {
+        "id": "capacity-b0",
+        "commandCount": 150,
+        "markdownSha256": "95067C2A182BB797AACC5341B6CBCF5BA4FE2711EEBCFCDF5C0B78A56839E497"
+      },
+      {
+        "id": "control-b0-pair1-first",
+        "commandCount": 149,
+        "markdownSha256": "C7F6DEC878A61E9008C51E87D183EC3BA1A612230B70D2A101C03E35EC237005"
+      },
+      {
+        "id": "control-b0-pair1-second",
+        "commandCount": 151,
+        "markdownSha256": "99F700CF377FAA9A4EE905B5A2B37157C398AA573DF60868EAE49C374307EFCD"
+      },
+      {
+        "id": "control-b0-pair2-first",
+        "commandCount": 164,
+        "markdownSha256": "09842F639BD3A12984464CB44274FDE40AD5362E59E2BBF2ADBB563F4B04B742"
+      },
+      {
+        "id": "control-b0-pair2-second",
+        "commandCount": 150,
+        "markdownSha256": "646A6F788E0719F572A06CC7D80A3A25F7C9D4B5DE11A67A53EA27762744F7F7"
+      }
+    ]
+  },
+  "privateEvidenceArchive": {
+    "committed": false,
+    "bytes": 4796162,
+    "sha256": "E6E27881BCF4E0D8554C70155BE77A691F37A43BDCFACE6BDCA5424A7EDA2AEA"
+  },
+  "postHocClosure": {
+    "scope": "ROOT_SUMMARY_ONLY",
+    "fixRevision": "4cad69c",
+    "armEvidenceChanged": false,
+    "metricsChanged": false,
+    "verdictChanged": false
+  },
+  "claimBoundary": {
+    "directB0VsV2ComparisonProduced": false,
+    "jmoaPerformanceVerdictProduced": false,
+    "capacityConclusion": "TARGET_CAPACITY_PASSED",
+    "reproducibilityConclusion": "B0_SAME_ARTIFACT_VARIANCE_EXCEEDED_FROZEN_THRESHOLDS"
+  }
+}
