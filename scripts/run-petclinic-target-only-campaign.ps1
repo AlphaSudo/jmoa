@@ -221,6 +221,40 @@ function Invoke-SharedSupportScreen {
         & $screenScript @args
         $screenOk=$?
         if(-not$screenOk){throw "Target screen failed for $ScenarioId."}
+        $requiredLabels = switch ($ExecutionMode) {
+            'BASELINE_ONLY' { @('b') }
+            'CANDIDATE_ONLY' { @('c') }
+            default { @('b','c') }
+        }
+        $requiredFiles = @(
+            'workload-result.json',
+            'environment-validity.json',
+            'run-manifest.json',
+            'smaps_rollup.txt',
+            'smaps.txt',
+            'memory.current',
+            'memory.stat',
+            'nmt-summary.txt',
+            'heap-info.txt',
+            'class-histogram.txt'
+        )
+        foreach($label in $requiredLabels){
+            $armDirectory=Join-Path $CaptureRoot "$label$PairIndex"
+            foreach($requiredFile in $requiredFiles){
+                $requiredPath=Join-Path $armDirectory $requiredFile
+                if(-not(Test-Path -LiteralPath $requiredPath -PathType Leaf)){
+                    throw "Target screen missing required output for $ScenarioId`: $requiredPath"
+                }
+            }
+            $workloadResult=Get-Content -Raw -LiteralPath (Join-Path $armDirectory 'workload-result.json')|ConvertFrom-Json
+            $environmentResult=Get-Content -Raw -LiteralPath (Join-Path $armDirectory 'environment-validity.json')|ConvertFrom-Json
+            if([string]$workloadResult.status-ne'COMPLETED'-or[int]$workloadResult.errors-ne0-or[string]$workloadResult.health-ne'UP'){
+                throw "Target screen emitted invalid workload output for $ScenarioId/$label$PairIndex."
+            }
+            if(-not[bool]$environmentResult.passed){
+                throw "Target screen emitted invalid environment output for $ScenarioId/$label$PairIndex."
+            }
+        }
     }finally{
         & $supportStop -OutputDirectory $supportDir -PairId $ScenarioId -ContainerCli $ContainerCli -LedgerDirectory $supportStopLedger
         Write-ScenarioCommandLedger -ScenarioId $ScenarioId -OutputDirectory $supportDir|Out-Null

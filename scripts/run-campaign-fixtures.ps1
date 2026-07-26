@@ -620,6 +620,14 @@ Add-FixtureResult -Name 'target-only-fails-closed-on-clean-transform-and-lineage
     $targetOnlyCampaignSource -match 'STOPPED_ARTIFACT_GATE'
 )
 
+Add-FixtureResult -Name 'target-only-cold-cache-and-required-output-contract-fail-closed' -Passed (
+    $runtimeScreenSource.Contains("sudo -n /usr/bin/tee /proc/sys/vm/drop_caches") -and
+    -not $runtimeScreenSource.Contains("sudo sh -c 'sync; echo 3 > /proc/sys/vm/drop_caches'") -and
+    $targetOnlyCampaignSource.Contains('Target screen missing required output') -and
+    $targetOnlyCampaignSource.Contains("'environment-validity.json'") -and
+    $targetOnlyCampaignSource.Contains("'class-histogram.txt'")
+) -Details 'Target-only cold-cache reset must be non-interactive and every required target evidence file must be checked before analysis.'
+
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{
     schemaVersion = 'jmoa-campaign-fixtures-v1'

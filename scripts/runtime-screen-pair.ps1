@@ -339,7 +339,7 @@ function Reset-PageCache {
     $attempts = @()
     for ($attempt = 1; $attempt -le 3; $attempt++) {
         $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
-            'machine', 'ssh', "sudo sh -c 'sync; echo 3 > /proc/sys/vm/drop_caches' && echo DROP_OK"
+            'machine', 'ssh', "sync && printf '3\n' | sudo -n /usr/bin/tee /proc/sys/vm/drop_caches >/dev/null && echo DROP_OK"
         ) -LedgerDirectory $script:CurrentCaptureLedger -Step "drop page cache (attempt $attempt)" -AllowFailure
         $attempts += [ordered]@{
             attempt = $attempt
