@@ -116,3 +116,25 @@ and [Historical Drift Attribution](petclinic-hyperv-2g-support-memory-drift-attr
 Future constrained-host admission uses `SUPPORT_CALIBRATION_V2` with three
 fresh support stacks, exact individual container cgroups, a 180-second
 observation, and private-memory gates over the final 60 seconds.
+
+## Support Calibration V2 Outcome
+
+The corrected campaign at runner revision `74c2df6` executed that contract.
+All three fresh support stacks passed capacity, pressure, health, restart,
+swap, OOM, and exact-cgroup gates. None passed final-window private-memory
+stability:
+
+| Calibration | PSS range KB | Private Dirty range KB | Anon range B | Attribution |
+| --- | ---: | ---: | ---: | --- |
+| 1 | 8,200 | 8,200 | 8,409,088 | `ANON_PRIVATE_GROWTH` |
+| 2 | 6,156 | 6,160 | 6,217,728 | `ANON_PRIVATE_GROWTH` |
+| 3 | 3,152 | 3,152 | 3,231,744 | `ANON_PRIVATE_GROWTH` |
+
+The terminal outcome is:
+
+```text
+SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE
+```
+
+No target arm was launched. See
+[Support Calibration V2 Result](petclinic-hyperv-2g-support-calibration-v2-result.md).

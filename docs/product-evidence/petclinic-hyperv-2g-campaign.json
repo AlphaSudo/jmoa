@@ -33,5 +33,16 @@
     "targetArmsLaunched": false,
     "details": "petclinic-hyperv-2g-terminal-outcome.json"
   },
-  "supportCalibrationContract": "SUPPORT_CALIBRATION_V2"
+  "supportCalibrationContract": "SUPPORT_CALIBRATION_V2",
+  "latestSupportCalibrationOutcome": {
+    "runnerRevision": "74c2df605c4f888ad46708df4f80fc225a44f463",
+    "terminalOutcome": "SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE",
+    "attribution": "ANON_PRIVATE_GROWTH",
+    "validCalibrations": 3,
+    "stableCalibrations": 0,
+    "capacityPassed": true,
+    "pressurePassed": true,
+    "targetArmsLaunched": false,
+    "details": "petclinic-hyperv-2g-support-calibration-v2-result.json"
+  }
 }

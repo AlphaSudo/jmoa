@@ -4,6 +4,10 @@
 > The interpretation is superseded by
 > `STOPPED_SUPPORT_STACK_STABILITY_GATE` because capacity/headroom passed.
 > See [Support-Stability Reclassification](petclinic-hyperv-2g-support-stability-reclassification.md).
+>
+> The subsequent corrected `SUPPORT_CALIBRATION_V2` campaign produced three
+> valid private-memory stability failures. See
+> [Support Calibration V2 Result](petclinic-hyperv-2g-support-calibration-v2-result.md).
 
 ## Verdict
 
