@@ -15,6 +15,7 @@ param(
     [Parameter(Mandatory)][string]$RunDirectory,
     [Parameter(Mandatory)][string]$ContainerName,
     [Parameter(Mandatory)][string]$Variant,
+    [string]$ProjectName = '',
     [string]$ContainerCli = 'podman',
     [string]$LedgerDirectory = '',
     [string]$LedgerStage = 'teardown',

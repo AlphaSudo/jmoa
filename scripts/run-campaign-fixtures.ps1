@@ -64,6 +64,7 @@ $testedScriptNames = @(
     'runtime-screen-pair.ps1',
     'analyze-same-artifact-noise.ps1',
     'analyze-petclinic-b0-period-effect.ps1',
+    'analyze-three-artifact-blocks.ps1',
     'build-artifact-lineage.ps1',
     'new-independent-session-evidence-adapter.ps1',
     'new-petclinic-campaign-manifest.ps1',
@@ -71,6 +72,12 @@ $testedScriptNames = @(
     'run-petclinic-performance-campaign.ps1',
     'run-petclinic-target-only-campaign.ps1',
     'run-petclinic-independent-session-campaign.ps1',
+    'run-three-artifact-balanced-campaign.ps1',
+    'three-artifact-campaign-common.ps1',
+    'prepare-petclinic-three-artifact-freeze.ps1',
+    'run-jmoa-evaluation.ps1',
+    'publish-three-artifact-result.ps1',
+    'build-three-service-direct-matrix.ps1',
     'run-linux-idle-calibration.ps1',
     'run-linux-host-calibration.ps1',
     'run-petclinic-capacity-qualification.ps1',
@@ -239,6 +246,13 @@ $treeHash = Get-CampaignTreeSha256 -Root $treeHashFixture
 Add-FixtureResult -Name 'tree-hash-is-cross-platform-and-case-stable' `
     -Passed ($treeHash -eq '5A7C00AABEAC3DCF9BA6A5CECA34C7C7205645E57FB92599E05BB9CD742DCBB0') `
     -Details "actual=$treeHash"
+Add-FixtureResult -Name 'artifact-hash-supports-exploded-directory-tree' `
+    -Passed ((Get-CampaignArtifactSha256 -Path $treeHashFixture) -eq $treeHash) `
+    -Details "artifact=$((Get-CampaignArtifactSha256 -Path $treeHashFixture)), tree=$treeHash"
+$artifactFileFixture = Join-Path $work 'artifact-hash-file.bin'
+Set-Content -LiteralPath $artifactFileFixture -Value 'artifact-file' -Encoding utf8 -NoNewline
+Add-FixtureResult -Name 'artifact-hash-preserves-single-file-sha256' `
+    -Passed ((Get-CampaignArtifactSha256 -Path $artifactFileFixture) -eq (Get-JmoaSha256 -Path $artifactFileFixture).ToUpperInvariant())
 
 $portableFixture = [pscustomobject][ordered]@{
     schemaVersion = 'jmoa-portable-fixture-v1'
@@ -640,6 +654,27 @@ Add-FixtureResult -Name 'runtime-capture-contract-keeps-io-stat-optional-and-pro
     $runtimeScreenSource.Contains('throw "Runtime screen pair $PairIndex failed."')
 ) -Details 'Rootless cgroups may omit io.stat; target memory and JVM captures remain required, and failed screens must throw into the parent runner.'
 
+Add-FixtureResult -Name 'runtime-cleanup-does-not-mask-primary-failure' -Passed (
+    $runtimeScreenSource.Contains("primaryRunError = `$launchError") -and
+    $runtimeScreenSource.Contains("teardownError = `$stopError") -and
+    $runtimeScreenSource.Contains("if (-not [string]::IsNullOrWhiteSpace(`$stopError) -and [string]::IsNullOrWhiteSpace(`$launchError))")
+) -Details 'A teardown failure is still evidence-invalid, but it must not replace the launch, workload, or capture failure that caused the observation to fail.'
+
+Add-FixtureResult -Name 'page-cache-reset-is-audited-and-time-bounded' -Passed (
+    $runtimeScreenSource.Contains('-TimeoutSeconds 60 -AllowFailure') -and
+    (Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'campaign-audit-common.ps1')).Contains('$process.Kill($true)') -and
+    (Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'campaign-audit-common.ps1')).Contains('$exitCode = 124')
+) -Details 'A stuck Podman machine SSH must become a ledgered invalid attempt instead of hanging the campaign indefinitely.'
+
+Add-FixtureResult -Name 'page-cache-reset-supports-frozen-machine-restart-policy' -Passed (
+    $runtimeScreenSource.Contains("'PODMAN_MACHINE_RESTART'") -and
+    $runtimeScreenSource.Contains("'machine', 'stop', `$PodmanMachineName") -and
+    $runtimeScreenSource.Contains('PODMAN_MACHINE_RESTART_BEFORE_EACH_VARIANT') -and
+    $runtimeScreenSource.Contains('MACHINE_RESTART_CACHE_RESET_OK') -and
+    $runtimeScreenSource.Contains('verify Docker-compatible Compose API readiness after restart') -and
+    $runtimeScreenSource.Contains("'compose', 'ls', '--format', 'json'")
+) -Details 'WSL hosts where drop_caches wedges can use Podman stop/start for every observation and verify the Compose compatibility API before launch.'
+
 Add-FixtureResult -Name 'target-only-scenario-ledger-preserves-http-responses-and-empty-streams' -Passed (
     $targetOnlyCampaignSource.Contains("PSObject.Properties['rawBodyPath']") -and
     $targetOnlyCampaignSource.Contains('[string](Get-Content -Raw -LiteralPath') -and
@@ -704,6 +739,151 @@ Add-FixtureResult -Name 'independent-session-adapter-links-captures-and-derives-
     $independentAdapterSource.Contains('sourceRunManifestSha256') -and
     $independentAdapterSource.Contains('capturesLinkedReadOnly = $true')
 ) -Details 'V2-C pairing must not copy or mutate raw session captures; only derived pair manifests are permitted.'
+
+$threeArtifactAnalyzer = Join-Path $PSScriptRoot 'analyze-three-artifact-blocks.ps1'
+$threeArtifactRunnerSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-three-artifact-balanced-campaign.ps1')
+$threeArtifactCommonSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'three-artifact-campaign-common.ps1')
+$threeArtifactAnalyzerSource = Get-Content -Raw -LiteralPath $threeArtifactAnalyzer
+$publicEvaluationSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-jmoa-evaluation.ps1')
+Add-FixtureResult -Name 'three-artifact-runner-freezes-all-six-balanced-orders' -Passed (
+    $threeArtifactRunnerSource.Contains("@('B0', 'V1', 'V2')") -and
+    $threeArtifactRunnerSource.Contains("@('B0', 'V2', 'V1')") -and
+    $threeArtifactRunnerSource.Contains("@('V1', 'B0', 'V2')") -and
+    $threeArtifactRunnerSource.Contains("@('V1', 'V2', 'B0')") -and
+    $threeArtifactRunnerSource.Contains("@('V2', 'B0', 'V1')") -and
+    $threeArtifactRunnerSource.Contains("@('V2', 'V1', 'B0')")
+) -Details 'The final campaign must execute every permutation once, with one fresh support lifecycle per observation.'
+
+Add-FixtureResult -Name 'three-artifact-runner-preserves-invalid-attempts-and-caps-retries' -Passed (
+    $threeArtifactRunnerSource.Contains('$Directory-retry-$_') -and
+    $threeArtifactRunnerSource.Contains('exhausted three preserved attempts') -and
+    $threeArtifactRunnerSource.Contains('Reusing valid frozen session')
+) -Details 'Invalid observations remain on disk and can be replaced only by a separately ledgered attempt.'
+
+Add-FixtureResult -Name 'three-artifact-runner-freezes-implementation-bytes-before-first-observation' -Passed (
+    $threeArtifactRunnerSource.Contains('Get-CampaignImplementationChecks') -and
+    $threeArtifactRunnerSource.Contains('Assert-CampaignImplementationUnchanged') -and
+    $threeArtifactRunnerSource.Contains("schemaVersion = 'jmoa-three-artifact-campaign-freeze-v2'") -and
+    $threeArtifactRunnerSource.Contains('Campaign implementation changed after freeze') -and
+    $threeArtifactRunnerSource.Contains('implementation = $implementationChecks')
+) -Details 'Runtime, workload, launcher, teardown, adapter, and analyzer script bytes are immutable across qualification and all six blocks.'
+
+Add-FixtureResult -Name 'three-artifact-session-exposes-independent-support-contract' -Passed (
+    $threeArtifactCommonSource.Contains('supportSessionId = $SessionId') -and
+    $threeArtifactCommonSource.Contains('targetSessionId = "$SessionId-target"') -and
+    $threeArtifactCommonSource.Contains('independentSupportSession = $true')
+) -Details 'Each observation must carry the support and target identity required by the read-only V2-C adapter.'
+
+Add-FixtureResult -Name 'three-artifact-freeze-supports-file-and-exploded-tree-identities' -Passed (
+    $threeArtifactRunnerSource.Contains('Get-CampaignArtifactSha256') -and
+    $threeArtifactRunnerSource.Contains("'DIRECTORY_TREE'") -and
+    $runtimeScreenSource.Contains('Get-CampaignArtifactSha256 -Path $ArtifactPath') -and
+    $runtimeScreenSource.Contains('RuntimeArtifactPath cannot be used with a directory-tree host artifact')
+) -Details 'PetClinic V2 is a frozen exploded dependency tree; file-only hashing must not silently substitute for its concrete byte identity.'
+
+Add-FixtureResult -Name 'three-artifact-session-result-preserves-directory-artifact-identity' -Passed (
+    $threeArtifactCommonSource.Contains('artifactSha256 = Get-CampaignArtifactSha256 -Path')
+) -Details 'Directory-backed variants must retain their deterministic tree hash in the session result used by resume and evidence-lineage checks.'
+
+Add-FixtureResult -Name 'public-evaluation-entrypoint-keeps-three-variant-qualification-atomic' -Passed (
+    $publicEvaluationSource.Contains("[ValidateSet('Doctor', 'Patient', 'PetClinicCustomers')]") -and
+    $publicEvaluationSource.Contains("[ValidateSet('B0', 'V1', 'V2', 'Final', 'Explain')]") -and
+    $publicEvaluationSource.Contains('B0, V1, and V2 qualification is one frozen unit') -and
+    $publicEvaluationSource.Contains('-Stage Qualification') -and
+    $publicEvaluationSource.Contains('-Stage Final') -and
+    $publicEvaluationSource.Contains('-Stage Explain')
+) -Details 'One public command exposes the frozen campaign without embedding private service paths or allowing partial qualification.'
+
+Add-FixtureResult -Name 'independent-session-adapter-supports-six-complete-pairs' -Passed (
+    $independentAdapterSource.Contains("'^[bc]([1-9][0-9]*)$'") -and
+    $independentAdapterSource.Contains('$completePairs.Count -ge 3') -and
+    $independentAdapterSource.Contains('$supportSessionIds.Count -eq $expectedRunCount')
+) -Details 'The evidence adapter must retain its independence checks while accepting the six balanced campaign blocks.'
+
+$adapterFixtureRoot = Join-Path $work 'six-pair-adapter'
+$adapterFixtureMappings = [Collections.Generic.List[object]]::new()
+foreach ($pairIndex in 1..6) {
+    foreach ($prefix in @('b', 'c')) {
+        $adapterRunId = "$prefix$pairIndex"
+        $sourceDirectory = Join-Path $adapterFixtureRoot "source-$adapterRunId"
+        New-JmoaDirectory $sourceDirectory
+        Write-JmoaJson ([ordered]@{
+            independentSupportSession = $true
+            supportSessionId = "support-$adapterRunId"
+            artifactSha256 = ('A' * 64)
+        }) (Join-Path $sourceDirectory 'run-manifest.json')
+        Write-JmoaText '1' (Join-Path $sourceDirectory 'memory.current')
+        $adapterFixtureMappings.Add([ordered]@{
+            adapterRunId = $adapterRunId
+            sessionId = "session-$adapterRunId"
+            supportSessionId = "support-$adapterRunId"
+            sourceRunDirectory = $sourceDirectory
+        })
+    }
+}
+$adapterFixtureIndex = Join-Path $adapterFixtureRoot 'session-index.json'
+$adapterFixtureOutput = Join-Path $adapterFixtureRoot 'output'
+Write-JmoaJson ([ordered]@{
+    schemaVersion = 'jmoa-independent-session-index-v1'
+    mappings = $adapterFixtureMappings.ToArray()
+}) $adapterFixtureIndex
+& (Join-Path $PSScriptRoot 'new-independent-session-evidence-adapter.ps1') `
+    -SessionIndexPath $adapterFixtureIndex -OutputDirectory $adapterFixtureOutput | Out-Null
+$adapterFixtureReport = Get-Content -Raw -LiteralPath (Join-Path $adapterFixtureOutput 'independent-session-adapter.json') | ConvertFrom-Json
+Add-FixtureResult -Name 'independent-session-adapter-materializes-six-read-only-pairs' -Passed (
+    [bool]$adapterFixtureReport.passed -and
+    [int]$adapterFixtureReport.completePairs -eq 6 -and
+    [int]$adapterFixtureReport.distinctIndependentSupportSessions -eq 12 -and
+    @($adapterFixtureReport.runs).Count -eq 12
+) -Details 'The generalized adapter is executed over twelve independent fixture runs, not merely inspected as source text.'
+
+$syntheticRoot = Join-Path $work 'three-artifact-analysis'
+$syntheticInput = Join-Path $syntheticRoot 'session-index.json'
+$syntheticOutput = Join-Path $syntheticRoot 'analysis'
+New-JmoaDirectory $syntheticRoot
+$syntheticOrders = @(
+    @('B0', 'V1', 'V2'), @('B0', 'V2', 'V1'), @('V1', 'B0', 'V2'),
+    @('V1', 'V2', 'B0'), @('V2', 'B0', 'V1'), @('V2', 'V1', 'B0')
+)
+$syntheticBlocks = for ($block = 1; $block -le 6; $block++) {
+    $sessions = foreach ($variant in @('B0', 'V1', 'V2')) {
+        $pss = switch ($variant) { B0 { 300000 + $block }; V1 { 297000 + $block }; V2 { 294000 + $block } }
+        $dirty = switch ($variant) { B0 { 280000 + $block }; V1 { 278000 + $block }; V2 { 276000 + $block } }
+        $current = switch ($variant) { B0 { 500000000 + $block }; V1 { 495000000 + $block }; V2 { 490000000 + $block } }
+        [ordered]@{
+            sessionId = "fixture-$block-$variant"; variant = $variant; valid = $true; semanticErrors = 0
+            pssKb = $pss; privateDirtyKb = $dirty; memoryCurrentBytes = $current
+            heapPssKb = $pss - 100000; loadedClasses = 20000; metaspaceUsedKb = 15000
+            startupMillis = 50000
+        }
+    }
+    [ordered]@{ block = $block; order = $syntheticOrders[$block - 1]; sessions = $sessions }
+}
+Write-JmoaJson ([ordered]@{
+    schemaVersion = 'jmoa-three-artifact-session-index-v1'
+    protocol = 'SYNTHETIC_FIXTURE'
+    service = 'fixture-service'
+    blocks = $syntheticBlocks
+}) $syntheticInput
+& $threeArtifactAnalyzer -SessionIndexPath $syntheticInput -OutputDirectory $syntheticOutput | Out-Null
+$syntheticAnalysis = Get-Content -Raw -LiteralPath (Join-Path $syntheticOutput 'three-artifact-analysis.json') | ConvertFrom-Json
+$syntheticDirect = @($syntheticAnalysis.comparisons | Where-Object id -eq B0_TO_V2)[0]
+Add-FixtureResult -Name 'three-artifact-analyzer-computes-direct-six-block-win' -Passed (
+    [int]$syntheticAnalysis.sessions -eq 18 -and
+    [int]$syntheticAnalysis.validSessions -eq 18 -and
+    [double]$syntheticDirect.metrics.pssKb.median -eq -6000 -and
+    [int]$syntheticDirect.metrics.pssKb.pairedWins -eq 6 -and
+    [double]$syntheticDirect.metrics.pssKb.bootstrap95.upper -lt 0 -and
+    [string]$syntheticAnalysis.terminalOutcome -eq 'COMPLETE_PRODUCT_WIN'
+) -Details 'Direct B0-to-V2 statistics must come from six within-block deltas and pass the exact bootstrap gate without historical arithmetic.'
+
+Add-FixtureResult -Name 'three-artifact-analyzer-uses-frozen-direct-gates' -Passed (
+    $threeArtifactAnalyzerSource.Contains('[long]$SubstantialPssGateKb = -4096') -and
+    $threeArtifactAnalyzerSource.Contains('[long]$PrivateDirtyGateKb = -1024') -and
+    $threeArtifactAnalyzerSource.Contains('[long]$MemoryCurrentGateBytes = -1048576') -and
+    $threeArtifactAnalyzerSource.Contains('pairedWins = ([int]$b0v2.metrics.pssKb.pairedWins -ge 4)') -and
+    $threeArtifactAnalyzerSource.Contains('resamples = 46656')
+) -Details 'The headline result requires the frozen substantial PSS, secondary memory, paired-win, and exact-bootstrap gates.'
 
 $passed = @($tests | Where-Object { -not $_.passed }).Count -eq 0
 $report = [ordered]@{

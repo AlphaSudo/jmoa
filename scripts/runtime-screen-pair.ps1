@@ -54,6 +54,8 @@ param(
     [switch]$DeferHistogramUntilFinalSnapshot,
     [switch]$DiagnosticOnly,
     [switch]$DropPageCacheBeforeVariant,
+    [ValidateSet('DROP_CACHES', 'PODMAN_MACHINE_RESTART')][string]$PageCacheResetStrategy = 'DROP_CACHES',
+    [string]$PodmanMachineName = 'podman-machine-default',
     [switch]$CapturePodmanMachinePressure,
     [long]$MinPodmanAvailableMemoryBytes = 1073741824,
     [long]$MinPostArmAvailableMemoryBytes = 0,
@@ -76,7 +78,10 @@ $ErrorActionPreference = 'Stop'
 $script:CurrentCaptureLedger = ''
 
 foreach ($path in @($BaselineLaunchScript, $CandidateLaunchScript, $WorkloadScript, $BaselineArtifactPath, $CandidateArtifactPath)) {
-    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Required path does not exist: $path" }
+    if (-not (Test-Path -LiteralPath $path)) { throw "Required path does not exist: $path" }
+}
+foreach ($scriptPath in @($BaselineLaunchScript, $CandidateLaunchScript, $WorkloadScript)) {
+    if (-not (Test-Path -LiteralPath $scriptPath -PathType Leaf)) { throw "Required script is not a file: $scriptPath" }
 }
 if (-not [string]::IsNullOrWhiteSpace($StopScript) -and -not (Test-Path -LiteralPath $StopScript -PathType Leaf)) {
     throw "Stop script does not exist: $StopScript"
@@ -336,11 +341,51 @@ function Reset-PageCache {
     if (-not $DropPageCacheBeforeVariant) {
         return [ordered]@{ policy = 'NOT_REQUESTED'; status = 'NOT_REQUESTED'; output = '' }
     }
+    if ($PageCacheResetStrategy -eq 'PODMAN_MACHINE_RESTART') {
+        if (-not $IsWindows) {
+            throw 'PODMAN_MACHINE_RESTART currently requires the Windows WSL Podman provider.'
+        }
+        $stop = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
+            'machine', 'stop', $PodmanMachineName
+        ) -LedgerDirectory $script:CurrentCaptureLedger -Step 'stop Podman machine for cold-cache reset' -TimeoutSeconds 120 -AllowFailure
+        if ($stop.exitCode -ne 0) {
+            throw "Could not stop Podman machine $PodmanMachineName (exit $($stop.exitCode))."
+        }
+        $start = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
+            'machine', 'start', $PodmanMachineName
+        ) -LedgerDirectory $script:CurrentCaptureLedger -Step 'restart Podman machine for cold-cache reset' -TimeoutSeconds 180 -AllowFailure
+        if ($start.exitCode -ne 0) {
+            throw "Could not restart Podman machine $PodmanMachineName (exit $($start.exitCode))."
+        }
+        $probe = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
+            'machine', 'ssh', 'echo MACHINE_RESTART_CACHE_RESET_OK'
+        ) -LedgerDirectory $script:CurrentCaptureLedger -Step 'verify Podman transport after cold-cache restart' -TimeoutSeconds 30 -AllowFailure
+        if ($probe.exitCode -ne 0 -or $probe.output -notmatch 'MACHINE_RESTART_CACHE_RESET_OK') {
+            throw 'Podman transport did not recover after the cold-cache machine restart.'
+        }
+        $apiProbe = $null
+        for ($apiAttempt = 1; $apiAttempt -le 6; $apiAttempt++) {
+            $apiProbe = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
+                'compose', 'ls', '--format', 'json'
+            ) -LedgerDirectory $script:CurrentCaptureLedger -Step "verify Docker-compatible Compose API readiness after restart (attempt $apiAttempt)" -TimeoutSeconds 30 -AllowFailure
+            if ($apiProbe.exitCode -eq 0 -and -not [string]::IsNullOrWhiteSpace($apiProbe.output)) { break }
+            if ($apiAttempt -lt 6) { Start-Sleep -Seconds (2 * $apiAttempt) }
+        }
+        if ($null -eq $apiProbe -or $apiProbe.exitCode -ne 0) {
+            throw 'Docker-compatible Compose API did not become ready after the cold-cache machine restart.'
+        }
+        return [ordered]@{
+            policy = 'PODMAN_MACHINE_RESTART_BEFORE_VARIANT'
+            status = 'PASSED'
+            attempts = 1
+            output = "stopExit=$($stop.exitCode); startExit=$($start.exitCode); sshProbeExit=$($probe.exitCode); composeApiProbeExit=$($apiProbe.exitCode)"
+        }
+    }
     $attempts = @()
     for ($attempt = 1; $attempt -le 3; $attempt++) {
         $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
             'machine', 'ssh', "sync && printf '3\n' | sudo -n /usr/bin/tee /proc/sys/vm/drop_caches >/dev/null && echo DROP_OK"
-        ) -LedgerDirectory $script:CurrentCaptureLedger -Step "drop page cache (attempt $attempt)" -AllowFailure
+        ) -LedgerDirectory $script:CurrentCaptureLedger -Step "drop page cache (attempt $attempt)" -TimeoutSeconds 60 -AllowFailure
         $attempts += [ordered]@{
             attempt = $attempt
             exitCode = $result.exitCode
@@ -545,10 +590,13 @@ function Invoke-Variant {
         $runtimePolicyProof = Capture-And-VerifyRuntimePolicy -ContainerName $ContainerName -JavaPid $javaPid -Directory $runDirectory -Policy $Policy
         $runtimeArtifactSha256 = $null
         if (-not [string]::IsNullOrWhiteSpace($RuntimeArtifactPath)) {
+            if (Test-Path -LiteralPath $ArtifactPath -PathType Container) {
+                throw 'RuntimeArtifactPath cannot be used with a directory-tree host artifact; use immutable image and materialization proof.'
+            }
             $artifactHashCapture = Capture-Command -ContainerName $ContainerName -ShellCommand "sha256sum '$RuntimeArtifactPath' | awk '{print `$1}'" -OutputPath (Join-Path $runDirectory 'runtime-artifact-sha256.txt')
             if ($artifactHashCapture.exitCode -ne 0) { throw "Could not hash runtime artifact: $RuntimeArtifactPath" }
             $runtimeArtifactSha256 = $artifactHashCapture.output.Trim().ToUpperInvariant()
-            if ($runtimeArtifactSha256 -ne (Get-JmoaSha256 -Path $ArtifactPath)) { throw 'Runtime artifact SHA-256 does not match the host artifact supplied to the screen.' }
+            if ($runtimeArtifactSha256 -ne (Get-CampaignArtifactSha256 -Path $ArtifactPath)) { throw 'Runtime artifact SHA-256 does not match the host artifact supplied to the screen.' }
         }
 
         $workloadPath = Join-Path $runDirectory 'workload-result.json'
@@ -620,8 +668,9 @@ function Invoke-Variant {
             variant = $Variant
             service = $Service
             phase = 'V2-O'
-            artifactSha256 = Get-JmoaSha256 -Path $ArtifactPath
-            expectedArtifactSha256 = Get-JmoaSha256 -Path $ArtifactPath
+            artifactSha256 = Get-CampaignArtifactSha256 -Path $ArtifactPath
+            expectedArtifactSha256 = Get-CampaignArtifactSha256 -Path $ArtifactPath
+            artifactKind = if (Test-Path -LiteralPath $ArtifactPath -PathType Container) { 'DIRECTORY_TREE' } else { 'FILE' }
             runtimeArtifactSha256 = $runtimeArtifactSha256
             imageId = Get-AuditedContainerIdentity -ContainerName $ContainerName -Field 'Image'
             containerId = Get-AuditedContainerIdentity -ContainerName $ContainerName -Field 'Id'
@@ -686,7 +735,20 @@ function Invoke-Variant {
             Complete-CampaignAuditLedger -LedgerDirectory $captureLedger -Status 'FAILED' -Stage 'capture' -Variant $Variant | Out-Null
         }
         $script:CurrentCaptureLedger = ''
-        Stop-VariantContainer -ContainerName $ContainerName -Variant $Variant -RunDirectory $runDirectory -LedgerDirectory $teardownLedger
+        $stopError = ''
+        try {
+            Stop-VariantContainer -ContainerName $ContainerName -Variant $Variant -RunDirectory $runDirectory -LedgerDirectory $teardownLedger
+        } catch {
+            $stopError = $_.Exception.Message
+            Write-JmoaJson -Value ([ordered]@{
+                status = 'FAILED'
+                primaryRunError = $launchError
+                teardownError = $stopError
+            }) -Path (Join-Path $runDirectory 'teardown-failure.json')
+        }
+        if (-not [string]::IsNullOrWhiteSpace($stopError) -and [string]::IsNullOrWhiteSpace($launchError)) {
+            throw $stopError
+        }
     }
 }
 
@@ -896,7 +958,9 @@ $pair = [ordered]@{
     baselineRuntimePolicy = $baselinePolicy.policy
     candidateRuntimePolicy = $candidatePolicy.policy
     firstVariant = $FirstVariant
-    pageCachePolicy = if ($DropPageCacheBeforeVariant) { 'DROP_CACHES_BEFORE_EACH_VARIANT' } else { 'NOT_REQUESTED' }
+    pageCachePolicy = if ($DropPageCacheBeforeVariant) {
+        if ($PageCacheResetStrategy -eq 'PODMAN_MACHINE_RESTART') { 'PODMAN_MACHINE_RESTART_BEFORE_EACH_VARIANT' } else { 'DROP_CACHES_BEFORE_EACH_VARIANT' }
+    } else { 'NOT_REQUESTED' }
     baseline = $baseline
     candidate = $candidate
     executionMode = $ExecutionMode

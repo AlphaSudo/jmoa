@@ -1,0 +1,372 @@
+{
+  "schemaVersion": "jmoa-three-artifact-public-result-v2",
+  "service": "spring-petclinic-customers-service",
+  "protocol": "PETCLINIC_CUSTOMERS_B0_V1_V2_BALANCED_V1",
+  "terminalOutcome": "B0_TO_V1_NOT_REPRODUCED",
+  "runtime": {
+    "launchMode": "EXPLODED_BOOT_APP",
+    "policy": "NO_CDS_LOW_DIRTY",
+    "validFinalSessions": 18,
+    "finalSessions": 18,
+    "balancedBlocks": 6,
+    "semanticErrors": 0
+  },
+  "qualification": {
+    "passed": true,
+    "directDiagnosticDeltas": {
+      "b0ToV1": {
+        "pssKb": -8566,
+        "privateDirtyKb": -8432,
+        "memoryCurrentBytes": -23453696
+      },
+      "v1ToV2": {
+        "pssKb": -1634,
+        "privateDirtyKb": -1384,
+        "memoryCurrentBytes": -3211264
+      },
+      "b0ToV2": {
+        "pssKb": -10200,
+        "privateDirtyKb": -9816,
+        "memoryCurrentBytes": -26664960
+      }
+    },
+    "claimBoundary": "Qualification establishes runtime and semantic validity. It is not a performance claim and has no arbitrary same-artifact range gate."
+  },
+  "comparisons": [
+    {
+      "id": "B0_TO_V1",
+      "blockDeltas": [
+        {
+          "block": 1,
+          "order": [
+            "B0",
+            "V1",
+            "V2"
+          ],
+          "pssKb": 7742,
+          "privateDirtyKb": 7692,
+          "memoryCurrentBytes": 7843840
+        },
+        {
+          "block": 2,
+          "order": [
+            "B0",
+            "V2",
+            "V1"
+          ],
+          "pssKb": 5375,
+          "privateDirtyKb": 5472,
+          "memoryCurrentBytes": 5644288
+        },
+        {
+          "block": 3,
+          "order": [
+            "V1",
+            "B0",
+            "V2"
+          ],
+          "pssKb": -3979,
+          "privateDirtyKb": -3648,
+          "memoryCurrentBytes": -3756032
+        },
+        {
+          "block": 4,
+          "order": [
+            "V1",
+            "V2",
+            "B0"
+          ],
+          "pssKb": 17336,
+          "privateDirtyKb": 17416,
+          "memoryCurrentBytes": 18251776
+        },
+        {
+          "block": 5,
+          "order": [
+            "V2",
+            "B0",
+            "V1"
+          ],
+          "pssKb": -3037,
+          "privateDirtyKb": -3416,
+          "memoryCurrentBytes": -3895296
+        },
+        {
+          "block": 6,
+          "order": [
+            "V2",
+            "V1",
+            "B0"
+          ],
+          "pssKb": -343,
+          "privateDirtyKb": -64,
+          "memoryCurrentBytes": -327680
+        }
+      ],
+      "pssKb": {
+        "median": 2516.0,
+        "mean": 3849.0,
+        "minimum": -3979.0,
+        "maximum": 17336.0,
+        "medianAbsoluteDeviation": 5389.5,
+        "pairedWins": 3,
+        "bootstrap95": {
+          "lower": -3508.0,
+          "upper": 12539.0
+        }
+      },
+      "privateDirtyKb": {
+        "median": 2704.0,
+        "pairedWins": 3,
+        "bootstrap95": {
+          "lower": -3532.0,
+          "upper": 12554.0
+        }
+      },
+      "memoryCurrentBytes": {
+        "median": 2658304.0,
+        "pairedWins": 3,
+        "bootstrap95": {
+          "lower": -3825664.0,
+          "upper": 13047808.0
+        }
+      },
+      "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+      "v2dPassed": true
+    },
+    {
+      "id": "V1_TO_V2",
+      "blockDeltas": [
+        {
+          "block": 1,
+          "order": [
+            "B0",
+            "V1",
+            "V2"
+          ],
+          "pssKb": -807,
+          "privateDirtyKb": -988,
+          "memoryCurrentBytes": -745472
+        },
+        {
+          "block": 2,
+          "order": [
+            "B0",
+            "V2",
+            "V1"
+          ],
+          "pssKb": -7646,
+          "privateDirtyKb": -7416,
+          "memoryCurrentBytes": -7356416
+        },
+        {
+          "block": 3,
+          "order": [
+            "V1",
+            "B0",
+            "V2"
+          ],
+          "pssKb": -4192,
+          "privateDirtyKb": -4416,
+          "memoryCurrentBytes": -4407296
+        },
+        {
+          "block": 4,
+          "order": [
+            "V1",
+            "V2",
+            "B0"
+          ],
+          "pssKb": -22198,
+          "privateDirtyKb": -22096,
+          "memoryCurrentBytes": -22962176
+        },
+        {
+          "block": 5,
+          "order": [
+            "V2",
+            "B0",
+            "V1"
+          ],
+          "pssKb": 4532,
+          "privateDirtyKb": 4684,
+          "memoryCurrentBytes": 4907008
+        },
+        {
+          "block": 6,
+          "order": [
+            "V2",
+            "V1",
+            "B0"
+          ],
+          "pssKb": -3280,
+          "privateDirtyKb": -3436,
+          "memoryCurrentBytes": -3366912
+        }
+      ],
+      "pssKb": {
+        "median": -3736.0,
+        "mean": -5598.5,
+        "minimum": -22198.0,
+        "maximum": 4532.0,
+        "medianAbsoluteDeviation": 3419.5,
+        "pairedWins": 5,
+        "bootstrap95": {
+          "lower": -14922.0,
+          "upper": 1862.5
+        }
+      },
+      "privateDirtyKb": {
+        "median": -3926.0,
+        "pairedWins": 5,
+        "bootstrap95": {
+          "lower": -14756.0,
+          "upper": 1848.0
+        }
+      },
+      "memoryCurrentBytes": {
+        "median": -3887104.0,
+        "pairedWins": 5,
+        "bootstrap95": {
+          "lower": -15159296.0,
+          "upper": 2080768.0
+        }
+      },
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true
+    },
+    {
+      "id": "B0_TO_V2",
+      "blockDeltas": [
+        {
+          "block": 1,
+          "order": [
+            "B0",
+            "V1",
+            "V2"
+          ],
+          "pssKb": 6935,
+          "privateDirtyKb": 6704,
+          "memoryCurrentBytes": 7098368
+        },
+        {
+          "block": 2,
+          "order": [
+            "B0",
+            "V2",
+            "V1"
+          ],
+          "pssKb": -2271,
+          "privateDirtyKb": -1944,
+          "memoryCurrentBytes": -1712128
+        },
+        {
+          "block": 3,
+          "order": [
+            "V1",
+            "B0",
+            "V2"
+          ],
+          "pssKb": -8171,
+          "privateDirtyKb": -8064,
+          "memoryCurrentBytes": -8163328
+        },
+        {
+          "block": 4,
+          "order": [
+            "V1",
+            "V2",
+            "B0"
+          ],
+          "pssKb": -4862,
+          "privateDirtyKb": -4680,
+          "memoryCurrentBytes": -4710400
+        },
+        {
+          "block": 5,
+          "order": [
+            "V2",
+            "B0",
+            "V1"
+          ],
+          "pssKb": 1495,
+          "privateDirtyKb": 1268,
+          "memoryCurrentBytes": 1011712
+        },
+        {
+          "block": 6,
+          "order": [
+            "V2",
+            "V1",
+            "B0"
+          ],
+          "pssKb": -3623,
+          "privateDirtyKb": -3500,
+          "memoryCurrentBytes": -3694592
+        }
+      ],
+      "pssKb": {
+        "median": -2947.0,
+        "mean": -1749.5,
+        "minimum": -8171.0,
+        "maximum": 6935.0,
+        "medianAbsoluteDeviation": 3178.5,
+        "pairedWins": 4,
+        "bootstrap95": {
+          "lower": -6516.5,
+          "upper": 4215.0
+        }
+      },
+      "privateDirtyKb": {
+        "median": -2722.0,
+        "pairedWins": 4,
+        "bootstrap95": {
+          "lower": -6372.0,
+          "upper": 3986.0
+        }
+      },
+      "memoryCurrentBytes": {
+        "median": -2703360.0,
+        "pairedWins": 4,
+        "bootstrap95": {
+          "lower": -6436864.0,
+          "upper": 4055040.0
+        }
+      },
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true
+    }
+  ],
+  "directProductGate": {
+    "allSessionsValid": true,
+    "pairedWins": true,
+    "substantialPss": false,
+    "pssBootstrapUpperBelowZero": false,
+    "privateDirty": true,
+    "memoryCurrent": true,
+    "semantics": true,
+    "v2c": true,
+    "v2d": true
+  },
+  "attribution": {
+    "reconciliation": "NMT_INVISIBLE_OR_PARTIAL",
+    "heapObjectClassification": "UNKNOWN",
+    "hypotheses": [
+      {
+        "hypothesis": "CLASS_COUNT_SAVINGS",
+        "confidence": "MEDIUM",
+        "evidence": [
+          "class histogram class-count delta -175"
+        ]
+      },
+      {
+        "hypothesis": "ANONYMOUS_RW_ALLOCATOR_REDUCTION",
+        "confidence": "MEDIUM",
+        "evidence": [
+          "anonymous_rw PSS median delta -2054 KB"
+        ]
+      }
+    ]
+  },
+  "evidenceBoundary": "Raw run-level evidence, local paths, private configuration, service source, credentials, runtime images, and CDS archives are excluded from Git."
+}

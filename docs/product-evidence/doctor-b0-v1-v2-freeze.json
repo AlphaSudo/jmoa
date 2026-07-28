@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "jmoa-doctor-b0-v1-v2-freeze-v1",
+  "service": "doctor-service",
+  "protocol": "DOCTOR_B0_V1_V2_BALANCED_V1",
+  "sourceRevision": "c33d6e9312739ab15fd705a28e60e9f50c6e7b8b",
+  "deployment": "SPRING_BOOT_FAT_JAR",
+  "runtimePolicy": "APPLICATION_CDS",
+  "jdk": "Eclipse Temurin 26.0.1+8",
+  "stockJdkCdsSha256": "77BCC7CC41CBD2EE8920CAE555019C722B4E40FCA731EAD484620D100FDC9EE6",
+  "workload": {
+    "id": "doctor-health-prometheus-3x100x2",
+    "requests": 600,
+    "rounds": 3,
+    "healthAndPrometheusIterationsPerRound": 100
+  },
+  "configTreeSha256": "42BED13F45DEB4DB3787FF6A012C3EB78E73EC935E1F3A7A57618FF037AD6951",
+  "dbInitSqlSha256": "AA66D80DAE113BB67DD42C81D6EB0B9B6D203CF38F57F924D135867041D0107A",
+  "variants": [
+    {
+      "id": "B0",
+      "classification": "STRICT_NO_JMOA_REBUILD",
+      "artifactSha256": "5B0AF47F86D174E885F7B17CDC329E1AB3119C12D4BE96D2A908758CFD8DEE16",
+      "artifactBytes": 101677501,
+      "image": "localhost/jmoa-product-doctor-b0-clean:latest",
+      "imageId": "cd7531399ffb412209a7432731d4c597f5cf80f5df980e6fd1bc43e78982c875",
+      "applicationClassFingerprint": "7A03CBC637F07773597266F1725F60629C3607F54787C4D41F74F8E955E2D9A4",
+      "dependencyFingerprint": "0896A3A1D7A116A03A4D8682197C4F1538DEB309B960A337EDEC4623DBE6E3B6",
+      "dependencyNameFingerprint": "2938F6F745EFD775F92CC01548FAEAE29C34F0A56DDD9A92A473F9CBF47F9B1F",
+      "jmoaEntryCount": 0,
+      "cdsArchiveSha256": "608C1067611EC7666F913D9D121201328B4C11753B6AA8430B37276A4E5A7261"
+    },
+    {
+      "id": "V1",
+      "classification": "PHASE32K_D2_FIXED_OPTIMIZED_COMPARATOR",
+      "artifactSha256": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+      "artifactBytes": 101906981,
+      "image": "localhost/jmoa-recovery-doctor-d2:latest",
+      "imageId": "f2d27eabdb87b8ebf969c070210eb3e8cccd1d7917ef836357874e2a4630b9b3",
+      "applicationClassFingerprint": "7A03CBC637F07773597266F1725F60629C3607F54787C4D41F74F8E955E2D9A4",
+      "dependencyFingerprint": "39402266E0A3ECFF5C90FD0967B18CB33936B0A38D952838E55D2D7D0A0C1FDC",
+      "dependencyNameFingerprint": "CB5FF3F9B6641B35FF363B67CD59670B1D3306C1F5475DA16BCB3EF9FAD3AA18",
+      "jmoaEntryCount": 43,
+      "cdsArchiveSha256": "DB1115C576EF636C3E7922DB572B87EB2A39FE27E69EEB17AF519CD8062FEEBC"
+    },
+    {
+      "id": "V2",
+      "classification": "FINAL_V2_REDUCED_D2_LINEAGE",
+      "artifactSha256": "9D00877C0AF90E02B0C8D812F8BC659297CA67D6A939016CAF96D3D5CED79742",
+      "artifactBytes": 97989324,
+      "image": "localhost/jmoa-recovery-doctor-d2r:latest",
+      "imageId": "f1c3ca6413fdd6b04721fa08604ed8bd12551f2dd9e6f7a12fb6451fbf02a1ba",
+      "applicationClassFingerprint": "7A03CBC637F07773597266F1725F60629C3607F54787C4D41F74F8E955E2D9A4",
+      "dependencyFingerprint": "6243C2FFB5B8586370258D9F24ADD1F8B6BCA7F05678BD2AC0954489A427B9A8",
+      "dependencyNameFingerprint": "CB5FF3F9B6641B35FF363B67CD59670B1D3306C1F5475DA16BCB3EF9FAD3AA18",
+      "jmoaEntryCount": 43,
+      "cdsArchiveSha256": "9F0ED3865564C46D7CAD2E200B1449831C7199B32119E0CDA98778A700EAA8DC"
+    }
+  ],
+  "b0Proof": {
+    "noJmoaEntries": true,
+    "noRuntimeDependency": true,
+    "noPluginExecution": true,
+    "noReducerManifest": true,
+    "noJavaagent": true
+  },
+  "sameSourceUniverse": true,
+  "comparisonAdmissible": true,
+  "privateConfigSha256": "E29D58EEBE15D36906843D8D02996A098C60AAC92573739BF2A283C458373FA0",
+  "privatePathsPublished": false,
+  "claimBoundary": "Freeze and lineage proof only. No runtime result is inferred."
+}

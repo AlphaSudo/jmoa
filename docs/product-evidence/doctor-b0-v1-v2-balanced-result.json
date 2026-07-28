@@ -1,0 +1,372 @@
+{
+  "schemaVersion": "jmoa-three-artifact-public-result-v2",
+  "service": "doctor-service",
+  "protocol": "DOCTOR_B0_V1_V2_BALANCED_V1",
+  "terminalOutcome": "COMPLETE_PRODUCT_WIN",
+  "runtime": {
+    "launchMode": "SPRING_BOOT_FAT_JAR",
+    "policy": "APPLICATION_CDS",
+    "validFinalSessions": 18,
+    "finalSessions": 18,
+    "balancedBlocks": 6,
+    "semanticErrors": 0
+  },
+  "qualification": {
+    "passed": true,
+    "directDiagnosticDeltas": {
+      "b0ToV1": {
+        "pssKb": -946,
+        "privateDirtyKb": -704,
+        "memoryCurrentBytes": -348160
+      },
+      "v1ToV2": {
+        "pssKb": -1900,
+        "privateDirtyKb": -1884,
+        "memoryCurrentBytes": -8769536
+      },
+      "b0ToV2": {
+        "pssKb": -2846,
+        "privateDirtyKb": -2588,
+        "memoryCurrentBytes": -9117696
+      }
+    },
+    "claimBoundary": "Qualification establishes runtime and semantic validity. It is not a performance claim and has no arbitrary same-artifact range gate."
+  },
+  "comparisons": [
+    {
+      "id": "B0_TO_V1",
+      "blockDeltas": [
+        {
+          "block": 1,
+          "order": [
+            "B0",
+            "V1",
+            "V2"
+          ],
+          "pssKb": 1885,
+          "privateDirtyKb": 1784,
+          "memoryCurrentBytes": 2646016
+        },
+        {
+          "block": 2,
+          "order": [
+            "B0",
+            "V2",
+            "V1"
+          ],
+          "pssKb": -4328,
+          "privateDirtyKb": -4412,
+          "memoryCurrentBytes": -3612672
+        },
+        {
+          "block": 3,
+          "order": [
+            "V1",
+            "B0",
+            "V2"
+          ],
+          "pssKb": -815,
+          "privateDirtyKb": -928,
+          "memoryCurrentBytes": 233472
+        },
+        {
+          "block": 4,
+          "order": [
+            "V1",
+            "V2",
+            "B0"
+          ],
+          "pssKb": 9104,
+          "privateDirtyKb": 9136,
+          "memoryCurrentBytes": 9957376
+        },
+        {
+          "block": 5,
+          "order": [
+            "V2",
+            "B0",
+            "V1"
+          ],
+          "pssKb": 2886,
+          "privateDirtyKb": 2508,
+          "memoryCurrentBytes": 3485696
+        },
+        {
+          "block": 6,
+          "order": [
+            "V2",
+            "V1",
+            "B0"
+          ],
+          "pssKb": -577,
+          "privateDirtyKb": -788,
+          "memoryCurrentBytes": 172032
+        }
+      ],
+      "pssKb": {
+        "median": 654.0,
+        "mean": 1359.167,
+        "minimum": -4328.0,
+        "maximum": 9104.0,
+        "medianAbsoluteDeviation": 1850.5,
+        "pairedWins": 3,
+        "bootstrap95": {
+          "lower": -2571.5,
+          "upper": 5995.0
+        }
+      },
+      "privateDirtyKb": {
+        "median": 498.0,
+        "pairedWins": 3,
+        "bootstrap95": {
+          "lower": -2670.0,
+          "upper": 5822.0
+        }
+      },
+      "memoryCurrentBytes": {
+        "median": 1439744.0,
+        "pairedWins": 1,
+        "bootstrap95": {
+          "lower": -1720320.0,
+          "upper": 6721536.0
+        }
+      },
+      "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+      "v2dPassed": true
+    },
+    {
+      "id": "V1_TO_V2",
+      "blockDeltas": [
+        {
+          "block": 1,
+          "order": [
+            "B0",
+            "V1",
+            "V2"
+          ],
+          "pssKb": -8989,
+          "privateDirtyKb": -8920,
+          "memoryCurrentBytes": -15994880
+        },
+        {
+          "block": 2,
+          "order": [
+            "B0",
+            "V2",
+            "V1"
+          ],
+          "pssKb": -1637,
+          "privateDirtyKb": -1648,
+          "memoryCurrentBytes": -8417280
+        },
+        {
+          "block": 3,
+          "order": [
+            "V1",
+            "B0",
+            "V2"
+          ],
+          "pssKb": -6295,
+          "privateDirtyKb": -6328,
+          "memoryCurrentBytes": -13307904
+        },
+        {
+          "block": 4,
+          "order": [
+            "V1",
+            "V2",
+            "B0"
+          ],
+          "pssKb": -6228,
+          "privateDirtyKb": -6160,
+          "memoryCurrentBytes": -13115392
+        },
+        {
+          "block": 5,
+          "order": [
+            "V2",
+            "B0",
+            "V1"
+          ],
+          "pssKb": -6299,
+          "privateDirtyKb": -6056,
+          "memoryCurrentBytes": -13049856
+        },
+        {
+          "block": 6,
+          "order": [
+            "V2",
+            "V1",
+            "B0"
+          ],
+          "pssKb": -2889,
+          "privateDirtyKb": -2960,
+          "memoryCurrentBytes": -9891840
+        }
+      ],
+      "pssKb": {
+        "median": -6261.5,
+        "mean": -5389.5,
+        "minimum": -8989.0,
+        "maximum": -1637.0,
+        "medianAbsoluteDeviation": 1382.5,
+        "pairedWins": 6,
+        "bootstrap95": {
+          "lower": -7644.0,
+          "upper": -2263.0
+        }
+      },
+      "privateDirtyKb": {
+        "median": -6108.0,
+        "pairedWins": 6,
+        "bootstrap95": {
+          "lower": -7624.0,
+          "upper": -2304.0
+        }
+      },
+      "memoryCurrentBytes": {
+        "median": -13082624.0,
+        "pairedWins": 6,
+        "bootstrap95": {
+          "lower": -14651392.0,
+          "upper": -9154560.0
+        }
+      },
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true
+    },
+    {
+      "id": "B0_TO_V2",
+      "blockDeltas": [
+        {
+          "block": 1,
+          "order": [
+            "B0",
+            "V1",
+            "V2"
+          ],
+          "pssKb": -7104,
+          "privateDirtyKb": -7136,
+          "memoryCurrentBytes": -13348864
+        },
+        {
+          "block": 2,
+          "order": [
+            "B0",
+            "V2",
+            "V1"
+          ],
+          "pssKb": -5965,
+          "privateDirtyKb": -6060,
+          "memoryCurrentBytes": -12029952
+        },
+        {
+          "block": 3,
+          "order": [
+            "V1",
+            "B0",
+            "V2"
+          ],
+          "pssKb": -7110,
+          "privateDirtyKb": -7256,
+          "memoryCurrentBytes": -13074432
+        },
+        {
+          "block": 4,
+          "order": [
+            "V1",
+            "V2",
+            "B0"
+          ],
+          "pssKb": 2876,
+          "privateDirtyKb": 2976,
+          "memoryCurrentBytes": -3158016
+        },
+        {
+          "block": 5,
+          "order": [
+            "V2",
+            "B0",
+            "V1"
+          ],
+          "pssKb": -3413,
+          "privateDirtyKb": -3548,
+          "memoryCurrentBytes": -9564160
+        },
+        {
+          "block": 6,
+          "order": [
+            "V2",
+            "V1",
+            "B0"
+          ],
+          "pssKb": -3466,
+          "privateDirtyKb": -3748,
+          "memoryCurrentBytes": -9719808
+        }
+      ],
+      "pssKb": {
+        "median": -4715.5,
+        "mean": -4030.333,
+        "minimum": -7110.0,
+        "maximum": 2876.0,
+        "medianAbsoluteDeviation": 1845.5,
+        "pairedWins": 5,
+        "bootstrap95": {
+          "lower": -7107.0,
+          "upper": -268.5
+        }
+      },
+      "privateDirtyKb": {
+        "median": -4904.0,
+        "pairedWins": 5,
+        "bootstrap95": {
+          "lower": -7196.0,
+          "upper": -286.0
+        }
+      },
+      "memoryCurrentBytes": {
+        "median": -10874880.0,
+        "pairedWins": 6,
+        "bootstrap95": {
+          "lower": -13211648.0,
+          "upper": -6361088.0
+        }
+      },
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true
+    }
+  ],
+  "directProductGate": {
+    "allSessionsValid": true,
+    "pairedWins": true,
+    "substantialPss": true,
+    "pssBootstrapUpperBelowZero": true,
+    "privateDirty": true,
+    "memoryCurrent": true,
+    "semantics": true,
+    "v2c": true,
+    "v2d": true
+  },
+  "attribution": {
+    "reconciliation": "NMT_VISIBLE",
+    "heapObjectClassification": "UNKNOWN",
+    "hypotheses": [
+      {
+        "hypothesis": "CLASS_COUNT_SAVINGS",
+        "confidence": "MEDIUM",
+        "evidence": [
+          "class histogram class-count delta -131"
+        ]
+      },
+      {
+        "hypothesis": "ANONYMOUS_RW_ALLOCATOR_REDUCTION",
+        "confidence": "MEDIUM",
+        "evidence": [
+          "anonymous_rw PSS median delta -2610 KB"
+        ]
+      }
+    ]
+  },
+  "evidenceBoundary": "Raw run-level evidence, local paths, private configuration, service source, credentials, runtime images, and CDS archives are excluded from Git."
+}

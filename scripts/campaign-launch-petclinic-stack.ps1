@@ -30,6 +30,10 @@ param(
     [Parameter(Mandatory)][string]$ConfigImage,
     [Parameter(Mandatory)][string]$DiscoveryImage,
     [Parameter(Mandatory)][string]$ConfigRepo,
+    [string]$ArtifactPath = '',
+    [string]$ArtifactVariant = '',
+    [string]$CdsArchivePath = '',
+    [string]$ProjectName = '',
     [int]$Port = 8081,
     [int]$ConfigPort = 8888,
     [int]$DiscoveryPort = 8761,
@@ -49,6 +53,9 @@ $ErrorActionPreference = 'Stop'
 
 if (-not (Test-Path -LiteralPath $ConfigRepo -PathType Container)) {
     throw "Config repository directory does not exist: $ConfigRepo"
+}
+if (-not [string]::IsNullOrWhiteSpace($ArtifactPath) -and -not (Test-Path -LiteralPath $ArtifactPath)) {
+    throw "Frozen artifact path does not exist: $ArtifactPath"
 }
 New-JmoaDirectory -Path $RunDirectory
 
@@ -266,6 +273,17 @@ try {
             discovery = [ordered]@{ requestedReference = $discoveryInfo.requestedReference; resolvedImageId = $discoveryInfo.resolvedImageId; launchedImageId = $discoveryLiveImageId; created = $discoveryInfo.created; architecture = $discoveryInfo.architecture; repoDigests = $discoveryInfo.repoDigests }
         }
         configRepo      = (Resolve-Path -LiteralPath $ConfigRepo).Path
+        frozenArtifact  = if ([string]::IsNullOrWhiteSpace($ArtifactPath)) {
+            $null
+        } else {
+            [ordered]@{
+                path = (Resolve-Path -LiteralPath $ArtifactPath).Path
+                kind = if (Test-Path -LiteralPath $ArtifactPath -PathType Container) { 'DIRECTORY_TREE' } else { 'FILE' }
+                sha256 = Get-CampaignArtifactSha256 -Path $ArtifactPath
+                logicalVariant = if ([string]::IsNullOrWhiteSpace($ArtifactVariant)) { $Variant } else { $ArtifactVariant }
+            }
+        }
+        campaignProjectName = $ProjectName
         port            = $Port
         customerFlags   = $customerFlags
         availableMemoryBeforeTargetBytes = if ($MinAvailableMemoryBeforeTargetBytes -gt 0) { $availableBeforeTarget } else { $null }

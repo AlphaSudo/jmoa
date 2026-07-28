@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "jmoa-three-artifact-public-freeze-v1",
+  "service": "spring-petclinic-customers-service",
+  "protocol": "PETCLINIC_CUSTOMERS_B0_V1_V2_BALANCED_V1",
+  "sourceRevision": "305a1f13e4f961001d4e6cb50a9db51dc3fc5967",
+  "launchMode": "EXPLODED_BOOT_APP",
+  "runtimePolicy": "NO_CDS_LOW_DIRTY",
+  "cdsEnabled": false,
+  "appCdsEnabled": false,
+  "mallocArenaMax": "1",
+  "variants": [
+    {
+      "id": "B0",
+      "artifactKind": "SPRING_BOOT_FAT_JAR_INPUT",
+      "artifactSha256": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+      "dependencyJarCount": 161,
+      "dependencyBytes": 92299443,
+      "jmoaEntryCount": 0,
+      "imageId": "deeca441bda0dac1a64cd9b6f26597ca7c2136de3050179199edeb4472139701"
+    },
+    {
+      "id": "V1",
+      "artifactKind": "JMOA_V1_SPRING_BOOT_FAT_JAR_INPUT",
+      "artifactSha256": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C",
+      "dependencyJarCount": 162,
+      "dependencyBytes": 92466274,
+      "jmoaEntryCount": 1,
+      "imageId": "79b29f0c3f98068cbd09bd77ee25a4f2c2a8507089c02242682bff3763ee620f"
+    },
+    {
+      "id": "V2",
+      "artifactKind": "DEPENDENCY_DIRECTORY_TREE",
+      "artifactSha256": "9DC15FF7AC1F99A3F53531E7D6A20E5603340D12FAEDA0F7344B0F95FE5B3EFC",
+      "acceptedProductArtifactId": "007F1796B83FCC2217A57A6975EF5CAFD7494A5EF050A7F5261C088B63C6CC2F",
+      "dependencyJarCount": 162,
+      "dependencyBytes": 88798165,
+      "jmoaRuntimeLibraryCount": 1,
+      "imageId": "dabb463d1eced92211f108e8be4a6406a423d02c277f47d611eaf339e6b0b255"
+    }
+  ],
+  "invariants": {
+    "v1V2ApplicationEqual": true,
+    "v1V2SpringBootLoaderEqual": true,
+    "v2DependencyInputMaterializedExactly": true
+  },
+  "privateConfigExcluded": true
+}
