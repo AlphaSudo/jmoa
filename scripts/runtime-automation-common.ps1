@@ -39,7 +39,7 @@ function Write-JmoaJson {
 
 function Write-JmoaText {
     param(
-        [Parameter(Mandatory)][string]$Value,
+        [Parameter(Mandatory)][AllowEmptyString()][string]$Value,
         [Parameter(Mandatory)][string]$Path
     )
     Set-Content -LiteralPath $Path -Value $Value -Encoding utf8

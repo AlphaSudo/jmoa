@@ -286,6 +286,8 @@ function Invoke-AuditedHttp {
         [string]$Step = '',
         [string]$Body = $null,
         [string]$ContentType = 'application/json',
+        [hashtable]$Headers = @{},
+        [string[]]$SensitiveHeaderNames = @('Authorization','Proxy-Authorization','Cookie','Set-Cookie'),
         [int]$TimeoutSeconds = 30,
         [scriptblock]$CanonicalizeBody = $null,
         [string]$CanonicalRuleId = ''
@@ -306,6 +308,7 @@ function Invoke-AuditedHttp {
             $params.ContentType = $ContentType
             $params.Body = $Body
         }
+        if ($Headers.Count -gt 0) { $params.Headers = $Headers }
         $response = Invoke-WebRequest @params
         $status = [int]$response.StatusCode
         $responseBody = ConvertTo-CampaignHttpBodyText -Content $response.Content
@@ -337,6 +340,10 @@ function Invoke-AuditedHttp {
                 $canonicalRel = ''
             }
         }
+        $auditedHeaders = [ordered]@{}
+        foreach ($header in $Headers.GetEnumerator()) {
+            $auditedHeaders[$header.Key] = if ($SensitiveHeaderNames -contains [string]$header.Key) { '<REDACTED>' } else { [string]$header.Value }
+        }
         $record = [ordered]@{
             sequence             = $sequence
             kind                 = 'HTTP'
@@ -347,6 +354,7 @@ function Invoke-AuditedHttp {
             method               = $Method
             uri                  = $Uri
             requestBody          = $Body
+            requestHeaders       = $auditedHeaders
             status               = $status
             error                = $requestError
             rawBodyPath          = $rawBodyRel

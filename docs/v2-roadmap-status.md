@@ -69,7 +69,12 @@ source/content comparator mismatches for Doctor and PetClinic and a
 runtime-policy mismatch plus incomplete artifact identity for Patient. See the
 [absolute B0 audit](product-evidence/historical-baseline-recovery/historical-vs-current-b0-absolute.md)
 and [baseline decision](product-evidence/historical-baseline-recovery/baseline-acceptance-decision.md).
-No immediate rerun or mechanism-counter study is authorized.
+The bounded follow-up is now closed: Doctor's exact historical V1 did not
+reproduce the old direction (`+2,661 KB` PSS in the reconstructed diagnostic
+pair), PetClinic historical B0 is contaminated by JMOA output and semantic
+drift, and Patient's historical comparator tuple is not recoverable. See the
+[final reconstruction closure](product-evidence/comparator-reconstruction/comparator-reconstruction-closure.md).
+No six-order historical rerun or mechanism-counter study is authorized.
 
 ## Historical Incremental Release Gate
 

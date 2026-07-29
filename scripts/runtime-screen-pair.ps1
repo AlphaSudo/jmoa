@@ -724,6 +724,11 @@ function Invoke-Variant {
         }
     } catch {
         $launchError = $_.Exception.Message
+        if (-not [string]::IsNullOrWhiteSpace($captureLedger)) {
+            $failureLog = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @('logs', $ContainerName) `
+                -LedgerDirectory $captureLedger -Step 'capture failed container logs' -AllowFailure
+            Write-JmoaText -Value ([string]$failureLog.output) -Path (Join-Path $runDirectory 'runtime-container-failure.log')
+        }
         if (-not [string]::IsNullOrWhiteSpace($captureLedger) -and (Test-Path -LiteralPath (Join-Path $captureLedger 'command-ledger.md') -PathType Leaf) -and -not (Test-Path -LiteralPath (Join-Path $captureLedger 'child-ledger-summary.json') -PathType Leaf)) {
             Complete-CampaignAuditLedger -LedgerDirectory $captureLedger -Status 'FAILED' -Stage 'capture' -Variant $Variant | Out-Null
         }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "jmoa-historical-expected-engineering-budget-v1",
+  "schemaVersion": "jmoa-historical-expected-engineering-budget-v2",
   "label": "HISTORICAL_EXPECTED_ENGINEERING_BUDGET",
   "services": [
     {
@@ -11,7 +11,13 @@
       "currentDirectB0ToV2MedianPssKb": -4715.5,
       "currentMinusHistoricalBudgetGapKb": 3168.5,
       "authoritative": false,
-      "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY"
+      "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY",
+      "evidenceLabel": "HISTORICAL_EXPECTED_ENGINEERING_BUDGET",
+      "currentEffectLabel": "CURRENT_DIRECT_PRODUCT_EFFECT",
+      "reconstructionDecision": "DOCTOR_HISTORICAL_V1_NOT_REPRODUCED",
+      "reconstructedB0ToV1DiagnosticPssKb": 2661.0,
+      "historicalDirectionReproduced": false,
+      "qualification": "Engineering-only historical budget. The corrected old -2,728 KB direction did not reproduce; the reconstructed diagnostic was +2,661 KB."
     },
     {
       "service": "patient-service",
@@ -22,7 +28,13 @@
       "currentDirectB0ToV2MedianPssKb": -1266.5,
       "currentMinusHistoricalBudgetGapKb": 11324.5,
       "authoritative": false,
-      "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY"
+      "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY",
+      "evidenceLabel": "HISTORICAL_EXPECTED_ENGINEERING_BUDGET",
+      "currentEffectLabel": "CURRENT_DIRECT_PRODUCT_EFFECT",
+      "reconstructionDecision": "PATIENT_HISTORICAL_COMPARATOR_NOT_RECOVERABLE",
+      "reconstructedB0ToV1DiagnosticPssKb": null,
+      "historicalDirectionReproduced": null,
+      "qualification": "Engineering-only historical budget. The historical comparator tuple is not recoverable."
     },
     {
       "service": "spring-petclinic-customers-service",
@@ -33,8 +45,15 @@
       "currentDirectB0ToV2MedianPssKb": -2947.0,
       "currentMinusHistoricalBudgetGapKb": 7823.0,
       "authoritative": false,
-      "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY"
+      "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY",
+      "evidenceLabel": "HISTORICAL_EXPECTED_ENGINEERING_BUDGET",
+      "currentEffectLabel": "CURRENT_DIRECT_PRODUCT_EFFECT",
+      "reconstructionDecision": "PETCLINIC_HISTORICAL_B0_CONTAMINATED",
+      "reconstructedB0ToV1DiagnosticPssKb": null,
+      "historicalDirectionReproduced": null,
+      "qualification": "Engineering-only historical budget. The historical baseline is not a clean no-JMOA B0."
     }
   ],
-  "warning": "Medians from separate campaigns are not additive. This is a directional engineering budget, never an authoritative product delta."
+  "warning": "Medians from separate campaigns are not additive. Historical budgets are engineering diagnostics only; current direct B0-to-V2 results are the product evidence.",
+  "reconstructionClosure": "docs/product-evidence/comparator-reconstruction/comparator-reconstruction-closure.json"
 }

@@ -56,6 +56,34 @@ level. They do not contain per-site execution counters or claim-run class-load
 logs, so exact transformed-site activation is currently unmeasurable. No new
 performance rerun is authorized by that limitation.
 
+## Historical Comparator Reconstruction
+
+The bounded reconstruction is closed without a new product claim:
+
+```text
+Doctor:
+  exact historical B0/V1 artifacts recovered
+  reconstructed B0-to-V1 diagnostic: +2,661 KB PSS
+  historical V1 direction not reproduced
+
+Patient:
+  historical B0/source/support tuple not recoverable
+  no performance run authorized
+
+PetClinic:
+  historical B0 contains JMOA output and semantic application drift
+  baseline contaminated; no performance run authorized
+```
+
+Doctor's old published `-6,048 KB` value used the wrong median index. The
+corrected historical references are `-2,728 KB` by independent medians and
+`-2,036 KB` by paired-delta median. Those historical numbers remain
+engineering diagnostics, not current product effects.
+
+See the
+[comparator reconstruction closure](product-evidence/comparator-reconstruction/comparator-reconstruction-closure.md)
+and [migration validation guide](adoption/16-validate-comparator-migration.md).
+
 ## Historical Protocol-Scoped Evidence
 
 All earlier results below remain useful under their original service, artifact,

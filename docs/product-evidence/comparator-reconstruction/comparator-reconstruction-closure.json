@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "jmoa-historical-comparator-reconstruction-closure-v1",
+  "status": "CLOSED_WITHOUT_NEW_PRODUCT_CLAIM",
+  "currentMatrixPreserved": true,
+  "broadCampaignAuthorized": false,
+  "services": [
+    {
+      "service": "doctor-service",
+      "decision": "DOCTOR_HISTORICAL_V1_NOT_REPRODUCED",
+      "exactHistoricalB0": true,
+      "exactHistoricalV1": true,
+      "runtimeEquivalenceComplete": false,
+      "diagnosticPssDeltaKb": 2661.0,
+      "currentDirectProductEffectPssKb": -4715.5,
+      "performanceCampaignAuthorized": false,
+      "reason": "The exact historical artifacts were paired under reconstructed base CDS, but V1 regressed by 2,661 KB PSS. Historical service JDK/support-image provenance is not exact."
+    },
+    {
+      "service": "patient-service",
+      "decision": "PATIENT_HISTORICAL_COMPARATOR_NOT_RECOVERABLE",
+      "exactHistoricalB0": false,
+      "exactHistoricalV1": false,
+      "runtimeEquivalenceComplete": false,
+      "diagnosticPssDeltaKb": null,
+      "currentDirectProductEffectPssKb": -1266.5,
+      "performanceCampaignAuthorized": false,
+      "reason": "The historical B0 artifact, source revision, and support/config identity were not recovered. Later artifacts cannot substitute for that tuple."
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "decision": "PETCLINIC_HISTORICAL_B0_CONTAMINATED",
+      "exactHistoricalB0": false,
+      "exactHistoricalV1": true,
+      "runtimeEquivalenceComplete": false,
+      "diagnosticPssDeltaKb": null,
+      "currentDirectProductEffectPssKb": -2947.0,
+      "performanceCampaignAuthorized": false,
+      "reason": "The historical B0 contains JMOA output and semantic application drift, so it cannot serve as a clean baseline."
+    }
+  ],
+  "rules": [
+    "Historical directional budgets are not current product effects.",
+    "A historical comparator requires exact source, dependency, generated output, runtime, workload, capture, and deployment identity.",
+    "A failed or contaminated comparator is closed explicitly; it is not replaced with a convenient later artifact."
+  ]
+}

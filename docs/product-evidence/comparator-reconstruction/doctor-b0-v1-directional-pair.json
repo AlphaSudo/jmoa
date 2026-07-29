@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "jmoa-doctor-b0-v1-directional-pair-v1",
+  "generatedAt": "2026-07-29T20:13:02.3089608Z",
+  "decision": "DOCTOR_HISTORICAL_V1_NOT_REPRODUCED",
+  "claimable": false,
+  "pairValid": true,
+  "baseline": {
+    "pssKb": 305850,
+    "privateDirtyKb": 296544,
+    "pssAnonKb": 296540,
+    "pssFileKb": 9310,
+    "memoryCurrentBytes": 307523584,
+    "nmtCommittedKb": 268391,
+    "loadedClasses": 24079
+  },
+  "candidate": {
+    "pssKb": 308511,
+    "privateDirtyKb": 299124,
+    "pssAnonKb": 299124,
+    "pssFileKb": 9387,
+    "memoryCurrentBytes": 310312960,
+    "nmtCommittedKb": 268025,
+    "loadedClasses": 23963
+  },
+  "deltaCandidateMinusBaseline": {
+    "pssKb": 2661,
+    "privateDirtyKb": 2580,
+    "pssAnonKb": 2584,
+    "pssFileKb": 77,
+    "memoryCurrentBytes": 2789376,
+    "nmtCommittedKb": -366,
+    "loadedClasses": -116
+  },
+  "historicalReference": {
+    "pairedDeltaMedianPssKb": -2036,
+    "independentMedianDeltaPssKb": -2728,
+    "invalidPublishedMedianPssKb": -6048
+  },
+  "gates": {
+    "artifactsExact": true,
+    "workloadsValid": true,
+    "effectiveBaseCdsPolicyEqual": true,
+    "historicalDirectionReturned": false
+  },
+  "attribution": {
+    "category": "NMT_INVISIBLE_ANONYMOUS_DIRTY_GROWTH",
+    "explanation": "V1 loaded fewer classes and had slightly lower NMT committed memory, but anonymous PSS and Private_Dirty increased. The reconstructed pair therefore does not reproduce the historical V1 direction."
+  },
+  "provenance": {
+    "b0Artifact": "EXACT_HISTORICAL",
+    "v1Artifact": "EXACT_HISTORICAL",
+    "effectiveCdsPolicy": "EXPLICIT_BASE_CDS_MATCHING_HISTORICAL_FALLBACK",
+    "serviceJdkAndSupportImages": "RECONSTRUCTED_NOT_ORIGINAL"
+  },
+  "authorization": {
+    "sixOrderCampaignAllowed": false,
+    "mechanismActivationStudyAllowed": false,
+    "nextAction": "Stop Doctor reruns. Compare historical host/JDK/support-image provenance; runtime equivalence is not complete enough to authorize mechanism instrumentation."
+  }
+}
