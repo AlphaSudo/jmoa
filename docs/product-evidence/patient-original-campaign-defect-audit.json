@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "jmoa-patient-original-campaign-defect-audit-v1",
+  "service": "patient-service",
+  "protocol": "PATIENT_B0_V1_V2_BALANCED_V1",
+  "status": "INVALIDATED_BY_PROVEN_CAPTURE_TIMING_DEFECT",
+  "configSha256": "039F71B71053E01432569C2875C2965772C31363542FD82F5834DBF903BB6804",
+  "artifactSha256": {
+    "B0": "2BE7E1D761ECE8BDC74CE44E7B82FB0B79D7508E45B22E9864577F4D643E0352",
+    "V1": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+    "V2": "4CFC40ADBD559066071A65BAC4A0D6836411BDBF4BB69E9162C0D2E7C65569E3"
+  },
+  "originalResult": {
+    "finalSessions": 18,
+    "sessionsMarkedValid": 18,
+    "terminalOutcome": "B0_TO_V1_NOT_REPRODUCED"
+  },
+  "sealedManifests": {
+    "commandLedgers": {
+      "files": 44,
+      "bytes": 325939421,
+      "sha256": "B4E5B5B5CF0BC68D71A22F5D6C7B7792D98FF4B053C700822A3C69FA59461924"
+    },
+    "analysis": {
+      "files": 311,
+      "bytes": 928936,
+      "sha256": "A4239C10F602A868FBFBB9435B3F764DA5AE6CD873641749BAB368B4D3A7617C"
+    },
+    "rawEvidence": {
+      "files": 19777,
+      "bytes": 1386144752,
+      "sha256": "FDC1A9BDB045A2FF1914E84D0F760B75611A9F7037F338EEDAC910D364FC01A7"
+    }
+  },
+  "defect": {
+    "decision": "PROVEN_CAPTURE_TIMING_DEFECT",
+    "sessionId": "block-1-position-1-b0",
+    "workloadCompletedAtUtc": "2026-07-27T10:02:48.7365524Z",
+    "firstClaimSnapshotAtUtc": "2026-07-28T17:28:58Z",
+    "actualCaptureLagSeconds": 113169.263,
+    "declaredSettleSeconds": 5,
+    "maximumAllowedCaptureLagSeconds": 65
+  },
+  "correctionBoundary": "Exactly one corrected Patient campaign is authorized. The artifacts, workload, runtime policy, six permutations, thresholds, and no-result-driven-retry rule remain frozen.",
+  "privacyBoundary": "Raw campaign evidence, local paths, service configuration, credentials, images, and service source remain outside Git."
+}

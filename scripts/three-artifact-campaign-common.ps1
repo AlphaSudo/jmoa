@@ -236,6 +236,31 @@ function Invoke-ThreeArtifactIndependentSession {
         if ([int]$workload.errors -ne 0 -or [int]$workload.requests -ne [int]$Config.expectedRequests -or -not [bool]$environment.passed) {
             throw "Session $SessionId failed workload or environment validity."
         }
+        $manifest = Get-Content -Raw -LiteralPath (Join-Path $runDirectory 'run-manifest.json') | ConvertFrom-Json
+        $workloadCompletedAt = if ($workload.PSObject.Properties['completedAt']) {
+            [DateTimeOffset]::Parse([string]$workload.completedAt)
+        } elseif ($workload.PSObject.Properties['generatedAt']) {
+            [DateTimeOffset]::Parse([string]$workload.generatedAt)
+        } else {
+            $null
+        }
+        if ($null -eq $workloadCompletedAt) {
+            throw "Session $SessionId capture timing is invalid: workload completion timestamp is missing."
+        }
+        if (@($manifest.postWorkloadSnapshots).Count -eq 0 -or
+            [string]::IsNullOrWhiteSpace([string]$manifest.postWorkloadSnapshots[0].capturedAt)) {
+            throw "Session $SessionId capture timing is invalid: first post-workload snapshot timestamp is missing."
+        }
+        $snapshotAt = [DateTimeOffset]::Parse([string]$manifest.postWorkloadSnapshots[0].capturedAt)
+        $actualCaptureLagSeconds = ($snapshotAt - $workloadCompletedAt).TotalSeconds
+        $maximumCaptureLagSeconds = if ($Config.PSObject.Properties['maxPostWorkloadCaptureLagSeconds']) {
+            [double]$Config.maxPostWorkloadCaptureLagSeconds
+        } else {
+            [double]$Config.settleSeconds + 60.0
+        }
+        if ($actualCaptureLagSeconds -lt 0 -or $actualCaptureLagSeconds -gt $maximumCaptureLagSeconds) {
+            throw "Session $SessionId capture timing is invalid: workload-to-snapshot lag $([math]::Round($actualCaptureLagSeconds, 3)) seconds; allowed range 0..$maximumCaptureLagSeconds seconds."
+        }
         Add-ThreeArtifactManifestFields -RunDirectory $runDirectory -Protocol ([string]$Config.protocol) -SessionId $SessionId -LogicalVariant $Variant -ExecutionOrdinal $ExecutionOrdinal -Block $Block -Position $Position
         $screenSucceeded = $true
     } finally {

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "jmoa-patient-capture-timing-correction-result-v1",
+  "service": "patient-service",
+  "protocol": "PATIENT_B0_V1_V2_BALANCED_V1",
+  "correction": "PROVEN_CAPTURE_TIMING_DEFECT",
+  "correctedConfigSha256": "BEC95F5022737B54719E57A64E38F8DAD856A21D0A3557B8544177899369A22B",
+  "execution": {
+    "qualificationSessions": 3,
+    "finalSessions": 18,
+    "validFinalSessions": 18,
+    "invalidFinalAttempts": 0,
+    "workloadErrors": 0,
+    "semanticErrors": 0,
+    "scenarioLedgers": 21,
+    "minimumFinalCaptureLagSeconds": 13.249,
+    "maximumFinalCaptureLagSeconds": 14.866,
+    "maximumAllowedCaptureLagSeconds": 65
+  },
+  "comparisons": {
+    "B0_TO_V1": {
+      "medianPssDeltaKb": 910,
+      "pairedWins": 3,
+      "bootstrap95LowerKb": -5326.5,
+      "bootstrap95UpperKb": 6151
+    },
+    "V1_TO_V2": {
+      "medianPssDeltaKb": -6135.5,
+      "pairedWins": 5,
+      "bootstrap95LowerKb": -7925.5,
+      "bootstrap95UpperKb": 2218
+    },
+    "B0_TO_V2": {
+      "medianPssDeltaKb": -1266.5,
+      "medianPrivateDirtyDeltaKb": -1238,
+      "medianMemoryCurrentDeltaBytes": -1103872,
+      "pairedWins": 4,
+      "bootstrap95LowerKb": -12330.5,
+      "bootstrap95UpperKb": 3488.5,
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true
+    }
+  },
+  "terminalOutcome": "B0_TO_V1_NOT_REPRODUCED",
+  "productGatePassed": false,
+  "failedProductGates": [
+    "substantialPss",
+    "pssBootstrapUpperBelowZero"
+  ],
+  "analysisRecovery": {
+    "measurementSessionsRerun": 0,
+    "reason": "The first post-processing process inherited a stale JDK 17 JAVA_HOME. Deterministic Stage Explain replay completed under JDK 26 against the same frozen sessions."
+  },
+  "claimBoundary": "The correction changed only capture-timing validation. It does not authorize another Patient rerun, and the corrected direct reduction is not a complete product win.",
+  "privacyBoundary": "Raw sessions, command responses, local paths, private configuration, service source, and credentials remain outside Git."
+}

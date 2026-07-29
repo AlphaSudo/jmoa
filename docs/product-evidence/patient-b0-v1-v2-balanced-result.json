@@ -15,19 +15,19 @@
     "passed": true,
     "directDiagnosticDeltas": {
       "b0ToV1": {
-        "pssKb": 12970,
-        "privateDirtyKb": 12832,
-        "memoryCurrentBytes": 13082624
+        "pssKb": 1973,
+        "privateDirtyKb": 1936,
+        "memoryCurrentBytes": 2146304
       },
       "v1ToV2": {
-        "pssKb": -13230,
-        "privateDirtyKb": -13132,
-        "memoryCurrentBytes": -13385728
+        "pssKb": -1542,
+        "privateDirtyKb": -1564,
+        "memoryCurrentBytes": -1867776
       },
       "b0ToV2": {
-        "pssKb": -260,
-        "privateDirtyKb": -300,
-        "memoryCurrentBytes": -303104
+        "pssKb": 431,
+        "privateDirtyKb": 372,
+        "memoryCurrentBytes": 278528
       }
     },
     "claimBoundary": "Qualification establishes runtime and semantic validity. It is not a performance claim and has no arbitrary same-artifact range gate."
@@ -43,9 +43,9 @@
             "V1",
             "V2"
           ],
-          "pssKb": 8534,
-          "privateDirtyKb": 8088,
-          "memoryCurrentBytes": 8208384
+          "pssKb": -7108,
+          "privateDirtyKb": -6956,
+          "memoryCurrentBytes": -6795264
         },
         {
           "block": 2,
@@ -54,9 +54,9 @@
             "V2",
             "V1"
           ],
-          "pssKb": 398,
-          "privateDirtyKb": 272,
-          "memoryCurrentBytes": 266240
+          "pssKb": 6216,
+          "privateDirtyKb": 6096,
+          "memoryCurrentBytes": 6742016
         },
         {
           "block": 3,
@@ -65,9 +65,9 @@
             "B0",
             "V2"
           ],
-          "pssKb": 3639,
-          "privateDirtyKb": 3800,
-          "memoryCurrentBytes": 3850240
+          "pssKb": 6086,
+          "privateDirtyKb": 6128,
+          "memoryCurrentBytes": 6074368
         },
         {
           "block": 4,
@@ -76,9 +76,9 @@
             "V2",
             "B0"
           ],
-          "pssKb": 4951,
-          "privateDirtyKb": 4924,
-          "memoryCurrentBytes": 4988928
+          "pssKb": 3522,
+          "privateDirtyKb": 3568,
+          "memoryCurrentBytes": 3825664
         },
         {
           "block": 5,
@@ -87,9 +87,9 @@
             "B0",
             "V1"
           ],
-          "pssKb": -6341,
-          "privateDirtyKb": -6396,
-          "memoryCurrentBytes": -6733824
+          "pssKb": -1702,
+          "privateDirtyKb": -1880,
+          "memoryCurrentBytes": -2170880
         },
         {
           "block": 6,
@@ -98,37 +98,37 @@
             "V1",
             "B0"
           ],
-          "pssKb": 234,
-          "privateDirtyKb": 204,
-          "memoryCurrentBytes": 225280
+          "pssKb": -3545,
+          "privateDirtyKb": -3628,
+          "memoryCurrentBytes": -3104768
         }
       ],
       "pssKb": {
-        "median": 2018.5,
-        "mean": 1902.5,
-        "minimum": -6341.0,
-        "maximum": 8534.0,
-        "medianAbsoluteDeviation": 2358.5,
-        "pairedWins": 1,
+        "median": 910.0,
+        "mean": 578.167,
+        "minimum": -7108.0,
+        "maximum": 6216.0,
+        "medianAbsoluteDeviation": 4815.5,
+        "pairedWins": 3,
         "bootstrap95": {
-          "lower": -3053.5,
-          "upper": 6742.5
+          "lower": -5326.5,
+          "upper": 6151.0
         }
       },
       "privateDirtyKb": {
-        "median": 2036.0,
-        "pairedWins": 1,
+        "median": 844.0,
+        "pairedWins": 3,
         "bootstrap95": {
-          "lower": -3096.0,
-          "upper": 6506.0
+          "lower": -5292.0,
+          "upper": 6112.0
         }
       },
       "memoryCurrentBytes": {
-        "median": 2058240.0,
-        "pairedWins": 1,
+        "median": 827392.0,
+        "pairedWins": 3,
         "bootstrap95": {
-          "lower": -3254272.0,
-          "upper": 6598656.0
+          "lower": -4950016.0,
+          "upper": 6408192.0
         }
       },
       "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
@@ -144,9 +144,9 @@
             "V1",
             "V2"
           ],
-          "pssKb": -3855,
-          "privateDirtyKb": -3656,
-          "memoryCurrentBytes": -3674112
+          "pssKb": -6627,
+          "privateDirtyKb": -6852,
+          "memoryCurrentBytes": -7102464
         },
         {
           "block": 2,
@@ -155,9 +155,9 @@
             "V2",
             "V1"
           ],
-          "pssKb": -3232,
-          "privateDirtyKb": -3088,
-          "memoryCurrentBytes": -2879488
+          "pssKb": -6417,
+          "privateDirtyKb": -6488,
+          "memoryCurrentBytes": -6950912
         },
         {
           "block": 3,
@@ -166,9 +166,9 @@
             "B0",
             "V2"
           ],
-          "pssKb": 2741,
-          "privateDirtyKb": 2712,
-          "memoryCurrentBytes": 2973696
+          "pssKb": -758,
+          "privateDirtyKb": -744,
+          "memoryCurrentBytes": -684032
         },
         {
           "block": 4,
@@ -177,9 +177,9 @@
             "V2",
             "B0"
           ],
-          "pssKb": 1409,
-          "privateDirtyKb": 1396,
-          "memoryCurrentBytes": 1511424
+          "pssKb": -5854,
+          "privateDirtyKb": -5652,
+          "memoryCurrentBytes": -5824512
         },
         {
           "block": 5,
@@ -188,9 +188,9 @@
             "B0",
             "V1"
           ],
-          "pssKb": -4083,
-          "privateDirtyKb": -4064,
-          "memoryCurrentBytes": -3981312
+          "pssKb": -9224,
+          "privateDirtyKb": -9060,
+          "memoryCurrentBytes": -8900608
         },
         {
           "block": 6,
@@ -199,37 +199,37 @@
             "V1",
             "B0"
           ],
-          "pssKb": -1586,
-          "privateDirtyKb": -1728,
-          "memoryCurrentBytes": -1654784
+          "pssKb": 5194,
+          "privateDirtyKb": 5260,
+          "memoryCurrentBytes": 4861952
         }
       ],
       "pssKb": {
-        "median": -2409.0,
-        "mean": -1434.333,
-        "minimum": -4083.0,
-        "maximum": 2741.0,
-        "medianAbsoluteDeviation": 1560.0,
-        "pairedWins": 4,
+        "median": -6135.5,
+        "mean": -3947.667,
+        "minimum": -9224.0,
+        "maximum": 5194.0,
+        "medianAbsoluteDeviation": 1790.0,
+        "pairedWins": 5,
         "bootstrap95": {
-          "lower": -3969.0,
-          "upper": 2075.0
+          "lower": -7925.5,
+          "upper": 2218.0
         }
       },
       "privateDirtyKb": {
-        "median": -2408.0,
-        "pairedWins": 4,
+        "median": -6070.0,
+        "pairedWins": 5,
         "bootstrap95": {
-          "lower": -3860.0,
-          "upper": 2054.0
+          "lower": -7956.0,
+          "upper": 2258.0
         }
       },
       "memoryCurrentBytes": {
-        "median": -2267136.0,
-        "pairedWins": 4,
+        "median": -6387712.0,
+        "pairedWins": 5,
         "bootstrap95": {
-          "lower": -3827712.0,
-          "upper": 2242560.0
+          "lower": -8001536.0,
+          "upper": 2088960.0
         }
       },
       "v2cVerdict": "CONFIRMED_WIN",
@@ -245,9 +245,9 @@
             "V1",
             "V2"
           ],
-          "pssKb": 4679,
-          "privateDirtyKb": 4432,
-          "memoryCurrentBytes": 4534272
+          "pssKb": -13735,
+          "privateDirtyKb": -13808,
+          "memoryCurrentBytes": -13897728
         },
         {
           "block": 2,
@@ -256,9 +256,9 @@
             "V2",
             "V1"
           ],
-          "pssKb": -2834,
-          "privateDirtyKb": -2816,
-          "memoryCurrentBytes": -2613248
+          "pssKb": -201,
+          "privateDirtyKb": -392,
+          "memoryCurrentBytes": -208896
         },
         {
           "block": 3,
@@ -267,9 +267,9 @@
             "B0",
             "V2"
           ],
-          "pssKb": 6380,
-          "privateDirtyKb": 6512,
-          "memoryCurrentBytes": 6823936
+          "pssKb": 5328,
+          "privateDirtyKb": 5384,
+          "memoryCurrentBytes": 5390336
         },
         {
           "block": 4,
@@ -278,9 +278,9 @@
             "V2",
             "B0"
           ],
-          "pssKb": 6360,
-          "privateDirtyKb": 6320,
-          "memoryCurrentBytes": 6500352
+          "pssKb": -2332,
+          "privateDirtyKb": -2084,
+          "memoryCurrentBytes": -1998848
         },
         {
           "block": 5,
@@ -289,9 +289,9 @@
             "B0",
             "V1"
           ],
-          "pssKb": -10424,
-          "privateDirtyKb": -10460,
-          "memoryCurrentBytes": -10715136
+          "pssKb": -10926,
+          "privateDirtyKb": -10940,
+          "memoryCurrentBytes": -11071488
         },
         {
           "block": 6,
@@ -300,52 +300,52 @@
             "V1",
             "B0"
           ],
-          "pssKb": -1352,
-          "privateDirtyKb": -1524,
-          "memoryCurrentBytes": -1429504
+          "pssKb": 1649,
+          "privateDirtyKb": 1632,
+          "memoryCurrentBytes": 1757184
         }
       ],
       "pssKb": {
-        "median": 1663.5,
-        "mean": 468.167,
-        "minimum": -10424.0,
-        "maximum": 6380.0,
-        "medianAbsoluteDeviation": 4597.0,
-        "pairedWins": 3,
+        "median": -1266.5,
+        "mean": -3369.5,
+        "minimum": -13735.0,
+        "maximum": 5328.0,
+        "medianAbsoluteDeviation": 4755.0,
+        "pairedWins": 4,
         "bootstrap95": {
-          "lower": -6629.0,
-          "upper": 6370.0
+          "lower": -12330.5,
+          "upper": 3488.5
         }
       },
       "privateDirtyKb": {
-        "median": 1454.0,
-        "pairedWins": 3,
+        "median": -1238.0,
+        "pairedWins": 4,
         "bootstrap95": {
-          "lower": -6638.0,
-          "upper": 6416.0
+          "lower": -12374.0,
+          "upper": 3508.0
         }
       },
       "memoryCurrentBytes": {
-        "median": 1552384.0,
-        "pairedWins": 3,
+        "median": -1103872.0,
+        "pairedWins": 4,
         "bootstrap95": {
-          "lower": -6664192.0,
-          "upper": 6662144.0
+          "lower": -12484608.0,
+          "upper": 3573760.0
         }
       },
-      "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+      "v2cVerdict": "CONFIRMED_WIN",
       "v2dPassed": true
     }
   ],
   "directProductGate": {
     "allSessionsValid": true,
-    "pairedWins": false,
+    "pairedWins": true,
     "substantialPss": false,
     "pssBootstrapUpperBelowZero": false,
-    "privateDirty": false,
-    "memoryCurrent": false,
+    "privateDirty": true,
+    "memoryCurrent": true,
     "semantics": true,
-    "v2c": false,
+    "v2c": true,
     "v2d": true
   },
   "attribution": {
@@ -356,7 +356,7 @@
         "hypothesis": "HEAP_PAGE_TOUCH_GROWTH",
         "confidence": "HIGH",
         "evidence": [
-          "heap PSS delta +4084 KB",
+          "heap PSS delta +1254 KB",
           "heap used stayed near flat",
           "class histogram bytes stayed near flat"
         ]
@@ -372,7 +372,7 @@
         "hypothesis": "ANONYMOUS_RW_ALLOCATOR_REDUCTION",
         "confidence": "MEDIUM",
         "evidence": [
-          "anonymous_rw PSS median delta -2726 KB"
+          "anonymous_rw PSS median delta -2624 KB"
         ]
       }
     ]

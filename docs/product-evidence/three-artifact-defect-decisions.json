@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "jmoa-three-artifact-defect-decisions-v1",
+  "services": [
+    {
+      "service": "doctor-service",
+      "decision": "NO_CORRECTABLE_DEFECT_FOUND",
+      "correctedCampaignApplied": false,
+      "appliedCorrectionDecision": "",
+      "furtherCorrectedCampaignAuthorized": false,
+      "publicVerdict": "COMPLETE_PRODUCT_WIN",
+      "b0ToV2PssMedianKb": -4715.5,
+      "rationale": "Lineage, runtime use, policy, workload, and capture gates passed. A disappointing or uncertain result is not a rerun authorization."
+    },
+    {
+      "service": "patient-service",
+      "decision": "NO_CORRECTABLE_DEFECT_FOUND",
+      "correctedCampaignApplied": true,
+      "appliedCorrectionDecision": "PROVEN_CAPTURE_TIMING_DEFECT",
+      "furtherCorrectedCampaignAuthorized": false,
+      "publicVerdict": "B0_TO_V1_NOT_REPRODUCED",
+      "b0ToV2PssMedianKb": -1266.5,
+      "rationale": "The service consumed its one evidence-authorized correction. No result-driven retry is permitted."
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "decision": "NO_CORRECTABLE_DEFECT_FOUND",
+      "correctedCampaignApplied": false,
+      "appliedCorrectionDecision": "",
+      "furtherCorrectedCampaignAuthorized": false,
+      "publicVerdict": "B0_TO_V1_NOT_REPRODUCED",
+      "b0ToV2PssMedianKb": -2947.0,
+      "rationale": "Lineage, runtime use, policy, workload, and capture gates passed. A disappointing or uncertain result is not a rerun authorization."
+    }
+  ],
+  "rerunPolicy": "No result-driven rerun is permitted. A service that consumed its one correction cannot be rerun again under this investigation."
+}

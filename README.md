@@ -11,6 +11,7 @@ Evidence-driven, build-time JVM footprint optimization for Spring Boot applicati
 [Methodology](docs/methodology/measurement-protocol.md) |
 [Reproduction](docs/reproduction/petclinic-quickstart.md) |
 [Direct Result](docs/product-evidence/b0-v1-v2-three-service-matrix.md) |
+[Forensic Matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md) |
 [V1 to V2](docs/results/v2-three-service-matrix.md) |
 [Portfolio](https://github.com/AlphaSudo/jmoa-jvm-optimization-portfolio)
 
@@ -29,16 +30,19 @@ qualification observations followed by all six B0/V1/V2 order permutations:
 | Service | Deployment and policy | B0 to V2 median PSS | Wins | 95% bootstrap CI | Product gate |
 | --- | --- | ---: | ---: | ---: | --- |
 | Doctor | Fat JAR, application CDS | **-4,715.5 KB** | 5/6 | [-7,107, -268.5] KB | Passed |
-| Patient | Fat JAR, stock JDK base CDS | +1,663.5 KB | 3/6 | [-6,629, 6,370] KB | Not passed |
+| Patient | Fat JAR, stock JDK base CDS | -1,266.5 KB | 4/6 | [-12,330.5, 3,488.5] KB | Not passed |
 | PetClinic customers | Exploded Boot, `NO_CDS_LOW_DIRTY` | -2,947 KB | 4/6 | [-6,516.5, 4,215] KB | Not passed |
 
 The frozen three-service launch criterion is therefore **not passed**: one of
-three services is a complete product win. PetClinic shows a moderate direct
-memory reduction but misses the required `-4,096 KB` PSS magnitude and
-bootstrap-upper-below-zero gates. Patient is a valid non-win. These
-observations are retained; no valid losing run was replaced.
+three services is a complete product win. Patient and PetClinic show direct
+memory reductions but miss the required `-4,096 KB` PSS magnitude and
+bootstrap-upper-below-zero gates. Patient's row comes from the one corrected
+campaign authorized by a proven capture-timing defect; it is still a valid
+non-win. These observations are retained; no valid losing run was replaced.
 
 Read the [direct matrix](docs/product-evidence/b0-v1-v2-three-service-matrix.md),
+[forensic matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md),
+[campaign seal](docs/product-evidence/three-artifact-campaign-seal.md),
 [balanced protocol](docs/product-evidence/b0-v1-v2-balanced-protocol.md), and
 the [adoption/evaluation guide](docs/adoption/README.md).
 

@@ -7,9 +7,12 @@ $ErrorActionPreference = 'Stop'
 $RepoRoot = (Resolve-Path -LiteralPath $RepoRoot).Path
 
 function Get-TrackedFiles([string]$Pattern) {
-    $files = & git -C $RepoRoot ls-files $Pattern
-    if ($LASTEXITCODE -ne 0) { throw "Could not enumerate tracked $Pattern files." }
-    return @($files | Where-Object { -not [string]::IsNullOrWhiteSpace($_) })
+    $files = & git -C $RepoRoot ls-files --cached --others --exclude-standard $Pattern
+    if ($LASTEXITCODE -ne 0) { throw "Could not enumerate working-tree $Pattern files." }
+    return @($files |
+        Where-Object { -not [string]::IsNullOrWhiteSpace($_) } |
+        Sort-Object -Unique |
+        Where-Object { Test-Path -LiteralPath (Join-Path $RepoRoot $_) -PathType Leaf })
 }
 
 function Assert-LocalMarkdownLinks {

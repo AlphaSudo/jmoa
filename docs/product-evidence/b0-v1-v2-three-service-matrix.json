@@ -1,6 +1,6 @@
 {
   "schemaVersion": "jmoa-three-service-direct-matrix-v1",
-  "generatedAtUtc": "2026-07-28T19:56:25.7544198Z",
+  "generatedAtUtc": "2026-07-29T09:48:39.2346439Z",
   "comparison": "DIRECT_B0_TO_V2_SIX_BALANCED_BLOCKS",
   "services": [
     {
@@ -27,14 +27,14 @@
       "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
       "terminalOutcome": "B0_TO_V1_NOT_REPRODUCED",
       "validSessions": 18,
-      "pairedWins": 3,
-      "medianPssDeltaKb": 1663.5,
-      "meanPssDeltaKb": 468.167,
-      "pssBootstrap95LowerKb": -6629.0,
-      "pssBootstrap95UpperKb": 6370.0,
-      "medianPrivateDirtyDeltaKb": 1454.0,
-      "medianMemoryCurrentDeltaBytes": 1552384.0,
-      "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+      "pairedWins": 4,
+      "medianPssDeltaKb": -1266.5,
+      "meanPssDeltaKb": -3369.5,
+      "pssBootstrap95LowerKb": -12330.5,
+      "pssBootstrap95UpperKb": 3488.5,
+      "medianPrivateDirtyDeltaKb": -1238.0,
+      "medianMemoryCurrentDeltaBytes": -1103872.0,
+      "v2cVerdict": "CONFIRMED_WIN",
       "v2dPassed": true
     },
     {

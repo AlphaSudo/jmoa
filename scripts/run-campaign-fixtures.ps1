@@ -65,6 +65,7 @@ $testedScriptNames = @(
     'analyze-same-artifact-noise.ps1',
     'analyze-petclinic-b0-period-effect.ps1',
     'analyze-three-artifact-blocks.ps1',
+    'audit-three-artifact-forensics.ps1',
     'build-artifact-lineage.ps1',
     'new-independent-session-evidence-adapter.ps1',
     'new-petclinic-campaign-manifest.ps1',
@@ -759,6 +760,16 @@ Add-FixtureResult -Name 'three-artifact-runner-preserves-invalid-attempts-and-ca
     $threeArtifactRunnerSource.Contains('exhausted three preserved attempts') -and
     $threeArtifactRunnerSource.Contains('Reusing valid frozen session')
 ) -Details 'Invalid observations remain on disk and can be replaced only by a separately ledgered attempt.'
+
+Add-FixtureResult -Name 'three-artifact-runner-rejects-stale-post-workload-captures' -Passed (
+    $threeArtifactCommonSource.Contains("PSObject.Properties['completedAt']") -and
+    $threeArtifactCommonSource.Contains("PSObject.Properties['generatedAt']") -and
+    $threeArtifactCommonSource.Contains('maxPostWorkloadCaptureLagSeconds') -and
+    $threeArtifactCommonSource.Contains('workload completion timestamp is missing') -and
+    $threeArtifactCommonSource.Contains('first post-workload snapshot timestamp is missing') -and
+    $threeArtifactCommonSource.Contains('capture timing is invalid') -and
+    $threeArtifactRunnerSource.Contains("'capture timing violation'")
+) -Details 'An interrupted workload-to-capture gap must preserve an invalid attempt instead of entering paired medians.'
 
 Add-FixtureResult -Name 'three-artifact-runner-freezes-implementation-bytes-before-first-observation' -Passed (
     $threeArtifactRunnerSource.Contains('Get-CampaignImplementationChecks') -and

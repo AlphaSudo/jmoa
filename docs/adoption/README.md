@@ -1,26 +1,33 @@
-# JMOA B0/V1/V2 Evaluation Guide
+# JMOA Adoption And Evaluation Guide
 
-This guide measures three artifacts directly:
+This guide evaluates three artifacts built from one source universe:
 
-- `B0`: the same service built without JMOA.
-- `V1`: the accepted JMOA transform without the V2 reducer.
-- `V2`: V1 plus the accepted V2 reducer.
-
-The headline result is always a direct B0-to-V2 measurement. Historical medians are context, never arithmetic inputs.
-
-Start with [environment setup](01-environment.md), then follow the numbered files. The executable entry point is:
-
-```powershell
-./scripts/run-jmoa-evaluation.ps1 `
-  -Service PetClinicCustomers `
-  -Stages B0,V1,V2,Final,Explain `
-  -ConfigPath <private-campaign-config.json> `
-  -OutputDirectory <private-output-directory>
+```text
+B0 = clean no-JMOA baseline
+V1 = JMOA lambda/adapter optimizer
+V2 = V1 plus the opt-in LVT/LVTT metadata reducer
 ```
 
-Raw command responses, runtime captures, credentials, local paths, and private service configuration stay outside Git. Only sanitized summaries belong in `docs/product-evidence`.
+The primary product result is measured directly as `B0 -> V2`. Historical
+results are references, never arithmetic inputs.
 
-The completed reference campaign and its claim boundary are published in the
-[three-service direct matrix](../product-evidence/b0-v1-v2-three-service-matrix.md).
-It contains one complete product win out of three services; the guide therefore
-teaches evaluation and evidence handling, not a universal memory-win promise.
+Follow the modules in order:
+
+1. [Choose service and policy](01-choose-service-and-policy.md)
+2. [Build clean B0](02-build-clean-b0.md)
+3. [Build V1](03-build-v1.md)
+4. [Build V2](04-build-v2.md)
+5. [Prove lineage](05-prove-lineage.md)
+6. [Prove runtime origin](06-prove-runtime-origin.md)
+7. [Train or select CDS](07-train-or-select-cds.md)
+8. [Run qualification](08-run-qualification.md)
+9. [Run six balanced blocks](09-run-six-balanced-blocks.md)
+10. [Run V2-C and V2-D](10-run-v2c-v2d.md)
+11. [Interpret B0/V1/V2](11-interpret-b0-v1-v2.md)
+12. [Troubleshoot a missing product effect](12-troubleshoot-missing-product-effect.md)
+13. [Read command ledgers](13-read-command-ledgers.md)
+
+The current reference outcomes are deliberately mixed: Doctor is a complete
+product win. Corrected Patient and PetClinic both observe direct reductions,
+but neither meets magnitude or uncertainty gates. The negative paths are part
+of the product contract.

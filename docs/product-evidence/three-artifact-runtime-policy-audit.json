@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "jmoa-three-artifact-runtime-policy-audit-v1",
+  "services": [
+    {
+      "service": "doctor-service",
+      "runtimePolicy": {
+        "decision": "RUNTIME_POLICY_IDENTICAL",
+        "policies": [
+          "APPLICATION_CDS"
+        ],
+        "launchModes": [
+          "SPRING_BOOT_FAT_JAR"
+        ],
+        "cdsModes": [
+          "ON"
+        ],
+        "mallocArenaMax": [
+          ""
+        ],
+        "nmtModes": [
+          "SUMMARY"
+        ],
+        "captureOrderVersions": [
+          "v2-claim-first-1"
+        ],
+        "warmupSeconds": [
+          20
+        ],
+        "classLoadLoggingEnabled": [
+          false
+        ],
+        "jfrEnabled": [
+          false
+        ],
+        "gcRunBeforeCapture": [
+          false
+        ],
+        "policyProofPassed": 18,
+        "sessions": 18,
+        "jdkRuntimeVersions": [
+          "26.0.1+8"
+        ],
+        "applicationArchiveHashesByVariant": {
+          "B0": [
+            "608C1067611EC7666F913D9D121201328B4C11753B6AA8430B37276A4E5A7261"
+          ],
+          "V1": [
+            "DB1115C576EF636C3E7922DB572B87EB2A39FE27E69EEB17AF519CD8062FEEBC"
+          ],
+          "V2": [
+            "9F0ED3865564C46D7CAD2E200B1449831C7199B32119E0CDA98778A700EAA8DC"
+          ]
+        }
+      }
+    },
+    {
+      "service": "patient-service",
+      "runtimePolicy": {
+        "decision": "RUNTIME_POLICY_IDENTICAL",
+        "policies": [
+          "JDK_BASE_CDS_LOW_DIRTY"
+        ],
+        "launchModes": [
+          "SPRING_BOOT_FAT_JAR"
+        ],
+        "cdsModes": [
+          "ON"
+        ],
+        "mallocArenaMax": [
+          "1"
+        ],
+        "nmtModes": [
+          "SUMMARY"
+        ],
+        "captureOrderVersions": [
+          "v2-claim-first-1"
+        ],
+        "warmupSeconds": [
+          20
+        ],
+        "classLoadLoggingEnabled": [
+          false
+        ],
+        "jfrEnabled": [
+          false
+        ],
+        "gcRunBeforeCapture": [
+          false
+        ],
+        "policyProofPassed": 18,
+        "sessions": 18,
+        "jdkRuntimeVersions": [
+          "26.0.1"
+        ],
+        "applicationArchiveHashesByVariant": {
+          "B0": [
+            ""
+          ],
+          "V1": [
+            ""
+          ],
+          "V2": [
+            ""
+          ]
+        }
+      }
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "runtimePolicy": {
+        "decision": "RUNTIME_POLICY_IDENTICAL",
+        "policies": [
+          "NO_CDS_LOW_DIRTY"
+        ],
+        "launchModes": [
+          "EXPLODED_BOOT_APP"
+        ],
+        "cdsModes": [
+          "OFF"
+        ],
+        "mallocArenaMax": [
+          "1"
+        ],
+        "nmtModes": [
+          "SUMMARY"
+        ],
+        "captureOrderVersions": [
+          "v2-claim-first-1"
+        ],
+        "warmupSeconds": [
+          20
+        ],
+        "classLoadLoggingEnabled": [
+          false
+        ],
+        "jfrEnabled": [
+          false
+        ],
+        "gcRunBeforeCapture": [
+          false
+        ],
+        "policyProofPassed": 18,
+        "sessions": 18,
+        "jdkRuntimeVersions": [
+          "17.0.19+10"
+        ],
+        "applicationArchiveHashesByVariant": {
+          "B0": [
+            ""
+          ],
+          "V1": [
+            ""
+          ],
+          "V2": [
+            ""
+          ]
+        }
+      }
+    }
+  ]
+}

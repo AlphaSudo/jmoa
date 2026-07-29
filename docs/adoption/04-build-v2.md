@@ -1,23 +1,37 @@
 # 04 Build V2
 
-V2 starts from the accepted V1 application and applies only the admitted V2 reducer.
+V2 starts from the accepted V1 dependency universe and applies the productized
+release-low-footprint reducer.
 
-The current productized reducer strips:
+The current reducer removes only:
 
 ```text
 LocalVariableTable
 LocalVariableTypeTable
 ```
 
-It preserves line numbers, stack maps, annotations, signatures, bootstrap methods, module metadata, and other runtime-sensitive attributes. Signed, multi-release, sealed, and otherwise excluded JARs follow the reducer safety policy.
+It preserves line numbers, stack maps, annotations, signatures, bootstrap
+methods, module metadata, and application classes outside the admitted scope.
+Signed, sealed, and multi-release JARs are skipped by default.
 
-Record:
+Record the reducer manifest:
 
-- reducer engine and profile;
-- input/output hashes;
-- changed and skipped classes;
-- preservation failures;
-- dependency bytes before and after;
-- materialized dependency manifest.
+```text
+V1 input hash
+V2 output hash
+per-JAR input/output hashes
+bytes removed
+classes scanned/reduced
+skip reasons
+preserved-attribute checks
+materialization layout
+```
 
-Zero preservation failures are required. V1 and V2 application and Spring Boot loader fingerprints must match when V2 is a dependency-only reduction.
+V2 must use V1 as its parent. Rebuilding a different optimizer candidate and
+calling it V2 breaks the three-leg interpretation.
+
+## Gate
+
+Require zero byte-preservation failures, identical application and Boot loader
+layers where V2 is dependency-only, all expected libraries materialized, and
+no original JAR shadowing a reduced JAR.

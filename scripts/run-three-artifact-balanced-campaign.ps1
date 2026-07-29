@@ -266,7 +266,8 @@ $freeze = [ordered]@{
     validLosingRunReplacement = 'FORBIDDEN'
     invalidRunReplacementReasons = @(
         'health failure', 'wrong artifact', 'wrong image', 'workload error',
-        'capture failure', 'host interruption', 'swap or OOM', 'pressure violation'
+        'capture failure', 'capture timing violation', 'host interruption',
+        'swap or OOM', 'pressure violation'
     )
 }
 if (Test-Path -LiteralPath $freezePath -PathType Leaf) {
