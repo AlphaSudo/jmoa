@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "jmoa-three-artifact-public-campaign-seal-v1",
+  "services": [
+    {
+      "service": "doctor-service",
+      "protocol": "DOCTOR_B0_V1_V2_BALANCED_V1",
+      "configSha256": "E29D58EEBE15D36906843D8D02996A098C60AAC92573739BF2A283C458373FA0",
+      "runnerCommit": "NOT_CAPTURED",
+      "implementationHashesAuthoritative": false,
+      "artifactSha256": {
+        "B0": "5B0AF47F86D174E885F7B17CDC329E1AB3119C12D4BE96D2A908758CFD8DEE16",
+        "V1": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+        "V2": "9D00877C0AF90E02B0C8D812F8BC659297CA67D6A939016CAF96D3D5CED79742"
+      },
+      "imageCount": 3,
+      "runtimePolicies": [
+        "APPLICATION_CDS"
+      ],
+      "jdkFingerprintCount": 1,
+      "finalSessions": 18,
+      "validFinalSessions": 18,
+      "terminalOutcome": "COMPLETE_PRODUCT_WIN",
+      "ledgerManifest": {
+        "files": 42,
+        "bytes": 284441317,
+        "sha256": "C4F7167521565EDD23CA1F2F7F313DE76C260818238CA0DF8E4D170674C82677"
+      },
+      "analysisManifest": {
+        "files": 311,
+        "bytes": 938726,
+        "sha256": "66D055A967CDF6C1422F64C4C172BE3143A14604B52577033BE31A2E1FAFC795"
+      },
+      "rawEvidenceManifest": {
+        "files": 17849,
+        "bytes": 1200422742,
+        "sha256": "CF7B5FA86A1CBFF8183F3AA4653CB2D4C56E4DFB526A726BA406155660A52E6A"
+      }
+    },
+    {
+      "service": "patient-service",
+      "protocol": "PATIENT_B0_V1_V2_BALANCED_V1",
+      "configSha256": "BEC95F5022737B54719E57A64E38F8DAD856A21D0A3557B8544177899369A22B",
+      "runnerCommit": "NOT_CAPTURED",
+      "implementationHashesAuthoritative": true,
+      "artifactSha256": {
+        "B0": "2BE7E1D761ECE8BDC74CE44E7B82FB0B79D7508E45B22E9864577F4D643E0352",
+        "V1": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+        "V2": "4CFC40ADBD559066071A65BAC4A0D6836411BDBF4BB69E9162C0D2E7C65569E3"
+      },
+      "imageCount": 1,
+      "runtimePolicies": [
+        "JDK_BASE_CDS_LOW_DIRTY"
+      ],
+      "jdkFingerprintCount": 1,
+      "finalSessions": 18,
+      "validFinalSessions": 18,
+      "terminalOutcome": "B0_TO_V1_NOT_REPRODUCED",
+      "ledgerManifest": {
+        "files": 42,
+        "bytes": 326139245,
+        "sha256": "DD2F088AFE7EEB948C03CE67906FEC65D9C92D0016787EC1F7674236288DBA67"
+      },
+      "analysisManifest": {
+        "files": 311,
+        "bytes": 946792,
+        "sha256": "A0F44EABFD65894D4B7C591EBE57CB43A9FFDCD7767E1D50EEDCD1C0DBA7A15B"
+      },
+      "rawEvidenceManifest": {
+        "files": 19621,
+        "bytes": 1367248930,
+        "sha256": "7FFFBD069DB8220EE27771038E80A9A7D9118AD252A47D6D789FA9C2893018E8"
+      }
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "protocol": "PETCLINIC_CUSTOMERS_B0_V1_V2_BALANCED_V1",
+      "configSha256": "C66EF5EDBEAACCE9537E246CB0D901DB809068A3A87E5DD30150C74C1193EE43",
+      "runnerCommit": "NOT_CAPTURED",
+      "implementationHashesAuthoritative": true,
+      "artifactSha256": {
+        "B0": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+        "V1": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C",
+        "V2": "9DC15FF7AC1F99A3F53531E7D6A20E5603340D12FAEDA0F7344B0F95FE5B3EFC"
+      },
+      "imageCount": 3,
+      "runtimePolicies": [
+        "NO_CDS_LOW_DIRTY"
+      ],
+      "jdkFingerprintCount": 1,
+      "finalSessions": 18,
+      "validFinalSessions": 18,
+      "terminalOutcome": "B0_TO_V1_NOT_REPRODUCED",
+      "ledgerManifest": {
+        "files": 42,
+        "bytes": 26684132,
+        "sha256": "2B00075B403136835A0076FC9C9E671BB3B3919BA4F102A86250B0FB7CAFE6F4"
+      },
+      "analysisManifest": {
+        "files": 419,
+        "bytes": 949652,
+        "sha256": "BF9AE474285602A6949E95D2C2F4FE7585FD4B6E5BAD515C12C984F6DE6ECB56"
+      },
+      "rawEvidenceManifest": {
+        "files": 10744,
+        "bytes": 141298169,
+        "sha256": "C20FECF25C2EFEC7BC7EE5BB06361E0F2EA6039CA7FA38A50E9EE22E60909A45"
+      }
+    }
+  ],
+  "evidenceBoundary": "Raw evidence and private paths remain outside Git. Each raw campaign root contains its private campaign-seal.json."
+}

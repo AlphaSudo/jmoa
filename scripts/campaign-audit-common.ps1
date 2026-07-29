@@ -53,19 +53,48 @@ function Get-CampaignTreeSha256 {
     $sha = [Security.Cryptography.SHA256]::Create()
     try {
         $fullRoot = (Resolve-Path -LiteralPath $Root).Path
-        $files = Get-ChildItem -LiteralPath $fullRoot -Recurse -File |
+        $records = @(Get-ChildItem -LiteralPath $fullRoot -Recurse -File -Force |
             Where-Object { $f = $_.FullName; -not ($ExcludeRegex | Where-Object { $f -match $_ }) } |
-            Sort-Object FullName
-        foreach ($file in $files) {
-            $rel = ($file.FullName.Substring($fullRoot.Length).TrimStart('\', '/')) -replace '\\', '/'
+            ForEach-Object {
+                [pscustomobject]@{
+                    File = $_
+                    RelativePath = ($_.FullName.Substring($fullRoot.Length).TrimStart('\', '/')) -replace '\\', '/'
+                }
+            })
+        $comparer = [Collections.Generic.Comparer[object]]::Create(
+            [Comparison[object]] {
+                param($left, $right)
+                return [StringComparer]::OrdinalIgnoreCase.Compare(
+                    [string]$left.RelativePath,
+                    [string]$right.RelativePath
+                )
+            }
+        )
+        [Array]::Sort([object[]]$records, $comparer)
+        foreach ($record in $records) {
+            $rel = [string]$record.RelativePath
             $relBytes = [Text.Encoding]::UTF8.GetBytes($rel)
             [void]$sha.TransformBlock($relBytes, 0, $relBytes.Length, $null, 0)
-            $fileHash = [Convert]::FromHexString((Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash)
+            $fileHash = [Convert]::FromHexString((Get-FileHash -LiteralPath $record.File.FullName -Algorithm SHA256).Hash)
             [void]$sha.TransformBlock($fileHash, 0, $fileHash.Length, $null, 0)
         }
         [void]$sha.TransformFinalBlock([byte[]]::new(0), 0, 0)
         return [BitConverter]::ToString($sha.Hash).Replace('-', '')
     } finally { $sha.Dispose() }
+}
+
+# Returns one frozen identity for either a single artifact file or an exploded artifact tree.
+# Runtime in-container hashing remains file-only; tree artifacts are proven by this host hash plus
+# the launcher's immutable image/materialization evidence.
+function Get-CampaignArtifactSha256 {
+    param([Parameter(Mandatory)][string]$Path)
+    if (Test-Path -LiteralPath $Path -PathType Leaf) {
+        return (Get-JmoaSha256 -Path $Path).ToUpperInvariant()
+    }
+    if (Test-Path -LiteralPath $Path -PathType Container) {
+        return (Get-CampaignTreeSha256 -Root $Path).ToUpperInvariant()
+    }
+    throw "Artifact path does not exist: $Path"
 }
 
 # Initializes (or re-uses) a child ledger directory and writes/refreshes its header.
@@ -134,6 +163,7 @@ function Invoke-AuditedExternal {
         [string]$Step = '',
         [string]$WorkingDirectory = (Get-Location).Path,
         [hashtable]$Environment = @{},
+        [ValidateRange(0, 86400)][int]$TimeoutSeconds = 0,
         [switch]$AllowFailure
     )
     $started = [DateTime]::UtcNow
@@ -150,14 +180,24 @@ function Invoke-AuditedExternal {
     $stdout = ''
     $stderr = ''
     $exitCode = 127
+    $timedOut = $false
     try {
         [void]$process.Start()
         $stdoutTask = $process.StandardOutput.ReadToEndAsync()
         $stderrTask = $process.StandardError.ReadToEndAsync()
+        if ($TimeoutSeconds -gt 0 -and -not $process.WaitForExit($TimeoutSeconds * 1000)) {
+            $timedOut = $true
+            $process.Kill($true)
+        }
         $process.WaitForExit()
         $stdout = $stdoutTask.GetAwaiter().GetResult()
         $stderr = $stderrTask.GetAwaiter().GetResult()
-        $exitCode = $process.ExitCode
+        if ($timedOut) {
+            $stderr = ($stderr + "`nProcess exceeded the audited timeout of $TimeoutSeconds seconds and was terminated.").Trim()
+            $exitCode = 124
+        } else {
+            $exitCode = $process.ExitCode
+        }
     } catch {
         $stderr = $_.Exception.ToString()
     } finally {
@@ -191,6 +231,8 @@ function Invoke-AuditedExternal {
             arguments            = @($Arguments)
             commandLine          = $commandLine
             exitCode             = $exitCode
+            timedOut             = $timedOut
+            timeoutSeconds       = $TimeoutSeconds
             failureAllowed       = [bool]$AllowFailure
             hardFailure          = ($exitCode -ne 0 -and -not $AllowFailure)
             rawStdoutPath        = "raw/$stdoutFile"

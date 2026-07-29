@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "jmoa-three-service-direct-matrix-v1",
+  "generatedAtUtc": "2026-07-29T09:48:39.2346439Z",
+  "comparison": "DIRECT_B0_TO_V2_SIX_BALANCED_BLOCKS",
+  "services": [
+    {
+      "service": "doctor-service",
+      "protocol": "DOCTOR_B0_V1_V2_BALANCED_V1",
+      "launchMode": "SPRING_BOOT_FAT_JAR",
+      "runtimePolicy": "APPLICATION_CDS",
+      "terminalOutcome": "COMPLETE_PRODUCT_WIN",
+      "validSessions": 18,
+      "pairedWins": 5,
+      "medianPssDeltaKb": -4715.5,
+      "meanPssDeltaKb": -4030.333,
+      "pssBootstrap95LowerKb": -7107.0,
+      "pssBootstrap95UpperKb": -268.5,
+      "medianPrivateDirtyDeltaKb": -4904.0,
+      "medianMemoryCurrentDeltaBytes": -10874880.0,
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true
+    },
+    {
+      "service": "patient-service",
+      "protocol": "PATIENT_B0_V1_V2_BALANCED_V1",
+      "launchMode": "SPRING_BOOT_FAT_JAR",
+      "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
+      "terminalOutcome": "B0_TO_V1_NOT_REPRODUCED",
+      "validSessions": 18,
+      "pairedWins": 4,
+      "medianPssDeltaKb": -1266.5,
+      "meanPssDeltaKb": -3369.5,
+      "pssBootstrap95LowerKb": -12330.5,
+      "pssBootstrap95UpperKb": 3488.5,
+      "medianPrivateDirtyDeltaKb": -1238.0,
+      "medianMemoryCurrentDeltaBytes": -1103872.0,
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "protocol": "PETCLINIC_CUSTOMERS_B0_V1_V2_BALANCED_V1",
+      "launchMode": "EXPLODED_BOOT_APP",
+      "runtimePolicy": "NO_CDS_LOW_DIRTY",
+      "terminalOutcome": "B0_TO_V1_NOT_REPRODUCED",
+      "validSessions": 18,
+      "pairedWins": 4,
+      "medianPssDeltaKb": -2947.0,
+      "meanPssDeltaKb": -1749.5,
+      "pssBootstrap95LowerKb": -6516.5,
+      "pssBootstrap95UpperKb": 4215.0,
+      "medianPrivateDirtyDeltaKb": -2722.0,
+      "medianMemoryCurrentDeltaBytes": -2703360.0,
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true
+    }
+  ],
+  "launchCriterion": {
+    "requiredServices": 3,
+    "completeProductWins": 1,
+    "passed": false
+  },
+  "claimBoundary": "Every row is a direct within-runtime B0-to-V2 result. Historical medians and V1-to-V2 medians are not added to these values."
+}

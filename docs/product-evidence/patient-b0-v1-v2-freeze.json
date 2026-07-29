@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "jmoa-three-artifact-public-freeze-v1",
+  "service": "patient-service",
+  "protocol": "PATIENT_B0_V1_V2_BALANCED_V1",
+  "launchMode": "SPRING_BOOT_FAT_JAR",
+  "runtimePolicy": "JDK_BASE_CDS_LOW_DIRTY",
+  "appCdsEnabled": false,
+  "stockJdkCdsSha256": "77BCC7CC41CBD2EE8920CAE555019C722B4E40FCA731EAD484620D100FDC9EE6",
+  "variants": [
+    {
+      "id": "B0",
+      "artifactSha256": "2BE7E1D761ECE8BDC74CE44E7B82FB0B79D7508E45B22E9864577F4D643E0352",
+      "imageId": "e2ee9224f54443c5eb44a0b02771e9d32fdc205e67e0cbf4c7884f104da40edf"
+    },
+    {
+      "id": "V1",
+      "artifactSha256": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+      "imageId": "e2ee9224f54443c5eb44a0b02771e9d32fdc205e67e0cbf4c7884f104da40edf"
+    },
+    {
+      "id": "V2",
+      "artifactSha256": "4CFC40ADBD559066071A65BAC4A0D6836411BDBF4BB69E9162C0D2E7C65569E3",
+      "imageId": "e2ee9224f54443c5eb44a0b02771e9d32fdc205e67e0cbf4c7884f104da40edf"
+    }
+  ],
+  "privateConfigExcluded": true
+}

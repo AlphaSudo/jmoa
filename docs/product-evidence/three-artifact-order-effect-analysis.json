@@ -1,0 +1,257 @@
+{
+  "schemaVersion": "jmoa-three-artifact-order-effect-analysis-v1",
+  "services": [
+    {
+      "service": "doctor-service",
+      "effects": {
+        "pssKb": {
+          "grandMean": 326256.278,
+          "artifactEffect": {
+            "B0": 890.389,
+            "V1": 2249.556,
+            "V2": -3139.944
+          },
+          "blockEffect": {
+            "1": 546.056,
+            "2": 211.722,
+            "3": 1161.056,
+            "4": -3444.944,
+            "5": 1417.056,
+            "6": 109.056
+          },
+          "positionEffect": {
+            "1": 1125.389,
+            "2": 593.556,
+            "3": -1718.944
+          },
+          "residual": {
+            "medianAbsoluteDeviation": 1322.25,
+            "rootMeanSquare": 1538.382,
+            "maximumAbsolute": 3164.779
+          }
+        },
+        "privateDirtyKb": {
+          "grandMean": 296217.333,
+          "artifactEffect": {
+            "B0": 970.667,
+            "V1": 2187.333,
+            "V2": -3158.0
+          },
+          "blockEffect": {
+            "1": 482.667,
+            "2": 212.0,
+            "3": 1194.667,
+            "4": -3400.0,
+            "5": 1396.0,
+            "6": 114.667
+          },
+          "positionEffect": {
+            "1": 1122.667,
+            "2": 622.667,
+            "3": -1745.333
+          },
+          "residual": {
+            "medianAbsoluteDeviation": 1249.0,
+            "rootMeanSquare": 1541.366,
+            "maximumAbsolute": 3262.667
+          }
+        },
+        "memoryCurrentBytes": {
+          "grandMean": 533537223.111,
+          "artifactEffect": {
+            "B0": 2667406.222,
+            "V1": 4814392.889,
+            "V2": -7481799.111
+          },
+          "blockEffect": {
+            "1": 335416.889,
+            "2": 93752.889,
+            "3": 1383992.889,
+            "4": -3357809.778,
+            "5": 1467278.222,
+            "6": 77368.889
+          },
+          "positionEffect": {
+            "1": 1151886.222,
+            "2": 605752.889,
+            "3": -1757639.111
+          },
+          "residual": {
+            "medianAbsoluteDeviation": 1276245.333,
+            "rootMeanSquare": 1528669.614,
+            "maximumAbsolute": 3176220.444
+          }
+        },
+        "interpretation": "Additive decomposition is diagnostic only; paired medians remain authoritative."
+      }
+    },
+    {
+      "service": "patient-service",
+      "effects": {
+        "pssKb": {
+          "grandMean": 295076.556,
+          "artifactEffect": {
+            "B0": 930.444,
+            "V1": 1508.611,
+            "V2": -2439.056
+          },
+          "blockEffect": {
+            "1": 721.778,
+            "2": -1948.556,
+            "3": -489.889,
+            "4": 2625.111,
+            "5": 323.111,
+            "6": -1231.556
+          },
+          "positionEffect": {
+            "1": 985.611,
+            "2": -1267.222,
+            "3": 281.611
+          },
+          "residual": {
+            "medianAbsoluteDeviation": 2787.584,
+            "rootMeanSquare": 3100.872,
+            "maximumAbsolute": 5263.222
+          }
+        },
+        "privateDirtyKb": {
+          "grandMean": 283538.889,
+          "artifactEffect": {
+            "B0": 937.778,
+            "V1": 1492.444,
+            "V2": -2430.222
+          },
+          "blockEffect": {
+            "1": 787.778,
+            "2": -1973.556,
+            "3": -441.556,
+            "4": 2579.778,
+            "5": 427.778,
+            "6": -1380.222
+          },
+          "positionEffect": {
+            "1": 1002.444,
+            "2": -1238.889,
+            "3": 236.444
+          },
+          "residual": {
+            "medianAbsoluteDeviation": 2841.0,
+            "rootMeanSquare": 3107.222,
+            "maximumAbsolute": 5238.889
+          }
+        },
+        "memoryCurrentBytes": {
+          "grandMean": 294198613.333,
+          "artifactEffect": {
+            "B0": 858794.667,
+            "V1": 1620650.667,
+            "V2": -2479445.333
+          },
+          "blockEffect": {
+            "1": 647850.667,
+            "2": -1917610.667,
+            "3": -507221.333,
+            "4": 2657621.333,
+            "5": 468992.0,
+            "6": -1349632.0
+          },
+          "positionEffect": {
+            "1": 956416.0,
+            "2": -1159168.0,
+            "3": 202752.0
+          },
+          "residual": {
+            "medianAbsoluteDeviation": 2928981.333,
+            "rootMeanSquare": 3141226.359,
+            "maximumAbsolute": 5134336.0
+          }
+        },
+        "interpretation": "Additive decomposition is diagnostic only; paired medians remain authoritative."
+      }
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "effects": {
+        "pssKb": {
+          "grandMean": 344512.167,
+          "artifactEffect": {
+            "B0": -699.833,
+            "V1": 3149.167,
+            "V2": -2449.333
+          },
+          "blockEffect": {
+            "1": -2922.833,
+            "2": 2558.5,
+            "3": 2045.833,
+            "4": 26.833,
+            "5": -2538.167,
+            "6": 829.833
+          },
+          "positionEffect": {
+            "1": 1171.667,
+            "2": -655.5,
+            "3": -516.167
+          },
+          "residual": {
+            "medianAbsoluteDeviation": 2815.75,
+            "rootMeanSquare": 3948.131,
+            "maximumAbsolute": 8857.166
+          }
+        },
+        "privateDirtyKb": {
+          "grandMean": 335518.0,
+          "artifactEffect": {
+            "B0": -735.333,
+            "V1": 3173.333,
+            "V2": -2438.0
+          },
+          "blockEffect": {
+            "1": -2819.333,
+            "2": 2462.0,
+            "3": 2094.0,
+            "4": -224.667,
+            "5": -2422.0,
+            "6": 910.0
+          },
+          "positionEffect": {
+            "1": 1187.333,
+            "2": -568.0,
+            "3": -619.333
+          },
+          "residual": {
+            "medianAbsoluteDeviation": 2868.666,
+            "rootMeanSquare": 3916.494,
+            "maximumAbsolute": 8810.001
+          }
+        },
+        "memoryCurrentBytes": {
+          "grandMean": 348964864.0,
+          "artifactEffect": {
+            "B0": -755029.333,
+            "V1": 3205120.0,
+            "V2": -2450090.667
+          },
+          "blockEffect": {
+            "1": -2942976.0,
+            "2": 2426880.0,
+            "3": 2037760.0,
+            "4": -153600.0,
+            "5": -2310826.667,
+            "6": 942762.667
+          },
+          "positionEffect": {
+            "1": 1213781.333,
+            "2": -572757.333,
+            "3": -641024.0
+          },
+          "residual": {
+            "medianAbsoluteDeviation": 3062442.666,
+            "rootMeanSquare": 4097080.595,
+            "maximumAbsolute": 9319082.667
+          }
+        },
+        "interpretation": "Additive decomposition is diagnostic only; paired medians remain authoritative."
+      }
+    }
+  ]
+}

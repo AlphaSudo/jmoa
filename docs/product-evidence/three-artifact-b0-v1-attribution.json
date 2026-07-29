@@ -1,0 +1,125 @@
+{
+  "schemaVersion": "jmoa-three-artifact-b0-v1-attribution-v1",
+  "services": [
+    {
+      "service": "doctor-service",
+      "attribution": {
+        "classification": "B0_V1_NO_MEASURABLE_EFFECT",
+        "pssMedianDeltaKb": 654.0,
+        "privateDirtyMedianDeltaKb": 498.0,
+        "memoryCurrentMedianDeltaBytes": 1439744.0,
+        "smapsNmtClassification": "LOW_SIGNAL",
+        "nmtTotalCommittedDeltaKb": -398.0,
+        "heapPssDeltaKb": 0.0,
+        "heapUsedDeltaKb": -60.0,
+        "heapCommittedDeltaKb": -206.0,
+        "histogramBytesDelta": -40784.0,
+        "loadedClassCountDelta": -130.0,
+        "metaspaceCommittedDeltaKb": -92.0,
+        "classCommittedDeltaKb": -264.0,
+        "codeCommittedDeltaKb": -88.0,
+        "hypotheses": [
+          {
+            "hypothesis": "CLASS_COUNT_SAVINGS",
+            "confidence": "MEDIUM",
+            "evidence": [
+              "class histogram class-count delta -130"
+            ],
+            "notEvidence": [
+              "Class count alone did not explain all PSS movement."
+            ],
+            "nextAction": "Treat class-count savings as supporting evidence, not sole causality."
+          }
+        ]
+      }
+    },
+    {
+      "service": "patient-service",
+      "attribution": {
+        "classification": "B0_V1_NO_MEASURABLE_EFFECT",
+        "pssMedianDeltaKb": 910.0,
+        "privateDirtyMedianDeltaKb": 844.0,
+        "memoryCurrentMedianDeltaBytes": 827392.0,
+        "smapsNmtClassification": "LOW_SIGNAL",
+        "nmtTotalCommittedDeltaKb": 543.0,
+        "heapPssDeltaKb": 560.0,
+        "heapUsedDeltaKb": 76.0,
+        "heapCommittedDeltaKb": 166.0,
+        "histogramBytesDelta": 77756.0,
+        "loadedClassCountDelta": -5.0,
+        "metaspaceCommittedDeltaKb": 1.0,
+        "classCommittedDeltaKb": -27.0,
+        "codeCommittedDeltaKb": 49.0,
+        "hypotheses": [
+          {
+            "hypothesis": "CLASS_COUNT_SAVINGS",
+            "confidence": "MEDIUM",
+            "evidence": [
+              "class histogram class-count delta -5"
+            ],
+            "notEvidence": [
+              "Class count alone did not explain all PSS movement."
+            ],
+            "nextAction": "Treat class-count savings as supporting evidence, not sole causality."
+          }
+        ]
+      }
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "attribution": {
+        "classification": "B0_V1_RUNTIME_OVERHEAD_EXCEEDS_SAVING",
+        "pssMedianDeltaKb": 2516.0,
+        "privateDirtyMedianDeltaKb": 2704.0,
+        "memoryCurrentMedianDeltaBytes": 2658304.0,
+        "smapsNmtClassification": "NMT_VISIBLE",
+        "nmtTotalCommittedDeltaKb": 1587.0,
+        "heapPssDeltaKb": 1706.0,
+        "heapUsedDeltaKb": 253.0,
+        "heapCommittedDeltaKb": 886.0,
+        "histogramBytesDelta": -146576.0,
+        "loadedClassCountDelta": -174.0,
+        "metaspaceCommittedDeltaKb": 88.0,
+        "classCommittedDeltaKb": -111.0,
+        "codeCommittedDeltaKb": 214.0,
+        "hypotheses": [
+          {
+            "hypothesis": "HEAP_PAGE_TOUCH_GROWTH",
+            "confidence": "HIGH",
+            "evidence": [
+              "heap PSS delta +1706 KB",
+              "heap used stayed near flat",
+              "class histogram bytes stayed near flat"
+            ],
+            "notEvidence": [
+              "Regression is not explained by retained-object growth."
+            ],
+            "nextAction": "Reject candidate shape or diagnose allocation/page-touch timing."
+          },
+          {
+            "hypothesis": "CLASS_COUNT_SAVINGS",
+            "confidence": "MEDIUM",
+            "evidence": [
+              "class histogram class-count delta -174"
+            ],
+            "notEvidence": [
+              "Class count alone did not explain all PSS movement."
+            ],
+            "nextAction": "Treat class-count savings as supporting evidence, not sole causality."
+          },
+          {
+            "hypothesis": "ANONYMOUS_RW_ALLOCATOR_GROWTH",
+            "confidence": "MEDIUM",
+            "evidence": [
+              "anonymous_rw PSS median delta 1178 KB"
+            ],
+            "notEvidence": [
+              "NMT may only partially explain allocator dirty pages."
+            ],
+            "nextAction": "Keep allocator policy explicit in evidence reports."
+          }
+        ]
+      }
+    }
+  ]
+}

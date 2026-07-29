@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "jmoa-hyperv-debian-fixed-2g-contract-v1",
+  "hostProfile": "HYPERV_DEBIAN_FIXED_2G",
+  "resourceClass": "CONSTRAINED_FIXED_MEMORY",
+  "configuredHostAssumptions": {
+    "fixedRamMiB": 2038,
+    "logicalProcessors": 4,
+    "dynamicMemory": false,
+    "automaticCheckpoints": false
+  },
+  "admission": {
+    "minTotalMemoryBytes": 1992294400,
+    "minPreflightAvailableMemoryBytes": 1415577600,
+    "minSupportReadyMemoryBytes": 734003200,
+    "minPreTargetMemoryBytes": 629145600,
+    "minInArmMemoryBytes": 314572800,
+    "requireSwapDisabled": true,
+    "maxSwapUsedBytes": 0,
+    "maxMemoryPressureSomeAvg10": 0.0,
+    "maxMemoryPressureFullAvg10": 0.0,
+    "requireZeroOomEvents": true
+  },
+  "scientificGatesChanged": false,
+  "capacityQualificationIncludedInMedians": false,
+  "hostInterruptionClassification": "HOST_HIBERNATION_INTERRUPTION",
+  "outOfScopeUntilPetClinicTerminal": [
+    "Doctor",
+    "Patient"
+  ],
+  "recordedOutcome": {
+    "terminalVerdict": "STOPPED_INSUFFICIENT_SUPPORT_STACK_HEADROOM",
+    "supersedingInterpretation": "STOPPED_SUPPORT_STACK_STABILITY_GATE",
+    "targetArmsLaunched": false,
+    "details": "petclinic-hyperv-2g-terminal-outcome.json"
+  },
+  "supportCalibrationContract": "SUPPORT_CALIBRATION_V2",
+  "latestSupportCalibrationOutcome": {
+    "runnerRevision": "74c2df605c4f888ad46708df4f80fc225a44f463",
+    "terminalOutcome": "SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE",
+    "attribution": "ANON_PRIVATE_GROWTH",
+    "validCalibrations": 3,
+    "stableCalibrations": 0,
+    "capacityPassed": true,
+    "pressurePassed": true,
+    "targetArmsLaunched": false,
+    "details": "petclinic-hyperv-2g-support-calibration-v2-result.json"
+  }
+}

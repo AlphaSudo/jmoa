@@ -1,0 +1,230 @@
+{
+  "schemaVersion": "jmoa-three-artifact-workload-equivalence-audit-v1",
+  "services": [
+    {
+      "service": "doctor-service",
+      "workload": {
+        "decision": "WORKLOAD_EQUIVALENT",
+        "schemas": [
+          "jmoa-doctor-three-artifact-workload-v1"
+        ],
+        "requests": [
+          600
+        ],
+        "rounds": [
+          3
+        ],
+        "pathStatusDigests": [
+          "A1D8D76D165F5403D763081C2EB23B3FE3DBE220BB639D47D693E232A7A2FAEC"
+        ],
+        "totalErrors": 0,
+        "healthStates": [
+          "UP"
+        ],
+        "mutationStates": [
+          ""
+        ],
+        "settleSeconds": [
+          5.0
+        ],
+        "captureAgeByVariant": {
+          "B0": {
+            "median": 181.0,
+            "minimum": 177.0,
+            "maximum": 220.0
+          },
+          "V1": {
+            "median": 176.5,
+            "minimum": 175.0,
+            "maximum": 188.0
+          },
+          "V2": {
+            "median": 175.0,
+            "minimum": 170.0,
+            "maximum": 186.0
+          }
+        },
+        "startupMillisByVariant": {
+          "B0": 46317.5,
+          "V1": 42263.0,
+          "V2": 41202.0
+        },
+        "workloadElapsedSecondsByVariant": {
+          "B0": 83.892,
+          "V1": 82.623,
+          "V2": 82.304
+        },
+        "actualCaptureLagSecondsByVariant": {
+          "B0": {
+            "median": 14.0,
+            "minimum": 13.0,
+            "maximum": 14.0
+          },
+          "V1": {
+            "median": 14.0,
+            "minimum": 13.0,
+            "maximum": 14.0
+          },
+          "V2": {
+            "median": 14.0,
+            "minimum": 13.0,
+            "maximum": 14.0
+          }
+        },
+        "captureTimingViolations": [],
+        "maximumAllowedCaptureLagSeconds": 65.0,
+        "timingBoundary": "Observed duration can vary; a defect requires a different nominal workload or settle/capture policy, not merely a slower run."
+      }
+    },
+    {
+      "service": "patient-service",
+      "workload": {
+        "decision": "WORKLOAD_EQUIVALENT",
+        "schemas": [
+          "jmoa-three-artifact-health-workload-v1"
+        ],
+        "requests": [
+          600
+        ],
+        "rounds": [
+          3
+        ],
+        "pathStatusDigests": [
+          "A1D8D76D165F5403D763081C2EB23B3FE3DBE220BB639D47D693E232A7A2FAEC"
+        ],
+        "totalErrors": 0,
+        "healthStates": [
+          "UP"
+        ],
+        "mutationStates": [
+          ""
+        ],
+        "settleSeconds": [
+          5.0
+        ],
+        "captureAgeByVariant": {
+          "B0": {
+            "median": 210.0,
+            "minimum": 200.0,
+            "maximum": 255.0
+          },
+          "V1": {
+            "median": 204.0,
+            "minimum": 200.0,
+            "maximum": 256.0
+          },
+          "V2": {
+            "median": 209.0,
+            "minimum": 203.0,
+            "maximum": 230.0
+          }
+        },
+        "startupMillisByVariant": {
+          "B0": 73275.5,
+          "V1": 71051.0,
+          "V2": 71954.5
+        },
+        "workloadElapsedSecondsByVariant": {
+          "B0": 86.643,
+          "V1": 84.96,
+          "V2": 85.676
+        },
+        "actualCaptureLagSecondsByVariant": {
+          "B0": {
+            "median": 14.0,
+            "minimum": 13.0,
+            "maximum": 15.0
+          },
+          "V1": {
+            "median": 14.0,
+            "minimum": 13.0,
+            "maximum": 15.0
+          },
+          "V2": {
+            "median": 13.0,
+            "minimum": 13.0,
+            "maximum": 14.0
+          }
+        },
+        "captureTimingViolations": [],
+        "maximumAllowedCaptureLagSeconds": 65.0,
+        "timingBoundary": "Observed duration can vary; a defect requires a different nominal workload or settle/capture policy, not merely a slower run."
+      }
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "workload": {
+        "decision": "WORKLOAD_EQUIVALENT",
+        "schemas": [
+          "jmoa-petclinic-workload-v1"
+        ],
+        "requests": [
+          81
+        ],
+        "rounds": [
+          3
+        ],
+        "pathStatusDigests": [
+          "73751B3B07E33F444204AA8B2AC04812FA17C204783E423174F92B9A2DF76078"
+        ],
+        "totalErrors": 0,
+        "healthStates": [
+          "UP"
+        ],
+        "mutationStates": [
+          "True"
+        ],
+        "settleSeconds": [
+          5.0
+        ],
+        "captureAgeByVariant": {
+          "B0": {
+            "median": 133.0,
+            "minimum": 130.0,
+            "maximum": 139.0
+          },
+          "V1": {
+            "median": 131.0,
+            "minimum": 129.0,
+            "maximum": 134.0
+          },
+          "V2": {
+            "median": 132.0,
+            "minimum": 130.0,
+            "maximum": 137.0
+          }
+        },
+        "startupMillisByVariant": {
+          "B0": 62429.5,
+          "V1": 62683.5,
+          "V2": 62874.0
+        },
+        "workloadElapsedSecondsByVariant": {
+          "B0": 0.0,
+          "V1": 0.0,
+          "V2": 0.0
+        },
+        "actualCaptureLagSecondsByVariant": {
+          "B0": {
+            "median": 13.0,
+            "minimum": 13.0,
+            "maximum": 18.0
+          },
+          "V1": {
+            "median": 13.0,
+            "minimum": 13.0,
+            "maximum": 13.0
+          },
+          "V2": {
+            "median": 13.0,
+            "minimum": 13.0,
+            "maximum": 17.0
+          }
+        },
+        "captureTimingViolations": [],
+        "maximumAllowedCaptureLagSeconds": 65.0,
+        "timingBoundary": "Observed duration can vary; a defect requires a different nominal workload or settle/capture policy, not merely a slower run."
+      }
+    }
+  ]
+}

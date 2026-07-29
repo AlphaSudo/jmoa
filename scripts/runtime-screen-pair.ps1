@@ -19,11 +19,15 @@ param(
     [string]$StopScript = "",
     [string[]]$StopScriptArguments = @(),
     [hashtable]$StopScriptParameters = @{},
+    [string]$TransitionScript = "",
+    [string[]]$TransitionScriptArguments = @(),
+    [hashtable]$TransitionScriptParameters = @{},
     [string]$ContainerCli = "podman",
     [string]$JcmdExecutable = "jcmd",
     [string]$JavaProcessPattern = "java",
     [int]$PairIndex = 1,
     [ValidateSet('BASELINE_FIRST', 'CANDIDATE_FIRST')][string]$FirstVariant = 'BASELINE_FIRST',
+    [ValidateSet('PAIR', 'BASELINE_ONLY', 'CANDIDATE_ONLY')][string]$ExecutionMode = 'PAIR',
     [string]$CaptureRoot = "target/jmoa-runtime-screen",
     [string]$BaselineRuntimeVerificationPath = "",
     [string]$CandidateRuntimeVerificationPath = "",
@@ -50,9 +54,14 @@ param(
     [switch]$DeferHistogramUntilFinalSnapshot,
     [switch]$DiagnosticOnly,
     [switch]$DropPageCacheBeforeVariant,
+    [ValidateSet('DROP_CACHES', 'PODMAN_MACHINE_RESTART')][string]$PageCacheResetStrategy = 'DROP_CACHES',
+    [string]$PodmanMachineName = 'podman-machine-default',
     [switch]$CapturePodmanMachinePressure,
     [long]$MinPodmanAvailableMemoryBytes = 1073741824,
+    [long]$MinPostArmAvailableMemoryBytes = 0,
     [long]$MaxPodmanSwapUsedBytes = 0,
+    [bool]$RequireSwapDisabled = $false,
+    [bool]$RequireZeroOomEvents = $false,
     [double]$MaxPodmanMemoryPressureSomeAvg10 = 1.0,
     [double]$MaxPodmanMemoryPressureFullAvg10 = 0.1,
     [int]$HealthTimeoutSeconds = 90,
@@ -69,10 +78,16 @@ $ErrorActionPreference = 'Stop'
 $script:CurrentCaptureLedger = ''
 
 foreach ($path in @($BaselineLaunchScript, $CandidateLaunchScript, $WorkloadScript, $BaselineArtifactPath, $CandidateArtifactPath)) {
-    if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Required path does not exist: $path" }
+    if (-not (Test-Path -LiteralPath $path)) { throw "Required path does not exist: $path" }
+}
+foreach ($scriptPath in @($BaselineLaunchScript, $CandidateLaunchScript, $WorkloadScript)) {
+    if (-not (Test-Path -LiteralPath $scriptPath -PathType Leaf)) { throw "Required script is not a file: $scriptPath" }
 }
 if (-not [string]::IsNullOrWhiteSpace($StopScript) -and -not (Test-Path -LiteralPath $StopScript -PathType Leaf)) {
     throw "Stop script does not exist: $StopScript"
+}
+if (-not [string]::IsNullOrWhiteSpace($TransitionScript) -and -not (Test-Path -LiteralPath $TransitionScript -PathType Leaf)) {
+    throw "Transition script does not exist: $TransitionScript"
 }
 New-JmoaDirectory -Path $CaptureRoot
 function Resolve-VariantPolicy {
@@ -207,30 +222,30 @@ function Capture-RuntimeState {
     # Capture-order classification (review Issue #11): claim metrics are captured BEFORE any perturbing
     # diagnostic. The product medians consume only CLAIM_EVIDENCE captures.
     $plan = @(
-        @{ file = 'smaps_rollup.txt';     cmd = "cat /proc/$JavaPid/smaps_rollup";                class = 'CLAIM_EVIDENCE' },
-        @{ file = 'smaps.txt';            cmd = "cat /proc/$JavaPid/smaps";                        class = 'CLAIM_EVIDENCE' },
-        @{ file = 'memory.current';       cmd = 'cat /sys/fs/cgroup/memory.current';               class = 'CLAIM_EVIDENCE' },
-        @{ file = 'memory.stat';          cmd = 'cat /sys/fs/cgroup/memory.stat';                  class = 'CLAIM_EVIDENCE' },
-        @{ file = 'io.stat';              cmd = 'cat /sys/fs/cgroup/io.stat';                      class = 'CLAIM_EVIDENCE' },
-        @{ file = 'nmt-summary.txt';      cmd = "$cleanJcmd $JavaPid VM.native_memory summary";    class = 'SUPPORTING_EVIDENCE' },
-        @{ file = 'heap-info.txt';        cmd = "$cleanJcmd $JavaPid GC.heap_info";               class = 'SUPPORTING_EVIDENCE' },
-        @{ file = 'metaspace.txt';        cmd = "$cleanJcmd $JavaPid VM.metaspace";               class = 'SUPPORTING_EVIDENCE' },
-        @{ file = 'classloader-stats.txt';cmd = "$cleanJcmd $JavaPid VM.classloader_stats";        class = 'SUPPORTING_EVIDENCE' },
-        @{ file = 'vm-flags.txt';         cmd = "$cleanJcmd $JavaPid VM.flags";                   class = 'SUPPORTING_EVIDENCE' }
+        @{ file = 'smaps_rollup.txt';     cmd = "cat /proc/$JavaPid/smaps_rollup";                class = 'CLAIM_EVIDENCE'; required = $true },
+        @{ file = 'smaps.txt';            cmd = "cat /proc/$JavaPid/smaps";                        class = 'CLAIM_EVIDENCE'; required = $true },
+        @{ file = 'memory.current';       cmd = 'cat /sys/fs/cgroup/memory.current';               class = 'CLAIM_EVIDENCE'; required = $true },
+        @{ file = 'memory.stat';          cmd = 'cat /sys/fs/cgroup/memory.stat';                  class = 'CLAIM_EVIDENCE'; required = $true },
+        @{ file = 'io.stat';              cmd = 'cat /sys/fs/cgroup/io.stat';                      class = 'OPTIONAL_DIAGNOSTIC'; required = $false },
+        @{ file = 'nmt-summary.txt';      cmd = "$cleanJcmd $JavaPid VM.native_memory summary";    class = 'SUPPORTING_EVIDENCE'; required = $true },
+        @{ file = 'heap-info.txt';        cmd = "$cleanJcmd $JavaPid GC.heap_info";               class = 'SUPPORTING_EVIDENCE'; required = $true },
+        @{ file = 'metaspace.txt';        cmd = "$cleanJcmd $JavaPid VM.metaspace";               class = 'SUPPORTING_EVIDENCE'; required = $true },
+        @{ file = 'classloader-stats.txt';cmd = "$cleanJcmd $JavaPid VM.classloader_stats";        class = 'SUPPORTING_EVIDENCE'; required = $true },
+        @{ file = 'vm-flags.txt';         cmd = "$cleanJcmd $JavaPid VM.flags";                   class = 'SUPPORTING_EVIDENCE'; required = $true }
     )
     $captures = New-Object System.Collections.Generic.List[object]
     $order = 0
     foreach ($item in $plan) {
         $order++
         $r = Capture-Command -ContainerName $ContainerName -ShellCommand $item.cmd -OutputPath (Join-Path $Directory $item.file) -Classification $item.class
-        $captures.Add([ordered]@{ order = $order; file = $item.file; classification = $item.class; exitCode = $r.exitCode }) | Out-Null
+        $captures.Add([ordered]@{ order = $order; file = $item.file; classification = $item.class; required = [bool]$item.required; exitCode = $r.exitCode }) | Out-Null
     }
     if ($IncludeHistogram) {
         $order++
         $r = Capture-Command -ContainerName $ContainerName -ShellCommand "$cleanJcmd $JavaPid GC.class_histogram" -OutputPath (Join-Path $Directory 'class-histogram.txt') -Classification 'PERTURBING_DIAGNOSTIC'
-        $captures.Add([ordered]@{ order = $order; file = 'class-histogram.txt'; classification = 'PERTURBING_DIAGNOSTIC'; exitCode = $r.exitCode }) | Out-Null
+        $captures.Add([ordered]@{ order = $order; file = 'class-histogram.txt'; classification = 'PERTURBING_DIAGNOSTIC'; required = $true; exitCode = $r.exitCode }) | Out-Null
     }
-    if ($captures | Where-Object { $_.exitCode -ne 0 }) { throw 'One or more required runtime captures failed.' }
+    if ($captures | Where-Object { $_.required -and $_.exitCode -ne 0 }) { throw 'One or more required runtime captures failed.' }
     [ordered]@{ capturedAt = [DateTime]::UtcNow.ToString('o'); histogramIncluded = $IncludeHistogram; directory = $Directory; captureOrderVersion = 'v2-claim-first-1'; captures = $captures.ToArray() }
 }
 
@@ -326,11 +341,51 @@ function Reset-PageCache {
     if (-not $DropPageCacheBeforeVariant) {
         return [ordered]@{ policy = 'NOT_REQUESTED'; status = 'NOT_REQUESTED'; output = '' }
     }
+    if ($PageCacheResetStrategy -eq 'PODMAN_MACHINE_RESTART') {
+        if (-not $IsWindows) {
+            throw 'PODMAN_MACHINE_RESTART currently requires the Windows WSL Podman provider.'
+        }
+        $stop = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
+            'machine', 'stop', $PodmanMachineName
+        ) -LedgerDirectory $script:CurrentCaptureLedger -Step 'stop Podman machine for cold-cache reset' -TimeoutSeconds 120 -AllowFailure
+        if ($stop.exitCode -ne 0) {
+            throw "Could not stop Podman machine $PodmanMachineName (exit $($stop.exitCode))."
+        }
+        $start = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
+            'machine', 'start', $PodmanMachineName
+        ) -LedgerDirectory $script:CurrentCaptureLedger -Step 'restart Podman machine for cold-cache reset' -TimeoutSeconds 180 -AllowFailure
+        if ($start.exitCode -ne 0) {
+            throw "Could not restart Podman machine $PodmanMachineName (exit $($start.exitCode))."
+        }
+        $probe = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
+            'machine', 'ssh', 'echo MACHINE_RESTART_CACHE_RESET_OK'
+        ) -LedgerDirectory $script:CurrentCaptureLedger -Step 'verify Podman transport after cold-cache restart' -TimeoutSeconds 30 -AllowFailure
+        if ($probe.exitCode -ne 0 -or $probe.output -notmatch 'MACHINE_RESTART_CACHE_RESET_OK') {
+            throw 'Podman transport did not recover after the cold-cache machine restart.'
+        }
+        $apiProbe = $null
+        for ($apiAttempt = 1; $apiAttempt -le 6; $apiAttempt++) {
+            $apiProbe = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
+                'compose', 'ls', '--format', 'json'
+            ) -LedgerDirectory $script:CurrentCaptureLedger -Step "verify Docker-compatible Compose API readiness after restart (attempt $apiAttempt)" -TimeoutSeconds 30 -AllowFailure
+            if ($apiProbe.exitCode -eq 0 -and -not [string]::IsNullOrWhiteSpace($apiProbe.output)) { break }
+            if ($apiAttempt -lt 6) { Start-Sleep -Seconds (2 * $apiAttempt) }
+        }
+        if ($null -eq $apiProbe -or $apiProbe.exitCode -ne 0) {
+            throw 'Docker-compatible Compose API did not become ready after the cold-cache machine restart.'
+        }
+        return [ordered]@{
+            policy = 'PODMAN_MACHINE_RESTART_BEFORE_VARIANT'
+            status = 'PASSED'
+            attempts = 1
+            output = "stopExit=$($stop.exitCode); startExit=$($start.exitCode); sshProbeExit=$($probe.exitCode); composeApiProbeExit=$($apiProbe.exitCode)"
+        }
+    }
     $attempts = @()
     for ($attempt = 1; $attempt -le 3; $attempt++) {
         $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
-            'machine', 'ssh', "sudo sh -c 'sync; echo 3 > /proc/sys/vm/drop_caches' && echo DROP_OK"
-        ) -LedgerDirectory $script:CurrentCaptureLedger -Step "drop page cache (attempt $attempt)" -AllowFailure
+            'machine', 'ssh', "sync && printf '3\n' | sudo -n /usr/bin/tee /proc/sys/vm/drop_caches >/dev/null && echo DROP_OK"
+        ) -LedgerDirectory $script:CurrentCaptureLedger -Step "drop page cache (attempt $attempt)" -TimeoutSeconds 60 -AllowFailure
         $attempts += [ordered]@{
             attempt = $attempt
             exitCode = $result.exitCode
@@ -362,6 +417,13 @@ function Get-PodmanMachinePressureValue {
     return [double]::Parse($match.Groups[1].Value, [Globalization.CultureInfo]::InvariantCulture)
 }
 
+function Get-CgroupMemoryEventValue {
+    param([string]$Text, [string]$Name)
+    $match = [regex]::Match($Text, "(?m)^$([regex]::Escape($Name))\s+(\d+)\s*$")
+    if (-not $match.Success) { return 0L }
+    return [long]$match.Groups[1].Value
+}
+
 function Capture-PodmanMachinePressure {
     param(
         [Parameter(Mandatory)][ValidateSet('PRE_ARM', 'POST_ARM')][string]$Point,
@@ -378,7 +440,9 @@ function Capture-PodmanMachinePressure {
         @{ key = 'memoryPressure'; command = 'cat /proc/pressure/memory' },
         @{ key = 'cpuPressure'; command = 'cat /proc/pressure/cpu' },
         @{ key = 'free'; command = 'free -b' },
-        @{ key = 'controllers'; command = 'cat /sys/fs/cgroup/cgroup.controllers' }
+        @{ key = 'controllers'; command = 'cat /sys/fs/cgroup/cgroup.controllers' },
+        @{ key = 'memoryEvents'; command = 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.events' },
+        @{ key = 'memorySwapCurrent'; command = 'cat /sys/fs/cgroup/user.slice/user-$(id -u).slice/memory.swap.current' }
     )) {
         $result = Invoke-AuditedExternal -Executable $ContainerCli -Arguments @(
             'machine', 'ssh', "sh -lc '$($spec.command)'"
@@ -396,12 +460,31 @@ function Capture-PodmanMachinePressure {
     $fullAvg10 = Get-PodmanMachinePressureValue -Text $captures.memoryPressure -Kind 'full' -Metric 'avg10'
     $someTotal = Get-PodmanMachinePressureValue -Text $captures.memoryPressure -Kind 'some' -Metric 'total'
     $fullTotal = Get-PodmanMachinePressureValue -Text $captures.memoryPressure -Kind 'full' -Metric 'total'
+    $oomEvents = Get-CgroupMemoryEventValue -Text $captures.memoryEvents -Name 'oom'
+    $oomKillEvents = Get-CgroupMemoryEventValue -Text $captures.memoryEvents -Name 'oom_kill'
+    $cgroupSwapCurrentBytes = if ($captures.memorySwapCurrent.Trim() -match '^\d+$') {
+        [long]$captures.memorySwapCurrent.Trim()
+    } else {
+        $null
+    }
     $reasons = New-Object System.Collections.Generic.List[string]
     if ($Point -eq 'PRE_ARM' -and $availableBytes -lt $MinPodmanAvailableMemoryBytes) {
         $reasons.Add("MemAvailable $availableBytes is below $MinPodmanAvailableMemoryBytes bytes") | Out-Null
     }
+    if ($Point -eq 'POST_ARM' -and $MinPostArmAvailableMemoryBytes -gt 0 -and $availableBytes -lt $MinPostArmAvailableMemoryBytes) {
+        $reasons.Add("post-arm MemAvailable $availableBytes is below $MinPostArmAvailableMemoryBytes bytes") | Out-Null
+    }
+    if ($RequireSwapDisabled -and $swapTotalBytes -ne 0) {
+        $reasons.Add("swap is configured: SwapTotal=$swapTotalBytes bytes") | Out-Null
+    }
     if ($swapUsedBytes -gt $MaxPodmanSwapUsedBytes) {
         $reasons.Add("swap used $swapUsedBytes exceeds $MaxPodmanSwapUsedBytes bytes") | Out-Null
+    }
+    if ($RequireSwapDisabled -and $null -ne $cgroupSwapCurrentBytes -and $cgroupSwapCurrentBytes -ne 0) {
+        $reasons.Add("cgroup memory.swap.current is $cgroupSwapCurrentBytes bytes") | Out-Null
+    }
+    if ($RequireZeroOomEvents -and ($oomEvents -ne 0 -or $oomKillEvents -ne 0)) {
+        $reasons.Add("cgroup OOM history is nonzero: oom=$oomEvents oom_kill=$oomKillEvents") | Out-Null
     }
     if ($someAvg10 -gt $MaxPodmanMemoryPressureSomeAvg10) {
         $reasons.Add("memory PSI some avg10 $someAvg10 exceeds $MaxPodmanMemoryPressureSomeAvg10") | Out-Null
@@ -410,7 +493,7 @@ function Capture-PodmanMachinePressure {
         $reasons.Add("memory PSI full avg10 $fullAvg10 exceeds $MaxPodmanMemoryPressureFullAvg10") | Out-Null
     }
     $report = [ordered]@{
-        schemaVersion       = 'jmoa-podman-machine-pressure-v1'
+        schemaVersion       = 'jmoa-podman-machine-pressure-v2'
         point               = $Point
         capturedAt          = [DateTime]::UtcNow.ToString('o')
         requested           = $true
@@ -418,6 +501,9 @@ function Capture-PodmanMachinePressure {
         swapTotalBytes      = $swapTotalBytes
         swapFreeBytes       = $swapFreeBytes
         swapUsedBytes       = $swapUsedBytes
+        cgroupSwapCurrentBytes = $cgroupSwapCurrentBytes
+        oomEvents           = $oomEvents
+        oomKillEvents       = $oomKillEvents
         memoryPressure      = [ordered]@{
             someAvg10 = $someAvg10
             fullAvg10 = $fullAvg10
@@ -426,7 +512,10 @@ function Capture-PodmanMachinePressure {
         }
         thresholds          = [ordered]@{
             minPreArmAvailableMemoryBytes = $MinPodmanAvailableMemoryBytes
+            minPostArmAvailableMemoryBytes = $MinPostArmAvailableMemoryBytes
             maxSwapUsedBytes              = $MaxPodmanSwapUsedBytes
+            requireSwapDisabled           = $RequireSwapDisabled
+            requireZeroOomEvents          = $RequireZeroOomEvents
             maxMemorySomeAvg10            = $MaxPodmanMemoryPressureSomeAvg10
             maxMemoryFullAvg10            = $MaxPodmanMemoryPressureFullAvg10
         }
@@ -501,10 +590,13 @@ function Invoke-Variant {
         $runtimePolicyProof = Capture-And-VerifyRuntimePolicy -ContainerName $ContainerName -JavaPid $javaPid -Directory $runDirectory -Policy $Policy
         $runtimeArtifactSha256 = $null
         if (-not [string]::IsNullOrWhiteSpace($RuntimeArtifactPath)) {
+            if (Test-Path -LiteralPath $ArtifactPath -PathType Container) {
+                throw 'RuntimeArtifactPath cannot be used with a directory-tree host artifact; use immutable image and materialization proof.'
+            }
             $artifactHashCapture = Capture-Command -ContainerName $ContainerName -ShellCommand "sha256sum '$RuntimeArtifactPath' | awk '{print `$1}'" -OutputPath (Join-Path $runDirectory 'runtime-artifact-sha256.txt')
             if ($artifactHashCapture.exitCode -ne 0) { throw "Could not hash runtime artifact: $RuntimeArtifactPath" }
             $runtimeArtifactSha256 = $artifactHashCapture.output.Trim().ToUpperInvariant()
-            if ($runtimeArtifactSha256 -ne (Get-JmoaSha256 -Path $ArtifactPath)) { throw 'Runtime artifact SHA-256 does not match the host artifact supplied to the screen.' }
+            if ($runtimeArtifactSha256 -ne (Get-CampaignArtifactSha256 -Path $ArtifactPath)) { throw 'Runtime artifact SHA-256 does not match the host artifact supplied to the screen.' }
         }
 
         $workloadPath = Join-Path $runDirectory 'workload-result.json'
@@ -576,8 +668,9 @@ function Invoke-Variant {
             variant = $Variant
             service = $Service
             phase = 'V2-O'
-            artifactSha256 = Get-JmoaSha256 -Path $ArtifactPath
-            expectedArtifactSha256 = Get-JmoaSha256 -Path $ArtifactPath
+            artifactSha256 = Get-CampaignArtifactSha256 -Path $ArtifactPath
+            expectedArtifactSha256 = Get-CampaignArtifactSha256 -Path $ArtifactPath
+            artifactKind = if (Test-Path -LiteralPath $ArtifactPath -PathType Container) { 'DIRECTORY_TREE' } else { 'FILE' }
             runtimeArtifactSha256 = $runtimeArtifactSha256
             imageId = Get-AuditedContainerIdentity -ContainerName $ContainerName -Field 'Image'
             containerId = Get-AuditedContainerIdentity -ContainerName $ContainerName -Field 'Id'
@@ -642,7 +735,20 @@ function Invoke-Variant {
             Complete-CampaignAuditLedger -LedgerDirectory $captureLedger -Status 'FAILED' -Stage 'capture' -Variant $Variant | Out-Null
         }
         $script:CurrentCaptureLedger = ''
-        Stop-VariantContainer -ContainerName $ContainerName -Variant $Variant -RunDirectory $runDirectory -LedgerDirectory $teardownLedger
+        $stopError = ''
+        try {
+            Stop-VariantContainer -ContainerName $ContainerName -Variant $Variant -RunDirectory $runDirectory -LedgerDirectory $teardownLedger
+        } catch {
+            $stopError = $_.Exception.Message
+            Write-JmoaJson -Value ([ordered]@{
+                status = 'FAILED'
+                primaryRunError = $launchError
+                teardownError = $stopError
+            }) -Path (Join-Path $runDirectory 'teardown-failure.json')
+        }
+        if (-not [string]::IsNullOrWhiteSpace($stopError) -and [string]::IsNullOrWhiteSpace($launchError)) {
+            throw $stopError
+        }
     }
 }
 
@@ -757,12 +863,51 @@ function Write-CampaignArmCommandLedger {
     return $summary
 }
 
+function Invoke-PairTransition {
+    param(
+        [Parameter(Mandatory)][string]$FirstContainerName,
+        [Parameter(Mandatory)][string]$FirstVariant,
+        [Parameter(Mandatory)][string]$SecondContainerName,
+        [Parameter(Mandatory)][string]$SecondVariant
+    )
+    if ([string]::IsNullOrWhiteSpace($TransitionScript)) { return $null }
+    $transitionLedger = if ([string]::IsNullOrWhiteSpace($LedgerDirectory)) { '' } else {
+        Join-Path $LedgerDirectory ("pair-{0}-transition" -f $PairIndex)
+    }
+    $parameters = @{} + $TransitionScriptParameters
+    $parameters.PairIndex = $PairIndex
+    $parameters.FirstContainerName = $FirstContainerName
+    $parameters.FirstVariant = $FirstVariant
+    $parameters.SecondContainerName = $SecondContainerName
+    $parameters.SecondVariant = $SecondVariant
+    $firstLabel = if ($FirstVariant -eq 'BASELINE') { 'b' } else { 'c' }
+    $parameters.FirstRunDirectory = Join-Path $CaptureRoot ("{0}{1}" -f $firstLabel, $PairIndex)
+    $parameters.OutputDirectory = Join-Path $CaptureRoot ("pair-{0}-transition" -f $PairIndex)
+    if (-not [string]::IsNullOrWhiteSpace($transitionLedger)) {
+        $parameters.LedgerDirectory = $transitionLedger
+        $parameters.LedgerStage = 'transition'
+    }
+    & $TransitionScript @parameters @TransitionScriptArguments
+    if (-not $?) { throw "Target transition proof failed after $FirstVariant arm." }
+    return Get-Content -Raw -LiteralPath (Join-Path $parameters.OutputDirectory 'target-transition-proof.json') | ConvertFrom-Json
+}
+
 $baseline = $null
 $candidate = $null
-if ($FirstVariant -eq 'BASELINE_FIRST') {
+$transition = $null
+if ($ExecutionMode -eq 'BASELINE_ONLY') {
     $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
         -LaunchArguments $BaselineLaunchArguments -LaunchParameters $BaselineLaunchParameters -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
         -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
+} elseif ($ExecutionMode -eq 'CANDIDATE_ONLY') {
+    $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
+        -LaunchArguments $CandidateLaunchArguments -LaunchParameters $CandidateLaunchParameters -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
+        -RuntimeVerificationPath $CandidateRuntimeVerificationPath -Policy $candidatePolicy -RuntimeArtifactPath $CandidateRuntimeArtifactPath
+} elseif ($FirstVariant -eq 'BASELINE_FIRST') {
+    $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
+        -LaunchArguments $BaselineLaunchArguments -LaunchParameters $BaselineLaunchParameters -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
+        -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
+    $transition = Invoke-PairTransition -FirstContainerName $BaselineContainerName -FirstVariant 'BASELINE' -SecondContainerName $CandidateContainerName -SecondVariant 'CANDIDATE'
     $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
         -LaunchArguments $CandidateLaunchArguments -LaunchParameters $CandidateLaunchParameters -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
         -RuntimeVerificationPath $CandidateRuntimeVerificationPath -Policy $candidatePolicy -RuntimeArtifactPath $CandidateRuntimeArtifactPath
@@ -770,19 +915,24 @@ if ($FirstVariant -eq 'BASELINE_FIRST') {
     $candidate = Invoke-Variant -Variant 'CANDIDATE' -Label 'c' -LaunchScript $CandidateLaunchScript `
         -LaunchArguments $CandidateLaunchArguments -LaunchParameters $CandidateLaunchParameters -ContainerName $CandidateContainerName -ArtifactPath $CandidateArtifactPath `
         -RuntimeVerificationPath $CandidateRuntimeVerificationPath -Policy $candidatePolicy -RuntimeArtifactPath $CandidateRuntimeArtifactPath
+    $transition = Invoke-PairTransition -FirstContainerName $CandidateContainerName -FirstVariant 'CANDIDATE' -SecondContainerName $BaselineContainerName -SecondVariant 'BASELINE'
     $baseline = Invoke-Variant -Variant 'BASELINE' -Label 'b' -LaunchScript $BaselineLaunchScript `
         -LaunchArguments $BaselineLaunchArguments -LaunchParameters $BaselineLaunchParameters -ContainerName $BaselineContainerName -ArtifactPath $BaselineArtifactPath `
         -RuntimeVerificationPath $BaselineRuntimeVerificationPath -Policy $baselinePolicy -RuntimeArtifactPath $BaselineRuntimeArtifactPath
 }
 $armLedgers = if ([string]::IsNullOrWhiteSpace($LedgerDirectory)) { $null } else {
     [ordered]@{
-        baseline = Write-CampaignArmCommandLedger -Label 'b' -Variant 'BASELINE'
-        candidate = Write-CampaignArmCommandLedger -Label 'c' -Variant 'CANDIDATE'
+        baseline = if ($null -eq $baseline) { $null } else { Write-CampaignArmCommandLedger -Label 'b' -Variant 'BASELINE' }
+        candidate = if ($null -eq $candidate) { $null } else { Write-CampaignArmCommandLedger -Label 'c' -Variant 'CANDIDATE' }
     }
 }
-$status = if ($baseline.status -eq 'CAPTURED' -and $candidate.status -eq 'CAPTURED') { 'CAPTURED' } else { 'FAILED' }
+$status = if (
+    ($ExecutionMode -eq 'PAIR' -and $baseline.status -eq 'CAPTURED' -and $candidate.status -eq 'CAPTURED') -or
+    ($ExecutionMode -eq 'BASELINE_ONLY' -and $baseline.status -eq 'CAPTURED') -or
+    ($ExecutionMode -eq 'CANDIDATE_ONLY' -and $candidate.status -eq 'CAPTURED')
+) { 'CAPTURED' } else { 'FAILED' }
 $baseArchiveIdentity = $null
-if ($status -eq 'CAPTURED' -and $baselinePolicy.kind -eq 'BASE' -and $candidatePolicy.kind -eq 'BASE') {
+if ($ExecutionMode -eq 'PAIR' -and $status -eq 'CAPTURED' -and $baselinePolicy.kind -eq 'BASE' -and $candidatePolicy.kind -eq 'BASE') {
     $sameHash = $baseline.runtimePolicyProof.defaultJdkArchiveSha256 -eq $candidate.runtimePolicyProof.defaultJdkArchiveSha256
     $samePath = $baseline.runtimePolicyProof.defaultJdkArchivePath -eq $candidate.runtimePolicyProof.defaultJdkArchivePath
     $sameDeviceInode = $baseline.runtimePolicyProof.defaultJdkArchiveDeviceInode -eq $candidate.runtimePolicyProof.defaultJdkArchiveDeviceInode
@@ -808,9 +958,13 @@ $pair = [ordered]@{
     baselineRuntimePolicy = $baselinePolicy.policy
     candidateRuntimePolicy = $candidatePolicy.policy
     firstVariant = $FirstVariant
-    pageCachePolicy = if ($DropPageCacheBeforeVariant) { 'DROP_CACHES_BEFORE_EACH_VARIANT' } else { 'NOT_REQUESTED' }
+    pageCachePolicy = if ($DropPageCacheBeforeVariant) {
+        if ($PageCacheResetStrategy -eq 'PODMAN_MACHINE_RESTART') { 'PODMAN_MACHINE_RESTART_BEFORE_EACH_VARIANT' } else { 'DROP_CACHES_BEFORE_EACH_VARIANT' }
+    } else { 'NOT_REQUESTED' }
     baseline = $baseline
     candidate = $candidate
+    executionMode = $ExecutionMode
+    transitionProof = $transition
     armCommandLedgers = $armLedgers
     baseArchiveIdentity = $baseArchiveIdentity
     claimBoundary = 'One paired screen only. Run V2-C and V2-D after three valid pairs before making a runtime claim.'
@@ -818,5 +972,5 @@ $pair = [ordered]@{
 }
 Write-JmoaJson -Value $pair -Path (Join-Path $CaptureRoot ("v2o-runtime-screen-pair-{0}.json" -f $PairIndex))
 Write-Host "Runtime screen pair $PairIndex status: $status"
-if ($FailOnFailure -and $status -ne 'CAPTURED') { exit 1 }
+if ($FailOnFailure -and $status -ne 'CAPTURED') { throw "Runtime screen pair $PairIndex failed." }
 exit 0

@@ -30,12 +30,17 @@ param(
     [Parameter(Mandatory)][string]$ConfigImage,
     [Parameter(Mandatory)][string]$DiscoveryImage,
     [Parameter(Mandatory)][string]$ConfigRepo,
+    [string]$ArtifactPath = '',
+    [string]$ArtifactVariant = '',
+    [string]$CdsArchivePath = '',
+    [string]$ProjectName = '',
     [int]$Port = 8081,
     [int]$ConfigPort = 8888,
     [int]$DiscoveryPort = 8761,
     [int]$ConfigReadyTimeoutSeconds = 180,
     [int]$DiscoveryReadyTimeoutSeconds = 180,
     [int]$CustomerReadyTimeoutSeconds = 900,
+    [long]$MinAvailableMemoryBeforeTargetBytes = 0,
     [string]$ContainerCli = 'podman',
     [string]$LedgerDirectory = '',
     [string]$LedgerStage = 'launch',
@@ -48,6 +53,9 @@ $ErrorActionPreference = 'Stop'
 
 if (-not (Test-Path -LiteralPath $ConfigRepo -PathType Container)) {
     throw "Config repository directory does not exist: $ConfigRepo"
+}
+if (-not [string]::IsNullOrWhiteSpace($ArtifactPath) -and -not (Test-Path -LiteralPath $ArtifactPath)) {
+    throw "Frozen artifact path does not exist: $ArtifactPath"
 }
 New-JmoaDirectory -Path $RunDirectory
 
@@ -180,6 +188,7 @@ function Wait-AuditedHealth {
 # Pre-clean any residual containers/network with the derived names.
 Remove-StackResiduals
 
+$availableBeforeTarget = $null
 try {
     # ---- Resolve all four images to immutable IDs ONCE (Issue #2) --------------------------------
     $configInfo = Resolve-ImageInfo -Reference $ConfigImage -Role 'config'
@@ -221,6 +230,16 @@ try {
     if (-not $discoveryHealth.passed) { throw "discovery-server did not become healthy: $($discoveryHealth.error)" }
     $discoveryLiveImageId = Assert-LiveImageId -Name $discoveryName -ExpectedImageId $discoveryInfo.resolvedImageId -Role 'discovery'
 
+    if ($MinAvailableMemoryBeforeTargetBytes -gt 0) {
+        $headroom = Invoke-Cli -Description 'capture MemAvailable before customers-service launch' -CliArguments @(
+            'machine', 'ssh', "awk '/^MemAvailable:/ {print `$2 * 1024}' /proc/meminfo"
+        )
+        $availableBeforeTarget = [long]$headroom.stdout.Trim()
+        if ($availableBeforeTarget -lt $MinAvailableMemoryBeforeTargetBytes) {
+            throw "MemAvailable $availableBeforeTarget is below the pre-target requirement $MinAvailableMemoryBeforeTargetBytes bytes."
+        }
+    }
+
     Invoke-Cli -Description 'start customers-service' -CliArguments @(
         'run', '-d',
         '--name', $ContainerName,
@@ -254,8 +273,21 @@ try {
             discovery = [ordered]@{ requestedReference = $discoveryInfo.requestedReference; resolvedImageId = $discoveryInfo.resolvedImageId; launchedImageId = $discoveryLiveImageId; created = $discoveryInfo.created; architecture = $discoveryInfo.architecture; repoDigests = $discoveryInfo.repoDigests }
         }
         configRepo      = (Resolve-Path -LiteralPath $ConfigRepo).Path
+        frozenArtifact  = if ([string]::IsNullOrWhiteSpace($ArtifactPath)) {
+            $null
+        } else {
+            [ordered]@{
+                path = (Resolve-Path -LiteralPath $ArtifactPath).Path
+                kind = if (Test-Path -LiteralPath $ArtifactPath -PathType Container) { 'DIRECTORY_TREE' } else { 'FILE' }
+                sha256 = Get-CampaignArtifactSha256 -Path $ArtifactPath
+                logicalVariant = if ([string]::IsNullOrWhiteSpace($ArtifactVariant)) { $Variant } else { $ArtifactVariant }
+            }
+        }
+        campaignProjectName = $ProjectName
         port            = $Port
         customerFlags   = $customerFlags
+        availableMemoryBeforeTargetBytes = if ($MinAvailableMemoryBeforeTargetBytes -gt 0) { $availableBeforeTarget } else { $null }
+        minAvailableMemoryBeforeTargetBytes = $MinAvailableMemoryBeforeTargetBytes
         mallocArenaMax  = '1'
         jdkFingerprint  = $jdkFingerprint
         healthProbes    = [ordered]@{ config = $configHealth.probes; discovery = $discoveryHealth.probes; customers = $customerHealth.probes }

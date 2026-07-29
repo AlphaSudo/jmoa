@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "jmoa-historical-support-drift-attribution-v1",
+  "verdict": "INSUFFICIENT_CAPTURE",
+  "sampleCount": 10,
+  "aggregateMemoryCurrentRangeBytes": 18612224,
+  "aggregatePssRangeKb": 14220,
+  "aggregatePrivateDirtyRangeKb": 14224,
+  "minimumAvailableMemoryBytes": 1121853440,
+  "monotonicGrowth": false,
+  "capacityPressureObserved": false,
+  "missingInputs": [
+    "exact host cgroup paths",
+    "sample timestamps",
+    "memory.stat decomposition",
+    "exact-container memory.pressure",
+    "post-window JVM diagnostics"
+  ],
+  "candidateExplanationsNotResolved": [
+    "ANON_PRIVATE_GROWTH",
+    "FILE_CACHE_CHARGE",
+    "JVM_WARMUP_CONVERGENCE",
+    "MIXED"
+  ],
+  "supersededBy": "SUPPORT_CALIBRATION_V2"
+}
+

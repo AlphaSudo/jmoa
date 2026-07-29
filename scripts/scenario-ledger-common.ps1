@@ -194,7 +194,7 @@ $(ConvertTo-IndentedLog $stderr)
 }
 
 function Complete-ScenarioLedger {
-    param([string]$Status = 'COMPLETE',[hashtable]$Result = @{})
+    param([string]$Status = 'COMPLETE',$Result = @{})
     $ended = [DateTime]::UtcNow
     # Finalize the Markdown ledger first so its hash covers the complete document.
     Add-ScenarioMarkdown "`n## Scenario Result`n`n- Status: **$Status**`n- Commands: $($script:ScenarioLedger.commandCount)`n- Hard failed commands: $($script:ScenarioLedger.hardFailedCommands)`n- Allowed nonzero commands: $($script:ScenarioLedger.allowedNonZeroCommands)`n- Ended UTC: $($ended.ToString('o'))`n"

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "jmoa-petclinic-b0-period-effect-attribution-summary-v1",
+  "sourceProtocol": "PETCLINIC_TARGET_ONLY_V1",
+  "evidenceMode": "READ_ONLY_EXISTING_CAPTURES",
+  "classification": "SECOND_POSITION_NATIVE_ANON",
+  "pairs": [
+    {
+      "pair": 1,
+      "secondMinusFirstPssKb": 5535,
+      "secondMinusFirstPrivateDirtyKb": 5612,
+      "secondMinusFirstMemoryCurrentBytes": 5763072,
+      "secondMinusFirstCgroupAnonBytes": 5750784,
+      "secondMinusFirstHeapPssKb": 156,
+      "secondMinusFirstHeapUsedKb": 1310,
+      "secondMinusFirstHistogramBytes": -2216
+    },
+    {
+      "pair": 2,
+      "secondMinusFirstPssKb": 10169,
+      "secondMinusFirstPrivateDirtyKb": 10200,
+      "secondMinusFirstMemoryCurrentBytes": 10932224,
+      "secondMinusFirstCgroupAnonBytes": 10436608,
+      "secondMinusFirstHeapPssKb": 0,
+      "secondMinusFirstHeapUsedKb": 990,
+      "secondMinusFirstHistogramBytes": 49976
+    }
+  ],
+  "medianSecondMinusFirst": {
+    "pssKb": 7852,
+    "privateDirtyKb": 7906,
+    "memoryCurrentBytes": 8347648,
+    "processAnonymousKb": 7908,
+    "cgroupAnonBytes": 8093696,
+    "cgroupFileBytes": 57344,
+    "heapPssKb": 78,
+    "heapUsedKb": 1150,
+    "histogramBytes": 23880,
+    "nmtClassCommittedKb": -11.5,
+    "nmtMetaspaceCommittedKb": 93.5,
+    "nmtCodeCommittedKb": 23.5,
+    "loadedClasses": 1,
+    "jvmAgeAtCaptureSeconds": 15.9215,
+    "workloadToCaptureSeconds": -0.641
+  },
+  "timing": {
+    "maximumJvmAgeDifferenceSeconds": 2,
+    "maximumPostWorkloadDifferenceSeconds": 0.5,
+    "converged": false
+  },
+  "unavailableDiagnostics": [
+    "gcCount",
+    "lastGcTime",
+    "codeCacheUsedKb",
+    "supportPssAtTargetCapture"
+  ],
+  "claimBoundary": "Diagnostic attribution only. No B0-to-V2 result is inferred."
+}

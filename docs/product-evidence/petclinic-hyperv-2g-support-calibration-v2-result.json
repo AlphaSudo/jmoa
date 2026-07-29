@@ -1,0 +1,75 @@
+{
+  "schemaVersion": "jmoa-petclinic-support-calibration-v2-result-v1",
+  "hostProfile": "HYPERV_DEBIAN_FIXED_2G",
+  "contract": "SUPPORT_CALIBRATION_V2",
+  "terminalOutcome": "SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE",
+  "attribution": "ANON_PRIVATE_GROWTH",
+  "capacityPassed": true,
+  "pressurePassed": true,
+  "cgroupScope": "INDIVIDUAL_CONTAINER_CGROUPS_CONFIRMED",
+  "requiredStableCalibrations": 3,
+  "stableCalibrationCount": 0,
+  "targetArmsLaunched": false,
+  "limits": {
+    "maxPssRangeKb": 2048,
+    "maxPrivateDirtyRangeKb": 2048,
+    "maxAnonRangeBytes": 2097152,
+    "maxPositiveSlopeBytesPerSecond": 65536
+  },
+  "calibrations": [
+    {
+      "id": "calibration-1",
+      "minimumAvailableMemoryBytes": 1077145600,
+      "pssRangeKb": 8200,
+      "privateDirtyRangeKb": 8200,
+      "anonRangeBytes": 8409088,
+      "fileRangeBytes": 0,
+      "memoryCurrentRangeBytes": 8400896,
+      "pssSlopeBytesPerSecond": 126587.097,
+      "anonSlopeBytesPerSecond": 126694.146,
+      "terminalOutcome": "SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE"
+    },
+    {
+      "id": "calibration-2",
+      "minimumAvailableMemoryBytes": 1076740096,
+      "pssRangeKb": 6156,
+      "privateDirtyRangeKb": 6160,
+      "anonRangeBytes": 6217728,
+      "fileRangeBytes": 0,
+      "memoryCurrentRangeBytes": 6184960,
+      "pssSlopeBytesPerSecond": 73595.789,
+      "anonSlopeBytesPerSecond": 74731.029,
+      "terminalOutcome": "SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE"
+    },
+    {
+      "id": "calibration-3",
+      "minimumAvailableMemoryBytes": 1081479168,
+      "pssRangeKb": 3152,
+      "privateDirtyRangeKb": 3152,
+      "anonRangeBytes": 3231744,
+      "fileRangeBytes": 0,
+      "memoryCurrentRangeBytes": 3244032,
+      "pssSlopeBytesPerSecond": 62498.897,
+      "anonSlopeBytesPerSecond": 63819.498,
+      "terminalOutcome": "SUPPORT_STACK_PRIVATE_MEMORY_UNSTABLE"
+    }
+  ],
+  "identity": {
+    "runnerRevision": "74c2df605c4f888ad46708df4f80fc225a44f463",
+    "sourceCampaignSha256": "90CBB67E866F251164BA052C20EFC9F15DB0BC4A594D370DF32240836C5CA6C9",
+    "portableArchiveSha256": "C3C586FEEAB03720BCC05011E3DA67A4F7E3E7AD7479A58AEC606EAEADD82EEC",
+    "nativeGateAPassed": 71,
+    "nativeGateAFailed": 0
+  },
+  "retrievedEvidenceIntegrity": {
+    "indexesVerified": 8,
+    "filesVerified": 1822,
+    "errors": 0
+  },
+  "claimBoundary": {
+    "productComparisonAvailable": false,
+    "jmoaRegression": false,
+    "reason": "The support stack failed private-memory stability admission before B0 or V2."
+  }
+}
+

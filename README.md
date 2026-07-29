@@ -10,7 +10,8 @@ Evidence-driven, build-time JVM footprint optimization for Spring Boot applicati
 [Architecture](docs/architecture/system-overview.md) |
 [Methodology](docs/methodology/measurement-protocol.md) |
 [Reproduction](docs/reproduction/petclinic-quickstart.md) |
-[Direct Result](docs/product-evidence/jmoa-vs-no-jmoa-matrix.md) |
+[Direct Result](docs/product-evidence/b0-v1-v2-three-service-matrix.md) |
+[Forensic Matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md) |
 [V1 to V2](docs/results/v2-three-service-matrix.md) |
 [Portfolio](https://github.com/AlphaSudo/jmoa-jvm-optimization-portfolio)
 
@@ -19,68 +20,47 @@ classfile metadata, materializes optimized bytecode into the real deployment
 shape, proves which artifacts the JVM loaded, and validates memory effects with
 paired PSS, Private_Dirty, cgroup, NMT, and class-level evidence.
 
-## Direct Product Reconciliation
+## Direct B0 To V2 Product Matrix
 
-The direct clean no-JMOA `B0` versus final V2 matrix is currently
-`DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED`. Doctor retains a
-confirmed direct win. PetClinic's frozen campaign stopped before product pairs
-after the same B0 artifact failed the noise gate twice. Patient's accepted
-artifact comparison remains open.
+The final direct campaign compares strict no-JMOA B0, accepted V1, and accepted
+V2 under one frozen runtime per service. Each service completed three valid
+qualification observations followed by all six B0/V1/V2 order permutations:
+`18/18` final observations and zero semantic errors.
 
-| Service | Deployment and policy | Direct B0 to V2 result | State |
-| --- | --- | ---: | --- |
-| Doctor | Fat JAR, artifact-specific application CDS | **-5,809 KB median PSS**, 3/3 wins | Confirmed |
-| PetClinic customers | Exploded Boot, `NO_CDS_LOW_DIRTY` | Not measured by the audited campaign | Environment blocked: 8 valid B0 control arms, same-artifact median absolute PSS noise 4.85-5.58 MB |
-| Patient | Fat JAR, stock JDK base CDS | +3,290 KB PSS for attempted candidate | Screen used a non-accepted V2 SHA; accepted comparison remains open |
+| Service | Deployment and policy | B0 to V2 median PSS | Wins | 95% bootstrap CI | Product gate |
+| --- | --- | ---: | ---: | ---: | --- |
+| Doctor | Fat JAR, application CDS | **-4,715.5 KB** | 5/6 | [-7,107, -268.5] KB | Passed |
+| Patient | Fat JAR, stock JDK base CDS | -1,266.5 KB | 4/6 | [-12,330.5, 3,488.5] KB | Not passed |
+| PetClinic customers | Exploded Boot, `NO_CDS_LOW_DIRTY` | -2,947 KB | 4/6 | [-6,516.5, 4,215] KB | Not passed |
 
-Doctor's result is the only confirmed direct product win. PetClinic's older
-screen and replay remain historical evidence, but the latest audited campaign
-does not classify V2 as a win or regression: it never admitted V2 after the B0
-control failed. Patient's two screens remain valid only for the attempted
-`FB4E...` candidate, not the accepted corrected `4CFC...` V2 artifact.
+The frozen three-service launch criterion is therefore **not passed**: one of
+three services is a complete product win. Patient and PetClinic show direct
+memory reductions but miss the required `-4,096 KB` PSS magnitude and
+bootstrap-upper-below-zero gates. Patient's row comes from the one corrected
+campaign authorized by a proven capture-timing defect; it is still a valid
+non-win. These observations are retained; no valid losing run was replaced.
 
-Read the [direct matrix](docs/product-evidence/jmoa-vs-no-jmoa-matrix.md),
-[evidence contract](docs/product-evidence/jmoa-vs-no-jmoa-contract.md), and
-[runtime-equivalence contract](docs/product-evidence/runtime-equivalence-investigation-contract.md).
-The exact PetClinic terminal result is in the
-[campaign result](docs/product-evidence/petclinic-performance-campaign-result.md).
+Read the [direct matrix](docs/product-evidence/b0-v1-v2-three-service-matrix.md),
+[forensic matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md),
+[campaign seal](docs/product-evidence/three-artifact-campaign-seal.md),
+[balanced protocol](docs/product-evidence/b0-v1-v2-balanced-protocol.md), and
+the [adoption/evaluation guide](docs/adoption/README.md).
 
-Run a full baseline-to-V2 audited scenario with:
-
-```powershell
-pwsh ./scripts/run-petclinic-audited-baseline-v2-scenario.ps1 `
-  -PetclinicSource <petclinic-source> `
-  -ConfigRepository <petclinic-config-repository> `
-  -BuildJavaHome <build-jdk> `
-  -RuntimeJavaHome <runtime-jdk> `
-  -Maven <mvn-command>
-```
-
-This emits one exact command ledger containing the baseline launch, auxiliary
-services, warmup, every workload response, memory captures, JMOA transform,
-V2 launch, and teardown. See the [ledger contract](docs/product-evidence/scenario-command-ledger-contract.md)
-and [fresh PetClinic screen](docs/product-evidence/petclinic-fresh-baseline-v2-scenario.md).
-
-For the balanced product gate, first run the campaign fixtures and readiness
-check against a signed manifest:
+Run the same workflow with a private frozen service config:
 
 ```powershell
-pwsh ./scripts/run-campaign-fixtures.ps1 -OutputDirectory target/campaign-fixtures
-
-pwsh ./scripts/run-petclinic-performance-campaign.ps1 `
-  -CampaignManifest <signed-campaign-manifest.json> `
-  -FixturesReport ./target/campaign-fixtures/campaign-fixtures.json `
-  -RunRoot <private-output-root> `
+pwsh ./scripts/run-jmoa-evaluation.ps1 `
+  -Service PetClinicCustomers `
+  -ConfigPath <private-campaign-config.json> `
+  -OutputDirectory <private-output-root> `
   -DryRun
 ```
 
-Remove `-DryRun` only after reviewing the readiness report. The full campaign
-runs two reversed B0 same-artifact pairs, two reversed V2 same-artifact pairs,
-then three balanced B0/V2 pairs. Every measured B0 and V2 arm receives one
-chronological Markdown ledger with commands and responses inline, backed by
-hashed stage ledgers and raw files. See the
-[campaign readiness result](docs/product-evidence/petclinic-campaign-readiness.md)
-and [executed campaign result](docs/product-evidence/petclinic-performance-campaign-result.md).
+Remove `-DryRun` after reviewing the artifact and implementation freeze. Each
+qualification and final observation gets a complete chronological Markdown
+ledger containing launch commands, support-service logs, warmup and workload
+responses, captures, and teardown. Raw evidence and private configuration stay
+outside the repository.
 
 ## V1 To V2 Engineering Evolution
 

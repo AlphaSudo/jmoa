@@ -1,0 +1,1217 @@
+{
+  "schemaVersion": "jmoa-b0-v1-v2-leg-diagnostics-v1",
+  "services": [
+    {
+      "service": "doctor-service",
+      "comparisons": [
+        {
+          "id": "B0_TO_V1",
+          "blockDeltas": [
+            {
+              "block": 1,
+              "order": [
+                "B0",
+                "V1",
+                "V2"
+              ],
+              "pssKb": 1885,
+              "privateDirtyKb": 1784,
+              "memoryCurrentBytes": 2646016
+            },
+            {
+              "block": 2,
+              "order": [
+                "B0",
+                "V2",
+                "V1"
+              ],
+              "pssKb": -4328,
+              "privateDirtyKb": -4412,
+              "memoryCurrentBytes": -3612672
+            },
+            {
+              "block": 3,
+              "order": [
+                "V1",
+                "B0",
+                "V2"
+              ],
+              "pssKb": -815,
+              "privateDirtyKb": -928,
+              "memoryCurrentBytes": 233472
+            },
+            {
+              "block": 4,
+              "order": [
+                "V1",
+                "V2",
+                "B0"
+              ],
+              "pssKb": 9104,
+              "privateDirtyKb": 9136,
+              "memoryCurrentBytes": 9957376
+            },
+            {
+              "block": 5,
+              "order": [
+                "V2",
+                "B0",
+                "V1"
+              ],
+              "pssKb": 2886,
+              "privateDirtyKb": 2508,
+              "memoryCurrentBytes": 3485696
+            },
+            {
+              "block": 6,
+              "order": [
+                "V2",
+                "V1",
+                "B0"
+              ],
+              "pssKb": -577,
+              "privateDirtyKb": -788,
+              "memoryCurrentBytes": 172032
+            }
+          ],
+          "metrics": {
+            "pssKb": {
+              "values": [
+                1885.0,
+                -4328.0,
+                -815.0,
+                9104.0,
+                2886.0,
+                -577.0
+              ],
+              "median": 654.0,
+              "mean": 1359.167,
+              "minimum": -4328.0,
+              "maximum": 9104.0,
+              "medianAbsoluteDeviation": 1850.5,
+              "pairedWins": 3,
+              "bootstrap95": {
+                "lower": -2571.5,
+                "upper": 5995.0
+              }
+            },
+            "privateDirtyKb": {
+              "values": [
+                1784.0,
+                -4412.0,
+                -928.0,
+                9136.0,
+                2508.0,
+                -788.0
+              ],
+              "median": 498.0,
+              "mean": 1216.667,
+              "minimum": -4412.0,
+              "maximum": 9136.0,
+              "medianAbsoluteDeviation": 1718.0,
+              "pairedWins": 3,
+              "bootstrap95": {
+                "lower": -2670.0,
+                "upper": 5822.0
+              }
+            },
+            "memoryCurrentBytes": {
+              "values": [
+                2646016.0,
+                -3612672.0,
+                233472.0,
+                9957376.0,
+                3485696.0,
+                172032.0
+              ],
+              "median": 1439744.0,
+              "mean": 2146986.667,
+              "minimum": -3612672.0,
+              "maximum": 9957376.0,
+              "medianAbsoluteDeviation": 1656832.0,
+              "pairedWins": 1,
+              "bootstrap95": {
+                "lower": -1720320.0,
+                "upper": 6721536.0
+              }
+            }
+          }
+        },
+        {
+          "id": "V1_TO_V2",
+          "blockDeltas": [
+            {
+              "block": 1,
+              "order": [
+                "B0",
+                "V1",
+                "V2"
+              ],
+              "pssKb": -8989,
+              "privateDirtyKb": -8920,
+              "memoryCurrentBytes": -15994880
+            },
+            {
+              "block": 2,
+              "order": [
+                "B0",
+                "V2",
+                "V1"
+              ],
+              "pssKb": -1637,
+              "privateDirtyKb": -1648,
+              "memoryCurrentBytes": -8417280
+            },
+            {
+              "block": 3,
+              "order": [
+                "V1",
+                "B0",
+                "V2"
+              ],
+              "pssKb": -6295,
+              "privateDirtyKb": -6328,
+              "memoryCurrentBytes": -13307904
+            },
+            {
+              "block": 4,
+              "order": [
+                "V1",
+                "V2",
+                "B0"
+              ],
+              "pssKb": -6228,
+              "privateDirtyKb": -6160,
+              "memoryCurrentBytes": -13115392
+            },
+            {
+              "block": 5,
+              "order": [
+                "V2",
+                "B0",
+                "V1"
+              ],
+              "pssKb": -6299,
+              "privateDirtyKb": -6056,
+              "memoryCurrentBytes": -13049856
+            },
+            {
+              "block": 6,
+              "order": [
+                "V2",
+                "V1",
+                "B0"
+              ],
+              "pssKb": -2889,
+              "privateDirtyKb": -2960,
+              "memoryCurrentBytes": -9891840
+            }
+          ],
+          "metrics": {
+            "pssKb": {
+              "values": [
+                -8989.0,
+                -1637.0,
+                -6295.0,
+                -6228.0,
+                -6299.0,
+                -2889.0
+              ],
+              "median": -6261.5,
+              "mean": -5389.5,
+              "minimum": -8989.0,
+              "maximum": -1637.0,
+              "medianAbsoluteDeviation": 1382.5,
+              "pairedWins": 6,
+              "bootstrap95": {
+                "lower": -7644.0,
+                "upper": -2263.0
+              }
+            },
+            "privateDirtyKb": {
+              "values": [
+                -8920.0,
+                -1648.0,
+                -6328.0,
+                -6160.0,
+                -6056.0,
+                -2960.0
+              ],
+              "median": -6108.0,
+              "mean": -5345.333,
+              "minimum": -8920.0,
+              "maximum": -1648.0,
+              "medianAbsoluteDeviation": 1516.0,
+              "pairedWins": 6,
+              "bootstrap95": {
+                "lower": -7624.0,
+                "upper": -2304.0
+              }
+            },
+            "memoryCurrentBytes": {
+              "values": [
+                -15994880.0,
+                -8417280.0,
+                -13307904.0,
+                -13115392.0,
+                -13049856.0,
+                -9891840.0
+              ],
+              "median": -13082624.0,
+              "mean": -12296192.0,
+              "minimum": -15994880.0,
+              "maximum": -8417280.0,
+              "medianAbsoluteDeviation": 1568768.0,
+              "pairedWins": 6,
+              "bootstrap95": {
+                "lower": -14651392.0,
+                "upper": -9154560.0
+              }
+            }
+          }
+        },
+        {
+          "id": "B0_TO_V2",
+          "blockDeltas": [
+            {
+              "block": 1,
+              "order": [
+                "B0",
+                "V1",
+                "V2"
+              ],
+              "pssKb": -7104,
+              "privateDirtyKb": -7136,
+              "memoryCurrentBytes": -13348864
+            },
+            {
+              "block": 2,
+              "order": [
+                "B0",
+                "V2",
+                "V1"
+              ],
+              "pssKb": -5965,
+              "privateDirtyKb": -6060,
+              "memoryCurrentBytes": -12029952
+            },
+            {
+              "block": 3,
+              "order": [
+                "V1",
+                "B0",
+                "V2"
+              ],
+              "pssKb": -7110,
+              "privateDirtyKb": -7256,
+              "memoryCurrentBytes": -13074432
+            },
+            {
+              "block": 4,
+              "order": [
+                "V1",
+                "V2",
+                "B0"
+              ],
+              "pssKb": 2876,
+              "privateDirtyKb": 2976,
+              "memoryCurrentBytes": -3158016
+            },
+            {
+              "block": 5,
+              "order": [
+                "V2",
+                "B0",
+                "V1"
+              ],
+              "pssKb": -3413,
+              "privateDirtyKb": -3548,
+              "memoryCurrentBytes": -9564160
+            },
+            {
+              "block": 6,
+              "order": [
+                "V2",
+                "V1",
+                "B0"
+              ],
+              "pssKb": -3466,
+              "privateDirtyKb": -3748,
+              "memoryCurrentBytes": -9719808
+            }
+          ],
+          "metrics": {
+            "pssKb": {
+              "values": [
+                -7104.0,
+                -5965.0,
+                -7110.0,
+                2876.0,
+                -3413.0,
+                -3466.0
+              ],
+              "median": -4715.5,
+              "mean": -4030.333,
+              "minimum": -7110.0,
+              "maximum": 2876.0,
+              "medianAbsoluteDeviation": 1845.5,
+              "pairedWins": 5,
+              "bootstrap95": {
+                "lower": -7107.0,
+                "upper": -268.5
+              }
+            },
+            "privateDirtyKb": {
+              "values": [
+                -7136.0,
+                -6060.0,
+                -7256.0,
+                2976.0,
+                -3548.0,
+                -3748.0
+              ],
+              "median": -4904.0,
+              "mean": -4128.667,
+              "minimum": -7256.0,
+              "maximum": 2976.0,
+              "medianAbsoluteDeviation": 1794.0,
+              "pairedWins": 5,
+              "bootstrap95": {
+                "lower": -7196.0,
+                "upper": -286.0
+              }
+            },
+            "memoryCurrentBytes": {
+              "values": [
+                -13348864.0,
+                -12029952.0,
+                -13074432.0,
+                -3158016.0,
+                -9564160.0,
+                -9719808.0
+              ],
+              "median": -10874880.0,
+              "mean": -10149205.333,
+              "minimum": -13348864.0,
+              "maximum": -3158016.0,
+              "medianAbsoluteDeviation": 1755136.0,
+              "pairedWins": 6,
+              "bootstrap95": {
+                "lower": -13211648.0,
+                "upper": -6361088.0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "service": "patient-service",
+      "comparisons": [
+        {
+          "id": "B0_TO_V1",
+          "blockDeltas": [
+            {
+              "block": 1,
+              "order": [
+                "B0",
+                "V1",
+                "V2"
+              ],
+              "pssKb": -7108,
+              "privateDirtyKb": -6956,
+              "memoryCurrentBytes": -6795264
+            },
+            {
+              "block": 2,
+              "order": [
+                "B0",
+                "V2",
+                "V1"
+              ],
+              "pssKb": 6216,
+              "privateDirtyKb": 6096,
+              "memoryCurrentBytes": 6742016
+            },
+            {
+              "block": 3,
+              "order": [
+                "V1",
+                "B0",
+                "V2"
+              ],
+              "pssKb": 6086,
+              "privateDirtyKb": 6128,
+              "memoryCurrentBytes": 6074368
+            },
+            {
+              "block": 4,
+              "order": [
+                "V1",
+                "V2",
+                "B0"
+              ],
+              "pssKb": 3522,
+              "privateDirtyKb": 3568,
+              "memoryCurrentBytes": 3825664
+            },
+            {
+              "block": 5,
+              "order": [
+                "V2",
+                "B0",
+                "V1"
+              ],
+              "pssKb": -1702,
+              "privateDirtyKb": -1880,
+              "memoryCurrentBytes": -2170880
+            },
+            {
+              "block": 6,
+              "order": [
+                "V2",
+                "V1",
+                "B0"
+              ],
+              "pssKb": -3545,
+              "privateDirtyKb": -3628,
+              "memoryCurrentBytes": -3104768
+            }
+          ],
+          "metrics": {
+            "pssKb": {
+              "values": [
+                -7108.0,
+                6216.0,
+                6086.0,
+                3522.0,
+                -1702.0,
+                -3545.0
+              ],
+              "median": 910.0,
+              "mean": 578.167,
+              "minimum": -7108.0,
+              "maximum": 6216.0,
+              "medianAbsoluteDeviation": 4815.5,
+              "pairedWins": 3,
+              "bootstrap95": {
+                "lower": -5326.5,
+                "upper": 6151.0
+              }
+            },
+            "privateDirtyKb": {
+              "values": [
+                -6956.0,
+                6096.0,
+                6128.0,
+                3568.0,
+                -1880.0,
+                -3628.0
+              ],
+              "median": 844.0,
+              "mean": 554.667,
+              "minimum": -6956.0,
+              "maximum": 6128.0,
+              "medianAbsoluteDeviation": 4862.0,
+              "pairedWins": 3,
+              "bootstrap95": {
+                "lower": -5292.0,
+                "upper": 6112.0
+              }
+            },
+            "memoryCurrentBytes": {
+              "values": [
+                -6795264.0,
+                6742016.0,
+                6074368.0,
+                3825664.0,
+                -2170880.0,
+                -3104768.0
+              ],
+              "median": 827392.0,
+              "mean": 761856.0,
+              "minimum": -6795264.0,
+              "maximum": 6742016.0,
+              "medianAbsoluteDeviation": 4589568.0,
+              "pairedWins": 3,
+              "bootstrap95": {
+                "lower": -4950016.0,
+                "upper": 6408192.0
+              }
+            }
+          }
+        },
+        {
+          "id": "V1_TO_V2",
+          "blockDeltas": [
+            {
+              "block": 1,
+              "order": [
+                "B0",
+                "V1",
+                "V2"
+              ],
+              "pssKb": -6627,
+              "privateDirtyKb": -6852,
+              "memoryCurrentBytes": -7102464
+            },
+            {
+              "block": 2,
+              "order": [
+                "B0",
+                "V2",
+                "V1"
+              ],
+              "pssKb": -6417,
+              "privateDirtyKb": -6488,
+              "memoryCurrentBytes": -6950912
+            },
+            {
+              "block": 3,
+              "order": [
+                "V1",
+                "B0",
+                "V2"
+              ],
+              "pssKb": -758,
+              "privateDirtyKb": -744,
+              "memoryCurrentBytes": -684032
+            },
+            {
+              "block": 4,
+              "order": [
+                "V1",
+                "V2",
+                "B0"
+              ],
+              "pssKb": -5854,
+              "privateDirtyKb": -5652,
+              "memoryCurrentBytes": -5824512
+            },
+            {
+              "block": 5,
+              "order": [
+                "V2",
+                "B0",
+                "V1"
+              ],
+              "pssKb": -9224,
+              "privateDirtyKb": -9060,
+              "memoryCurrentBytes": -8900608
+            },
+            {
+              "block": 6,
+              "order": [
+                "V2",
+                "V1",
+                "B0"
+              ],
+              "pssKb": 5194,
+              "privateDirtyKb": 5260,
+              "memoryCurrentBytes": 4861952
+            }
+          ],
+          "metrics": {
+            "pssKb": {
+              "values": [
+                -6627.0,
+                -6417.0,
+                -758.0,
+                -5854.0,
+                -9224.0,
+                5194.0
+              ],
+              "median": -6135.5,
+              "mean": -3947.667,
+              "minimum": -9224.0,
+              "maximum": 5194.0,
+              "medianAbsoluteDeviation": 1790.0,
+              "pairedWins": 5,
+              "bootstrap95": {
+                "lower": -7925.5,
+                "upper": 2218.0
+              }
+            },
+            "privateDirtyKb": {
+              "values": [
+                -6852.0,
+                -6488.0,
+                -744.0,
+                -5652.0,
+                -9060.0,
+                5260.0
+              ],
+              "median": -6070.0,
+              "mean": -3922.667,
+              "minimum": -9060.0,
+              "maximum": 5260.0,
+              "medianAbsoluteDeviation": 1886.0,
+              "pairedWins": 5,
+              "bootstrap95": {
+                "lower": -7956.0,
+                "upper": 2258.0
+              }
+            },
+            "memoryCurrentBytes": {
+              "values": [
+                -7102464.0,
+                -6950912.0,
+                -684032.0,
+                -5824512.0,
+                -8900608.0,
+                4861952.0
+              ],
+              "median": -6387712.0,
+              "mean": -4100096.0,
+              "minimum": -8900608.0,
+              "maximum": 4861952.0,
+              "medianAbsoluteDeviation": 1613824.0,
+              "pairedWins": 5,
+              "bootstrap95": {
+                "lower": -8001536.0,
+                "upper": 2088960.0
+              }
+            }
+          }
+        },
+        {
+          "id": "B0_TO_V2",
+          "blockDeltas": [
+            {
+              "block": 1,
+              "order": [
+                "B0",
+                "V1",
+                "V2"
+              ],
+              "pssKb": -13735,
+              "privateDirtyKb": -13808,
+              "memoryCurrentBytes": -13897728
+            },
+            {
+              "block": 2,
+              "order": [
+                "B0",
+                "V2",
+                "V1"
+              ],
+              "pssKb": -201,
+              "privateDirtyKb": -392,
+              "memoryCurrentBytes": -208896
+            },
+            {
+              "block": 3,
+              "order": [
+                "V1",
+                "B0",
+                "V2"
+              ],
+              "pssKb": 5328,
+              "privateDirtyKb": 5384,
+              "memoryCurrentBytes": 5390336
+            },
+            {
+              "block": 4,
+              "order": [
+                "V1",
+                "V2",
+                "B0"
+              ],
+              "pssKb": -2332,
+              "privateDirtyKb": -2084,
+              "memoryCurrentBytes": -1998848
+            },
+            {
+              "block": 5,
+              "order": [
+                "V2",
+                "B0",
+                "V1"
+              ],
+              "pssKb": -10926,
+              "privateDirtyKb": -10940,
+              "memoryCurrentBytes": -11071488
+            },
+            {
+              "block": 6,
+              "order": [
+                "V2",
+                "V1",
+                "B0"
+              ],
+              "pssKb": 1649,
+              "privateDirtyKb": 1632,
+              "memoryCurrentBytes": 1757184
+            }
+          ],
+          "metrics": {
+            "pssKb": {
+              "values": [
+                -13735.0,
+                -201.0,
+                5328.0,
+                -2332.0,
+                -10926.0,
+                1649.0
+              ],
+              "median": -1266.5,
+              "mean": -3369.5,
+              "minimum": -13735.0,
+              "maximum": 5328.0,
+              "medianAbsoluteDeviation": 4755.0,
+              "pairedWins": 4,
+              "bootstrap95": {
+                "lower": -12330.5,
+                "upper": 3488.5
+              }
+            },
+            "privateDirtyKb": {
+              "values": [
+                -13808.0,
+                -392.0,
+                5384.0,
+                -2084.0,
+                -10940.0,
+                1632.0
+              ],
+              "median": -1238.0,
+              "mean": -3368.0,
+              "minimum": -13808.0,
+              "maximum": 5384.0,
+              "medianAbsoluteDeviation": 4746.0,
+              "pairedWins": 4,
+              "bootstrap95": {
+                "lower": -12374.0,
+                "upper": 3508.0
+              }
+            },
+            "memoryCurrentBytes": {
+              "values": [
+                -13897728.0,
+                -208896.0,
+                5390336.0,
+                -1998848.0,
+                -11071488.0,
+                1757184.0
+              ],
+              "median": -1103872.0,
+              "mean": -3338240.0,
+              "minimum": -13897728.0,
+              "maximum": 5390336.0,
+              "medianAbsoluteDeviation": 4677632.0,
+              "pairedWins": 4,
+              "bootstrap95": {
+                "lower": -12484608.0,
+                "upper": 3573760.0
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "comparisons": [
+        {
+          "id": "B0_TO_V1",
+          "blockDeltas": [
+            {
+              "block": 1,
+              "order": [
+                "B0",
+                "V1",
+                "V2"
+              ],
+              "pssKb": 7742,
+              "privateDirtyKb": 7692,
+              "memoryCurrentBytes": 7843840
+            },
+            {
+              "block": 2,
+              "order": [
+                "B0",
+                "V2",
+                "V1"
+              ],
+              "pssKb": 5375,
+              "privateDirtyKb": 5472,
+              "memoryCurrentBytes": 5644288
+            },
+            {
+              "block": 3,
+              "order": [
+                "V1",
+                "B0",
+                "V2"
+              ],
+              "pssKb": -3979,
+              "privateDirtyKb": -3648,
+              "memoryCurrentBytes": -3756032
+            },
+            {
+              "block": 4,
+              "order": [
+                "V1",
+                "V2",
+                "B0"
+              ],
+              "pssKb": 17336,
+              "privateDirtyKb": 17416,
+              "memoryCurrentBytes": 18251776
+            },
+            {
+              "block": 5,
+              "order": [
+                "V2",
+                "B0",
+                "V1"
+              ],
+              "pssKb": -3037,
+              "privateDirtyKb": -3416,
+              "memoryCurrentBytes": -3895296
+            },
+            {
+              "block": 6,
+              "order": [
+                "V2",
+                "V1",
+                "B0"
+              ],
+              "pssKb": -343,
+              "privateDirtyKb": -64,
+              "memoryCurrentBytes": -327680
+            }
+          ],
+          "metrics": {
+            "pssKb": {
+              "values": [
+                7742.0,
+                5375.0,
+                -3979.0,
+                17336.0,
+                -3037.0,
+                -343.0
+              ],
+              "median": 2516.0,
+              "mean": 3849.0,
+              "minimum": -3979.0,
+              "maximum": 17336.0,
+              "medianAbsoluteDeviation": 5389.5,
+              "pairedWins": 3,
+              "bootstrap95": {
+                "lower": -3508.0,
+                "upper": 12539.0
+              }
+            },
+            "privateDirtyKb": {
+              "values": [
+                7692.0,
+                5472.0,
+                -3648.0,
+                17416.0,
+                -3416.0,
+                -64.0
+              ],
+              "median": 2704.0,
+              "mean": 3908.667,
+              "minimum": -3648.0,
+              "maximum": 17416.0,
+              "medianAbsoluteDeviation": 5554.0,
+              "pairedWins": 3,
+              "bootstrap95": {
+                "lower": -3532.0,
+                "upper": 12554.0
+              }
+            },
+            "memoryCurrentBytes": {
+              "values": [
+                7843840.0,
+                5644288.0,
+                -3756032.0,
+                18251776.0,
+                -3895296.0,
+                -327680.0
+              ],
+              "median": 2658304.0,
+              "mean": 3960149.333,
+              "minimum": -3895296.0,
+              "maximum": 18251776.0,
+              "medianAbsoluteDeviation": 5799936.0,
+              "pairedWins": 3,
+              "bootstrap95": {
+                "lower": -3825664.0,
+                "upper": 13047808.0
+              }
+            }
+          }
+        },
+        {
+          "id": "V1_TO_V2",
+          "blockDeltas": [
+            {
+              "block": 1,
+              "order": [
+                "B0",
+                "V1",
+                "V2"
+              ],
+              "pssKb": -807,
+              "privateDirtyKb": -988,
+              "memoryCurrentBytes": -745472
+            },
+            {
+              "block": 2,
+              "order": [
+                "B0",
+                "V2",
+                "V1"
+              ],
+              "pssKb": -7646,
+              "privateDirtyKb": -7416,
+              "memoryCurrentBytes": -7356416
+            },
+            {
+              "block": 3,
+              "order": [
+                "V1",
+                "B0",
+                "V2"
+              ],
+              "pssKb": -4192,
+              "privateDirtyKb": -4416,
+              "memoryCurrentBytes": -4407296
+            },
+            {
+              "block": 4,
+              "order": [
+                "V1",
+                "V2",
+                "B0"
+              ],
+              "pssKb": -22198,
+              "privateDirtyKb": -22096,
+              "memoryCurrentBytes": -22962176
+            },
+            {
+              "block": 5,
+              "order": [
+                "V2",
+                "B0",
+                "V1"
+              ],
+              "pssKb": 4532,
+              "privateDirtyKb": 4684,
+              "memoryCurrentBytes": 4907008
+            },
+            {
+              "block": 6,
+              "order": [
+                "V2",
+                "V1",
+                "B0"
+              ],
+              "pssKb": -3280,
+              "privateDirtyKb": -3436,
+              "memoryCurrentBytes": -3366912
+            }
+          ],
+          "metrics": {
+            "pssKb": {
+              "values": [
+                -807.0,
+                -7646.0,
+                -4192.0,
+                -22198.0,
+                4532.0,
+                -3280.0
+              ],
+              "median": -3736.0,
+              "mean": -5598.5,
+              "minimum": -22198.0,
+              "maximum": 4532.0,
+              "medianAbsoluteDeviation": 3419.5,
+              "pairedWins": 5,
+              "bootstrap95": {
+                "lower": -14922.0,
+                "upper": 1862.5
+              }
+            },
+            "privateDirtyKb": {
+              "values": [
+                -988.0,
+                -7416.0,
+                -4416.0,
+                -22096.0,
+                4684.0,
+                -3436.0
+              ],
+              "median": -3926.0,
+              "mean": -5611.333,
+              "minimum": -22096.0,
+              "maximum": 4684.0,
+              "medianAbsoluteDeviation": 3214.0,
+              "pairedWins": 5,
+              "bootstrap95": {
+                "lower": -14756.0,
+                "upper": 1848.0
+              }
+            },
+            "memoryCurrentBytes": {
+              "values": [
+                -745472.0,
+                -7356416.0,
+                -4407296.0,
+                -22962176.0,
+                4907008.0,
+                -3366912.0
+              ],
+              "median": -3887104.0,
+              "mean": -5655210.667,
+              "minimum": -22962176.0,
+              "maximum": 4907008.0,
+              "medianAbsoluteDeviation": 3305472.0,
+              "pairedWins": 5,
+              "bootstrap95": {
+                "lower": -15159296.0,
+                "upper": 2080768.0
+              }
+            }
+          }
+        },
+        {
+          "id": "B0_TO_V2",
+          "blockDeltas": [
+            {
+              "block": 1,
+              "order": [
+                "B0",
+                "V1",
+                "V2"
+              ],
+              "pssKb": 6935,
+              "privateDirtyKb": 6704,
+              "memoryCurrentBytes": 7098368
+            },
+            {
+              "block": 2,
+              "order": [
+                "B0",
+                "V2",
+                "V1"
+              ],
+              "pssKb": -2271,
+              "privateDirtyKb": -1944,
+              "memoryCurrentBytes": -1712128
+            },
+            {
+              "block": 3,
+              "order": [
+                "V1",
+                "B0",
+                "V2"
+              ],
+              "pssKb": -8171,
+              "privateDirtyKb": -8064,
+              "memoryCurrentBytes": -8163328
+            },
+            {
+              "block": 4,
+              "order": [
+                "V1",
+                "V2",
+                "B0"
+              ],
+              "pssKb": -4862,
+              "privateDirtyKb": -4680,
+              "memoryCurrentBytes": -4710400
+            },
+            {
+              "block": 5,
+              "order": [
+                "V2",
+                "B0",
+                "V1"
+              ],
+              "pssKb": 1495,
+              "privateDirtyKb": 1268,
+              "memoryCurrentBytes": 1011712
+            },
+            {
+              "block": 6,
+              "order": [
+                "V2",
+                "V1",
+                "B0"
+              ],
+              "pssKb": -3623,
+              "privateDirtyKb": -3500,
+              "memoryCurrentBytes": -3694592
+            }
+          ],
+          "metrics": {
+            "pssKb": {
+              "values": [
+                6935.0,
+                -2271.0,
+                -8171.0,
+                -4862.0,
+                1495.0,
+                -3623.0
+              ],
+              "median": -2947.0,
+              "mean": -1749.5,
+              "minimum": -8171.0,
+              "maximum": 6935.0,
+              "medianAbsoluteDeviation": 3178.5,
+              "pairedWins": 4,
+              "bootstrap95": {
+                "lower": -6516.5,
+                "upper": 4215.0
+              }
+            },
+            "privateDirtyKb": {
+              "values": [
+                6704.0,
+                -1944.0,
+                -8064.0,
+                -4680.0,
+                1268.0,
+                -3500.0
+              ],
+              "median": -2722.0,
+              "mean": -1702.667,
+              "minimum": -8064.0,
+              "maximum": 6704.0,
+              "medianAbsoluteDeviation": 2974.0,
+              "pairedWins": 4,
+              "bootstrap95": {
+                "lower": -6372.0,
+                "upper": 3986.0
+              }
+            },
+            "memoryCurrentBytes": {
+              "values": [
+                7098368.0,
+                -1712128.0,
+                -8163328.0,
+                -4710400.0,
+                1011712.0,
+                -3694592.0
+              ],
+              "median": -2703360.0,
+              "mean": -1695061.333,
+              "minimum": -8163328.0,
+              "maximum": 7098368.0,
+              "medianAbsoluteDeviation": 2861056.0,
+              "pairedWins": 4,
+              "bootstrap95": {
+                "lower": -6436864.0,
+                "upper": 4055040.0
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

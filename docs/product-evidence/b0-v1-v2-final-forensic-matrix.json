@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "jmoa-b0-v1-v2-final-forensic-matrix-v1",
+  "services": [
+    {
+      "service": "doctor-service",
+      "b0ToV1PssMedianKb": 654.0,
+      "v1ToV2PssMedianKb": -6261.5,
+      "b0ToV2PssMedianKb": -4715.5,
+      "b0ToV2Wins": 5,
+      "b0ToV2Bootstrap95": {
+        "lower": -7107.0,
+        "upper": -268.5
+      },
+      "forensicDecision": "NO_CORRECTABLE_DEFECT_FOUND",
+      "correctedCampaignApplied": false,
+      "directVerdict": "COMPLETE_PRODUCT_WIN"
+    },
+    {
+      "service": "patient-service",
+      "b0ToV1PssMedianKb": 910.0,
+      "v1ToV2PssMedianKb": -6135.5,
+      "b0ToV2PssMedianKb": -1266.5,
+      "b0ToV2Wins": 4,
+      "b0ToV2Bootstrap95": {
+        "lower": -12330.5,
+        "upper": 3488.5
+      },
+      "forensicDecision": "NO_CORRECTABLE_DEFECT_FOUND",
+      "correctedCampaignApplied": true,
+      "directVerdict": "B0_TO_V1_NOT_REPRODUCED"
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "b0ToV1PssMedianKb": 2516.0,
+      "v1ToV2PssMedianKb": -3736.0,
+      "b0ToV2PssMedianKb": -2947.0,
+      "b0ToV2Wins": 4,
+      "b0ToV2Bootstrap95": {
+        "lower": -6516.5,
+        "upper": 4215.0
+      },
+      "forensicDecision": "NO_CORRECTABLE_DEFECT_FOUND",
+      "correctedCampaignApplied": false,
+      "directVerdict": "B0_TO_V1_NOT_REPRODUCED"
+    }
+  ],
+  "correction": "Doctor B0_TO_V1 is not a win; Doctor succeeds because its V1_TO_V2 reduction is large enough to create a direct B0_TO_V2 win."
+}

@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "jmoa-petclinic-target-only-protocol-v1",
+  "protocol": "PETCLINIC_TARGET_ONLY_V1",
+  "status": "PRE_REGISTERED",
+  "support": {
+    "scope": "PAIR",
+    "fixedSettleSeconds": 180,
+    "minimumAvailableMemoryBytes": 734003200,
+    "memoryIncludedInProductDelta": false
+  },
+  "target": {
+    "warmupSeconds": 20,
+    "settleSeconds": 5,
+    "requests": 81,
+    "minimumAvailableMemoryBytes": 314572800,
+    "claimMetrics": [
+      "process.Pss",
+      "process.Private_Dirty",
+      "cgroup.memory.current",
+      "cgroup.memory.stat.anon",
+      "cgroup.memory.stat.file"
+    ]
+  },
+  "controlOrders": {
+    "b0": ["B0_A_TO_B0_B", "B0_B_TO_B0_A"],
+    "v2": ["V2_A_TO_V2_B", "V2_B_TO_V2_A"]
+  },
+  "productOrders": ["B0_TO_V2", "V2_TO_B0", "B0_TO_V2"],
+  "thresholds": {
+    "noisePssKb": 1024,
+    "noisePrivateDirtyKb": 1024,
+    "noiseMemoryCurrentBytes": 2097152,
+    "confirmedPssKb": -1024,
+    "confirmedPrivateDirtyKb": -1024,
+    "confirmedMemoryCurrentBytes": -1048576,
+    "strictPssKb": -4096
+  },
+  "redesignAfterTargetEvidence": "FORBIDDEN"
+}

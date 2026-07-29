@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "jmoa-three-artifact-correction-contract-v1",
+  "service": "patient-service",
+  "defect": "PROVEN_CAPTURE_TIMING_DEFECT",
+  "evidence": {
+    "affectedSession": "block-1-position-1-b0",
+    "workloadCompletedAtUtc": "2026-07-27T10:02:48.7365524Z",
+    "firstClaimSnapshotAtUtc": "2026-07-28T17:28:58Z",
+    "actualCaptureLagSeconds": 113169.263,
+    "declaredSettleSeconds": 5,
+    "otherFinalSessionCaptureLagRangeSeconds": [
+      13.4,
+      25.8
+    ]
+  },
+  "exactCorrection": {
+    "rule": "Reject a session when the first post-workload snapshot is earlier than workload completion or later than settleSeconds plus 60 seconds.",
+    "invalidAttemptsPreserved": true,
+    "maximumRetriesPerSession": 2
+  },
+  "unchangedDimensions": [
+    "B0, V1, and V2 artifact hashes",
+    "JDK base-CDS low-dirty runtime policy",
+    "six balanced block permutations",
+    "three qualification sessions",
+    "600-request workload",
+    "20-second warmup",
+    "5-second nominal settle",
+    "memory and semantic gates",
+    "valid losing run no-replacement rule"
+  ],
+  "expectedDiagnosticConsequence": "Every admitted session has a contemporaneous workload and claim capture. Performance direction is not predeclared.",
+  "stopCondition": "Stop after one corrected six-block campaign. Do not retry a valid losing result."
+}

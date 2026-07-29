@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "jmoa-b0-v1-v2-balanced-protocol-v1",
+  "objective": "Measure B0, accepted V1, and accepted V2 directly under one frozen service runtime.",
+  "qualificationOrder": ["B0", "V1", "V2"],
+  "blockOrders": [
+    ["B0", "V1", "V2"],
+    ["B0", "V2", "V1"],
+    ["V1", "B0", "V2"],
+    ["V1", "V2", "B0"],
+    ["V2", "B0", "V1"],
+    ["V2", "V1", "B0"]
+  ],
+  "observationContract": {
+    "independentSupportStack": true,
+    "targetJvmCount": 1,
+    "warmupFrozen": true,
+    "workloadFrozen": true,
+    "captureOrderFrozen": true,
+    "fullTeardown": true,
+    "scenarioCommandResponseLedger": true
+  },
+  "directComparisons": ["B0_TO_V1", "V1_TO_V2", "B0_TO_V2"],
+  "headlineGate": {
+    "validFinalSessions": 18,
+    "minimumPssWins": 4,
+    "maximumMedianPssDeltaKb": -4096,
+    "maximumBootstrap95UpperPssKb": 0,
+    "maximumMedianPrivateDirtyDeltaKb": -1024,
+    "maximumMedianMemoryCurrentDeltaBytes": -1048576,
+    "semanticErrors": 0,
+    "v2cVerdict": "CONFIRMED_WIN",
+    "v2dRequired": true
+  },
+  "terminalOutcomes": [
+    "COMPLETE_PRODUCT_WIN",
+    "COMPLETE_PRODUCT_WIN_BELOW_4MIB",
+    "B0_TO_V1_NOT_REPRODUCED",
+    "V1_TO_V2_NOT_REPRODUCED",
+    "PRODUCT_EFFECT_NOT_CONFIRMED",
+    "SEMANTIC_INCOMPATIBILITY",
+    "RUNTIME_ENVIRONMENT_INVALID"
+  ],
+  "rules": {
+    "historicalMediansUsedAsArithmeticInputs": false,
+    "validLosingRunsReplaceable": false,
+    "protocolChangesAfterStart": false,
+    "rawPrivateEvidenceCommitted": false
+  }
+}

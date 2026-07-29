@@ -1,0 +1,381 @@
+{
+  "schemaVersion": "jmoa-three-artifact-public-result-v2",
+  "service": "patient-service",
+  "protocol": "PATIENT_B0_V1_V2_BALANCED_V1",
+  "terminalOutcome": "B0_TO_V1_NOT_REPRODUCED",
+  "runtime": {
+    "launchMode": "SPRING_BOOT_FAT_JAR",
+    "policy": "JDK_BASE_CDS_LOW_DIRTY",
+    "validFinalSessions": 18,
+    "finalSessions": 18,
+    "balancedBlocks": 6,
+    "semanticErrors": 0
+  },
+  "qualification": {
+    "passed": true,
+    "directDiagnosticDeltas": {
+      "b0ToV1": {
+        "pssKb": 1973,
+        "privateDirtyKb": 1936,
+        "memoryCurrentBytes": 2146304
+      },
+      "v1ToV2": {
+        "pssKb": -1542,
+        "privateDirtyKb": -1564,
+        "memoryCurrentBytes": -1867776
+      },
+      "b0ToV2": {
+        "pssKb": 431,
+        "privateDirtyKb": 372,
+        "memoryCurrentBytes": 278528
+      }
+    },
+    "claimBoundary": "Qualification establishes runtime and semantic validity. It is not a performance claim and has no arbitrary same-artifact range gate."
+  },
+  "comparisons": [
+    {
+      "id": "B0_TO_V1",
+      "blockDeltas": [
+        {
+          "block": 1,
+          "order": [
+            "B0",
+            "V1",
+            "V2"
+          ],
+          "pssKb": -7108,
+          "privateDirtyKb": -6956,
+          "memoryCurrentBytes": -6795264
+        },
+        {
+          "block": 2,
+          "order": [
+            "B0",
+            "V2",
+            "V1"
+          ],
+          "pssKb": 6216,
+          "privateDirtyKb": 6096,
+          "memoryCurrentBytes": 6742016
+        },
+        {
+          "block": 3,
+          "order": [
+            "V1",
+            "B0",
+            "V2"
+          ],
+          "pssKb": 6086,
+          "privateDirtyKb": 6128,
+          "memoryCurrentBytes": 6074368
+        },
+        {
+          "block": 4,
+          "order": [
+            "V1",
+            "V2",
+            "B0"
+          ],
+          "pssKb": 3522,
+          "privateDirtyKb": 3568,
+          "memoryCurrentBytes": 3825664
+        },
+        {
+          "block": 5,
+          "order": [
+            "V2",
+            "B0",
+            "V1"
+          ],
+          "pssKb": -1702,
+          "privateDirtyKb": -1880,
+          "memoryCurrentBytes": -2170880
+        },
+        {
+          "block": 6,
+          "order": [
+            "V2",
+            "V1",
+            "B0"
+          ],
+          "pssKb": -3545,
+          "privateDirtyKb": -3628,
+          "memoryCurrentBytes": -3104768
+        }
+      ],
+      "pssKb": {
+        "median": 910.0,
+        "mean": 578.167,
+        "minimum": -7108.0,
+        "maximum": 6216.0,
+        "medianAbsoluteDeviation": 4815.5,
+        "pairedWins": 3,
+        "bootstrap95": {
+          "lower": -5326.5,
+          "upper": 6151.0
+        }
+      },
+      "privateDirtyKb": {
+        "median": 844.0,
+        "pairedWins": 3,
+        "bootstrap95": {
+          "lower": -5292.0,
+          "upper": 6112.0
+        }
+      },
+      "memoryCurrentBytes": {
+        "median": 827392.0,
+        "pairedWins": 3,
+        "bootstrap95": {
+          "lower": -4950016.0,
+          "upper": 6408192.0
+        }
+      },
+      "v2cVerdict": "MIXED_METRICS_NEEDS_RERUN",
+      "v2dPassed": true
+    },
+    {
+      "id": "V1_TO_V2",
+      "blockDeltas": [
+        {
+          "block": 1,
+          "order": [
+            "B0",
+            "V1",
+            "V2"
+          ],
+          "pssKb": -6627,
+          "privateDirtyKb": -6852,
+          "memoryCurrentBytes": -7102464
+        },
+        {
+          "block": 2,
+          "order": [
+            "B0",
+            "V2",
+            "V1"
+          ],
+          "pssKb": -6417,
+          "privateDirtyKb": -6488,
+          "memoryCurrentBytes": -6950912
+        },
+        {
+          "block": 3,
+          "order": [
+            "V1",
+            "B0",
+            "V2"
+          ],
+          "pssKb": -758,
+          "privateDirtyKb": -744,
+          "memoryCurrentBytes": -684032
+        },
+        {
+          "block": 4,
+          "order": [
+            "V1",
+            "V2",
+            "B0"
+          ],
+          "pssKb": -5854,
+          "privateDirtyKb": -5652,
+          "memoryCurrentBytes": -5824512
+        },
+        {
+          "block": 5,
+          "order": [
+            "V2",
+            "B0",
+            "V1"
+          ],
+          "pssKb": -9224,
+          "privateDirtyKb": -9060,
+          "memoryCurrentBytes": -8900608
+        },
+        {
+          "block": 6,
+          "order": [
+            "V2",
+            "V1",
+            "B0"
+          ],
+          "pssKb": 5194,
+          "privateDirtyKb": 5260,
+          "memoryCurrentBytes": 4861952
+        }
+      ],
+      "pssKb": {
+        "median": -6135.5,
+        "mean": -3947.667,
+        "minimum": -9224.0,
+        "maximum": 5194.0,
+        "medianAbsoluteDeviation": 1790.0,
+        "pairedWins": 5,
+        "bootstrap95": {
+          "lower": -7925.5,
+          "upper": 2218.0
+        }
+      },
+      "privateDirtyKb": {
+        "median": -6070.0,
+        "pairedWins": 5,
+        "bootstrap95": {
+          "lower": -7956.0,
+          "upper": 2258.0
+        }
+      },
+      "memoryCurrentBytes": {
+        "median": -6387712.0,
+        "pairedWins": 5,
+        "bootstrap95": {
+          "lower": -8001536.0,
+          "upper": 2088960.0
+        }
+      },
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true
+    },
+    {
+      "id": "B0_TO_V2",
+      "blockDeltas": [
+        {
+          "block": 1,
+          "order": [
+            "B0",
+            "V1",
+            "V2"
+          ],
+          "pssKb": -13735,
+          "privateDirtyKb": -13808,
+          "memoryCurrentBytes": -13897728
+        },
+        {
+          "block": 2,
+          "order": [
+            "B0",
+            "V2",
+            "V1"
+          ],
+          "pssKb": -201,
+          "privateDirtyKb": -392,
+          "memoryCurrentBytes": -208896
+        },
+        {
+          "block": 3,
+          "order": [
+            "V1",
+            "B0",
+            "V2"
+          ],
+          "pssKb": 5328,
+          "privateDirtyKb": 5384,
+          "memoryCurrentBytes": 5390336
+        },
+        {
+          "block": 4,
+          "order": [
+            "V1",
+            "V2",
+            "B0"
+          ],
+          "pssKb": -2332,
+          "privateDirtyKb": -2084,
+          "memoryCurrentBytes": -1998848
+        },
+        {
+          "block": 5,
+          "order": [
+            "V2",
+            "B0",
+            "V1"
+          ],
+          "pssKb": -10926,
+          "privateDirtyKb": -10940,
+          "memoryCurrentBytes": -11071488
+        },
+        {
+          "block": 6,
+          "order": [
+            "V2",
+            "V1",
+            "B0"
+          ],
+          "pssKb": 1649,
+          "privateDirtyKb": 1632,
+          "memoryCurrentBytes": 1757184
+        }
+      ],
+      "pssKb": {
+        "median": -1266.5,
+        "mean": -3369.5,
+        "minimum": -13735.0,
+        "maximum": 5328.0,
+        "medianAbsoluteDeviation": 4755.0,
+        "pairedWins": 4,
+        "bootstrap95": {
+          "lower": -12330.5,
+          "upper": 3488.5
+        }
+      },
+      "privateDirtyKb": {
+        "median": -1238.0,
+        "pairedWins": 4,
+        "bootstrap95": {
+          "lower": -12374.0,
+          "upper": 3508.0
+        }
+      },
+      "memoryCurrentBytes": {
+        "median": -1103872.0,
+        "pairedWins": 4,
+        "bootstrap95": {
+          "lower": -12484608.0,
+          "upper": 3573760.0
+        }
+      },
+      "v2cVerdict": "CONFIRMED_WIN",
+      "v2dPassed": true
+    }
+  ],
+  "directProductGate": {
+    "allSessionsValid": true,
+    "pairedWins": true,
+    "substantialPss": false,
+    "pssBootstrapUpperBelowZero": false,
+    "privateDirty": true,
+    "memoryCurrent": true,
+    "semantics": true,
+    "v2c": true,
+    "v2d": true
+  },
+  "attribution": {
+    "reconciliation": "NMT_VISIBLE",
+    "heapObjectClassification": "HEAP_PAGE_TOUCH_GROWTH",
+    "hypotheses": [
+      {
+        "hypothesis": "HEAP_PAGE_TOUCH_GROWTH",
+        "confidence": "HIGH",
+        "evidence": [
+          "heap PSS delta +1254 KB",
+          "heap used stayed near flat",
+          "class histogram bytes stayed near flat"
+        ]
+      },
+      {
+        "hypothesis": "CLASS_COUNT_SAVINGS",
+        "confidence": "MEDIUM",
+        "evidence": [
+          "class histogram class-count delta -5"
+        ]
+      },
+      {
+        "hypothesis": "ANONYMOUS_RW_ALLOCATOR_REDUCTION",
+        "confidence": "MEDIUM",
+        "evidence": [
+          "anonymous_rw PSS median delta -2624 KB"
+        ]
+      }
+    ]
+  },
+  "evidenceBoundary": "Raw run-level evidence, local paths, private configuration, service source, credentials, runtime images, and CDS archives are excluded from Git."
+}
