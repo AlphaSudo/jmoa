@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "jmoa-doctor-vs-nonwins-v1-cost-model-v1",
+  "positiveControl": "doctor-service",
+  "services": [
+    {
+      "service": "doctor-service",
+      "completeProductVerdict": "COMPLETE_PRODUCT_WIN",
+      "v1Cost": {
+        "pssKb": 654.0,
+        "heapPssKb": -574.0,
+        "anonymousRwPssKb": 522.0,
+        "loadedClasses": -112.5,
+        "classLoaders": 17.0,
+        "nmtMetadataCommittedKb": -96.0,
+        "nmtCodeCommittedKb": -88.5,
+        "jmoaObjectBytes": 6288.0
+      },
+      "activation": {
+        "admittedLogicalSites": 542,
+        "rewrittenSiteEvents": 723,
+        "exactActivationRatio": null,
+        "decision": "UNMEASURABLE_FROM_EXISTING_CAPTURES"
+      },
+      "memoryBudget": {
+        "v1Contribution": 654.0,
+        "v2Contribution": -6261.5,
+        "legSum": -5607.5,
+        "directCompleteProduct": -4715.5,
+        "interactionVarianceRemainder": 892.0
+      }
+    },
+    {
+      "service": "patient-service",
+      "completeProductVerdict": "B0_TO_V1_NOT_REPRODUCED",
+      "v1Cost": {
+        "pssKb": 910.0,
+        "heapPssKb": 104.0,
+        "anonymousRwPssKb": 94.0,
+        "loadedClasses": -8.0,
+        "classLoaders": -2.0,
+        "nmtMetadataCommittedKb": 0.0,
+        "nmtCodeCommittedKb": 48.5,
+        "jmoaObjectBytes": 96.0
+      },
+      "activation": {
+        "admittedLogicalSites": 549,
+        "rewrittenSiteEvents": 666,
+        "exactActivationRatio": null,
+        "decision": "UNMEASURABLE_FROM_EXISTING_CAPTURES"
+      },
+      "memoryBudget": {
+        "v1Contribution": 910.0,
+        "v2Contribution": -6135.5,
+        "legSum": -5225.5,
+        "directCompleteProduct": -1266.5,
+        "interactionVarianceRemainder": 3959.0
+      }
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "completeProductVerdict": "B0_TO_V1_NOT_REPRODUCED",
+      "v1Cost": {
+        "pssKb": 2516.0,
+        "heapPssKb": 1194.0,
+        "anonymousRwPssKb": 242.0,
+        "loadedClasses": -153.0,
+        "classLoaders": 25.0,
+        "nmtMetadataCommittedKb": 64.0,
+        "nmtCodeCommittedKb": 214.0,
+        "jmoaObjectBytes": 4752.0
+      },
+      "activation": {
+        "admittedLogicalSites": 310,
+        "rewrittenSiteEvents": 271,
+        "exactActivationRatio": null,
+        "decision": "UNMEASURABLE_FROM_EXISTING_CAPTURES"
+      },
+      "memoryBudget": {
+        "v1Contribution": 2516.0,
+        "v2Contribution": -3736.0,
+        "legSum": -1220.0,
+        "directCompleteProduct": -2947.0,
+        "interactionVarianceRemainder": -1727.0
+      }
+    }
+  ],
+  "conclusion": "Doctor does not demonstrate an independent V1 win. Its V2 reduction is large enough to overcome low-signal V1 overhead; current captures cannot determine whether higher transformed-site activation caused that difference."
+}

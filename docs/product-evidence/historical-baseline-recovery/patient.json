@@ -1,0 +1,294 @@
+{
+  "schemaVersion": "jmoa-historical-baseline-recovery-v1",
+  "service": "patient-service",
+  "classification": "HISTORICAL_ABSOLUTE_RUNS_RECOVERED",
+  "historicalProtocol": "PHASE_31D_P2_3RUN",
+  "runs": [
+    {
+      "runId": "patient-historical-1-b0",
+      "variant": "B0",
+      "pssKb": 346282.0,
+      "privateDirtyKb": 302112.0,
+      "memoryCurrentBytes": 447025152.0,
+      "heapPssKb": null,
+      "heapUsedKb": null,
+      "loadedClasses": 22497.0,
+      "metaspaceUsedKb": null,
+      "metaspaceCommittedKb": 12963.0,
+      "startupMillis": 18721.0,
+      "captureAgeSeconds": null,
+      "artifactSha256": null,
+      "imageId": null
+    },
+    {
+      "runId": "patient-historical-1-v1",
+      "variant": "V1",
+      "pssKb": 334520.0,
+      "privateDirtyKb": 290596.0,
+      "memoryCurrentBytes": 435220480.0,
+      "heapPssKb": null,
+      "heapUsedKb": null,
+      "loadedClasses": 22478.0,
+      "metaspaceUsedKb": null,
+      "metaspaceCommittedKb": 12442.0,
+      "startupMillis": 33347.0,
+      "captureAgeSeconds": null,
+      "artifactSha256": null,
+      "imageId": null
+    },
+    {
+      "runId": "patient-historical-2-b0",
+      "variant": "B0",
+      "pssKb": 338832.0,
+      "privateDirtyKb": 295048.0,
+      "memoryCurrentBytes": 439885824.0,
+      "heapPssKb": null,
+      "heapUsedKb": null,
+      "loadedClasses": 22503.0,
+      "metaspaceUsedKb": null,
+      "metaspaceCommittedKb": 12569.0,
+      "startupMillis": 27663.0,
+      "captureAgeSeconds": null,
+      "artifactSha256": null,
+      "imageId": null
+    },
+    {
+      "runId": "patient-historical-2-v1",
+      "variant": "V1",
+      "pssKb": 332504.0,
+      "privateDirtyKb": 288928.0,
+      "memoryCurrentBytes": 433471488.0,
+      "heapPssKb": null,
+      "heapUsedKb": null,
+      "loadedClasses": 22486.0,
+      "metaspaceUsedKb": null,
+      "metaspaceCommittedKb": 12510.0,
+      "startupMillis": 39833.0,
+      "captureAgeSeconds": null,
+      "artifactSha256": null,
+      "imageId": null
+    },
+    {
+      "runId": "patient-historical-3-b0",
+      "variant": "B0",
+      "pssKb": 334132.0,
+      "privateDirtyKb": 290460.0,
+      "memoryCurrentBytes": 434987008.0,
+      "heapPssKb": null,
+      "heapUsedKb": null,
+      "loadedClasses": 22483.0,
+      "metaspaceUsedKb": null,
+      "metaspaceCommittedKb": 12506.0,
+      "startupMillis": 28067.0,
+      "captureAgeSeconds": null,
+      "artifactSha256": null,
+      "imageId": null
+    },
+    {
+      "runId": "patient-historical-3-v1",
+      "variant": "V1",
+      "pssKb": 334968.0,
+      "privateDirtyKb": 291584.0,
+      "memoryCurrentBytes": 435974144.0,
+      "heapPssKb": null,
+      "heapUsedKb": null,
+      "loadedClasses": 22481.0,
+      "metaspaceUsedKb": null,
+      "metaspaceCommittedKb": 12516.0,
+      "startupMillis": 34027.0,
+      "captureAgeSeconds": null,
+      "artifactSha256": null,
+      "imageId": null
+    }
+  ],
+  "b0": {
+    "runCount": 3,
+    "metrics": {
+      "pssKb": {
+        "values": [
+          346282.0,
+          338832.0,
+          334132.0
+        ],
+        "median": 338832.0,
+        "min": 334132.0,
+        "max": 346282.0
+      },
+      "privateDirtyKb": {
+        "values": [
+          302112.0,
+          295048.0,
+          290460.0
+        ],
+        "median": 295048.0,
+        "min": 290460.0,
+        "max": 302112.0
+      },
+      "memoryCurrentBytes": {
+        "values": [
+          447025152.0,
+          439885824.0,
+          434987008.0
+        ],
+        "median": 439885824.0,
+        "min": 434987008.0,
+        "max": 447025152.0
+      },
+      "heapPssKb": {
+        "values": [],
+        "median": null,
+        "min": null,
+        "max": null
+      },
+      "heapUsedKb": {
+        "values": [],
+        "median": null,
+        "min": null,
+        "max": null
+      },
+      "loadedClasses": {
+        "values": [
+          22497.0,
+          22503.0,
+          22483.0
+        ],
+        "median": 22497.0,
+        "min": 22483.0,
+        "max": 22503.0
+      },
+      "metaspaceUsedKb": {
+        "values": [],
+        "median": null,
+        "min": null,
+        "max": null
+      },
+      "metaspaceCommittedKb": {
+        "values": [
+          12963.0,
+          12569.0,
+          12506.0
+        ],
+        "median": 12569.0,
+        "min": 12506.0,
+        "max": 12963.0
+      },
+      "startupMillis": {
+        "values": [
+          18721.0,
+          27663.0,
+          28067.0
+        ],
+        "median": 27663.0,
+        "min": 18721.0,
+        "max": 28067.0
+      },
+      "captureAgeSeconds": {
+        "values": [],
+        "median": null,
+        "min": null,
+        "max": null
+      }
+    }
+  },
+  "v1": {
+    "runCount": 3,
+    "metrics": {
+      "pssKb": {
+        "values": [
+          334520.0,
+          332504.0,
+          334968.0
+        ],
+        "median": 334520.0,
+        "min": 332504.0,
+        "max": 334968.0
+      },
+      "privateDirtyKb": {
+        "values": [
+          290596.0,
+          288928.0,
+          291584.0
+        ],
+        "median": 290596.0,
+        "min": 288928.0,
+        "max": 291584.0
+      },
+      "memoryCurrentBytes": {
+        "values": [
+          435220480.0,
+          433471488.0,
+          435974144.0
+        ],
+        "median": 435220480.0,
+        "min": 433471488.0,
+        "max": 435974144.0
+      },
+      "heapPssKb": {
+        "values": [],
+        "median": null,
+        "min": null,
+        "max": null
+      },
+      "heapUsedKb": {
+        "values": [],
+        "median": null,
+        "min": null,
+        "max": null
+      },
+      "loadedClasses": {
+        "values": [
+          22478.0,
+          22486.0,
+          22481.0
+        ],
+        "median": 22481.0,
+        "min": 22478.0,
+        "max": 22486.0
+      },
+      "metaspaceUsedKb": {
+        "values": [],
+        "median": null,
+        "min": null,
+        "max": null
+      },
+      "metaspaceCommittedKb": {
+        "values": [
+          12442.0,
+          12510.0,
+          12516.0
+        ],
+        "median": 12510.0,
+        "min": 12442.0,
+        "max": 12516.0
+      },
+      "startupMillis": {
+        "values": [
+          33347.0,
+          39833.0,
+          34027.0
+        ],
+        "median": 34027.0,
+        "min": 33347.0,
+        "max": 39833.0
+      },
+      "captureAgeSeconds": {
+        "values": [],
+        "median": null,
+        "min": null,
+        "max": null
+      }
+    }
+  },
+  "source": {
+    "logicalSource": "phase31d per-run post-workload JSON set",
+    "sha256": "2481E01AAF53CAAF81090B3D015E8DC9EFBEBFD84F0EE3BE639A75298DED2056"
+  },
+  "recomputed": {
+    "independentMedianDeltaPssKb": -4312.0,
+    "pairedMedianDeltaPssKb": -6328.0
+  },
+  "primaryDeltaConvention": "INDEPENDENT_VARIANT_MEDIANS",
+  "historicalPrimaryMedianPssDeltaKb": -4312.0,
+  "auditFinding": "RAW_RUNS_RECOVERED_ARTIFACT_IDENTITY_INCOMPLETE",
+  "privacyBoundary": "No local paths, private class names, credentials, or raw service configuration are emitted."
+}

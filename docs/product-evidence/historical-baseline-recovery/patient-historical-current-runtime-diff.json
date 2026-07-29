@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "jmoa-historical-current-runtime-diff-v1",
+  "service": "patient-service",
+  "conclusion": "DISQUALIFYING_DIFFERENCES_PRESENT",
+  "dimensions": [
+    {
+      "dimension": "B0 artifact SHA",
+      "historical": "NOT_RECOVERED",
+      "current": "2BE7E1D761ECE8BDC74CE44E7B82FB0B79D7508E45B22E9864577F4D643E0352",
+      "classification": "UNKNOWN",
+      "reason": "Raw runs exist but the historical B0 JAR was not recovered."
+    },
+    {
+      "dimension": "V1 artifact SHA",
+      "historical": "3150AB868898359710DE317A38A0156685E30883D8A3585BA7EAE7CC698A331C",
+      "current": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+      "classification": "POTENTIALLY_MEMORY_RELEVANT",
+      "reason": "The nearest retained later candidate is not the current V1 or proven Phase 31D artifact."
+    },
+    {
+      "dimension": "CDS policy",
+      "historical": "PER_CANDIDATE_APPLICATION_CDS",
+      "current": "JDK_BASE_CDS_LOW_DIRTY",
+      "classification": "DISQUALIFYING",
+      "reason": "CDS policy changes absolute and incremental memory."
+    },
+    {
+      "dimension": "Workload",
+      "historical": "300 operation pairs / 600 requests",
+      "current": "frozen health-oriented workload",
+      "classification": "DISQUALIFYING",
+      "reason": "Mechanism activation and retained state differ."
+    },
+    {
+      "dimension": "Capture design",
+      "historical": "three paired runs",
+      "current": "six balanced orders",
+      "classification": "EXPECTED",
+      "reason": "Current design controls order more strongly."
+    },
+    {
+      "dimension": "Five JDK identities",
+      "historical": "INCOMPLETE_HISTORICAL_RECORD",
+      "current": "CURRENT_RUNTIME_FINGERPRINTED",
+      "classification": "UNKNOWN",
+      "reason": "The historical five-way split was not frozen."
+    }
+  ],
+  "privacyBoundary": "Private paths, configuration values, and service internals are not emitted."
+}

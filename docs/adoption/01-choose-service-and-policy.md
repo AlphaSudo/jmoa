@@ -17,6 +17,32 @@ workload and state-reset method
 warmup, settle, and capture order
 ```
 
+Record JVM identity as five separate fields. Do not use one `javaVersion`
+label as a substitute for all of them:
+
+| Identity | What To Freeze | Why It Is Separate |
+| --- | --- | --- |
+| Build JDK | vendor, version, and `java.home` used to compile JMOA and the service | Determines compiler and plugin execution behavior |
+| Target bytecode | Maven/compiler `release` or source/target level | Determines which JVMs can load the produced classes |
+| Runtime JDK | vendor, exact build, image digest, and JVM flags | Owns the measured memory behavior |
+| CDS training JDK | exact runtime build and archive-producing command | A CDS archive is tied to its training/runtime identity |
+| Analysis/Maven JDK | JDK running offline JMOA evidence goals | May be newer than the measured runtime but must never be presented as that runtime |
+
+For each command ledger, record the relevant identity before the command:
+
+```text
+JAVA_HOME
+java -version
+mvn -version
+compiler release
+runtime image digest
+CDS archive hash and training JDK, when applicable
+```
+
+Changing any runtime or CDS identity creates a new protocol. Changing only the
+offline analysis JDK does not change captured runtime evidence, but it must
+still be recorded so parser behavior is reproducible.
+
 Use the deployment mode the service actually ships. Doctor used a Spring Boot
 fat JAR with artifact-specific AppCDS. Patient used a fat JAR with the same
 stock JDK base archive for every arm. PetClinic used exploded Boot with CDS

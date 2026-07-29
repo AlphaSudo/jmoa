@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "jmoa-v1-forensic-disposition-v1",
+  "currentCampaignVerdictsPreserved": true,
+  "newPerformanceCampaignAuthorized": false,
+  "serviceStates": [
+    {
+      "service": "doctor-service",
+      "currentCampaignRuntimeDefectProven": false,
+      "historicalComparatorDefect": "B0_SOURCE_OR_DEPENDENCY_MISMATCH",
+      "correctedMeasurementAuthorization": "AUTHORIZED_AFTER_NEW_FREEZE",
+      "exactMechanismActivationKnown": false,
+      "state": "CURRENT_CAMPAIGN_VALID_HISTORICAL_COMPARATOR_RECONCILIATION_SEPARATE",
+      "nextAction": "Follow the baseline acceptance decision; mechanism activation remains blocked until B0/V1 identity is accepted."
+    },
+    {
+      "service": "patient-service",
+      "currentCampaignRuntimeDefectProven": false,
+      "historicalComparatorDefect": "B0_RUNTIME_POLICY_MISMATCH",
+      "correctedMeasurementAuthorization": "NOT_AUTHORIZED",
+      "exactMechanismActivationKnown": false,
+      "state": "CURRENT_CAMPAIGN_VALID_HISTORICAL_COMPARATOR_RECONCILIATION_SEPARATE",
+      "nextAction": "Follow the baseline acceptance decision; mechanism activation remains blocked until B0/V1 identity is accepted."
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "currentCampaignRuntimeDefectProven": false,
+      "historicalComparatorDefect": "B0_SOURCE_OR_DEPENDENCY_MISMATCH",
+      "correctedMeasurementAuthorization": "AUTHORIZED_AFTER_NEW_FREEZE",
+      "exactMechanismActivationKnown": false,
+      "state": "CURRENT_CAMPAIGN_VALID_HISTORICAL_COMPARATOR_RECONCILIATION_SEPARATE",
+      "nextAction": "Follow the baseline acceptance decision; mechanism activation remains blocked until B0/V1 identity is accepted."
+    }
+  ],
+  "productEngineering": [
+    "reduce V1 runtime-library initialization and retained support",
+    "generate fewer package/SAM adapter families",
+    "add profile-based admission tied to demonstrated production mechanisms",
+    "emit per-site execution counters in diagnostic builds",
+    "keep reducer-only mode independent from full V1 optimization"
+  ],
+  "rerunRule": "No current B0/V1/V2 result-driven rerun. A bounded correction requires a newly proven artifact, origin, runtime-library, archive, materialization, or workload-contract defect."
+}

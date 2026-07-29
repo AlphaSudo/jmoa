@@ -1,8 +1,65 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_V2_FINAL_PATIENT_POLICY_RECONCILIATION",
+  "status": "CURRENT_AFTER_UNIFIED_THREE_ARTIFACT_FORENSICS",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
+  "currentUnifiedEvidence": {
+    "evidenceClass": "CURRENT_COMPLETE_PRODUCT_EVIDENCE",
+    "protocol": "six-order balanced B0/V1/V2 within one service runtime",
+    "launchCriterion": {
+      "completeProductWins": 1,
+      "requiredServices": 3,
+      "status": "NOT_PASSED"
+    },
+    "services": [
+      {
+        "service": "Doctor-service",
+        "b0ToV1MedianPssDeltaKb": 654,
+        "v1ToV2MedianPssDeltaKb": -6261.5,
+        "b0ToV2MedianPssDeltaKb": -4715.5,
+        "b0ToV2PairedWins": 5,
+        "b0ToV2Bootstrap95Kb": [-7107, -268.5],
+        "decision": "COMPLETE_PRODUCT_WIN"
+      },
+      {
+        "service": "Patient-service",
+        "b0ToV1MedianPssDeltaKb": 910,
+        "v1ToV2MedianPssDeltaKb": -6135.5,
+        "b0ToV2MedianPssDeltaKb": -1266.5,
+        "b0ToV2PairedWins": 4,
+        "b0ToV2Bootstrap95Kb": [-12330.5, 3488.5],
+        "decision": "OBSERVED_REDUCTION_NOT_CONFIRMED_SUBSTANTIAL"
+      },
+      {
+        "service": "Spring PetClinic customers-service",
+        "b0ToV1MedianPssDeltaKb": 2516,
+        "v1ToV2MedianPssDeltaKb": -3736,
+        "b0ToV2MedianPssDeltaKb": -2947,
+        "b0ToV2PairedWins": 4,
+        "b0ToV2Bootstrap95Kb": [-6516.5, 4215],
+        "decision": "OBSERVED_REDUCTION_NOT_CONFIRMED_SUBSTANTIAL"
+      }
+    ],
+    "primaryEngineeringFinding": "The missing complete-product win is concentrated in B0_TO_V1. V1_TO_V2 reduces median PSS in all three services, while B0_TO_V1 does not reproduce a standalone median win.",
+    "activationBoundary": "Family-level JMOA runtime objects are observed. Exact per-site execution was not captured and is not inferred.",
+    "matrix": "docs/product-evidence/b0-v1-v2-final-forensic-matrix.json",
+    "runtimeCostCensus": "docs/product-evidence/v1-runtime-cost-census.json",
+    "historicalComparatorReconciliation": {
+      "status": "CURRENT_MATRIX_PRESERVED_HISTORICAL_COMPARATORS_NOT_EQUIVALENT",
+      "absoluteRunsRecovered": [
+        "Doctor-service",
+        "Patient-service",
+        "Spring PetClinic customers-service"
+      ],
+      "doctor": "B0_SOURCE_OR_DEPENDENCY_MISMATCH",
+      "patient": "B0_RUNTIME_POLICY_MISMATCH_AND_ARTIFACT_IDENTITY_INCOMPLETE",
+      "petclinic": "B0_SOURCE_OR_DEPENDENCY_MISMATCH",
+      "historicalMedianCorrection": "Doctor's source-stated -6048 KB used the wrong median index; corrected independent-median delta is -2728 KB and paired-delta median is -2036 KB.",
+      "performanceCampaignStarted": false,
+      "source": "docs/product-evidence/historical-baseline-recovery/baseline-acceptance-decision.json"
+    }
+  },
   "historicalDirectBaselineRecord": {
+    "evidenceClass": "HISTORICAL_PROTOCOL_SCOPED",
     "id": "final-public-b0-v2",
     "comparison": "B0 baseline vs final V2 product artifact",
     "service": "Spring PetClinic customers-service",
@@ -16,6 +73,8 @@
     "claimBoundary": "Historical raw run capture is unavailable; fresh exact-image replication is mixed and does not support a direct B0-to-V2 claim."
   },
   "finalIncrementalGate": {
+    "evidenceClass": "HISTORICAL_PROTOCOL_SCOPED_INCREMENTAL",
+    "currentCompleteProductGate": false,
     "id": "final-public-v1-v2",
     "comparison": "finalized V1 vs final V2 product artifact",
     "service": "Spring PetClinic customers-service",
@@ -29,6 +88,8 @@
     "claimBoundary": "Incremental raw reducer result under the same frozen public customers protocol; no startup or universal claim."
   },
   "threeServiceAcceptance": {
+    "evidenceClass": "HISTORICAL_INCREMENTAL_V1_TO_V2_ACCEPTANCE",
+    "currentCompleteProductGate": false,
     "status": "READY_FOR_V2_FINAL",
     "comparison": "final V1 -> final V2 under each service's confirmed runtime policy",
     "policySelection": "SERVICE_SPECIFIC_CONFIRMED_POLICY",

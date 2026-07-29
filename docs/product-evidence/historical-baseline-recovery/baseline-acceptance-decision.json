@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "jmoa-baseline-acceptance-decision-v1",
+  "currentMatrixPreserved": true,
+  "performanceCampaignStarted": false,
+  "services": [
+    {
+      "service": "doctor-service",
+      "decision": "REJECT_CURRENT_B0_AS_HISTORICAL_COMPARATOR",
+      "provenDefect": "B0_SOURCE_OR_DEPENDENCY_MISMATCH",
+      "correctedMeasurementAuthorization": "AUTHORIZED_AFTER_NEW_FREEZE",
+      "boundedScope": "One balanced Doctor campaign with a source/dependency-equivalent B0, exact V1 JAR, fresh artifact-specific CDS archives, and frozen workload."
+    },
+    {
+      "service": "patient-service",
+      "decision": "B0_COMPARISON_INCONCLUSIVE",
+      "provenDefect": "B0_RUNTIME_POLICY_MISMATCH",
+      "correctedMeasurementAuthorization": "NOT_AUTHORIZED",
+      "boundedScope": "Recover/rebuild the historical source universe and choose one common runtime policy first."
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "decision": "REJECT_CURRENT_B0_AS_HISTORICAL_COMPARATOR",
+      "provenDefect": "B0_SOURCE_OR_DEPENDENCY_MISMATCH",
+      "correctedMeasurementAuthorization": "AUTHORIZED_AFTER_NEW_FREEZE",
+      "boundedScope": "One balanced public campaign with historical-equivalent B0 and exact V1 under frozen no-CDS exploded Boot."
+    }
+  ],
+  "globalDecision": "NO_IMMEDIATE_RUN",
+  "reason": "Conditional authorization requires a new artifact/runtime/workload/JDK freeze and complete command ledgers."
+}

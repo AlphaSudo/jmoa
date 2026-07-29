@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "jmoa-reducer-only-product-path-v1",
+  "mode": "JMOA_METADATA_REDUCTION",
+  "artifact": "B0R = clean B0 plus raw LocalVariableTable/LocalVariableTypeTable reduction",
+  "separateFrom": "JMOA_FULL_OPTIMIZATION = V1 semantic transform plus V2 reducer",
+  "implementationStatus": "SUPPORTED_BY_EXISTING_RAW_REDUCER_ENGINE",
+  "evidenceBoundary": "Reducer-only evidence must use B0 versus B0R. It cannot inherit full-optimization claims or overwrite the B0/V1/V2 matrix.",
+  "currentEvidence": [
+    {
+      "service": "spring-petclinic-visits-service",
+      "scope": "HISTORICAL_PROTOCOL_SCOPED",
+      "medianPssDeltaKb": -2012,
+      "comparison": "public baseline versus same baseline plus raw reducer"
+    }
+  ]
+}

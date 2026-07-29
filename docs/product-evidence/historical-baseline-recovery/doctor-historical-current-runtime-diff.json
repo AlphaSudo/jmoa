@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "jmoa-historical-current-runtime-diff-v1",
+  "service": "doctor-service",
+  "conclusion": "DISQUALIFYING_DIFFERENCES_PRESENT",
+  "dimensions": [
+    {
+      "dimension": "B0 artifact SHA",
+      "historical": "0B44E107A4699D090D22CF3C6FAFF52630AA803345DF7775510F22FA3FD10F7B",
+      "current": "5B0AF47F86D174E885F7B17CDC329E1AB3119C12D4BE96D2A908758CFD8DEE16",
+      "classification": "DISQUALIFYING",
+      "reason": "Normalized application/generated content differs."
+    },
+    {
+      "dimension": "V1 artifact SHA",
+      "historical": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+      "current": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+      "classification": "EXPECTED",
+      "reason": "Exact JAR recovered."
+    },
+    {
+      "dimension": "B0 CDS archive SHA",
+      "historical": "3EC503C87E232AB32B8638FED8696058F85F9DC3D9FEF63CD09BBD9DC7F8770C",
+      "current": "608C1067611EC7666F913D9D121201328B4C11753B6AA8430B37276A4E5A7261",
+      "classification": "POTENTIALLY_MEMORY_RELEVANT",
+      "reason": "Application CDS is artifact/runtime specific."
+    },
+    {
+      "dimension": "V1 CDS archive SHA",
+      "historical": "02955A369BB9F675706E4715E28437220A95637294FC23D07D0A381AD216F6D2",
+      "current": "DB1115C576EF636C3E7922DB572B87EB2A39FE27E69EEB17AF519CD8062FEEBC",
+      "classification": "POTENTIALLY_MEMORY_RELEVANT",
+      "reason": "The historical and current V1 archives differ."
+    },
+    {
+      "dimension": "Capture design",
+      "historical": "three paired runs",
+      "current": "six balanced orders",
+      "classification": "EXPECTED",
+      "reason": "Current design controls order more strongly."
+    },
+    {
+      "dimension": "Five JDK identities",
+      "historical": "INCOMPLETE_HISTORICAL_RECORD",
+      "current": "CURRENT_RUNTIME_FINGERPRINTED",
+      "classification": "UNKNOWN",
+      "reason": "The historical five-way split was not frozen."
+    }
+  ],
+  "privacyBoundary": "Private paths, configuration values, and service internals are not emitted."
+}

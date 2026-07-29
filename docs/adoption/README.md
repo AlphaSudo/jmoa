@@ -26,6 +26,8 @@ Follow the modules in order:
 11. [Interpret B0/V1/V2](11-interpret-b0-v1-v2.md)
 12. [Troubleshoot a missing product effect](12-troubleshoot-missing-product-effect.md)
 13. [Read command ledgers](13-read-command-ledgers.md)
+14. [Choose full optimization or reducer-only mode](14-choose-jmoa-mode.md)
+15. [Migrate a historical campaign](15-migrate-historical-campaign.md)
 
 The current reference outcomes are deliberately mixed: Doctor is a complete
 product win. Corrected Patient and PetClinic both observe direct reductions,

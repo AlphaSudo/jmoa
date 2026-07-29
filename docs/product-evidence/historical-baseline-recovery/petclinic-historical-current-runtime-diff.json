@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "jmoa-historical-current-runtime-diff-v1",
+  "service": "spring-petclinic-customers-service",
+  "conclusion": "DISQUALIFYING_DIFFERENCES_PRESENT",
+  "dimensions": [
+    {
+      "dimension": "B0 artifact SHA",
+      "historical": "4952EF9306C732846BFAE0FAE6A67BE2F9B8509644B3396B8247215A03E5589D",
+      "current": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+      "classification": "DISQUALIFYING",
+      "reason": "Normalized JAR content differs."
+    },
+    {
+      "dimension": "V1 artifact SHA",
+      "historical": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C",
+      "current": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C",
+      "classification": "EXPECTED",
+      "reason": "Exact artifact recovered."
+    },
+    {
+      "dimension": "Launch mode",
+      "historical": "EXPLODED_BOOT_APP",
+      "current": "EXPLODED_BOOT_APP",
+      "classification": "EXPECTED",
+      "reason": "Same deployment shape."
+    },
+    {
+      "dimension": "CDS policy",
+      "historical": "NO_CDS_LOW_DIRTY",
+      "current": "NO_CDS_LOW_DIRTY",
+      "classification": "EXPECTED",
+      "reason": "Same high-level policy."
+    },
+    {
+      "dimension": "Capture design",
+      "historical": "three paired runs",
+      "current": "six balanced orders",
+      "classification": "EXPECTED",
+      "reason": "Current design controls order more strongly."
+    },
+    {
+      "dimension": "Five JDK identities",
+      "historical": "INCOMPLETE_HISTORICAL_RECORD",
+      "current": "CURRENT_RUNTIME_FINGERPRINTED",
+      "classification": "UNKNOWN",
+      "reason": "The historical five-way split was not frozen."
+    }
+  ],
+  "privacyBoundary": "Private paths, configuration values, and service internals are not emitted."
+}

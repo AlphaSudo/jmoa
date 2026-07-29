@@ -1,80 +1,74 @@
 # V2 Claim Register
 
-This is the source of truth after final performance reconciliation.
+This is the source of truth after the unified six-order B0/V1/V2 forensic
+campaign. Claims are separated by evidence class; an incremental `V1 -> V2`
+result is not a substitute for a direct complete-product `B0 -> V2` result.
 
 Closure terms follow:
 
 - [V2 Phase Closure Taxonomy](v2-phase-closure-taxonomy.md)
 
-## Final Product Gate
+## Current Complete-Product Evidence
 
-The reproducible final public customers-service release gate is the incremental
-V1-to-V2 comparison. The direct B0-to-V2 historical result is preserved but is
-not an RC2 claim because its raw capture is unavailable and a fresh five-pair
-exact-image replication was mixed.
+The authoritative product gate is the direct within-block `B0 -> V2` result
+from the unified runtime. Every service ran all six artifact permutations.
 
-```text
-comparison: finalized V1 vs final V2 product artifact
-valid runs: 6/6
-paired wins: 2/3
-median PSS delta: -6,012 KB
-median Private_Dirty delta: -5,708 KB
-median memory.current delta: -8,081,408 bytes
-decision: CONFIRMED_WIN
+| Service | B0 -> V1 PSS | V1 -> V2 PSS | B0 -> V2 PSS | Direct wins | Direct verdict |
+|---|---:|---:|---:|---:|---|
+| Doctor | +654 KB | -6,261.5 KB | **-4,715.5 KB** | 5/6 | `COMPLETE_PRODUCT_WIN` |
+| Patient | +910 KB | -6,135.5 KB | -1,266.5 KB | 4/6 | observed reduction, not confirmed substantial |
+| PetClinic customers | +2,516 KB | -3,736 KB | -2,947 KB | 4/6 | observed reduction, not confirmed substantial |
 
-comparison: B0 baseline vs final V2 product artifact (fresh RC2 replication)
-valid runs: 10/10
-paired wins: 2/5
-median PSS delta: +585 KB
-median Private_Dirty delta: +844 KB
-median memory.current delta: -1,363,968 bytes
-decision: MIXED_METRICS_NEEDS_RERUN; not claimable
-```
+The current three-service complete-product launch criterion is `1/3`; it is
+**not passed**. Doctor is the complete-product positive control. It is not a
+standalone V1 positive control.
 
-The claim is limited to public customers-service under `EXPLODED_BOOT_APP`,
-`NO_CDS_LOW_DIRTY`, `MALLOC_ARENA_MAX=1`, no CDS/AppCDS/Leyden/javaagent, and
-the balanced cold-page-cache protocol. It is not a universal or startup claim.
+See the [final forensic matrix](product-evidence/b0-v1-v2-final-forensic-matrix.md),
+[V1 runtime-cost census](product-evidence/v1-runtime-cost-census.md), and
+[memory budget](product-evidence/v1-v2-memory-budget.md).
 
-### Final Direct B0-to-V2 Boundary
+## Current Incremental Evidence
 
-`PETCLINIC_INDEPENDENT_SESSION_V1` was the final direct-product protocol
-authorized on the current Hyper-V VM. Three independently restarted B0
-sessions were valid but exceeded the frozen repeatability limits:
+The same unified campaigns show substantial `V1 -> V2` median reductions:
 
 ```text
-PSS range: 3,038 KB (limit 1,024 KB)
-Private_Dirty range: 2,912 KB (limit 1,024 KB)
-memory.current range: 3,321,856 bytes (limit 2,097,152 bytes)
-terminal outcome: PETCLINIC_DIRECT_PRODUCT_UNMEASURABLE_ON_CURRENT_HOST
+Doctor:    -6,261.5 KB
+Patient:   -6,135.5 KB
+PetClinic: -3,736 KB
 ```
 
-V2 was not run, so no new direct B0-to-V2 delta exists. This does not alter the
-separate finalized-V1-to-final-V2 confirmed claim. No further direct PetClinic
-protocol is authorized on this VM.
+These values quantify the reducer contribution on top of the accepted V1
+artifact. They do not answer whether an adopter should choose the complete
+product over clean B0.
 
-## Three-Service Acceptance
+## Current V1 Contribution
 
-The frozen final V1-to-V2 launch gate now passes under service-specific
-confirmed runtime policies:
+No service produced a median `B0 -> V1` PSS win:
 
 ```text
-status: READY_FOR_V2_FINAL
-PetClinic: PASS (NO_CDS_LOW_DIRTY; median PSS -6,012 KB)
-Doctor: PASS (APPLICATION_CDS; median PSS -5,156 KB)
-Patient: PASS (JDK_BASE_CDS_LOW_DIRTY; 6/6 valid runs, 3/3 paired wins, median PSS -8,279 KB)
-Patient secondary policy: PASS (NO_CDS_LOW_DIRTY; median PSS -8,903 KB)
-Patient application CDS: BLOCK_RUNTIME_PROMOTION
+Doctor:    +654 KB
+Patient:   +910 KB
+PetClinic: +2,516 KB
 ```
 
-The Patient stock-base-CDS and no-CDS evidence sets are independently valid,
-V2-C-confirmed, and V2-D-attributed. The failed application-archive studies
-remain policy-specific failures. The aggregate claim is service-policy scoped:
-it does not transfer between base CDS, application CDS, and no-CDS.
+The sealed captures prove JMOA adapter/runtime objects were live at family
+level. They do not contain per-site execution counters or claim-run class-load
+logs, so exact transformed-site activation is currently unmeasurable. No new
+performance rerun is authorized by that limitation.
 
-See [the final three-service matrix](v2-final/v2-three-service-memory-matrix.md)
-and [the Patient policy verdict](v2-final/patient-final-policy-verdict.md).
-The preserved CDS failure is recorded in
-[patient-cds-final-verdict.md](v2-final/patient-cds-final-verdict.md).
+## Historical Protocol-Scoped Evidence
+
+All earlier results below remain useful under their original service, artifact,
+runtime-policy, workload, and capture contracts. They are classified:
+
+```text
+HISTORICAL_PROTOCOL_SCOPED
+NOT_CURRENT_COMPLETE_PRODUCT_GATE
+```
+
+This includes the earlier PetClinic full-P2 result, V2-E/V2-I incremental
+results, Doctor D2/D2R result, Patient V1/V2 policy studies, and Visits
+reducer-only result. None is arithmetically combined with the unified matrix.
 
 ## Confirmed Runtime Claims
 

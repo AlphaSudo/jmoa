@@ -42,9 +42,19 @@ non-win. These observations are retained; no valid losing run was replaced.
 
 Read the [direct matrix](docs/product-evidence/b0-v1-v2-three-service-matrix.md),
 [forensic matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md),
+[V1 runtime-cost census](docs/product-evidence/v1-runtime-cost-census.md),
+[historical/current B0 reconciliation](docs/product-evidence/historical-baseline-recovery/historical-vs-current-b0-absolute.md),
 [campaign seal](docs/product-evidence/three-artifact-campaign-seal.md),
 [balanced protocol](docs/product-evidence/b0-v1-v2-balanced-protocol.md), and
 the [adoption/evaluation guide](docs/adoption/README.md).
+
+The current engineering diagnosis is that V1 has a positive median PSS cost in
+all three unified campaigns, while V2's metadata reduction more than offsets
+that cost in median direct results. Existing captures prove artifact admission
+and shared JMOA runtime-family objects, but not exact transformed-site
+execution. Choose between the [reducer-only B0R path and full
+optimization](docs/adoption/14-choose-jmoa-mode.md) explicitly; do not infer a
+universal full-pipeline recommendation from incremental V1-to-V2 wins.
 
 Run the same workflow with a private frozen service config:
 

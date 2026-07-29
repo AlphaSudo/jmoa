@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "jmoa-v1-v2-memory-budget-v1",
+  "equation": "direct complete-product effect = V1 contribution + V2 contribution + interaction/variance remainder",
+  "services": [
+    {
+      "service": "doctor-service",
+      "metrics": {
+        "pssKb": {
+          "v1Contribution": 654.0,
+          "v2Contribution": -6261.5,
+          "legSum": -5607.5,
+          "directCompleteProduct": -4715.5,
+          "interactionVarianceRemainder": 892.0
+        },
+        "privateDirtyKb": {
+          "v1Contribution": 498.0,
+          "v2Contribution": -6108.0,
+          "legSum": -5610.0,
+          "directCompleteProduct": -4904.0,
+          "interactionVarianceRemainder": 706.0
+        },
+        "memoryCurrentBytes": {
+          "v1Contribution": 1439744.0,
+          "v2Contribution": -13082624.0,
+          "legSum": -11642880.0,
+          "directCompleteProduct": -10874880.0,
+          "interactionVarianceRemainder": 768000.0
+        }
+      }
+    },
+    {
+      "service": "patient-service",
+      "metrics": {
+        "pssKb": {
+          "v1Contribution": 910.0,
+          "v2Contribution": -6135.5,
+          "legSum": -5225.5,
+          "directCompleteProduct": -1266.5,
+          "interactionVarianceRemainder": 3959.0
+        },
+        "privateDirtyKb": {
+          "v1Contribution": 844.0,
+          "v2Contribution": -6070.0,
+          "legSum": -5226.0,
+          "directCompleteProduct": -1238.0,
+          "interactionVarianceRemainder": 3988.0
+        },
+        "memoryCurrentBytes": {
+          "v1Contribution": 827392.0,
+          "v2Contribution": -6387712.0,
+          "legSum": -5560320.0,
+          "directCompleteProduct": -1103872.0,
+          "interactionVarianceRemainder": 4456448.0
+        }
+      }
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "metrics": {
+        "pssKb": {
+          "v1Contribution": 2516.0,
+          "v2Contribution": -3736.0,
+          "legSum": -1220.0,
+          "directCompleteProduct": -2947.0,
+          "interactionVarianceRemainder": -1727.0
+        },
+        "privateDirtyKb": {
+          "v1Contribution": 2704.0,
+          "v2Contribution": -3926.0,
+          "legSum": -1222.0,
+          "directCompleteProduct": -2722.0,
+          "interactionVarianceRemainder": -1500.0
+        },
+        "memoryCurrentBytes": {
+          "v1Contribution": 2658304.0,
+          "v2Contribution": -3887104.0,
+          "legSum": -1228800.0,
+          "directCompleteProduct": -2703360.0,
+          "interactionVarianceRemainder": -1474560.0
+        }
+      }
+    }
+  ],
+  "warning": "Medians of paired legs are not algebraically additive. The remainder is diagnostic and combines interaction, order, and sampling variance."
+}
