@@ -65,6 +65,7 @@ $testedScriptNames = @(
     'analyze-same-artifact-noise.ps1',
     'analyze-petclinic-b0-period-effect.ps1',
     'analyze-three-artifact-blocks.ps1',
+    'analyze-v1-runtime-cost.ps1',
     'audit-three-artifact-forensics.ps1',
     'build-artifact-lineage.ps1',
     'new-independent-session-evidence-adapter.ps1',
@@ -745,7 +746,54 @@ $threeArtifactAnalyzer = Join-Path $PSScriptRoot 'analyze-three-artifact-blocks.
 $threeArtifactRunnerSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-three-artifact-balanced-campaign.ps1')
 $threeArtifactCommonSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'three-artifact-campaign-common.ps1')
 $threeArtifactAnalyzerSource = Get-Content -Raw -LiteralPath $threeArtifactAnalyzer
+$v1RuntimeCostAnalyzerSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'analyze-v1-runtime-cost.ps1')
 $publicEvaluationSource = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'run-jmoa-evaluation.ps1')
+$claimRegister = Get-Content -Raw -LiteralPath (Join-Path $repositoryRoot 'docs\v2-claim-register.json') | ConvertFrom-Json
+$doctorActivation = Get-Content -Raw -LiteralPath (Join-Path $repositoryRoot 'docs\product-evidence\v1-runtime-activation-doctor.json') | ConvertFrom-Json
+$patientActivation = Get-Content -Raw -LiteralPath (Join-Path $repositoryRoot 'docs\product-evidence\v1-runtime-activation-patient.json') | ConvertFrom-Json
+$adoptionModeGuide = Get-Content -Raw -LiteralPath (Join-Path $repositoryRoot 'docs\adoption\14-choose-jmoa-mode.md')
+
+Add-FixtureResult -Name 'v1-runtime-cost-analyzer-is-existing-evidence-only' -Passed (
+    $v1RuntimeCostAnalyzerSource.Contains('read-only existing-evidence analyzer') -and
+    $v1RuntimeCostAnalyzerSource.Contains('never launches a service') -and
+    -not $v1RuntimeCostAnalyzerSource.Contains('Start-Process') -and
+    -not $v1RuntimeCostAnalyzerSource.Contains('docker run') -and
+    -not $v1RuntimeCostAnalyzerSource.Contains('podman run')
+) -Details 'V1 runtime-cost forensics must consume sealed evidence without launching, mutating, or resealing a campaign.'
+
+Add-FixtureResult -Name 'v1-activation-keeps-uncaptured-levels-explicit' -Passed (
+    $null -eq $doctorActivation.exactActivationRatio -and
+    [string]$doctorActivation.exactActivationDecision -eq 'UNMEASURABLE_FROM_EXISTING_CAPTURES' -and
+    [string]$doctorActivation.evidence.exactClassLoadLog -eq 'NOT_CAPTURED' -and
+    [string]$doctorActivation.evidence.perMethodExecution -eq 'NOT_CAPTURED' -and
+    [string]$doctorActivation.evidence.perSiteExecutionCounter -eq 'NOT_CAPTURED'
+) -Details 'Artifact admission and shared runtime-family presence cannot be promoted to exact class, method, or site activation.'
+
+$privateActivationNamesAbsent = @($doctorActivation.sites + $patientActivation.sites | Where-Object {
+    $null -ne $_.siteKey -or $null -ne $_.ownerClass
+}).Count -eq 0
+$privateActivationHashesPresent = @($doctorActivation.sites + $patientActivation.sites | Where-Object {
+    [string]$_.siteId -notmatch '^[0-9A-F]{64}$' -or [string]$_.ownerId -notmatch '^[0-9A-F]{64}$'
+}).Count -eq 0
+Add-FixtureResult -Name 'v1-private-activation-records-are-hash-only' -Passed (
+    $privateActivationNamesAbsent -and $privateActivationHashesPresent
+) -Details 'Doctor and Patient activation records must expose stable hashes, never private owner or site names.'
+
+Add-FixtureResult -Name 'claim-register-separates-current-direct-and-historical-evidence' -Passed (
+    [string]$claimRegister.currentUnifiedEvidence.launchCriterion.status -eq 'NOT_PASSED' -and
+    [int]$claimRegister.currentUnifiedEvidence.launchCriterion.completeProductWins -eq 1 -and
+    @($claimRegister.currentUnifiedEvidence.services).Count -eq 3 -and
+    [bool]$claimRegister.finalIncrementalGate.currentCompleteProductGate -eq $false -and
+    [string]$claimRegister.historicalDirectBaselineRecord.evidenceClass -eq 'HISTORICAL_PROTOCOL_SCOPED'
+) -Details 'Current B0-to-V2 launch evidence, current incremental evidence, and historical protocol-scoped evidence remain separate claims.'
+
+Add-FixtureResult -Name 'adoption-guide-exposes-reducer-only-and-full-pipeline-modes' -Passed (
+    $adoptionModeGuide.Contains('reducer-only mode') -and
+    $adoptionModeGuide.Contains('## Full Optimization') -and
+    $adoptionModeGuide.Contains('B0R') -and
+    $adoptionModeGuide.Contains('V2 = V1 + metadata reduction')
+) -Details 'Users need an explicit mode decision rather than an implied one-size-fits-all optimizer path.'
+
 Add-FixtureResult -Name 'three-artifact-runner-freezes-all-six-balanced-orders' -Passed (
     $threeArtifactRunnerSource.Contains("@('B0', 'V1', 'V2')") -and
     $threeArtifactRunnerSource.Contains("@('B0', 'V2', 'V1')") -and

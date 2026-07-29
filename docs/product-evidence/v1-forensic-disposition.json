@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "jmoa-v1-forensic-disposition-v1",
+  "currentCampaignVerdictsPreserved": true,
+  "newPerformanceCampaignAuthorized": false,
+  "serviceStates": [
+    {
+      "service": "doctor-service",
+      "runtimeDefectProven": false,
+      "exactMechanismActivationKnown": false,
+      "state": "NO_RUNTIME_DEFECT_PROVEN_V1_COST_OBSERVED_ACTIVATION_COVERAGE_UNKNOWN",
+      "nextAction": "Product engineering plus a separately labeled MECHANISM_ACTIVATION_STUDY only if exact execution proof is required."
+    },
+    {
+      "service": "patient-service",
+      "runtimeDefectProven": false,
+      "exactMechanismActivationKnown": false,
+      "state": "NO_RUNTIME_DEFECT_PROVEN_V1_COST_OBSERVED_ACTIVATION_COVERAGE_UNKNOWN",
+      "nextAction": "Product engineering plus a separately labeled MECHANISM_ACTIVATION_STUDY only if exact execution proof is required."
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "runtimeDefectProven": false,
+      "exactMechanismActivationKnown": false,
+      "state": "NO_RUNTIME_DEFECT_PROVEN_V1_COST_OBSERVED_ACTIVATION_COVERAGE_UNKNOWN",
+      "nextAction": "Product engineering plus a separately labeled MECHANISM_ACTIVATION_STUDY only if exact execution proof is required."
+    }
+  ],
+  "productEngineering": [
+    "reduce V1 runtime-library initialization and retained support",
+    "generate fewer package/SAM adapter families",
+    "add profile-based admission tied to demonstrated production mechanisms",
+    "emit per-site execution counters in diagnostic builds",
+    "keep reducer-only mode independent from full V1 optimization"
+  ],
+  "rerunRule": "No current B0/V1/V2 result-driven rerun. A bounded correction requires a newly proven artifact, origin, runtime-library, archive, materialization, or workload-contract defect."
+}

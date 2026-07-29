@@ -22,6 +22,10 @@ three-service V1-to-V2 launch gate was also executed. Patient is now confirmed
 under stock JDK base CDS and independently under no-CDS; dynamic Patient
 application CDS remains blocked.
 
+The later unified B0/V1/V2 forensic campaign supersedes the old aggregate
+launch wording: the current direct complete-product criterion passes on one of
+three services and is therefore **not passed**.
+
 This document records the public roadmap boundary after
 `v0.7.3-v2g-artifact-generalization`, the V2-H hardened reducer screen, the
 V2-I raw reducer recovery confirmation, the V2-J raw engine productization
@@ -35,11 +39,31 @@ campaign infrastructure, V2-V fresh matched-capture execution tooling, V2-W
 matched capture execution, and the V2 final release audit. The fresh RC2
 replication confirmed the incremental V1-to-V2 comparison but found the direct
 B0-to-V2 comparison mixed, so only the incremental result is release-claimable.
-The final Patient stock-base-CDS confirmation is now part of the three-service
-matrix. Patient no-CDS remains independently confirmed, and the application-CDS
-failures remain separate policy-specific records.
+The final Patient stock-base-CDS confirmation remains historical
+protocol-scoped incremental evidence. Patient no-CDS is also historical
+protocol-scoped incremental evidence, and the application-CDS failures remain
+separate policy-specific records.
 
-## Final Release Gate
+## Current Unified Three-Artifact Evidence
+
+The current sealed campaign measured `B0`, `V1`, and `V2` in the same balanced
+six-block protocol. It keeps three different questions separate:
+
+| Service | B0 -> V1 median PSS | V1 -> V2 median PSS | B0 -> V2 median PSS | Direct paired wins | Direct verdict |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Doctor | +654 KB | -6,261.5 KB | -4,715.5 KB | 5/6 | `COMPLETE_PRODUCT_WIN` |
+| Patient | +910 KB | -6,135.5 KB | -1,266.5 KB | 4/6 | observed improvement, not frozen direct win |
+| PetClinic customers | +2,516 KB | -3,736 KB | -2,947 KB | 4/6 | observed improvement, not frozen direct win |
+
+The frozen complete-product launch criterion requires all three services to
+pass. Current result: `1/3`, `NOT_PASSED`. V2 engineering remains useful:
+V1 has a positive median PSS cost on all three services while V2 more than
+offsets it in the median direct result. See the
+[claim register](v2-claim-register.md),
+[V1 runtime-cost census](product-evidence/v1-runtime-cost-census.md), and
+[V1/V2 memory budget](product-evidence/v1-v2-memory-budget.md).
+
+## Historical Incremental Release Gate
 
 The frozen protocol controls page-cache state before every variant and balances
 pair order. The reproducible public customers-service acceptance result is:
@@ -54,7 +78,9 @@ median memory.current delta: -8,081,408 bytes
 decision: CONFIRMED_WIN
 ```
 
-The direct B0-to-V2 five-pair replication was valid but mixed (2/5 PSS wins;
+This is historical protocol-scoped incremental evidence, not the current
+complete-product launch gate. The direct B0-to-V2 five-pair replication was
+valid but mixed (2/5 PSS wins;
 median PSS `+585 KB`) and is explicitly non-claimable. The historical B0-to-V2
 record remains provenance only. See [V2 Final Audit](v2-final/README.md) and
 the [memory-win matrix](v2-final/v2-final-memory-win-matrix.md).
@@ -66,7 +92,7 @@ still failed the frozen repeatability limits. It terminated before V2 as
 PetClinic protocol is authorized on this Hyper-V VM; the incremental V1-to-V2
 release gate above remains the claimable PetClinic result.
 
-## Final Three-Service Acceptance
+## Historical Three-Service Incremental Acceptance
 
 The stricter final launch contract compares final V1 with final V2 for exactly
 three services under their individually confirmed runtime policies:
@@ -77,7 +103,7 @@ Doctor-service: PASS (CDS)
 Patient-service: PASS (JDK_BASE_CDS_LOW_DIRTY; 6/6 valid runs, 3/3 paired wins, median PSS -8279 KB)
 Patient secondary policy: PASS (NO_CDS_LOW_DIRTY; median PSS -8903 KB)
 Patient application CDS: BLOCK_RUNTIME_PROMOTION
-aggregate: READY_FOR_V2_FINAL
+historical aggregate: READY_FOR_V2_FINAL
 ```
 
 Patient's stock-base-CDS and no-CDS evidence are independently valid and have
@@ -90,6 +116,7 @@ See the [three-service acceptance contract](v2-final/v2-three-service-acceptance
 the [final three-service memory matrix](v2-final/v2-three-service-memory-matrix.md),
 the [Patient policy verdict](v2-final/patient-final-policy-verdict.md), and the
 [separate Patient CDS verdict](v2-final/patient-cds-final-verdict.md).
+These records do not override the current unified direct result of `1/3`.
 
 ## Closure Taxonomy
 

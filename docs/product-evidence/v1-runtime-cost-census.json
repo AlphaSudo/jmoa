@@ -1,0 +1,1660 @@
+{
+  "schemaVersion": "jmoa-v1-runtime-cost-census-v1",
+  "comparison": "B0_TO_V1",
+  "services": [
+    {
+      "service": "doctor-service",
+      "campaignProtocol": "DOCTOR_B0_V1_V2_BALANCED_V1",
+      "validFinalSessions": 18,
+      "blocks": [
+        {
+          "block": 1,
+          "b0Session": "block-1-position-1-b0",
+          "v1Session": "block-1-position-2-v1",
+          "delta": {
+            "PssKb": 1885.0,
+            "PrivateDirtyKb": 1784.0,
+            "MemoryCurrentBytes": 2646016.0,
+            "HeapPssKb": -68.0,
+            "HeapUsedKb": 10006.0,
+            "AnonymousRwPssKb": 1424.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 536.0,
+            "CgroupAnonBytes": 1835008.0,
+            "CgroupFileBytes": 659456.0,
+            "LoadedClasses": -118.0,
+            "ClassLoaders": 13.0,
+            "NmtClassCommittedKb": -276.0,
+            "NmtMetadataCommittedKb": -128.0,
+            "NmtCodeCommittedKb": -249.0,
+            "Threads": 0.0,
+            "HistogramInstances": -3855.0,
+            "HistogramBytes": -206144.0,
+            "HistogramClassRows": -160.0,
+            "JmoaObjectInstances": 393.0,
+            "JmoaObjectBytes": 6288.0,
+            "JmoaRuntimeClassRows": 87.0,
+            "AdapterClassRows": 83.0,
+            "LambdaObjectInstances": -182.0,
+            "LambdaObjectBytes": -288.0,
+            "MethodHandleInstances": -16.0,
+            "MethodHandleBytes": 4168.0,
+            "LambdaFormInstances": 20.0,
+            "LambdaFormBytes": 888.0
+          }
+        },
+        {
+          "block": 2,
+          "b0Session": "block-2-position-1-b0",
+          "v1Session": "block-2-position-3-v1",
+          "delta": {
+            "PssKb": -4328.0,
+            "PrivateDirtyKb": -4412.0,
+            "MemoryCurrentBytes": -3612672.0,
+            "HeapPssKb": -628.0,
+            "HeapUsedKb": 12672.0,
+            "AnonymousRwPssKb": -4208.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 530.0,
+            "CgroupAnonBytes": -4513792.0,
+            "CgroupFileBytes": 819200.0,
+            "LoadedClasses": -114.0,
+            "ClassLoaders": 16.0,
+            "NmtClassCommittedKb": -277.0,
+            "NmtMetadataCommittedKb": -192.0,
+            "NmtCodeCommittedKb": -318.0,
+            "Threads": 0.0,
+            "HistogramInstances": -1950.0,
+            "HistogramBytes": -253976.0,
+            "HistogramClassRows": -128.0,
+            "JmoaObjectInstances": 393.0,
+            "JmoaObjectBytes": 6288.0,
+            "JmoaRuntimeClassRows": 87.0,
+            "AdapterClassRows": 83.0,
+            "LambdaObjectInstances": -132.0,
+            "LambdaObjectBytes": 1472.0,
+            "MethodHandleInstances": -10.0,
+            "MethodHandleBytes": 4360.0,
+            "LambdaFormInstances": 60.0,
+            "LambdaFormBytes": 2240.0
+          }
+        },
+        {
+          "block": 3,
+          "b0Session": "block-3-position-2-b0",
+          "v1Session": "block-3-position-1-v1",
+          "delta": {
+            "PssKb": -815.0,
+            "PrivateDirtyKb": -928.0,
+            "MemoryCurrentBytes": 233472.0,
+            "HeapPssKb": -72.0,
+            "HeapUsedKb": -327.0,
+            "AnonymousRwPssKb": -1292.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 505.0,
+            "CgroupAnonBytes": -966656.0,
+            "CgroupFileBytes": 1040384.0,
+            "LoadedClasses": -111.0,
+            "ClassLoaders": 18.0,
+            "NmtClassCommittedKb": -235.0,
+            "NmtMetadataCommittedKb": -64.0,
+            "NmtCodeCommittedKb": -3.0,
+            "Threads": 0.0,
+            "HistogramInstances": 2005.0,
+            "HistogramBytes": 192904.0,
+            "HistogramClassRows": -129.0,
+            "JmoaObjectInstances": 393.0,
+            "JmoaObjectBytes": 6288.0,
+            "JmoaRuntimeClassRows": 87.0,
+            "AdapterClassRows": 83.0,
+            "LambdaObjectInstances": -100.0,
+            "LambdaObjectBytes": 2584.0,
+            "MethodHandleInstances": -6.0,
+            "MethodHandleBytes": 4488.0,
+            "LambdaFormInstances": 90.0,
+            "LambdaFormBytes": 3248.0
+          }
+        },
+        {
+          "block": 4,
+          "b0Session": "block-4-position-3-b0",
+          "v1Session": "block-4-position-1-v1",
+          "delta": {
+            "PssKb": 9104.0,
+            "PrivateDirtyKb": 9136.0,
+            "MemoryCurrentBytes": 9957376.0,
+            "HeapPssKb": -520.0,
+            "HeapUsedKb": -7992.0,
+            "AnonymousRwPssKb": 9232.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 406.0,
+            "CgroupAnonBytes": 9355264.0,
+            "CgroupFileBytes": 585728.0,
+            "LoadedClasses": -109.0,
+            "ClassLoaders": 20.0,
+            "NmtClassCommittedKb": -233.0,
+            "NmtMetadataCommittedKb": -128.0,
+            "NmtCodeCommittedKb": -68.0,
+            "Threads": 0.0,
+            "HistogramInstances": -266.0,
+            "HistogramBytes": -124248.0,
+            "HistogramClassRows": -132.0,
+            "JmoaObjectInstances": 393.0,
+            "JmoaObjectBytes": 6288.0,
+            "JmoaRuntimeClassRows": 87.0,
+            "AdapterClassRows": 83.0,
+            "LambdaObjectInstances": -89.0,
+            "LambdaObjectBytes": 3016.0,
+            "MethodHandleInstances": -6.0,
+            "MethodHandleBytes": 4472.0,
+            "LambdaFormInstances": 98.0,
+            "LambdaFormBytes": 3544.0
+          }
+        },
+        {
+          "block": 5,
+          "b0Session": "block-5-position-2-b0",
+          "v1Session": "block-5-position-3-v1",
+          "delta": {
+            "PssKb": 2886.0,
+            "PrivateDirtyKb": 2508.0,
+            "MemoryCurrentBytes": 3485696.0,
+            "HeapPssKb": -1564.0,
+            "HeapUsedKb": -11554.0,
+            "AnonymousRwPssKb": 3716.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 748.0,
+            "CgroupAnonBytes": 2625536.0,
+            "CgroupFileBytes": 692224.0,
+            "LoadedClasses": -115.0,
+            "ClassLoaders": 14.0,
+            "NmtClassCommittedKb": -260.0,
+            "NmtMetadataCommittedKb": -64.0,
+            "NmtCodeCommittedKb": -57.0,
+            "Threads": 0.0,
+            "HistogramInstances": -1323.0,
+            "HistogramBytes": 42680.0,
+            "HistogramClassRows": -129.0,
+            "JmoaObjectInstances": 393.0,
+            "JmoaObjectBytes": 6288.0,
+            "JmoaRuntimeClassRows": 87.0,
+            "AdapterClassRows": 83.0,
+            "LambdaObjectInstances": -165.0,
+            "LambdaObjectBytes": 280.0,
+            "MethodHandleInstances": -14.0,
+            "MethodHandleBytes": 4232.0,
+            "LambdaFormInstances": 32.0,
+            "LambdaFormBytes": 1288.0
+          }
+        },
+        {
+          "block": 6,
+          "b0Session": "block-6-position-3-b0",
+          "v1Session": "block-6-position-2-v1",
+          "delta": {
+            "PssKb": -577.0,
+            "PrivateDirtyKb": -788.0,
+            "MemoryCurrentBytes": 172032.0,
+            "HeapPssKb": -824.0,
+            "HeapUsedKb": 2592.0,
+            "AnonymousRwPssKb": -380.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 605.0,
+            "CgroupAnonBytes": -790528.0,
+            "CgroupFileBytes": 667648.0,
+            "LoadedClasses": -109.0,
+            "ClassLoaders": 21.0,
+            "NmtClassCommittedKb": -269.0,
+            "NmtMetadataCommittedKb": 0.0,
+            "NmtCodeCommittedKb": -109.0,
+            "Threads": 0.0,
+            "HistogramInstances": 414.0,
+            "HistogramBytes": 101360.0,
+            "HistogramClassRows": -133.0,
+            "JmoaObjectInstances": 393.0,
+            "JmoaObjectBytes": 6288.0,
+            "JmoaRuntimeClassRows": 87.0,
+            "AdapterClassRows": 83.0,
+            "LambdaObjectInstances": -83.0,
+            "LambdaObjectBytes": 3232.0,
+            "MethodHandleInstances": 0.0,
+            "MethodHandleBytes": 4680.0,
+            "LambdaFormInstances": 104.0,
+            "LambdaFormBytes": 3760.0
+          }
+        }
+      ],
+      "medianDeltas": {
+        "PssKb": {
+          "medianDelta": 654.0,
+          "values": [
+            1885.0,
+            -4328.0,
+            -815.0,
+            9104.0,
+            2886.0,
+            -577.0
+          ]
+        },
+        "PrivateDirtyKb": {
+          "medianDelta": 498.0,
+          "values": [
+            1784.0,
+            -4412.0,
+            -928.0,
+            9136.0,
+            2508.0,
+            -788.0
+          ]
+        },
+        "MemoryCurrentBytes": {
+          "medianDelta": 1439744.0,
+          "values": [
+            2646016.0,
+            -3612672.0,
+            233472.0,
+            9957376.0,
+            3485696.0,
+            172032.0
+          ]
+        },
+        "HeapPssKb": {
+          "medianDelta": -574.0,
+          "values": [
+            -68.0,
+            -628.0,
+            -72.0,
+            -520.0,
+            -1564.0,
+            -824.0
+          ]
+        },
+        "HeapUsedKb": {
+          "medianDelta": 1132.5,
+          "values": [
+            10006.0,
+            12672.0,
+            -327.0,
+            -7992.0,
+            -11554.0,
+            2592.0
+          ]
+        },
+        "AnonymousRwPssKb": {
+          "medianDelta": 522.0,
+          "values": [
+            1424.0,
+            -4208.0,
+            -1292.0,
+            9232.0,
+            3716.0,
+            -380.0
+          ]
+        },
+        "AnonymousExecutablePssKb": {
+          "medianDelta": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "MappedFilePssKb": {
+          "medianDelta": 533.0,
+          "values": [
+            536.0,
+            530.0,
+            505.0,
+            406.0,
+            748.0,
+            605.0
+          ]
+        },
+        "CgroupAnonBytes": {
+          "medianDelta": 522240.0,
+          "values": [
+            1835008.0,
+            -4513792.0,
+            -966656.0,
+            9355264.0,
+            2625536.0,
+            -790528.0
+          ]
+        },
+        "CgroupFileBytes": {
+          "medianDelta": 679936.0,
+          "values": [
+            659456.0,
+            819200.0,
+            1040384.0,
+            585728.0,
+            692224.0,
+            667648.0
+          ]
+        },
+        "LoadedClasses": {
+          "medianDelta": -112.5,
+          "values": [
+            -118.0,
+            -114.0,
+            -111.0,
+            -109.0,
+            -115.0,
+            -109.0
+          ]
+        },
+        "ClassLoaders": {
+          "medianDelta": 17.0,
+          "values": [
+            13.0,
+            16.0,
+            18.0,
+            20.0,
+            14.0,
+            21.0
+          ]
+        },
+        "NmtClassCommittedKb": {
+          "medianDelta": -264.5,
+          "values": [
+            -276.0,
+            -277.0,
+            -235.0,
+            -233.0,
+            -260.0,
+            -269.0
+          ]
+        },
+        "NmtMetadataCommittedKb": {
+          "medianDelta": -96.0,
+          "values": [
+            -128.0,
+            -192.0,
+            -64.0,
+            -128.0,
+            -64.0,
+            0.0
+          ]
+        },
+        "NmtCodeCommittedKb": {
+          "medianDelta": -88.5,
+          "values": [
+            -249.0,
+            -318.0,
+            -3.0,
+            -68.0,
+            -57.0,
+            -109.0
+          ]
+        },
+        "Threads": {
+          "medianDelta": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "HistogramInstances": {
+          "medianDelta": -794.5,
+          "values": [
+            -3855.0,
+            -1950.0,
+            2005.0,
+            -266.0,
+            -1323.0,
+            414.0
+          ]
+        },
+        "HistogramBytes": {
+          "medianDelta": -40784.0,
+          "values": [
+            -206144.0,
+            -253976.0,
+            192904.0,
+            -124248.0,
+            42680.0,
+            101360.0
+          ]
+        },
+        "HistogramClassRows": {
+          "medianDelta": -130.5,
+          "values": [
+            -160.0,
+            -128.0,
+            -129.0,
+            -132.0,
+            -129.0,
+            -133.0
+          ]
+        },
+        "JmoaObjectInstances": {
+          "medianDelta": 393.0,
+          "values": [
+            393.0,
+            393.0,
+            393.0,
+            393.0,
+            393.0,
+            393.0
+          ]
+        },
+        "JmoaObjectBytes": {
+          "medianDelta": 6288.0,
+          "values": [
+            6288.0,
+            6288.0,
+            6288.0,
+            6288.0,
+            6288.0,
+            6288.0
+          ]
+        },
+        "JmoaRuntimeClassRows": {
+          "medianDelta": 87.0,
+          "values": [
+            87.0,
+            87.0,
+            87.0,
+            87.0,
+            87.0,
+            87.0
+          ]
+        },
+        "AdapterClassRows": {
+          "medianDelta": 83.0,
+          "values": [
+            83.0,
+            83.0,
+            83.0,
+            83.0,
+            83.0,
+            83.0
+          ]
+        },
+        "LambdaObjectInstances": {
+          "medianDelta": -116.0,
+          "values": [
+            -182.0,
+            -132.0,
+            -100.0,
+            -89.0,
+            -165.0,
+            -83.0
+          ]
+        },
+        "LambdaObjectBytes": {
+          "medianDelta": 2028.0,
+          "values": [
+            -288.0,
+            1472.0,
+            2584.0,
+            3016.0,
+            280.0,
+            3232.0
+          ]
+        },
+        "MethodHandleInstances": {
+          "medianDelta": -8.0,
+          "values": [
+            -16.0,
+            -10.0,
+            -6.0,
+            -6.0,
+            -14.0,
+            0.0
+          ]
+        },
+        "MethodHandleBytes": {
+          "medianDelta": 4416.0,
+          "values": [
+            4168.0,
+            4360.0,
+            4488.0,
+            4472.0,
+            4232.0,
+            4680.0
+          ]
+        },
+        "LambdaFormInstances": {
+          "medianDelta": 75.0,
+          "values": [
+            20.0,
+            60.0,
+            90.0,
+            98.0,
+            32.0,
+            104.0
+          ]
+        },
+        "LambdaFormBytes": {
+          "medianDelta": 2744.0,
+          "values": [
+            888.0,
+            2240.0,
+            3248.0,
+            3544.0,
+            1288.0,
+            3760.0
+          ]
+        }
+      },
+      "availability": {
+        "codeCacheUsed": "NOT_CAPTURED",
+        "codeCommitted": "CAPTURED_NMT",
+        "exactLoadedClassNames": "NOT_CAPTURED_CLASS_LOAD_LOG_DISABLED",
+        "histogramObjectClassNames": "CAPTURED",
+        "perSiteExecutionCounters": "NOT_CAPTURED"
+      }
+    },
+    {
+      "service": "patient-service",
+      "campaignProtocol": "PATIENT_B0_V1_V2_BALANCED_V1",
+      "validFinalSessions": 18,
+      "blocks": [
+        {
+          "block": 1,
+          "b0Session": "block-1-position-1-b0",
+          "v1Session": "block-1-position-2-v1",
+          "delta": {
+            "PssKb": -7108.0,
+            "PrivateDirtyKb": -6956.0,
+            "MemoryCurrentBytes": -6795264.0,
+            "HeapPssKb": 104.0,
+            "HeapUsedKb": -4418.0,
+            "AnonymousRwPssKb": 104.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": -130.0,
+            "CgroupAnonBytes": -7118848.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -3.0,
+            "ClassLoaders": -1.0,
+            "NmtClassCommittedKb": -76.0,
+            "NmtMetadataCommittedKb": 0.0,
+            "NmtCodeCommittedKb": 112.0,
+            "Threads": 0.0,
+            "HistogramInstances": 1005.0,
+            "HistogramBytes": 186904.0,
+            "HistogramClassRows": -5.0,
+            "JmoaObjectInstances": 6.0,
+            "JmoaObjectBytes": 96.0,
+            "JmoaRuntimeClassRows": 1.0,
+            "AdapterClassRows": 1.0,
+            "LambdaObjectInstances": -13.0,
+            "LambdaObjectBytes": -440.0,
+            "MethodHandleInstances": -27.0,
+            "MethodHandleBytes": -848.0,
+            "LambdaFormInstances": -14.0,
+            "LambdaFormBytes": -472.0
+          }
+        },
+        {
+          "block": 2,
+          "b0Session": "block-2-position-1-b0",
+          "v1Session": "block-2-position-3-v1",
+          "delta": {
+            "PssKb": 6216.0,
+            "PrivateDirtyKb": 6096.0,
+            "MemoryCurrentBytes": 6742016.0,
+            "HeapPssKb": 216.0,
+            "HeapUsedKb": -1225.0,
+            "AnonymousRwPssKb": 64.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 130.0,
+            "CgroupAnonBytes": 6246400.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -7.0,
+            "ClassLoaders": -3.0,
+            "NmtClassCommittedKb": -47.0,
+            "NmtMetadataCommittedKb": 0.0,
+            "NmtCodeCommittedKb": -15.0,
+            "Threads": 0.0,
+            "HistogramInstances": 462.0,
+            "HistogramBytes": 73888.0,
+            "HistogramClassRows": -7.0,
+            "JmoaObjectInstances": 6.0,
+            "JmoaObjectBytes": 96.0,
+            "JmoaRuntimeClassRows": 1.0,
+            "AdapterClassRows": 1.0,
+            "LambdaObjectInstances": -32.0,
+            "LambdaObjectBytes": -1128.0,
+            "MethodHandleInstances": -31.0,
+            "MethodHandleBytes": -976.0,
+            "LambdaFormInstances": -28.0,
+            "LambdaFormBytes": -968.0
+          }
+        },
+        {
+          "block": 3,
+          "b0Session": "block-3-position-2-b0",
+          "v1Session": "block-3-position-1-v1",
+          "delta": {
+            "PssKb": 6086.0,
+            "PrivateDirtyKb": 6128.0,
+            "MemoryCurrentBytes": 6074368.0,
+            "HeapPssKb": -140.0,
+            "HeapUsedKb": -6577.0,
+            "AnonymousRwPssKb": 104.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": -11.0,
+            "CgroupAnonBytes": 6279168.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -11.0,
+            "ClassLoaders": -4.0,
+            "NmtClassCommittedKb": -88.0,
+            "NmtMetadataCommittedKb": 0.0,
+            "NmtCodeCommittedKb": -205.0,
+            "Threads": 0.0,
+            "HistogramInstances": 142.0,
+            "HistogramBytes": 138040.0,
+            "HistogramClassRows": -5.0,
+            "JmoaObjectInstances": 6.0,
+            "JmoaObjectBytes": 96.0,
+            "JmoaRuntimeClassRows": 1.0,
+            "AdapterClassRows": 1.0,
+            "LambdaObjectInstances": -46.0,
+            "LambdaObjectBytes": -1712.0,
+            "MethodHandleInstances": -41.0,
+            "MethodHandleBytes": -1328.0,
+            "LambdaFormInstances": -45.0,
+            "LambdaFormBytes": -1536.0
+          }
+        },
+        {
+          "block": 4,
+          "b0Session": "block-4-position-3-b0",
+          "v1Session": "block-4-position-1-v1",
+          "delta": {
+            "PssKb": 3522.0,
+            "PrivateDirtyKb": 3568.0,
+            "MemoryCurrentBytes": 3825664.0,
+            "HeapPssKb": 264.0,
+            "HeapUsedKb": -22450.0,
+            "AnonymousRwPssKb": 120.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": -79.0,
+            "CgroupAnonBytes": 3649536.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -9.0,
+            "ClassLoaders": -2.0,
+            "NmtClassCommittedKb": 67.0,
+            "NmtMetadataCommittedKb": 0.0,
+            "NmtCodeCommittedKb": 260.0,
+            "Threads": 0.0,
+            "HistogramInstances": 373.0,
+            "HistogramBytes": 81624.0,
+            "HistogramClassRows": -4.0,
+            "JmoaObjectInstances": 6.0,
+            "JmoaObjectBytes": 96.0,
+            "JmoaRuntimeClassRows": 1.0,
+            "AdapterClassRows": 1.0,
+            "LambdaObjectInstances": -27.0,
+            "LambdaObjectBytes": -1000.0,
+            "MethodHandleInstances": -37.0,
+            "MethodHandleBytes": -1200.0,
+            "LambdaFormInstances": -28.0,
+            "LambdaFormBytes": -944.0
+          }
+        },
+        {
+          "block": 5,
+          "b0Session": "block-5-position-2-b0",
+          "v1Session": "block-5-position-3-v1",
+          "delta": {
+            "PssKb": -1702.0,
+            "PrivateDirtyKb": -1880.0,
+            "MemoryCurrentBytes": -2170880.0,
+            "HeapPssKb": 104.0,
+            "HeapUsedKb": 2201.0,
+            "AnonymousRwPssKb": 84.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 121.0,
+            "CgroupAnonBytes": -1912832.0,
+            "CgroupFileBytes": 4096.0,
+            "LoadedClasses": -1.0,
+            "ClassLoaders": 2.0,
+            "NmtClassCommittedKb": 21.0,
+            "NmtMetadataCommittedKb": 64.0,
+            "NmtCodeCommittedKb": 374.0,
+            "Threads": 0.0,
+            "HistogramInstances": 408.0,
+            "HistogramBytes": 7896.0,
+            "HistogramClassRows": -6.0,
+            "JmoaObjectInstances": 6.0,
+            "JmoaObjectBytes": 96.0,
+            "JmoaRuntimeClassRows": 1.0,
+            "AdapterClassRows": 1.0,
+            "LambdaObjectInstances": 16.0,
+            "LambdaObjectBytes": 656.0,
+            "MethodHandleInstances": -21.0,
+            "MethodHandleBytes": -656.0,
+            "LambdaFormInstances": 13.0,
+            "LambdaFormBytes": 464.0
+          }
+        },
+        {
+          "block": 6,
+          "b0Session": "block-6-position-3-b0",
+          "v1Session": "block-6-position-2-v1",
+          "delta": {
+            "PssKb": -3545.0,
+            "PrivateDirtyKb": -3628.0,
+            "MemoryCurrentBytes": -3104768.0,
+            "HeapPssKb": -8.0,
+            "HeapUsedKb": 17305.0,
+            "AnonymousRwPssKb": -188.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 77.0,
+            "CgroupAnonBytes": -3715072.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -10.0,
+            "ClassLoaders": -2.0,
+            "NmtClassCommittedKb": -7.0,
+            "NmtMetadataCommittedKb": 64.0,
+            "NmtCodeCommittedKb": -440.0,
+            "Threads": 0.0,
+            "HistogramInstances": 939.0,
+            "HistogramBytes": 31960.0,
+            "HistogramClassRows": -4.0,
+            "JmoaObjectInstances": 6.0,
+            "JmoaObjectBytes": 96.0,
+            "JmoaRuntimeClassRows": 1.0,
+            "AdapterClassRows": 1.0,
+            "LambdaObjectInstances": -8.0,
+            "LambdaObjectBytes": -288.0,
+            "MethodHandleInstances": -37.0,
+            "MethodHandleBytes": -1200.0,
+            "LambdaFormInstances": -7.0,
+            "LambdaFormBytes": -280.0
+          }
+        }
+      ],
+      "medianDeltas": {
+        "PssKb": {
+          "medianDelta": 910.0,
+          "values": [
+            -7108.0,
+            6216.0,
+            6086.0,
+            3522.0,
+            -1702.0,
+            -3545.0
+          ]
+        },
+        "PrivateDirtyKb": {
+          "medianDelta": 844.0,
+          "values": [
+            -6956.0,
+            6096.0,
+            6128.0,
+            3568.0,
+            -1880.0,
+            -3628.0
+          ]
+        },
+        "MemoryCurrentBytes": {
+          "medianDelta": 827392.0,
+          "values": [
+            -6795264.0,
+            6742016.0,
+            6074368.0,
+            3825664.0,
+            -2170880.0,
+            -3104768.0
+          ]
+        },
+        "HeapPssKb": {
+          "medianDelta": 104.0,
+          "values": [
+            104.0,
+            216.0,
+            -140.0,
+            264.0,
+            104.0,
+            -8.0
+          ]
+        },
+        "HeapUsedKb": {
+          "medianDelta": -2821.5,
+          "values": [
+            -4418.0,
+            -1225.0,
+            -6577.0,
+            -22450.0,
+            2201.0,
+            17305.0
+          ]
+        },
+        "AnonymousRwPssKb": {
+          "medianDelta": 94.0,
+          "values": [
+            104.0,
+            64.0,
+            104.0,
+            120.0,
+            84.0,
+            -188.0
+          ]
+        },
+        "AnonymousExecutablePssKb": {
+          "medianDelta": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "MappedFilePssKb": {
+          "medianDelta": 33.0,
+          "values": [
+            -130.0,
+            130.0,
+            -11.0,
+            -79.0,
+            121.0,
+            77.0
+          ]
+        },
+        "CgroupAnonBytes": {
+          "medianDelta": 868352.0,
+          "values": [
+            -7118848.0,
+            6246400.0,
+            6279168.0,
+            3649536.0,
+            -1912832.0,
+            -3715072.0
+          ]
+        },
+        "CgroupFileBytes": {
+          "medianDelta": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            4096.0,
+            0.0
+          ]
+        },
+        "LoadedClasses": {
+          "medianDelta": -8.0,
+          "values": [
+            -3.0,
+            -7.0,
+            -11.0,
+            -9.0,
+            -1.0,
+            -10.0
+          ]
+        },
+        "ClassLoaders": {
+          "medianDelta": -2.0,
+          "values": [
+            -1.0,
+            -3.0,
+            -4.0,
+            -2.0,
+            2.0,
+            -2.0
+          ]
+        },
+        "NmtClassCommittedKb": {
+          "medianDelta": -27.0,
+          "values": [
+            -76.0,
+            -47.0,
+            -88.0,
+            67.0,
+            21.0,
+            -7.0
+          ]
+        },
+        "NmtMetadataCommittedKb": {
+          "medianDelta": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            64.0,
+            64.0
+          ]
+        },
+        "NmtCodeCommittedKb": {
+          "medianDelta": 48.5,
+          "values": [
+            112.0,
+            -15.0,
+            -205.0,
+            260.0,
+            374.0,
+            -440.0
+          ]
+        },
+        "Threads": {
+          "medianDelta": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "HistogramInstances": {
+          "medianDelta": 435.0,
+          "values": [
+            1005.0,
+            462.0,
+            142.0,
+            373.0,
+            408.0,
+            939.0
+          ]
+        },
+        "HistogramBytes": {
+          "medianDelta": 77756.0,
+          "values": [
+            186904.0,
+            73888.0,
+            138040.0,
+            81624.0,
+            7896.0,
+            31960.0
+          ]
+        },
+        "HistogramClassRows": {
+          "medianDelta": -5.0,
+          "values": [
+            -5.0,
+            -7.0,
+            -5.0,
+            -4.0,
+            -6.0,
+            -4.0
+          ]
+        },
+        "JmoaObjectInstances": {
+          "medianDelta": 6.0,
+          "values": [
+            6.0,
+            6.0,
+            6.0,
+            6.0,
+            6.0,
+            6.0
+          ]
+        },
+        "JmoaObjectBytes": {
+          "medianDelta": 96.0,
+          "values": [
+            96.0,
+            96.0,
+            96.0,
+            96.0,
+            96.0,
+            96.0
+          ]
+        },
+        "JmoaRuntimeClassRows": {
+          "medianDelta": 1.0,
+          "values": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "AdapterClassRows": {
+          "medianDelta": 1.0,
+          "values": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "LambdaObjectInstances": {
+          "medianDelta": -20.0,
+          "values": [
+            -13.0,
+            -32.0,
+            -46.0,
+            -27.0,
+            16.0,
+            -8.0
+          ]
+        },
+        "LambdaObjectBytes": {
+          "medianDelta": -720.0,
+          "values": [
+            -440.0,
+            -1128.0,
+            -1712.0,
+            -1000.0,
+            656.0,
+            -288.0
+          ]
+        },
+        "MethodHandleInstances": {
+          "medianDelta": -34.0,
+          "values": [
+            -27.0,
+            -31.0,
+            -41.0,
+            -37.0,
+            -21.0,
+            -37.0
+          ]
+        },
+        "MethodHandleBytes": {
+          "medianDelta": -1088.0,
+          "values": [
+            -848.0,
+            -976.0,
+            -1328.0,
+            -1200.0,
+            -656.0,
+            -1200.0
+          ]
+        },
+        "LambdaFormInstances": {
+          "medianDelta": -21.0,
+          "values": [
+            -14.0,
+            -28.0,
+            -45.0,
+            -28.0,
+            13.0,
+            -7.0
+          ]
+        },
+        "LambdaFormBytes": {
+          "medianDelta": -708.0,
+          "values": [
+            -472.0,
+            -968.0,
+            -1536.0,
+            -944.0,
+            464.0,
+            -280.0
+          ]
+        }
+      },
+      "availability": {
+        "codeCacheUsed": "NOT_CAPTURED",
+        "codeCommitted": "CAPTURED_NMT",
+        "exactLoadedClassNames": "NOT_CAPTURED_CLASS_LOAD_LOG_DISABLED",
+        "histogramObjectClassNames": "CAPTURED",
+        "perSiteExecutionCounters": "NOT_CAPTURED"
+      }
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "campaignProtocol": "PETCLINIC_CUSTOMERS_B0_V1_V2_BALANCED_V1",
+      "validFinalSessions": 18,
+      "blocks": [
+        {
+          "block": 1,
+          "b0Session": "block-1-position-1-b0",
+          "v1Session": "block-1-position-2-v1",
+          "delta": {
+            "PssKb": 7742.0,
+            "PrivateDirtyKb": 7692.0,
+            "MemoryCurrentBytes": 7843840.0,
+            "HeapPssKb": 488.0,
+            "HeapUsedKb": 4818.0,
+            "AnonymousRwPssKb": 388.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 44.0,
+            "CgroupAnonBytes": 7856128.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -153.0,
+            "ClassLoaders": 25.0,
+            "NmtClassCommittedKb": -120.0,
+            "NmtMetadataCommittedKb": 192.0,
+            "NmtCodeCommittedKb": 282.0,
+            "Threads": 0.0,
+            "HistogramInstances": -2149.0,
+            "HistogramBytes": -117984.0,
+            "HistogramClassRows": -175.0,
+            "JmoaObjectInstances": 297.0,
+            "JmoaObjectBytes": 4752.0,
+            "JmoaRuntimeClassRows": 111.0,
+            "AdapterClassRows": 107.0,
+            "LambdaObjectInstances": -218.0,
+            "LambdaObjectBytes": -1744.0,
+            "MethodHandleInstances": -854.0,
+            "MethodHandleBytes": -27456.0,
+            "LambdaFormInstances": 54.0,
+            "LambdaFormBytes": 2088.0
+          }
+        },
+        {
+          "block": 2,
+          "b0Session": "block-2-position-1-b0",
+          "v1Session": "block-2-position-3-v1",
+          "delta": {
+            "PssKb": 5375.0,
+            "PrivateDirtyKb": 5472.0,
+            "MemoryCurrentBytes": 5644288.0,
+            "HeapPssKb": 1604.0,
+            "HeapUsedKb": -2341.0,
+            "AnonymousRwPssKb": 96.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": -89.0,
+            "CgroupAnonBytes": 5599232.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -153.0,
+            "ClassLoaders": 25.0,
+            "NmtClassCommittedKb": -61.0,
+            "NmtMetadataCommittedKb": 64.0,
+            "NmtCodeCommittedKb": 146.0,
+            "Threads": 0.0,
+            "HistogramInstances": -1318.0,
+            "HistogramBytes": -141232.0,
+            "HistogramClassRows": -172.0,
+            "JmoaObjectInstances": 297.0,
+            "JmoaObjectBytes": 4752.0,
+            "JmoaRuntimeClassRows": 111.0,
+            "AdapterClassRows": 107.0,
+            "LambdaObjectInstances": -220.0,
+            "LambdaObjectBytes": -1808.0,
+            "MethodHandleInstances": -638.0,
+            "MethodHandleBytes": -21056.0,
+            "LambdaFormInstances": 54.0,
+            "LambdaFormBytes": 2088.0
+          }
+        },
+        {
+          "block": 3,
+          "b0Session": "block-3-position-2-b0",
+          "v1Session": "block-3-position-1-v1",
+          "delta": {
+            "PssKb": -3979.0,
+            "PrivateDirtyKb": -3648.0,
+            "MemoryCurrentBytes": -3756032.0,
+            "HeapPssKb": 1836.0,
+            "HeapUsedKb": -3154.0,
+            "AnonymousRwPssKb": -52.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": -345.0,
+            "CgroupAnonBytes": -3739648.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -153.0,
+            "ClassLoaders": 25.0,
+            "NmtClassCommittedKb": -42.0,
+            "NmtMetadataCommittedKb": 64.0,
+            "NmtCodeCommittedKb": -69.0,
+            "Threads": 0.0,
+            "HistogramInstances": -1791.0,
+            "HistogramBytes": -149016.0,
+            "HistogramClassRows": -175.0,
+            "JmoaObjectInstances": 297.0,
+            "JmoaObjectBytes": 4752.0,
+            "JmoaRuntimeClassRows": 111.0,
+            "AdapterClassRows": 107.0,
+            "LambdaObjectInstances": -218.0,
+            "LambdaObjectBytes": -1744.0,
+            "MethodHandleInstances": -704.0,
+            "MethodHandleBytes": -23168.0,
+            "LambdaFormInstances": 54.0,
+            "LambdaFormBytes": 2088.0
+          }
+        },
+        {
+          "block": 4,
+          "b0Session": "block-4-position-3-b0",
+          "v1Session": "block-4-position-1-v1",
+          "delta": {
+            "PssKb": 17336.0,
+            "PrivateDirtyKb": 17416.0,
+            "MemoryCurrentBytes": 18251776.0,
+            "HeapPssKb": 1612.0,
+            "HeapUsedKb": 48.0,
+            "AnonymousRwPssKb": 820.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": -94.0,
+            "CgroupAnonBytes": 17817600.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -153.0,
+            "ClassLoaders": 25.0,
+            "NmtClassCommittedKb": -117.0,
+            "NmtMetadataCommittedKb": 64.0,
+            "NmtCodeCommittedKb": 866.0,
+            "Threads": 0.0,
+            "HistogramInstances": -2005.0,
+            "HistogramBytes": -163464.0,
+            "HistogramClassRows": -175.0,
+            "JmoaObjectInstances": 297.0,
+            "JmoaObjectBytes": 4752.0,
+            "JmoaRuntimeClassRows": 111.0,
+            "AdapterClassRows": 107.0,
+            "LambdaObjectInstances": -218.0,
+            "LambdaObjectBytes": -1744.0,
+            "MethodHandleInstances": -799.0,
+            "MethodHandleBytes": -25952.0,
+            "LambdaFormInstances": 54.0,
+            "LambdaFormBytes": 2088.0
+          }
+        },
+        {
+          "block": 5,
+          "b0Session": "block-5-position-2-b0",
+          "v1Session": "block-5-position-3-v1",
+          "delta": {
+            "PssKb": -3037.0,
+            "PrivateDirtyKb": -3416.0,
+            "MemoryCurrentBytes": -3895296.0,
+            "HeapPssKb": 784.0,
+            "HeapUsedKb": -4731.0,
+            "AnonymousRwPssKb": 396.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": 375.0,
+            "CgroupAnonBytes": -3493888.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -153.0,
+            "ClassLoaders": 25.0,
+            "NmtClassCommittedKb": -125.0,
+            "NmtMetadataCommittedKb": 64.0,
+            "NmtCodeCommittedKb": 415.0,
+            "Threads": 0.0,
+            "HistogramInstances": -2141.0,
+            "HistogramBytes": -144136.0,
+            "HistogramClassRows": -173.0,
+            "JmoaObjectInstances": 297.0,
+            "JmoaObjectBytes": 4752.0,
+            "JmoaRuntimeClassRows": 111.0,
+            "AdapterClassRows": 107.0,
+            "LambdaObjectInstances": -218.0,
+            "LambdaObjectBytes": -1744.0,
+            "MethodHandleInstances": -694.0,
+            "MethodHandleBytes": -22592.0,
+            "LambdaFormInstances": 54.0,
+            "LambdaFormBytes": 2088.0
+          }
+        },
+        {
+          "block": 6,
+          "b0Session": "block-6-position-3-b0",
+          "v1Session": "block-6-position-2-v1",
+          "delta": {
+            "PssKb": -343.0,
+            "PrivateDirtyKb": -64.0,
+            "MemoryCurrentBytes": -327680.0,
+            "HeapPssKb": 472.0,
+            "HeapUsedKb": -2086.0,
+            "AnonymousRwPssKb": -188.0,
+            "AnonymousExecutablePssKb": 0.0,
+            "MappedFilePssKb": -248.0,
+            "CgroupAnonBytes": -73728.0,
+            "CgroupFileBytes": 0.0,
+            "LoadedClasses": -153.0,
+            "ClassLoaders": 25.0,
+            "NmtClassCommittedKb": -105.0,
+            "NmtMetadataCommittedKb": 192.0,
+            "NmtCodeCommittedKb": -273.0,
+            "Threads": 0.0,
+            "HistogramInstances": -1599.0,
+            "HistogramBytes": -172576.0,
+            "HistogramClassRows": -173.0,
+            "JmoaObjectInstances": 297.0,
+            "JmoaObjectBytes": 4752.0,
+            "JmoaRuntimeClassRows": 111.0,
+            "AdapterClassRows": 107.0,
+            "LambdaObjectInstances": -218.0,
+            "LambdaObjectBytes": -1744.0,
+            "MethodHandleInstances": -811.0,
+            "MethodHandleBytes": -26336.0,
+            "LambdaFormInstances": 54.0,
+            "LambdaFormBytes": 2088.0
+          }
+        }
+      ],
+      "medianDeltas": {
+        "PssKb": {
+          "medianDelta": 2516.0,
+          "values": [
+            7742.0,
+            5375.0,
+            -3979.0,
+            17336.0,
+            -3037.0,
+            -343.0
+          ]
+        },
+        "PrivateDirtyKb": {
+          "medianDelta": 2704.0,
+          "values": [
+            7692.0,
+            5472.0,
+            -3648.0,
+            17416.0,
+            -3416.0,
+            -64.0
+          ]
+        },
+        "MemoryCurrentBytes": {
+          "medianDelta": 2658304.0,
+          "values": [
+            7843840.0,
+            5644288.0,
+            -3756032.0,
+            18251776.0,
+            -3895296.0,
+            -327680.0
+          ]
+        },
+        "HeapPssKb": {
+          "medianDelta": 1194.0,
+          "values": [
+            488.0,
+            1604.0,
+            1836.0,
+            1612.0,
+            784.0,
+            472.0
+          ]
+        },
+        "HeapUsedKb": {
+          "medianDelta": -2213.5,
+          "values": [
+            4818.0,
+            -2341.0,
+            -3154.0,
+            48.0,
+            -4731.0,
+            -2086.0
+          ]
+        },
+        "AnonymousRwPssKb": {
+          "medianDelta": 242.0,
+          "values": [
+            388.0,
+            96.0,
+            -52.0,
+            820.0,
+            396.0,
+            -188.0
+          ]
+        },
+        "AnonymousExecutablePssKb": {
+          "medianDelta": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "MappedFilePssKb": {
+          "medianDelta": -91.5,
+          "values": [
+            44.0,
+            -89.0,
+            -345.0,
+            -94.0,
+            375.0,
+            -248.0
+          ]
+        },
+        "CgroupAnonBytes": {
+          "medianDelta": 2762752.0,
+          "values": [
+            7856128.0,
+            5599232.0,
+            -3739648.0,
+            17817600.0,
+            -3493888.0,
+            -73728.0
+          ]
+        },
+        "CgroupFileBytes": {
+          "medianDelta": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "LoadedClasses": {
+          "medianDelta": -153.0,
+          "values": [
+            -153.0,
+            -153.0,
+            -153.0,
+            -153.0,
+            -153.0,
+            -153.0
+          ]
+        },
+        "ClassLoaders": {
+          "medianDelta": 25.0,
+          "values": [
+            25.0,
+            25.0,
+            25.0,
+            25.0,
+            25.0,
+            25.0
+          ]
+        },
+        "NmtClassCommittedKb": {
+          "medianDelta": -111.0,
+          "values": [
+            -120.0,
+            -61.0,
+            -42.0,
+            -117.0,
+            -125.0,
+            -105.0
+          ]
+        },
+        "NmtMetadataCommittedKb": {
+          "medianDelta": 64.0,
+          "values": [
+            192.0,
+            64.0,
+            64.0,
+            64.0,
+            64.0,
+            192.0
+          ]
+        },
+        "NmtCodeCommittedKb": {
+          "medianDelta": 214.0,
+          "values": [
+            282.0,
+            146.0,
+            -69.0,
+            866.0,
+            415.0,
+            -273.0
+          ]
+        },
+        "Threads": {
+          "medianDelta": 0.0,
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "HistogramInstances": {
+          "medianDelta": -1898.0,
+          "values": [
+            -2149.0,
+            -1318.0,
+            -1791.0,
+            -2005.0,
+            -2141.0,
+            -1599.0
+          ]
+        },
+        "HistogramBytes": {
+          "medianDelta": -146576.0,
+          "values": [
+            -117984.0,
+            -141232.0,
+            -149016.0,
+            -163464.0,
+            -144136.0,
+            -172576.0
+          ]
+        },
+        "HistogramClassRows": {
+          "medianDelta": -174.0,
+          "values": [
+            -175.0,
+            -172.0,
+            -175.0,
+            -175.0,
+            -173.0,
+            -173.0
+          ]
+        },
+        "JmoaObjectInstances": {
+          "medianDelta": 297.0,
+          "values": [
+            297.0,
+            297.0,
+            297.0,
+            297.0,
+            297.0,
+            297.0
+          ]
+        },
+        "JmoaObjectBytes": {
+          "medianDelta": 4752.0,
+          "values": [
+            4752.0,
+            4752.0,
+            4752.0,
+            4752.0,
+            4752.0,
+            4752.0
+          ]
+        },
+        "JmoaRuntimeClassRows": {
+          "medianDelta": 111.0,
+          "values": [
+            111.0,
+            111.0,
+            111.0,
+            111.0,
+            111.0,
+            111.0
+          ]
+        },
+        "AdapterClassRows": {
+          "medianDelta": 107.0,
+          "values": [
+            107.0,
+            107.0,
+            107.0,
+            107.0,
+            107.0,
+            107.0
+          ]
+        },
+        "LambdaObjectInstances": {
+          "medianDelta": -218.0,
+          "values": [
+            -218.0,
+            -220.0,
+            -218.0,
+            -218.0,
+            -218.0,
+            -218.0
+          ]
+        },
+        "LambdaObjectBytes": {
+          "medianDelta": -1744.0,
+          "values": [
+            -1744.0,
+            -1808.0,
+            -1744.0,
+            -1744.0,
+            -1744.0,
+            -1744.0
+          ]
+        },
+        "MethodHandleInstances": {
+          "medianDelta": -751.5,
+          "values": [
+            -854.0,
+            -638.0,
+            -704.0,
+            -799.0,
+            -694.0,
+            -811.0
+          ]
+        },
+        "MethodHandleBytes": {
+          "medianDelta": -24560.0,
+          "values": [
+            -27456.0,
+            -21056.0,
+            -23168.0,
+            -25952.0,
+            -22592.0,
+            -26336.0
+          ]
+        },
+        "LambdaFormInstances": {
+          "medianDelta": 54.0,
+          "values": [
+            54.0,
+            54.0,
+            54.0,
+            54.0,
+            54.0,
+            54.0
+          ]
+        },
+        "LambdaFormBytes": {
+          "medianDelta": 2088.0,
+          "values": [
+            2088.0,
+            2088.0,
+            2088.0,
+            2088.0,
+            2088.0,
+            2088.0
+          ]
+        }
+      },
+      "availability": {
+        "codeCacheUsed": "NOT_CAPTURED",
+        "codeCommitted": "CAPTURED_NMT",
+        "exactLoadedClassNames": "NOT_CAPTURED_CLASS_LOAD_LOG_DISABLED",
+        "histogramObjectClassNames": "CAPTURED",
+        "perSiteExecutionCounters": "NOT_CAPTURED"
+      }
+    }
+  ],
+  "interpretation": "All three unified campaigns show positive median B0-to-V1 PSS. The recurring V1 cost is not explained by one universal category; service-specific deltas and uncertainty remain material."
+}
