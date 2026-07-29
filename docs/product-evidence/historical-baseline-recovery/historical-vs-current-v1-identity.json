@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "jmoa-historical-current-v1-identity-v1",
+  "services": [
+    {
+      "service": "doctor-service",
+      "historicalArtifact": {
+        "sha256": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+        "bytes": 101906981
+      },
+      "currentArtifact": {
+        "sha256": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+        "bytes": 101906981
+      },
+      "artifactExact": true,
+      "cdsArchiveExact": false,
+      "conclusion": "V1_EXACT_IDENTITY",
+      "qualification": "JAR exact; application CDS archive not exact, so runtime identity is not exact."
+    },
+    {
+      "service": "patient-service",
+      "historicalArtifact": null,
+      "nearestLaterHistoricalArtifact": {
+        "sha256": "3150AB868898359710DE317A38A0156685E30883D8A3585BA7EAE7CC698A331C",
+        "bytes": 99635097
+      },
+      "currentArtifact": {
+        "sha256": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+        "bytes": 99585809
+      },
+      "artifactExact": false,
+      "conclusion": "V1_IDENTITY_INCONCLUSIVE",
+      "qualification": "Phase 31D candidate JAR not recovered; a later corrected candidate cannot substitute for it."
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "historicalArtifact": {
+        "sha256": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C",
+        "bytes": 92727362
+      },
+      "currentArtifact": {
+        "sha256": "314761904021A75EF1BD114B28BBE15FCAFE31C9F21C71577ABF47CECA33A92C",
+        "bytes": 92727362
+      },
+      "artifactExact": true,
+      "conclusion": "V1_EXACT_IDENTITY",
+      "qualification": "Historical Phase 33M full-P2 JAR is the exact finalized current V1 artifact."
+    }
+  ],
+  "unprovenDimensions": [
+    "historical profile SHA where absent",
+    "historical admission-set SHA where absent",
+    "historical plugin/runtime-library identity where absent",
+    "historical five-way JDK identity"
+  ]
+}

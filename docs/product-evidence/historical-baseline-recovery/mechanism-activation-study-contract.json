@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "jmoa-mechanism-activation-study-contract-v1",
+  "status": "BLOCKED_PENDING_COMPARATOR_RECONCILIATION",
+  "evidenceClass": "DIAGNOSTIC_ONLY_NOT_PRODUCT_PERFORMANCE",
+  "requiredCounters": [
+    "siteId",
+    "declaringClassId",
+    "methodId",
+    "classLoaded",
+    "methodReached",
+    "transformedBranchExecuted",
+    "adapterCreated",
+    "adapterInvocationCount",
+    "fallbackCount",
+    "originalAllocationAvoidedCount"
+  ],
+  "hardRules": [
+    "Counters are disabled in product performance campaigns.",
+    "Diagnostic captures cannot update the B0/V1/V2 claim matrix.",
+    "Private class/method names are hashed before publication.",
+    "Activation is not inferred from histograms.",
+    "The study starts only after B0 and V1 identity are accepted."
+  ]
+}

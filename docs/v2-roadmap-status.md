@@ -63,6 +63,14 @@ offsets it in the median direct result. See the
 [V1 runtime-cost census](product-evidence/v1-runtime-cost-census.md), and
 [V1/V2 memory budget](product-evidence/v1-v2-memory-budget.md).
 
+Historical/current reconciliation subsequently recovered all three historical
+absolute run vectors. It does not change the sealed current matrix. It found
+source/content comparator mismatches for Doctor and PetClinic and a
+runtime-policy mismatch plus incomplete artifact identity for Patient. See the
+[absolute B0 audit](product-evidence/historical-baseline-recovery/historical-vs-current-b0-absolute.md)
+and [baseline decision](product-evidence/historical-baseline-recovery/baseline-acceptance-decision.md).
+No immediate rerun or mechanism-counter study is authorized.
+
 ## Historical Incremental Release Gate
 
 The frozen protocol controls page-cache state before every variant and balances

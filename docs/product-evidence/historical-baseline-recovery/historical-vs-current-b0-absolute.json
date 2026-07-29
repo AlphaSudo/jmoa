@@ -1,0 +1,706 @@
+{
+  "schemaVersion": "jmoa-historical-current-b0-absolute-v1",
+  "comparison": "HISTORICAL_B0_TO_CURRENT_B0",
+  "services": [
+    {
+      "service": "doctor-service",
+      "recoveryClassification": "HISTORICAL_ABSOLUTE_RUNS_RECOVERED",
+      "historicalB0": {
+        "runCount": 3,
+        "metrics": {
+          "pssKb": {
+            "values": [
+              336484.0,
+              335792.0,
+              340896.0
+            ],
+            "median": 336484.0,
+            "min": 335792.0,
+            "max": 340896.0
+          },
+          "privateDirtyKb": {
+            "values": [
+              290148.0,
+              289176.0,
+              294320.0
+            ],
+            "median": 290148.0,
+            "min": 289176.0,
+            "max": 294320.0
+          },
+          "memoryCurrentBytes": {
+            "values": [
+              532750336.0,
+              418836480.0,
+              424136704.0
+            ],
+            "median": 424136704.0,
+            "min": 418836480.0,
+            "max": 532750336.0
+          },
+          "heapPssKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "heapUsedKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "loadedClasses": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "metaspaceUsedKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "metaspaceCommittedKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "startupMillis": {
+            "values": [
+              33700.0,
+              32100.0,
+              38500.0
+            ],
+            "median": 33700.0,
+            "min": 32100.0,
+            "max": 38500.0
+          },
+          "captureAgeSeconds": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          }
+        }
+      },
+      "currentB0": {
+        "runCount": 6,
+        "metrics": {
+          "pssKb": {
+            "values": [
+              328542.0,
+              329899.0,
+              330059.0,
+              318818.0,
+              327849.0,
+              327713.0
+            ],
+            "median": 328195.5,
+            "min": 318818.0,
+            "max": 330059.0
+          },
+          "privateDirtyKb": {
+            "values": [
+              298484.0,
+              299920.0,
+              300140.0,
+              288780.0,
+              297960.0,
+              297844.0
+            ],
+            "median": 298222.0,
+            "min": 288780.0,
+            "max": 300140.0
+          },
+          "memoryCurrentBytes": {
+            "values": [
+              537440256.0,
+              538845184.0,
+              539201536.0,
+              527912960.0,
+              537030656.0,
+              536797184.0
+            ],
+            "median": 537235456.0,
+            "min": 527912960.0,
+            "max": 539201536.0
+          },
+          "heapPssKb": {
+            "values": [
+              108.0,
+              108.0,
+              108.0,
+              108.0,
+              108.0,
+              108.0
+            ],
+            "median": 108.0,
+            "min": 108.0,
+            "max": 108.0
+          },
+          "heapUsedKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "loadedClasses": {
+            "values": [
+              23097.0,
+              23096.0,
+              23097.0,
+              23096.0,
+              23101.0,
+              23095.0
+            ],
+            "median": 23096.5,
+            "min": 23095.0,
+            "max": 23101.0
+          },
+          "metaspaceUsedKb": {
+            "values": [
+              15738.0,
+              15791.0,
+              15775.0,
+              15765.0,
+              15722.0,
+              15731.0
+            ],
+            "median": 15751.5,
+            "min": 15722.0,
+            "max": 15791.0
+          },
+          "metaspaceCommittedKb": {
+            "values": [
+              16192.0,
+              16256.0,
+              16192.0,
+              16192.0,
+              16128.0,
+              16128.0
+            ],
+            "median": 16192.0,
+            "min": 16128.0,
+            "max": 16256.0
+          },
+          "startupMillis": {
+            "values": [
+              64974.0,
+              49824.0,
+              41428.0,
+              42811.0,
+              42321.0,
+              54874.0
+            ],
+            "median": 46317.5,
+            "min": 41428.0,
+            "max": 64974.0
+          },
+          "captureAgeSeconds": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          }
+        }
+      },
+      "artifactIdentity": {
+        "historical": {
+          "sha256": "0B44E107A4699D090D22CF3C6FAFF52630AA803345DF7775510F22FA3FD10F7B",
+          "bytes": 101677278
+        },
+        "current": {
+          "sha256": "5B0AF47F86D174E885F7B17CDC329E1AB3119C12D4BE96D2A908758CFD8DEE16",
+          "bytes": 101677501
+        },
+        "normalizedJarComparison": {
+          "historicalEntries": 657,
+          "currentEntries": 657,
+          "differingEntries": 13,
+          "categoryCounts": {
+            "APP_GENERATED_AOT_CLASS": 1,
+            "APP_GENERATED_CGLIB_CLASS": 8,
+            "BUILD_METADATA": 4
+          },
+          "normalizedContentEqual": false,
+          "privacyBoundary": "Entry names are not emitted; only aggregate categories are public."
+        }
+      },
+      "pssMedianDeltaCurrentMinusHistoricalKb": -8288.5,
+      "conclusion": "B0_SOURCE_OR_DEPENDENCY_MISMATCH",
+      "reason": "JAR SHA and normalized application/generated content differ; application CDS archives also differ."
+    },
+    {
+      "service": "patient-service",
+      "recoveryClassification": "HISTORICAL_ABSOLUTE_RUNS_RECOVERED",
+      "historicalB0": {
+        "runCount": 3,
+        "metrics": {
+          "pssKb": {
+            "values": [
+              346282.0,
+              338832.0,
+              334132.0
+            ],
+            "median": 338832.0,
+            "min": 334132.0,
+            "max": 346282.0
+          },
+          "privateDirtyKb": {
+            "values": [
+              302112.0,
+              295048.0,
+              290460.0
+            ],
+            "median": 295048.0,
+            "min": 290460.0,
+            "max": 302112.0
+          },
+          "memoryCurrentBytes": {
+            "values": [
+              447025152.0,
+              439885824.0,
+              434987008.0
+            ],
+            "median": 439885824.0,
+            "min": 434987008.0,
+            "max": 447025152.0
+          },
+          "heapPssKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "heapUsedKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "loadedClasses": {
+            "values": [
+              22497.0,
+              22503.0,
+              22483.0
+            ],
+            "median": 22497.0,
+            "min": 22483.0,
+            "max": 22503.0
+          },
+          "metaspaceUsedKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "metaspaceCommittedKb": {
+            "values": [
+              12963.0,
+              12569.0,
+              12506.0
+            ],
+            "median": 12569.0,
+            "min": 12506.0,
+            "max": 12963.0
+          },
+          "startupMillis": {
+            "values": [
+              18721.0,
+              27663.0,
+              28067.0
+            ],
+            "median": 27663.0,
+            "min": 18721.0,
+            "max": 28067.0
+          },
+          "captureAgeSeconds": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          }
+        }
+      },
+      "currentB0": {
+        "runCount": 6,
+        "metrics": {
+          "pssKb": {
+            "values": [
+              302746.0,
+              291123.0,
+              290782.0,
+              297305.0,
+              299609.0,
+              294477.0
+            ],
+            "median": 295891.0,
+            "min": 290782.0,
+            "max": 302746.0
+          },
+          "privateDirtyKb": {
+            "values": [
+              291248.0,
+              279664.0,
+              279260.0,
+              285624.0,
+              288240.0,
+              282824.0
+            ],
+            "median": 284224.0,
+            "min": 279260.0,
+            "max": 291248.0
+          },
+          "memoryCurrentBytes": {
+            "values": [
+              301744128.0,
+              290103296.0,
+              289869824.0,
+              296247296.0,
+              299081728.0,
+              293298176.0
+            ],
+            "median": 294772736.0,
+            "min": 289869824.0,
+            "max": 301744128.0
+          },
+          "heapPssKb": {
+            "values": [
+              89164.0,
+              77996.0,
+              77484.0,
+              83844.0,
+              86480.0,
+              81012.0
+            ],
+            "median": 82428.0,
+            "min": 77484.0,
+            "max": 89164.0
+          },
+          "heapUsedKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "loadedClasses": {
+            "values": [
+              22980.0,
+              22978.0,
+              22980.0,
+              22980.0,
+              22974.0,
+              22978.0
+            ],
+            "median": 22979.0,
+            "min": 22974.0,
+            "max": 22980.0
+          },
+          "metaspaceUsedKb": {
+            "values": [
+              99398.0,
+              99353.0,
+              99376.0,
+              99368.0,
+              99366.0,
+              99376.0
+            ],
+            "median": 99372.0,
+            "min": 99353.0,
+            "max": 99398.0
+          },
+          "metaspaceCommittedKb": {
+            "values": [
+              100096.0,
+              100032.0,
+              100096.0,
+              100032.0,
+              99968.0,
+              100032.0
+            ],
+            "median": 100032.0,
+            "min": 99968.0,
+            "max": 100096.0
+          },
+          "startupMillis": {
+            "values": [
+              95532.0,
+              77031.0,
+              82247.0,
+              69210.0,
+              67829.0,
+              69520.0
+            ],
+            "median": 73275.5,
+            "min": 67829.0,
+            "max": 95532.0
+          },
+          "captureAgeSeconds": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          }
+        }
+      },
+      "artifactIdentity": {
+        "historical": null,
+        "current": {
+          "sha256": "2BE7E1D761ECE8BDC74CE44E7B82FB0B79D7508E45B22E9864577F4D643E0352",
+          "bytes": 99431613
+        },
+        "normalizedJarComparison": null
+      },
+      "pssMedianDeltaCurrentMinusHistoricalKb": -42941.0,
+      "conclusion": "B0_RUNTIME_POLICY_MISMATCH",
+      "reason": "Historical per-candidate application CDS and long workload differ from the current base-CDS health workload; the exact historical B0 JAR was not recovered."
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "recoveryClassification": "HISTORICAL_ABSOLUTE_RUNS_RECOVERED",
+      "historicalB0": {
+        "runCount": 3,
+        "metrics": {
+          "pssKb": {
+            "values": [
+              354187.0,
+              345214.0,
+              351779.0
+            ],
+            "median": 351779.0,
+            "min": 345214.0,
+            "max": 354187.0
+          },
+          "privateDirtyKb": {
+            "values": [
+              345192.0,
+              336128.0,
+              342604.0
+            ],
+            "median": 342604.0,
+            "min": 336128.0,
+            "max": 345192.0
+          },
+          "memoryCurrentBytes": {
+            "values": [
+              435388416.0,
+              349687808.0,
+              356163584.0
+            ],
+            "median": 356163584.0,
+            "min": 349687808.0,
+            "max": 435388416.0
+          },
+          "heapPssKb": {
+            "values": [
+              106948.0,
+              96692.0,
+              105084.0
+            ],
+            "median": 105084.0,
+            "min": 96692.0,
+            "max": 106948.0
+          },
+          "heapUsedKb": {
+            "values": [
+              55050.0,
+              54963.0,
+              55095.0
+            ],
+            "median": 55050.0,
+            "min": 54963.0,
+            "max": 55095.0
+          },
+          "loadedClasses": {
+            "values": [
+              24404.0,
+              24403.0,
+              24404.0
+            ],
+            "median": 24404.0,
+            "min": 24403.0,
+            "max": 24404.0
+          },
+          "metaspaceUsedKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "metaspaceCommittedKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "startupMillis": {
+            "values": [
+              18053.0,
+              16866.0,
+              16583.0
+            ],
+            "median": 16866.0,
+            "min": 16583.0,
+            "max": 18053.0
+          },
+          "captureAgeSeconds": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          }
+        }
+      },
+      "currentB0": {
+        "runCount": 6,
+        "metrics": {
+          "pssKb": {
+            "values": [
+              336697.0,
+              346036.0,
+              350608.0,
+              340381.0,
+              342488.0,
+              346664.0
+            ],
+            "median": 344262.0,
+            "min": 336697.0,
+            "max": 350608.0
+          },
+          "privateDirtyKb": {
+            "values": [
+              327900.0,
+              336804.0,
+              341516.0,
+              331048.0,
+              333812.0,
+              337616.0
+            ],
+            "median": 335308.0,
+            "min": 327900.0,
+            "max": 341516.0
+          },
+          "memoryCurrentBytes": {
+            "values": [
+              341041152.0,
+              350081024.0,
+              354975744.0,
+              344297472.0,
+              347615232.0,
+              351248384.0
+            ],
+            "median": 348848128.0,
+            "min": 341041152.0,
+            "max": 354975744.0
+          },
+          "heapPssKb": {
+            "values": [
+              88568.0,
+              97376.0,
+              102140.0,
+              92144.0,
+              93588.0,
+              97948.0
+            ],
+            "median": 95482.0,
+            "min": 88568.0,
+            "max": 102140.0
+          },
+          "heapUsedKb": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          },
+          "loadedClasses": {
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "metaspaceUsedKb": {
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "metaspaceCommittedKb": {
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "startupMillis": {
+            "values": [
+              60679.0,
+              66945.0,
+              71227.0,
+              62072.0,
+              62199.0,
+              62660.0
+            ],
+            "median": 62429.5,
+            "min": 60679.0,
+            "max": 71227.0
+          },
+          "captureAgeSeconds": {
+            "values": [],
+            "median": null,
+            "min": null,
+            "max": null
+          }
+        }
+      },
+      "artifactIdentity": {
+        "historical": {
+          "sha256": "4952EF9306C732846BFAE0FAE6A67BE2F9B8509644B3396B8247215A03E5589D",
+          "bytes": 92563715
+        },
+        "current": {
+          "sha256": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+          "bytes": 92557714
+        },
+        "normalizedJarComparison": {
+          "historicalEntries": 290,
+          "currentEntries": 289,
+          "differingEntries": 10,
+          "categoryCounts": {
+            "OTHER": 1,
+            "APP_CLASS": 7,
+            "ARCHIVE_METADATA": 2
+          },
+          "normalizedContentEqual": false,
+          "privacyBoundary": "Entry names are not emitted; only aggregate categories are public."
+        }
+      },
+      "pssMedianDeltaCurrentMinusHistoricalKb": -7517.0,
+      "conclusion": "B0_SOURCE_OR_DEPENDENCY_MISMATCH",
+      "reason": "JAR SHA and normalized content differ even though both protocols use exploded Boot no-CDS execution."
+    }
+  ],
+  "campaignAuthorization": "NO_PERFORMANCE_CAMPAIGN_STARTED"
+}

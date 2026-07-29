@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "jmoa-historical-expected-engineering-budget-v1",
+  "label": "HISTORICAL_EXPECTED_ENGINEERING_BUDGET",
+  "services": [
+    {
+      "service": "doctor-service",
+      "historicalB0ToV1PrimaryConvention": "INDEPENDENT_VARIANT_MEDIANS",
+      "historicalB0ToV1RecomputedMedianPssKb": -2728.0,
+      "historicalV1ToV2ProtocolScopedMedianPssKb": -5156.0,
+      "historicalExpectedEngineeringBudgetPssKb": -7884.0,
+      "currentDirectB0ToV2MedianPssKb": -4715.5,
+      "currentMinusHistoricalBudgetGapKb": 3168.5,
+      "authoritative": false,
+      "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY"
+    },
+    {
+      "service": "patient-service",
+      "historicalB0ToV1PrimaryConvention": "INDEPENDENT_VARIANT_MEDIANS",
+      "historicalB0ToV1RecomputedMedianPssKb": -4312.0,
+      "historicalV1ToV2ProtocolScopedMedianPssKb": -8279.0,
+      "historicalExpectedEngineeringBudgetPssKb": -12591.0,
+      "currentDirectB0ToV2MedianPssKb": -1266.5,
+      "currentMinusHistoricalBudgetGapKb": 11324.5,
+      "authoritative": false,
+      "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY"
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "historicalB0ToV1PrimaryConvention": "PAIRED_DELTA_MEDIAN",
+      "historicalB0ToV1RecomputedMedianPssKb": -4758.0,
+      "historicalV1ToV2ProtocolScopedMedianPssKb": -6012.0,
+      "historicalExpectedEngineeringBudgetPssKb": -10770.0,
+      "currentDirectB0ToV2MedianPssKb": -2947.0,
+      "currentMinusHistoricalBudgetGapKb": 7823.0,
+      "authoritative": false,
+      "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY"
+    }
+  ],
+  "warning": "Medians from separate campaigns are not additive. This is a directional engineering budget, never an authoritative product delta."
+}

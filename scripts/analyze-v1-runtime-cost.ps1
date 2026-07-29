@@ -630,17 +630,30 @@ foreach ($service in $differential.services) {
 $differentialLines += '', $differential.conclusion
 Write-JsonAndMarkdown -Value $differential -BaseName 'doctor-vs-nonwins-v1-cost-model' -Markdown $differentialLines
 
+$baselineDecisionPath = Join-Path $OutputDirectory 'historical-baseline-recovery\baseline-acceptance-decision.json'
+$baselineDecision = if (Test-Path -LiteralPath $baselineDecisionPath -PathType Leaf) {
+    Read-Json $baselineDecisionPath
+} else { $null }
 $disposition = [ordered]@{
     schemaVersion = 'jmoa-v1-forensic-disposition-v1'
     currentCampaignVerdictsPreserved = $true
     newPerformanceCampaignAuthorized = $false
     serviceStates = @($services | ForEach-Object {
+        $historicalDecision = if ($null -ne $baselineDecision) {
+            @($baselineDecision.services | Where-Object service -eq $_.service)[0]
+        } else { $null }
         [ordered]@{
             service = $_.service
-            runtimeDefectProven = $false
+            currentCampaignRuntimeDefectProven = $false
+            historicalComparatorDefect = if ($null -ne $historicalDecision) {
+                [string]$historicalDecision.provenDefect
+            } else { 'NOT_AUDITED' }
+            correctedMeasurementAuthorization = if ($null -ne $historicalDecision) {
+                [string]$historicalDecision.correctedMeasurementAuthorization
+            } else { 'NOT_AUTHORIZED' }
             exactMechanismActivationKnown = $false
-            state = 'NO_RUNTIME_DEFECT_PROVEN_V1_COST_OBSERVED_ACTIVATION_COVERAGE_UNKNOWN'
-            nextAction = 'Product engineering plus a separately labeled MECHANISM_ACTIVATION_STUDY only if exact execution proof is required.'
+            state = 'CURRENT_CAMPAIGN_VALID_HISTORICAL_COMPARATOR_RECONCILIATION_SEPARATE'
+            nextAction = 'Follow the baseline acceptance decision; mechanism activation remains blocked until B0/V1 identity is accepted.'
         }
     })
     productEngineering = @(
@@ -655,10 +668,11 @@ $disposition = [ordered]@{
 Write-JsonAndMarkdown -Value $disposition -BaseName 'v1-forensic-disposition' -Markdown @(
     '# V1 Forensic Disposition', '',
     '- Current campaign verdicts remain unchanged.',
-    '- No artifact, runtime-origin, policy, archive, or materialization defect was proven.',
+    '- No runtime defect was proven inside the current frozen campaigns.',
+    '- Historical reconciliation separately proves B0 comparator defects for Doctor and PetClinic; Patient remains inconclusive.',
     '- Exact transformed-site activation was not captured; this is an evidence limitation, not proof of a runtime defect.',
-    '- No new performance campaign is authorized.',
-    '- The next engineering target is V1 overhead and activation-aware admission.', '',
+    '- No immediate performance run is authorized; any bounded correction requires a new freeze.',
+    '- Activation-aware engineering remains diagnostic-only until comparator identity is accepted.', '',
     $disposition.rerunRule
 )
 
