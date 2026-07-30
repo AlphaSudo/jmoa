@@ -736,6 +736,9 @@ function Invoke-Variant {
         Write-JmoaJson -Value $failure -Path (Join-Path $runDirectory 'workload-result.json')
         return [ordered]@{ variant = $Variant; runDirectory = $runDirectory; status = 'FAILED'; error = $launchError }
     } finally {
+        if (-not [string]::IsNullOrWhiteSpace($workloadLedger) -and (Test-Path -LiteralPath (Join-Path $workloadLedger 'command-ledger.md') -PathType Leaf) -and -not (Test-Path -LiteralPath (Join-Path $workloadLedger 'child-ledger-summary.json') -PathType Leaf)) {
+            Complete-CampaignAuditLedger -LedgerDirectory $workloadLedger -Status 'FAILED' -Stage 'workload' -Variant $Variant | Out-Null
+        }
         if (-not [string]::IsNullOrWhiteSpace($captureLedger) -and (Test-Path -LiteralPath (Join-Path $captureLedger 'command-ledger.md') -PathType Leaf) -and -not (Test-Path -LiteralPath (Join-Path $captureLedger 'child-ledger-summary.json') -PathType Leaf)) {
             Complete-CampaignAuditLedger -LedgerDirectory $captureLedger -Status 'FAILED' -Stage 'capture' -Variant $Variant | Out-Null
         }

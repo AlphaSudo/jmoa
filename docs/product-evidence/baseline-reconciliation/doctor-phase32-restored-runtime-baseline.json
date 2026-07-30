@@ -1,0 +1,119 @@
+{
+  "schemaVersion": "jmoa-doctor-phase32-restored-baseline-public-v1",
+  "generatedAt": "2026-07-30",
+  "decision": "TARGET_MEMORY_BASELINE_REPRODUCED",
+  "scope": "BASELINE_ONLY",
+  "claimableOptimizerResult": false,
+  "artifact": {
+    "sha256": "0B44E107A4699D090D22CF3C6FAFF52630AA803345DF7775510F22FA3FD10F7B",
+    "status": "EXACT_HISTORICAL_BYTES"
+  },
+  "runtime": {
+    "java": "Temurin OpenJDK 26+35",
+    "customJreModulesSha256": "4315B4B87C772D7BE5F07733C40DC0B5B6AB4DF8900E9AF4188AAE5AFAB834C",
+    "baseArchiveSha256": "F79C398C671A8E248F5FE31A053F4690402578702EE331E42D0D1297C4143CA8",
+    "preservedDynamicArchiveSha256": "3EC503C87E232AB32B8638FED8696058F85F9DC3D9FEF63CD09BBD9DC7F8770C",
+    "dynamicArchiveCompatible": true,
+    "imageId": "9936B2237B0ACE3155AAEAA54B3276FD22E431A15A53B6651D63B5920954F2CD",
+    "classification": "ARCHIVE_COMPATIBLE_RECONSTRUCTION_OPENJDK_26_PLUS_35"
+  },
+  "current": {
+    "validRuns": 3,
+    "requestsPerRun": 80,
+    "totalWorkloadErrors": 0,
+    "pssKb": {
+      "values": [326612, 329020, 329416],
+      "minimum": 326612,
+      "median": 329020,
+      "maximum": 329416
+    },
+    "anonymousPssKb": {
+      "values": [290052, 292312, 292956],
+      "minimum": 290052,
+      "median": 292312,
+      "maximum": 292956
+    },
+    "privateDirtyKb": {
+      "values": [290060, 292312, 292968],
+      "minimum": 290060,
+      "median": 292312,
+      "maximum": 292968
+    },
+    "filePssKb": {
+      "values": [36560, 36708, 36460],
+      "minimum": 36460,
+      "median": 36560,
+      "maximum": 36708
+    },
+    "memoryCurrentBytes": {
+      "values": [300376064, 302432256, 303079424],
+      "minimum": 300376064,
+      "median": 302432256,
+      "maximum": 303079424
+    },
+    "startupMillis": {
+      "values": [42926, 41737, 39341],
+      "minimum": 39341,
+      "median": 41737,
+      "maximum": 42926
+    }
+  },
+  "historical": {
+    "pssKb": {
+      "values": [336484, 335792, 340896],
+      "minimum": 335792,
+      "median": 336484,
+      "maximum": 340896
+    },
+    "anonymousPssKb": {
+      "values": [290140, 289172, 294320],
+      "minimum": 289172,
+      "median": 290140,
+      "maximum": 294320
+    },
+    "privateDirtyKb": {
+      "values": [290148, 289176, 294320],
+      "minimum": 289176,
+      "median": 290148,
+      "maximum": 294320
+    },
+    "filePssKb": {
+      "values": [46344, 46620, 46576],
+      "minimum": 46344,
+      "median": 46576,
+      "maximum": 46620
+    },
+    "memoryCurrentBytes": {
+      "values": [532750336, 418836480, 424136704],
+      "minimum": 418836480,
+      "median": 424136704,
+      "maximum": 532750336
+    },
+    "startupMillis": {
+      "values": [33700, 32100, 38500],
+      "minimum": 32100,
+      "median": 33700,
+      "maximum": 38500
+    }
+  },
+  "gates": {
+    "exactArtifactAllRuns": true,
+    "exactCompatibleBaseArchiveAllRuns": true,
+    "exactRestoredImageAllRuns": true,
+    "liveOpenJdk26Plus35FingerprintRuns": 2,
+    "historicalWorkloadValidAllRuns": true,
+    "everyAnonymousPssInsideHistoricalRange": true,
+    "everyPrivateDirtyInsideHistoricalRange": true,
+    "fileNormalizedMedianPssKb": 339036,
+    "fileNormalizedMedianPssInsideHistoricalRange": true,
+    "startupDistributionOverlaps": false,
+    "memoryCurrentDistributionOverlaps": false
+  },
+  "reconstructionBoundary": {
+    "finalDistrolessUserspace": "RECONSTRUCTED_CURRENT_PIN",
+    "supportImages": "RECONSTRUCTED",
+    "containerEngineAndHost": "CURRENT_NOT_HISTORICAL",
+    "captureHelper": "DISCLOSED_BUSYBOX_NOT_JVM_LOADED"
+  },
+  "nextAction": "BASELINE_RECONCILIATION_COMPLETE_NO_CANDIDATE_RUN_IN_THIS_SCOPE"
+}

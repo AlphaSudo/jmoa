@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "jmoa-current-vs-historical-baseline-v2",
+  "generatedAt": "2026-07-30",
+  "scope": "BASELINE_ONLY",
+  "overallDecision": "DOCTOR_TARGET_MEMORY_BASELINE_REPRODUCED_OTHER_HISTORICAL_COMPARATORS_UNAVAILABLE",
+  "services": [
+    {
+      "service": "patient-service",
+      "historicalProtocol": "PHASE_31D_P2_3RUN",
+      "artifactStatus": "HISTORICAL_ARTIFACT_MISSING",
+      "verdict": "HISTORICAL_COMPARATOR_NOT_RECOVERABLE",
+      "candidateComparisonRunInThisScope": false
+    },
+    {
+      "service": "doctor-service",
+      "historicalProtocol": "PHASE_32K_I_3RUN_CORRECTED_D2",
+      "artifactSha256": "0B44E107A4699D090D22CF3C6FAFF52630AA803345DF7775510F22FA3FD10F7B",
+      "runtime": "ARCHIVE_COMPATIBLE_RECONSTRUCTION_OPENJDK_26_PLUS_35",
+      "currentValidRuns": 3,
+      "workloadRequestsPerRun": 80,
+      "workloadErrors": 0,
+      "historicalMedianAnonymousPssKb": 290140,
+      "currentMedianAnonymousPssKb": 292312,
+      "historicalMedianPrivateDirtyKb": 290148,
+      "currentMedianPrivateDirtyKb": 292312,
+      "fileNormalizedCurrentMedianPssKb": 339036,
+      "historicalPssRangeKb": [335792, 340896],
+      "startupReproduced": false,
+      "memoryCurrentReproduced": false,
+      "verdict": "TARGET_MEMORY_BASELINE_REPRODUCED",
+      "candidateComparisonRunInThisScope": false
+    },
+    {
+      "service": "spring-petclinic-customers-service",
+      "historicalProtocol": "PHASE_33M_EXPLODED_BOOT_NO_CDS",
+      "artifactStatus": "HISTORICAL_BASELINE_CONTAMINATED",
+      "verdict": "HISTORICAL_B0_INVALID_CONTAMINATED",
+      "candidateComparisonRunInThisScope": false
+    }
+  ],
+  "ledgerPolicy": {
+    "rawLedgersCommitted": false,
+    "commandsAndResponsesRecorded": true,
+    "failedAttemptsRecorded": true,
+    "logicalReferencesOnlyInPublicReport": true
+  },
+  "nextAction": "DECIDE_DOCTOR_CANDIDATE_COMPARISON_SEPARATELY_OR_FREEZE_NEW_CLEAN_BASELINES_FOR_OTHER_SERVICES"
+}
