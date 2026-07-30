@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "jmoa-doctor-v1-mechanism-activation-study-v1",
+  "generatedAt": "2026-07-30T08:49:00.9857892Z",
+  "classification": "PROFILE_DERIVED_NON_CLAIM",
+  "service": "doctor-service",
+  "inputs": {
+    "profileSha256": "3E42E8919CAC2663BCDAA23C4EE2B14841DFDA9A6C1A2E529BFD1D83B23EBDF2",
+    "buildReportSha256": "8418F46989283D1004B2AE04E172BD2E4886CB158742A3A083A870B8B75EF98E",
+    "profileVersion": "3.3",
+    "buildReportVersion": "NOT_RECORDED"
+  },
+  "buildSurface": {
+    "totalLambdaSites": 3265,
+    "eligibleSites": 516,
+    "rewrittenOperations": 723,
+    "rewrittenClasses": 618,
+    "admittedDecisionSites": 542,
+    "exactTier1SupportedPlanSites": 255,
+    "note": "rewrittenOperations is a build-summary operation count and is not asserted to be a unique site count."
+  },
+  "recoveredProfile": {
+    "loadedClasses": 20021,
+    "hotClasses": 1884,
+    "lambdaSites": 2928,
+    "trainingDurationSeconds": 0,
+    "trainingDurationReliable": false
+  },
+  "activationCoverage": {
+    "admittedSitesObservedInProfile": 540,
+    "admittedSiteCoveragePercent": 99.63,
+    "admittedOwnerClassesLoaded": 537,
+    "exactTier1SitesObservedInProfile": 255,
+    "exactTier1CoveragePercent": 100.0,
+    "profileInvocationCount": 26497,
+    "sitesWithPositiveProfileCount": 540,
+    "medianProfileInvocationCount": 1,
+    "p90ProfileInvocationCount": 16,
+    "maximumProfileInvocationCount": 6851,
+    "families": [
+      {
+        "family": "ACTUATOR_MICROMETER",
+        "profileObservedSites": 1,
+        "profileInvocationCount": 1,
+        "medianInvocationCount": 1,
+        "p90InvocationCount": 1
+      },
+      {
+        "family": "DOCTOR_APPLICATION",
+        "profileObservedSites": 6,
+        "profileInvocationCount": 6,
+        "medianInvocationCount": 1,
+        "p90InvocationCount": 1
+      },
+      {
+        "family": "FRAMEWORK_OTHER",
+        "profileObservedSites": 259,
+        "profileInvocationCount": 24709,
+        "medianInvocationCount": 1,
+        "p90InvocationCount": 96
+      },
+      {
+        "family": "STARTUP_CONFIGURATION_AOT",
+        "profileObservedSites": 274,
+        "profileInvocationCount": 1781,
+        "medianInvocationCount": 1,
+        "p90InvocationCount": 1
+      }
+    ]
+  },
+  "unavailablePostRewriteCounters": {
+    "transformedBranchExecutions": "NOT_CAPTURED",
+    "adapterInstances": "NOT_CAPTURED",
+    "adapterInvocations": "NOT_CAPTURED",
+    "fallbackInvocations": "NOT_CAPTURED",
+    "allocationsAvoided": "NOT_CAPTURED",
+    "workloadPhasePartition": "NOT_CAPTURED"
+  },
+  "workloadQualityDecision": {
+    "classification": "PROFILE_COVERAGE_HIGH_RUNTIME_PHASE_UNATTRIBUTABLE",
+    "explanation": "The recovered training profile observed nearly all admitted sites, but it does not partition startup, Actuator, and business phases and it predates the rewrite. It therefore cannot prove transformed-path activation in the reconstructed 80-request runtime diagnostic."
+  },
+  "claimBoundary": [
+    "This is a profile-derived mechanism study, not a memory result.",
+    "Profile invocation counts are pre-rewrite observations used for admission and are not post-rewrite adapter invocation counts.",
+    "No per-phase activation, allocation avoidance, or transformed-branch count was captured.",
+    "The report does not upgrade the reconstructed Doctor V1 result into an exact historical replay."
+  ]
+}

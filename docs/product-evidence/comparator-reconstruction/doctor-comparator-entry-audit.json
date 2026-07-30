@@ -1,0 +1,222 @@
+{
+  "schemaVersion": "jmoa-comparator-entry-audit-v1",
+  "generatedAt": "2026-07-29T19:27:26.6973969Z",
+  "service": "doctor",
+  "privacy": {
+    "logicalPathsPublished": false,
+    "logicalPathHashesPublished": true,
+    "note": "Entry names remain private; SHA-256 logical path identifiers support stable reconciliation."
+  },
+  "artifactIdentity": {
+    "historicalSha256": "0B44E107A4699D090D22CF3C6FAFF52630AA803345DF7775510F22FA3FD10F7B",
+    "currentSha256": "5B0AF47F86D174E885F7B17CDC329E1AB3119C12D4BE96D2A908758CFD8DEE16",
+    "historicalBytes": 101677278,
+    "currentBytes": 101677501
+  },
+  "contamination": {
+    "historicalJmoaEntryCount": 0,
+    "currentJmoaEntryCount": 0,
+    "historicalCleanB0": true,
+    "currentCleanB0": true
+  },
+  "summary": {
+    "historicalEntryCount": 657,
+    "currentEntryCount": 657,
+    "differenceCount": 13,
+    "disqualifyingDifferenceCount": 9,
+    "semanticNondeterminismCount": 0,
+    "comparatorDecision": "COMPARATOR_DRIFT_REQUIRES_EXACT_HISTORICAL_REUSE"
+  },
+  "categoryCounts": {
+    "GENERATED_CLASS": 9,
+    "METADATA": 4
+  },
+  "classificationCounts": {
+    "DISQUALIFYING_GENERATED_OUTPUT_DRIFT": 9,
+    "EXPECTED_NONFUNCTIONAL_BUILD_DRIFT": 4
+  },
+  "differences": [
+    {
+      "logicalPathSha256": "1AEE974F189868D34D94E777788B293A25F671B8C771FFCF4DBB09E1A2B0E969",
+      "category": "GENERATED_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 5046,
+      "currentBytes": 5045,
+      "historicalContentSha256": "407EDF4EBC60891A8578829FBFBA3E596503493BEE47845C39015B701723CA4A",
+      "currentContentSha256": "CE43431702968439E612C293129F1E468F254D4FD63C425E8C0CCDC480709BA4",
+      "semanticFingerprintEqual": false,
+      "jmoaRelated": false,
+      "likelySource": "SPRING_GENERATED_OUTPUT",
+      "memoryRelevance": "MEDIUM",
+      "classification": "DISQUALIFYING_GENERATED_OUTPUT_DRIFT"
+    },
+    {
+      "logicalPathSha256": "3A6386519DD30DFEFC2670ADC776703EED328EF6EA81210B4144478EF6661C93",
+      "category": "GENERATED_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 5494,
+      "currentBytes": 5494,
+      "historicalContentSha256": "76B6073550F013C32E2EF9B77872BB2FBDF93A70782B9E2CBB1262F85427C0DF",
+      "currentContentSha256": "68C8EB72ACFE95C51596C8D6A643F256C66B28289D31CEC94769F9DD7A1FFE65",
+      "semanticFingerprintEqual": false,
+      "jmoaRelated": false,
+      "likelySource": "SPRING_GENERATED_OUTPUT",
+      "memoryRelevance": "MEDIUM",
+      "classification": "DISQUALIFYING_GENERATED_OUTPUT_DRIFT"
+    },
+    {
+      "logicalPathSha256": "269E6674EA7EEE403189B24AF26F9888D8F12D1A4413A601BB747AC5942F13BB",
+      "category": "GENERATED_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 3551,
+      "currentBytes": 3551,
+      "historicalContentSha256": "7B5ED5CDF266B4705B4DF3156B11ACB14D890F9E38AAA74AE606CAB6F6B98CB9",
+      "currentContentSha256": "9F1460B72D46FE27D995FEF5000D8D02C4B5600A62F164FD74051661DE711E19",
+      "semanticFingerprintEqual": false,
+      "jmoaRelated": false,
+      "likelySource": "SPRING_GENERATED_OUTPUT",
+      "memoryRelevance": "MEDIUM",
+      "classification": "DISQUALIFYING_GENERATED_OUTPUT_DRIFT"
+    },
+    {
+      "logicalPathSha256": "C67F603BB598B8034698B3BEE5FDC084CA8A378D0974CA4C99DFAB61A8183D58",
+      "category": "GENERATED_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 6479,
+      "currentBytes": 6478,
+      "historicalContentSha256": "FDC19E1767BCEB6995690C71AE679A10A8257582258EFA86176DA7B7104C4A0F",
+      "currentContentSha256": "3D420762E167A726195383DEFBD88CD8758076E590084BAB7A18786F7B967351",
+      "semanticFingerprintEqual": false,
+      "jmoaRelated": false,
+      "likelySource": "SPRING_GENERATED_OUTPUT",
+      "memoryRelevance": "MEDIUM",
+      "classification": "DISQUALIFYING_GENERATED_OUTPUT_DRIFT"
+    },
+    {
+      "logicalPathSha256": "DE8711CB8B6016CFDA9C3B5EBB7E6F39CB28D7DB5B09BC0D83BB1E1282A5EB51",
+      "category": "GENERATED_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 14896,
+      "currentBytes": 14896,
+      "historicalContentSha256": "CD2D2F9B4BDF3B1B38B1838348C65967604261E6F08CF9AF8E63E7D7185816AD",
+      "currentContentSha256": "5DB2138E8D870DD04705CE0A1CAB308AE41BB22296B98F59B68DE02617FD68DA",
+      "semanticFingerprintEqual": false,
+      "jmoaRelated": false,
+      "likelySource": "SPRING_GENERATED_OUTPUT",
+      "memoryRelevance": "MEDIUM",
+      "classification": "DISQUALIFYING_GENERATED_OUTPUT_DRIFT"
+    },
+    {
+      "logicalPathSha256": "64AF0692EF96DD0802695378C3D90BF5E2D4484F992A64C248BE6C0835E9467A",
+      "category": "GENERATED_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 118515,
+      "currentBytes": 118515,
+      "historicalContentSha256": "77E2191191080401FBAE3D0FE21A6B696B5154779F7C476D304FAAEC891E067F",
+      "currentContentSha256": "82732270D46C0128A9110F668C102B5606AD342931B81A00E14988AB572F726F",
+      "semanticFingerprintEqual": false,
+      "jmoaRelated": false,
+      "likelySource": "SPRING_GENERATED_OUTPUT",
+      "memoryRelevance": "MEDIUM",
+      "classification": "DISQUALIFYING_GENERATED_OUTPUT_DRIFT"
+    },
+    {
+      "logicalPathSha256": "0A8DD572635F6B045FCD64068705D4BC517765500392E1E8215AA23413EEA0B0",
+      "category": "GENERATED_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 15531,
+      "currentBytes": 15531,
+      "historicalContentSha256": "135B12C641C88FA38496D8F00EA07A14A3337E5B4F868A3EA62493266F9D862C",
+      "currentContentSha256": "AD71DC85E5B2361CD61FF70D0FFA43B97821A61B272F6C6B832AD4764ED5A19A",
+      "semanticFingerprintEqual": false,
+      "jmoaRelated": false,
+      "likelySource": "SPRING_GENERATED_OUTPUT",
+      "memoryRelevance": "MEDIUM",
+      "classification": "DISQUALIFYING_GENERATED_OUTPUT_DRIFT"
+    },
+    {
+      "logicalPathSha256": "E15065B2FA269D001684B0072619E778909FB66B8A82A946DB928FA254E0D48C",
+      "category": "GENERATED_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 10966,
+      "currentBytes": 10966,
+      "historicalContentSha256": "C6F61D29786BE4E5F12A3A3B9A06430014E81DFD26CDCCBDB12D42C7EC49B44C",
+      "currentContentSha256": "2A892C88FFCE05DC754855B45224DB5B3BA96ACFAECDE4CBF12F439FA34C4E0D",
+      "semanticFingerprintEqual": false,
+      "jmoaRelated": false,
+      "likelySource": "SPRING_GENERATED_OUTPUT",
+      "memoryRelevance": "MEDIUM",
+      "classification": "DISQUALIFYING_GENERATED_OUTPUT_DRIFT"
+    },
+    {
+      "logicalPathSha256": "9CA7534F57CA4A2960E460DFE13F235BF1D76ACA1E26FD80E869E33CF24567A7",
+      "category": "GENERATED_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 13335,
+      "currentBytes": 13335,
+      "historicalContentSha256": "389BE17A24BEADFD395B93147EC8912DFAD0F1B03F125D9AE7965194CC336275",
+      "currentContentSha256": "271E8AE17A8DFA3B6A1D0DBC5D7A0105F474BB16511DF7F84926E5695AB7F4F3",
+      "semanticFingerprintEqual": false,
+      "jmoaRelated": false,
+      "likelySource": "SPRING_GENERATED_OUTPUT",
+      "memoryRelevance": "MEDIUM",
+      "classification": "DISQUALIFYING_GENERATED_OUTPUT_DRIFT"
+    },
+    {
+      "logicalPathSha256": "1F8E444D0215C113CB119ECC8E7570B436399FC1D32EF91B34A3FC0E5CB801D6",
+      "category": "METADATA",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 76,
+      "currentBytes": 79,
+      "historicalContentSha256": "2A3F7904229849C484C62CBD59DE1A4DF8C1BC320519B264C40BBE8CF4AF6DF9",
+      "currentContentSha256": "08830B133190319E4128F7D4FD5F7C995B3D3C1225F3A163AF9A41362CE3199D",
+      "semanticFingerprintEqual": null,
+      "jmoaRelated": false,
+      "likelySource": "BUILD_METADATA",
+      "memoryRelevance": "LOW",
+      "classification": "EXPECTED_NONFUNCTIONAL_BUILD_DRIFT"
+    },
+    {
+      "logicalPathSha256": "1A991FD1D0C7076AAC988C331D9C582133C7046725341737596C83487FCE4BA2",
+      "category": "METADATA",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 6885,
+      "currentBytes": 7111,
+      "historicalContentSha256": "7B44AAF7ABDC7CA129A7355489712161EF314DB49B265876CBDB23EA4DECDC20",
+      "currentContentSha256": "240337D376FE63B8A3465895CA37A3C0AD1A6BD78ED9E5DE7794741C3B70636E",
+      "semanticFingerprintEqual": null,
+      "jmoaRelated": false,
+      "likelySource": "BUILD_METADATA",
+      "memoryRelevance": "LOW",
+      "classification": "EXPECTED_NONFUNCTIONAL_BUILD_DRIFT"
+    },
+    {
+      "logicalPathSha256": "DC94646D1687AC122D173BBC0CE4D01C1C5160A998D91422830A7C9AC2F95BAF",
+      "category": "METADATA",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 98,
+      "currentBytes": 99,
+      "historicalContentSha256": "1484961647D89D001B9B399CD1A99AD207E19969511E0993F3444148E3B77DD3",
+      "currentContentSha256": "0A82568F8D3670F96B91F0EFFD0CC15242F67FCE44C28B778EBD8287734CDC0E",
+      "semanticFingerprintEqual": null,
+      "jmoaRelated": false,
+      "likelySource": "BUILD_METADATA",
+      "memoryRelevance": "LOW",
+      "classification": "EXPECTED_NONFUNCTIONAL_BUILD_DRIFT"
+    },
+    {
+      "logicalPathSha256": "A3851FD7B2E3C4EEF3809FC8D3983CED97FE288BF49AF692B5831B4AF37A19DC",
+      "category": "METADATA",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 437226,
+      "currentBytes": 455244,
+      "historicalContentSha256": "BAA5A23B6AA7100DC003C0AB2C2A9B7B297CB2334974BBFEB98E2AAC41C014ED",
+      "currentContentSha256": "5A27F8C555307CB00299CE9958ABD43EDB490A8ABE4332DEC38F153FDE6D0977",
+      "semanticFingerprintEqual": null,
+      "jmoaRelated": false,
+      "likelySource": "BUILD_METADATA",
+      "memoryRelevance": "LOW",
+      "classification": "EXPECTED_NONFUNCTIONAL_BUILD_DRIFT"
+    }
+  ]
+}

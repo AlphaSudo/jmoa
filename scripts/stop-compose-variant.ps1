@@ -1,31 +1,34 @@
 param(
+    [Parameter(Mandatory)][string]$BaselineComposeFile,
+    [Parameter(Mandatory)][string]$CandidateComposeFile,
+    [Parameter(Mandatory)][string]$BaselineProjectName,
+    [Parameter(Mandatory)][string]$CandidateProjectName,
     [Parameter(Mandatory)][string]$RunDirectory,
     [Parameter(Mandatory)][string]$ContainerName,
     [Parameter(Mandatory)][string]$Variant,
-    [Parameter(Mandatory)][string]$ComposeFile,
-    [Parameter(Mandatory)][string]$OverlayFile,
-    [Parameter(Mandatory)][string]$ComposeProject,
-    [Parameter(Mandatory)][string]$ComposeWorkingDirectory,
-    [string]$ContainerCli = 'podman'
+    [string]$LedgerDirectory = '',
+    [string]$LedgerStage = 'teardown',
+    [string]$LedgerVariant = ''
 )
 
+Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-New-Item -ItemType Directory -Force -Path $RunDirectory | Out-Null
-$arguments = @(
-    'compose', '-p', $ComposeProject,
-    '-f', $ComposeFile,
-    '-f', $OverlayFile,
-    'down', '--remove-orphans'
-)
-Push-Location $ComposeWorkingDirectory
-try {
-    $output = & $ContainerCli @arguments 2>&1
-    $exitCode = $LASTEXITCODE
-} finally {
-    Pop-Location
+. (Join-Path $PSScriptRoot 'runtime-automation-common.ps1')
+. (Join-Path $PSScriptRoot 'campaign-audit-common.ps1')
+
+if (-not [string]::IsNullOrWhiteSpace($LedgerDirectory)) {
+    Initialize-CampaignAuditLedger -LedgerDirectory $LedgerDirectory -Stage $LedgerStage -Variant $LedgerVariant `
+        -Description "Audited Compose teardown for $Variant." | Out-Null
 }
-$output | Set-Content -LiteralPath (Join-Path $RunDirectory 'compose-stop.log') -Encoding UTF8
-if ($exitCode -ne 0) {
-    throw "Compose stop failed for $Variant ($ContainerName) with exit code $exitCode. See $(Join-Path $RunDirectory 'compose-stop.log')."
+foreach ($stack in @(
+    [ordered]@{ file = $BaselineComposeFile; project = $BaselineProjectName },
+    [ordered]@{ file = $CandidateComposeFile; project = $CandidateProjectName }
+)) {
+    if (-not (Test-Path -LiteralPath $stack.file -PathType Leaf)) { continue }
+    [void](Invoke-AuditedExternal -Executable 'podman' `
+        -Arguments @('compose','-p',$stack.project,'-f',$stack.file,'down','-v','--remove-orphans') `
+        -LedgerDirectory $LedgerDirectory -Step "tear down $($stack.project)" -TimeoutSeconds 180 -AllowFailure)
 }
-Write-Host "Stopped $Variant compose project."
+if (-not [string]::IsNullOrWhiteSpace($LedgerDirectory)) {
+    Complete-CampaignAuditLedger -LedgerDirectory $LedgerDirectory -Status 'COMPLETE' -Stage $LedgerStage -Variant $LedgerVariant | Out-Null
+}

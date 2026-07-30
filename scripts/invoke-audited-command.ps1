@@ -19,11 +19,14 @@ $ErrorActionPreference = 'Stop'
 
 function Get-PathRecord([string]$Path) {
     $resolved = if (Test-Path -LiteralPath $Path) { (Resolve-Path -LiteralPath $Path).Path } else { [IO.Path]::GetFullPath($Path, $WorkingDirectory) }
+    $isFile = Test-Path -LiteralPath $resolved -PathType Leaf
+    $isDirectory = Test-Path -LiteralPath $resolved -PathType Container
     [ordered]@{
         path = $resolved
-        exists = Test-Path -LiteralPath $resolved -PathType Leaf
-        sha256 = Get-JmoaSha256 -Path $resolved
-        bytes = if (Test-Path -LiteralPath $resolved -PathType Leaf) { (Get-Item -LiteralPath $resolved).Length } else { $null }
+        exists = ($isFile -or $isDirectory)
+        pathType = if ($isFile) { 'FILE' } elseif ($isDirectory) { 'DIRECTORY' } else { 'MISSING' }
+        sha256 = if ($isFile) { Get-JmoaSha256 -Path $resolved } else { '' }
+        bytes = if ($isFile) { (Get-Item -LiteralPath $resolved).Length } else { $null }
     }
 }
 
@@ -85,7 +88,12 @@ $ended = [DateTime]::UtcNow
 $pathJava = (& where.exe java 2>$null | Select-Object -First 1)
 $pathJavac = (& where.exe javac 2>$null | Select-Object -First 1)
 $pathMaven = (& where.exe mvn 2>$null | Select-Object -First 1)
-$javaHomeJava = if ($env:JAVA_HOME) { Join-Path $env:JAVA_HOME 'bin/java.exe' } else { '' }
+$effectiveJavaHome = if ($Environment.ContainsKey('JAVA_HOME')) {
+    [string]$Environment['JAVA_HOME']
+} else {
+    [Environment]::GetEnvironmentVariable('JAVA_HOME')
+}
+$javaHomeJava = if ($effectiveJavaHome) { Join-Path $effectiveJavaHome 'bin/java.exe' } else { '' }
 $mavenVersion = ''
 if ($pathMaven) { try { $mavenVersion = (& $pathMaven -version 2>&1 | Out-String).Trim() } catch { $mavenVersion = $_.Exception.Message } }
 
@@ -97,7 +105,7 @@ $record = [ordered]@{
     executable = $Executable
     arguments = @($ArgumentList)
     environment = $effectiveEnvironment
-    javaHome = [Environment]::GetEnvironmentVariable('JAVA_HOME')
+    javaHome = $effectiveJavaHome
     toolResolution = [ordered]@{
         javaHomeJava = $javaHomeJava
         pathJava = $pathJava

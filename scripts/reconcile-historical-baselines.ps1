@@ -429,7 +429,7 @@ $v1Identity = [ordered]@{
             service = 'doctor-service'; historicalArtifact = $doctorHistoricalV1; currentArtifact = $doctorCurrentV1
             artifactExact = ($doctorHistoricalV1.sha256 -eq $doctorCurrentV1.sha256)
             cdsArchiveExact = ((Get-FileIdentity $DoctorHistoricalV1Cds).sha256 -eq (($doctorFreeze.artifacts | Where-Object variant -eq V1).cdsArchiveSha256))
-            conclusion = 'V1_EXACT_IDENTITY'; qualification = 'JAR exact; application CDS archive not exact, so runtime identity is not exact.'
+            conclusion = 'V1_EXACT_IDENTITY'; qualification = 'JAR exact; requested application archive was rejected historically, so the effective policy was base-CDS fallback and runtime identity is not exact.'
         }
         [ordered]@{
             service = 'patient-service'; historicalArtifact = $null
@@ -460,6 +460,26 @@ foreach ($row in $claims.threeServiceAcceptance.services) {
     $key = if ($row.service -like 'Doctor*') { 'doctor-service' } elseif ($row.service -like 'Patient*') { 'patient-service' } else { 'spring-petclinic-customers-service' }
     $incremental[$key] = [double]$row.medianPssDeltaKb
 }
+$reconstructionStatus = @{
+    'doctor-service' = [ordered]@{
+        decision = 'V1_RUNTIME_COST'
+        diagnosticPssKb = 5401.0
+        directionReproduced = $false
+        qualification = 'Engineering-only historical budget. V1 was more expensive in both reconstructed orders; the order-balanced +5,401 KB estimate is timing/provenance scoped.'
+    }
+    'patient-service' = [ordered]@{
+        decision = 'PATIENT_HISTORICAL_COMPARATOR_NOT_RECOVERABLE'
+        diagnosticPssKb = $null
+        directionReproduced = $null
+        qualification = 'Engineering-only historical budget. The historical B0/source/support comparator tuple is not recoverable.'
+    }
+    'spring-petclinic-customers-service' = [ordered]@{
+        decision = 'HISTORICAL_PETCLINIC_B0_INVALID'
+        diagnosticPssKb = $null
+        directionReproduced = $null
+        qualification = 'Engineering-only historical budget. The historical baseline contains JMOA output and semantic application drift.'
+    }
+}
 $budgetRows = foreach ($recovery in $recoveries) {
     $historicalB0V1 = [double]$recovery.historicalPrimaryMedianPssDeltaKb
     $historicalV1V2 = [double]$incremental[$recovery.service]
@@ -473,18 +493,31 @@ $budgetRows = foreach ($recovery in $recoveries) {
         historicalExpectedEngineeringBudgetPssKb = $expected
         currentDirectB0ToV2MedianPssKb = [double]$current.b0ToV2PssMedianKb
         currentMinusHistoricalBudgetGapKb = [double]$current.b0ToV2PssMedianKb - $expected
-        authoritative = $false; comparability = 'CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY'
+        authoritative = $false
+        comparability = 'CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY'
+        evidenceLabel = 'HISTORICAL_EXPECTED_ENGINEERING_BUDGET'
+        currentEffectLabel = 'CURRENT_DIRECT_PRODUCT_EFFECT'
+        reconstructionDecision = $reconstructionStatus[$recovery.service].decision
+        reconstructedB0ToV1DiagnosticPssKb = $reconstructionStatus[$recovery.service].diagnosticPssKb
+        historicalDirectionReproduced = $reconstructionStatus[$recovery.service].directionReproduced
+        qualification = $reconstructionStatus[$recovery.service].qualification
     }
 }
 $budget = [ordered]@{
-    schemaVersion = 'jmoa-historical-expected-engineering-budget-v1'; label = 'HISTORICAL_EXPECTED_ENGINEERING_BUDGET'
+    schemaVersion = 'jmoa-historical-expected-engineering-budget-v2'; label = 'HISTORICAL_EXPECTED_ENGINEERING_BUDGET'
     services = @($budgetRows)
-    warning = 'Medians from separate campaigns are not additive. This is a directional engineering budget, never an authoritative product delta.'
+    reconstructionClosure = 'docs/product-evidence/comparator-reconstruction/comparator-reconstruction-closure.json'
+    warning = 'Medians from separate campaigns are not additive. Historical budgets are engineering diagnostics only; current direct B0-to-V2 results are the product evidence.'
 }
 Write-Json $budget (Join-Path $resolvedOutput 'historical-expected-engineering-budget.json')
-$lines = @('# Historical Expected Engineering Budget', '', '| Service | Historical B0->V1 KB | Historical V1->V2 KB | Directional sum KB | Current direct KB | Gap KB |', '|---|---:|---:|---:|---:|---:|')
+$lines = @(
+    '# Historical Expected Engineering Budget', '',
+    'These rows are `HISTORICAL_EXPECTED_ENGINEERING_BUDGET` diagnostics, not `CURRENT_DIRECT_PRODUCT_EFFECT` measurements.', '',
+    '| Service | Historical B0->V1 KB | Historical V1->V2 KB | Directional sum KB | Current direct KB | Reconstruction |',
+    '|---|---:|---:|---:|---:|---|'
+)
 foreach ($row in $budgetRows) {
-    $lines += "| $($row.service) | $($row.historicalB0ToV1RecomputedMedianPssKb) | $($row.historicalV1ToV2ProtocolScopedMedianPssKb) | $($row.historicalExpectedEngineeringBudgetPssKb) | $($row.currentDirectB0ToV2MedianPssKb) | $($row.currentMinusHistoricalBudgetGapKb) |"
+    $lines += "| $($row.service) | $($row.historicalB0ToV1RecomputedMedianPssKb) | $($row.historicalV1ToV2ProtocolScopedMedianPssKb) | $($row.historicalExpectedEngineeringBudgetPssKb) | $($row.currentDirectB0ToV2MedianPssKb) | ``$($row.reconstructionDecision)`` |"
 }
 $lines += '', $budget.warning
 Write-Text $lines (Join-Path $resolvedOutput 'historical-expected-engineering-budget.md')

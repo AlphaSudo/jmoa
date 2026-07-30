@@ -1,42 +1,36 @@
 param(
+    [Parameter(Mandatory)][string]$ComposeFile,
+    [Parameter(Mandatory)][string]$ProjectName,
     [Parameter(Mandatory)][string]$RunDirectory,
     [Parameter(Mandatory)][string]$ContainerName,
     [Parameter(Mandatory)][string]$Variant,
-    [Parameter(Mandatory)][string]$ComposeFile,
-    [Parameter(Mandatory)][string]$OverlayFile,
-    [Parameter(Mandatory)][string]$ComposeProject,
-    [Parameter(Mandatory)][string]$ComposeWorkingDirectory,
-    [string]$ContainerCli = 'podman',
-    [string]$Services = '',
-    [switch]$NoBuild
+    [string]$LedgerDirectory = '',
+    [string]$LedgerStage = 'launch',
+    [string]$LedgerVariant = ''
 )
 
+Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
-New-Item -ItemType Directory -Force -Path $RunDirectory | Out-Null
+. (Join-Path $PSScriptRoot 'runtime-automation-common.ps1')
+. (Join-Path $PSScriptRoot 'campaign-audit-common.ps1')
+
 if (-not (Test-Path -LiteralPath $ComposeFile -PathType Leaf)) { throw "Compose file does not exist: $ComposeFile" }
-if (-not (Test-Path -LiteralPath $OverlayFile -PathType Leaf)) { throw "Compose overlay does not exist: $OverlayFile" }
-if (-not (Test-Path -LiteralPath $ComposeWorkingDirectory -PathType Container)) { throw "Compose working directory does not exist: $ComposeWorkingDirectory" }
-
-$arguments = @(
-    'compose', '-p', $ComposeProject,
-    '-f', $ComposeFile,
-    '-f', $OverlayFile,
-    'up', '-d'
-)
-if ($NoBuild) { $arguments += '--no-build' }
-if (-not [string]::IsNullOrWhiteSpace($Services)) {
-    $arguments += @($Services.Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+New-JmoaDirectory -Path $RunDirectory
+if (-not [string]::IsNullOrWhiteSpace($LedgerDirectory)) {
+    Initialize-CampaignAuditLedger -LedgerDirectory $LedgerDirectory -Stage $LedgerStage -Variant $LedgerVariant `
+        -Description "Audited Compose launch for $Variant." | Out-Null
 }
 
-Push-Location $ComposeWorkingDirectory
-try {
-    $output = & $ContainerCli @arguments 2>&1
-    $exitCode = $LASTEXITCODE
-} finally {
-    Pop-Location
+$down = Invoke-AuditedExternal -Executable 'podman' -Arguments @('compose','-p',$ProjectName,'-f',$ComposeFile,'down','-v','--remove-orphans') `
+    -LedgerDirectory $LedgerDirectory -Step "clean pre-existing $Variant stack" -TimeoutSeconds 180 -AllowFailure
+$up = Invoke-AuditedExternal -Executable 'podman' -Arguments @('compose','-p',$ProjectName,'-f',$ComposeFile,'up','-d') `
+    -LedgerDirectory $LedgerDirectory -Step "launch $Variant stack" -TimeoutSeconds 300
+if ($up.exitCode -ne 0) { throw "Compose launch failed for $Variant`: $($up.output)" }
+
+$inspect = Invoke-AuditedExternal -Executable 'podman' -Arguments @('inspect',$ContainerName) `
+    -LedgerDirectory $LedgerDirectory -Step "inspect launched $Variant container"
+if ($inspect.exitCode -ne 0) { throw "Launched container not found: $ContainerName" }
+
+if (-not [string]::IsNullOrWhiteSpace($LedgerDirectory)) {
+    Complete-CampaignAuditLedger -LedgerDirectory $LedgerDirectory -Status 'COMPLETE' -Stage $LedgerStage -Variant $LedgerVariant | Out-Null
 }
-$output | Set-Content -LiteralPath (Join-Path $RunDirectory 'compose-launch.log') -Encoding UTF8
-if ($exitCode -ne 0) {
-    throw "Compose launch failed for $Variant ($ContainerName) with exit code $exitCode. See $(Join-Path $RunDirectory 'compose-launch.log')."
-}
-Write-Host "Launched $Variant container $ContainerName."

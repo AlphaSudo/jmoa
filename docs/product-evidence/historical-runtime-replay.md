@@ -4,6 +4,8 @@
 
 Status: **HISTORICAL_RUNTIME_DRIFT**
 
+Comparator status: **HISTORICAL_PETCLINIC_B0_INVALID**
+
 The original Phase 33M runner was executed from an isolated workspace against
 the frozen image IDs and original artifact hashes. It used the original
 exploded-Boot, SerialGC, `-Xshare:off`, `MALLOC_ARENA_MAX=1`, 20-second warmup,
@@ -18,8 +20,10 @@ exploded-Boot, SerialGC, `-Xshare:off`, `MALLOC_ARENA_MAX=1`, 20-second warmup,
 
 The replay still reduced loaded classes by roughly 154 and retained-heap bytes
 did not grow materially. The direction changed through heap page residency and
-anonymous memory. PetClinic is stopped before a new three-arm product campaign
-until the runtime drift is isolated.
+anonymous memory. Independently, artifact inspection proved that the historical
+artifact named baseline contains JMOA output and semantic application drift.
+Neither the original result nor this replay is a clean B0-to-V1 product
+comparison.
 
 ## Doctor
 

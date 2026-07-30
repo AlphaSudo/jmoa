@@ -5,9 +5,10 @@
   "classification": [
     "HISTORICAL_COMMANDS_COMPLETE",
     "HISTORICAL_ARTIFACT_COMPLETE",
-    "HISTORICAL_RUNTIME_NOT_REPRODUCIBLE"
+    "HISTORICAL_RUNTIME_NOT_REPRODUCIBLE",
+    "HISTORICAL_PETCLINIC_B0_INVALID"
   ],
-  "notes": "Phase 33M is the authoritative exploded-Boot, no-CDS full-P2 protocol. Its frozen 2026-07-19 replay reversed direction and is classified as historical runtime drift.",
+  "notes": "Phase 33M preserves the historical protocol, but artifact/petclinic/baseline.jar contains JMOA output and semantic application drift. The baseline name is provenance only and is not a valid no-JMOA B0.",
   "commands": [
     {
       "logicalPath": "historical/petclinic/run-33l7-exploded-boot-materialization.ps1",

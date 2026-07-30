@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "jmoa-petclinic-historical-comparator-closure-v1",
+  "decision": "HISTORICAL_PETCLINIC_B0_INVALID",
+  "performanceRunAuthorized": false,
+  "historicalArtifactSha256": "4952EF9306C732846BFAE0FAE6A67BE2F9B8509644B3396B8247215A03E5589D",
+  "currentCleanArtifactSha256": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+  "historicalJmoaEntryCount": 1,
+  "disqualifyingDifferenceCount": 2,
+  "reason": "The historical artifact contains JMOA output and a semantically different application class. It is not a clean no-JMOA B0.",
+  "currentEvidencePreserved": true,
+  "currentEvidenceScope": "The current six-order result remains authoritative only for its frozen current artifacts and protocol."
+}

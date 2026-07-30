@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "jmoa-comparator-entry-audit-v1",
+  "generatedAt": "2026-07-29T19:27:34.2990323Z",
+  "service": "petclinic",
+  "privacy": {
+    "logicalPathsPublished": false,
+    "logicalPathHashesPublished": true,
+    "note": "Entry names remain private; SHA-256 logical path identifiers support stable reconciliation."
+  },
+  "artifactIdentity": {
+    "historicalSha256": "4952EF9306C732846BFAE0FAE6A67BE2F9B8509644B3396B8247215A03E5589D",
+    "currentSha256": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+    "historicalBytes": 92563715,
+    "currentBytes": 92557714
+  },
+  "contamination": {
+    "historicalJmoaEntryCount": 1,
+    "currentJmoaEntryCount": 0,
+    "historicalCleanB0": false,
+    "currentCleanB0": true
+  },
+  "summary": {
+    "historicalEntryCount": 290,
+    "currentEntryCount": 289,
+    "differenceCount": 10,
+    "disqualifyingDifferenceCount": 2,
+    "semanticNondeterminismCount": 5,
+    "comparatorDecision": "HISTORICAL_BASELINE_CONTAMINATED"
+  },
+  "categoryCounts": {
+    "APPLICATION_CLASS": 7,
+    "MANIFEST": 1,
+    "METADATA": 2
+  },
+  "classificationCounts": {
+    "BENIGN_CLASSFILE_NONDETERMINISM": 5,
+    "DISQUALIFYING_COMPARATOR_CONTAMINATION": 1,
+    "DISQUALIFYING_COMPARATOR_DRIFT": 1,
+    "EXPECTED_NONFUNCTIONAL_BUILD_DRIFT": 3
+  },
+  "differences": [
+    {
+      "logicalPathSha256": "E4D45F553C8FA4BC76E60F21421B81ADD5D66CE8526F3201D20909B3872DC6B9",
+      "category": "METADATA",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 1336,
+      "currentBytes": 1336,
+      "historicalContentSha256": "124216FE9EFF37FC4A23DC5D67BE5D6202438766F04A2DC8443B467E7F60F653",
+      "currentContentSha256": "AA55B21C5D261207C621F5479682FF61002E040A45D2C16DD30003AC9A7D2CB0",
+      "semanticFingerprintEqual": null,
+      "jmoaRelated": false,
+      "likelySource": "BUILD_METADATA",
+      "memoryRelevance": "LOW",
+      "classification": "EXPECTED_NONFUNCTIONAL_BUILD_DRIFT"
+    },
+    {
+      "logicalPathSha256": "E52DBD81234B4289E575090033635D8C41F41984B0FEEEB93CDC38EB15EE17A8",
+      "category": "APPLICATION_CLASS",
+      "differenceType": "HISTORICAL_ONLY",
+      "historicalBytes": 14744,
+      "currentBytes": null,
+      "historicalContentSha256": "292304130C19ADE2ACB6F8B4574103BCC1871E6A5B081E4A0B99B13A76190220",
+      "currentContentSha256": null,
+      "semanticFingerprintEqual": null,
+      "jmoaRelated": true,
+      "likelySource": "JMOA_OUTPUT",
+      "memoryRelevance": "HIGH",
+      "classification": "DISQUALIFYING_COMPARATOR_CONTAMINATION"
+    },
+    {
+      "logicalPathSha256": "15993171F8AD940B1DA30C6638C65877FB498F392CEA453AAB5F7AA5489EAD78",
+      "category": "APPLICATION_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 2244,
+      "currentBytes": 2244,
+      "historicalContentSha256": "9E564C7B4A0BA8E3EDE0E6B74B8E706B241269749D39746D2D3FCF3505B0E9BF",
+      "currentContentSha256": "F84E32C43399B03376EC3914FA11A2FDBB2372186797FC30E84A7ECE1F61694F",
+      "semanticFingerprintEqual": true,
+      "jmoaRelated": false,
+      "likelySource": "APPLICATION_COMPILATION",
+      "memoryRelevance": "MEDIUM",
+      "classification": "BENIGN_CLASSFILE_NONDETERMINISM"
+    },
+    {
+      "logicalPathSha256": "E924E0DB6BAF336C38AE29ADFA8530046B1FCCAFE4B439F72B06C3F38F330303",
+      "category": "APPLICATION_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 2905,
+      "currentBytes": 2905,
+      "historicalContentSha256": "E45927525AAC788A8148966E0421E8DC56007878C0F8826FEEE8AEFC449CAE38",
+      "currentContentSha256": "897E12C4071D2B38A8F2468CDD7290D83085736D28876C498C216F443552B4A4",
+      "semanticFingerprintEqual": true,
+      "jmoaRelated": false,
+      "likelySource": "APPLICATION_COMPILATION",
+      "memoryRelevance": "MEDIUM",
+      "classification": "BENIGN_CLASSFILE_NONDETERMINISM"
+    },
+    {
+      "logicalPathSha256": "C8971998A41CA4129A0CC2D0EA05342897B840E1CF439A7C1AB22109373EB12B",
+      "category": "APPLICATION_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 5248,
+      "currentBytes": 5248,
+      "historicalContentSha256": "48011314653B829306AC4288B9675F6CA0BBC34D5269EE8E7CF95BC3B9B20190",
+      "currentContentSha256": "0DB583F6C010C7DB35CF232E00C3714F2FBCF21FEA957712BE224402B489DEAF",
+      "semanticFingerprintEqual": true,
+      "jmoaRelated": false,
+      "likelySource": "APPLICATION_COMPILATION",
+      "memoryRelevance": "MEDIUM",
+      "classification": "BENIGN_CLASSFILE_NONDETERMINISM"
+    },
+    {
+      "logicalPathSha256": "9A0C5A30959EB20BC624588DB5EA67F0084335A86A2D083B1F0E8FF407DB8D59",
+      "category": "APPLICATION_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 3556,
+      "currentBytes": 3556,
+      "historicalContentSha256": "7BA21407315EF31CAB150D269728D50405826A1B788E29343A49E7A9B6CC27C0",
+      "currentContentSha256": "3ABDCE2CA6BB62F44EDC4278A891A5E5050158DA2B55995285954F4BF5EB4FE2",
+      "semanticFingerprintEqual": true,
+      "jmoaRelated": false,
+      "likelySource": "APPLICATION_COMPILATION",
+      "memoryRelevance": "MEDIUM",
+      "classification": "BENIGN_CLASSFILE_NONDETERMINISM"
+    },
+    {
+      "logicalPathSha256": "4F16B8726F6AE41D407BF3E784C24547D5935CE29E02431D67A8440CB30B3244",
+      "category": "APPLICATION_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 2402,
+      "currentBytes": 2402,
+      "historicalContentSha256": "6C060DFDF1E0BCCB7E33E683B89397F20598CDE13F34C2AB241121FCB2C0F8FC",
+      "currentContentSha256": "83AA6F43E1018DF395CCDD07577E02C70F6C1EE105C09C1AA3C5A0AB7B6030D3",
+      "semanticFingerprintEqual": true,
+      "jmoaRelated": false,
+      "likelySource": "APPLICATION_COMPILATION",
+      "memoryRelevance": "MEDIUM",
+      "classification": "BENIGN_CLASSFILE_NONDETERMINISM"
+    },
+    {
+      "logicalPathSha256": "F66C8283DE042119C43645DE587CE1C10F8656A9BBB4C9EC68FBA682B510C279",
+      "category": "APPLICATION_CLASS",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 6605,
+      "currentBytes": 6605,
+      "historicalContentSha256": "CFEDB29A11FA477B7B570DDDB83AB501053D1018CC1311C6E8CF8FBEAEBE6F76",
+      "currentContentSha256": "6829110505DDFF63BB09C091C5B4860426AF961624176498AB5B9791B70ECF3B",
+      "semanticFingerprintEqual": false,
+      "jmoaRelated": false,
+      "likelySource": "APPLICATION_COMPILATION",
+      "memoryRelevance": "MEDIUM",
+      "classification": "DISQUALIFYING_COMPARATOR_DRIFT"
+    },
+    {
+      "logicalPathSha256": "64E8294B1CD17F13203DCA4EC2A38C861A915121C6744AE3F72DF57C71011643",
+      "category": "METADATA",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 300,
+      "currentBytes": 300,
+      "historicalContentSha256": "14AF7CC6DE68E3DE4769DD3EE937803CA54A5A560711276BCA4FA064E8D6872D",
+      "currentContentSha256": "ED049A019CACA491AFC2623392A235AFE39AEE6731938ECEEAA6B7C3A123CF16",
+      "semanticFingerprintEqual": null,
+      "jmoaRelated": false,
+      "likelySource": "BUILD_METADATA",
+      "memoryRelevance": "LOW",
+      "classification": "EXPECTED_NONFUNCTIONAL_BUILD_DRIFT"
+    },
+    {
+      "logicalPathSha256": "A4C530F21D062194A2B5CF6849FE09CFC27FAF9264EBFF379AA57CEAB48CBFA7",
+      "category": "MANIFEST",
+      "differenceType": "CONTENT_CHANGED",
+      "historicalBytes": 527,
+      "currentBytes": 527,
+      "historicalContentSha256": "681F2C262B7BAB8BF03C37ACE5F6ED68F8AB7A482AC4BAF7DCB030A8577D1704",
+      "currentContentSha256": "D585F16FE73A6E055A943E4DE935AC37944F37F2D0613AF924FF1F05CB09D845",
+      "semanticFingerprintEqual": null,
+      "jmoaRelated": false,
+      "likelySource": "BUILD_METADATA",
+      "memoryRelevance": "LOW",
+      "classification": "EXPECTED_NONFUNCTIONAL_BUILD_DRIFT"
+    }
+  ]
+}

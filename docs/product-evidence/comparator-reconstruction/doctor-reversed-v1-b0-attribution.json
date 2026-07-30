@@ -1,0 +1,943 @@
+{
+  "schemaVersion": "jmoa-doctor-reconstructed-pair-attribution-v1",
+  "status": "DIAGNOSTIC_EXISTING_PAIR",
+  "comparison": "V1_FIRST_MINUS_B0_SECOND",
+  "semanticGate": "SEMANTICALLY_EQUIVALENT_VOLATILE_FIELDS",
+  "headline": {
+    "pssDeltaKb": 8141,
+    "privateDirtyDeltaKb": 8260,
+    "memoryCurrentDeltaBytes": 8454144,
+    "nmtCommittedDeltaKb": -1080,
+    "reconciliation": "NMT_PARTIAL_ANONYMOUS_RW_OUTSIDE_HEAP",
+    "primaryMappingMovement": "ANONYMOUS_RW_OUTSIDE_HEAP"
+  },
+  "smapsCategories": {
+    "ANONYMOUS_EXECUTABLE": {
+      "mappingCount": {
+        "baseline": 1,
+        "candidate": 1,
+        "delta": 0
+      },
+      "rssKb": {
+        "baseline": 16184,
+        "candidate": 16092,
+        "delta": -92
+      },
+      "pssKb": {
+        "baseline": 16184,
+        "candidate": 16092,
+        "delta": -92
+      },
+      "privateDirtyKb": {
+        "baseline": 16184,
+        "candidate": 16092,
+        "delta": -92
+      },
+      "privateCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "sharedCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "anonymousKb": {
+        "baseline": 16184,
+        "candidate": 16092,
+        "delta": -92
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "ANONYMOUS_OTHER": {
+      "mappingCount": {
+        "baseline": 104,
+        "candidate": 105,
+        "delta": 1
+      },
+      "rssKb": {
+        "baseline": 4,
+        "candidate": 4,
+        "delta": 0
+      },
+      "pssKb": {
+        "baseline": 4,
+        "candidate": 4,
+        "delta": 0
+      },
+      "privateDirtyKb": {
+        "baseline": 4,
+        "candidate": 4,
+        "delta": 0
+      },
+      "privateCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "sharedCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "anonymousKb": {
+        "baseline": 4,
+        "candidate": 4,
+        "delta": 0
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "ANONYMOUS_RW_OUTSIDE_HEAP": {
+      "mappingCount": {
+        "baseline": 137,
+        "candidate": 133,
+        "delta": -4
+      },
+      "rssKb": {
+        "baseline": 198860,
+        "candidate": 207344,
+        "delta": 8484
+      },
+      "pssKb": {
+        "baseline": 198860,
+        "candidate": 207344,
+        "delta": 8484
+      },
+      "privateDirtyKb": {
+        "baseline": 198860,
+        "candidate": 207344,
+        "delta": 8484
+      },
+      "privateCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "sharedCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "anonymousKb": {
+        "baseline": 198860,
+        "candidate": 207344,
+        "delta": 8484
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "JAVA_HEAP": {
+      "mappingCount": {
+        "baseline": 4,
+        "candidate": 4,
+        "delta": 0
+      },
+      "rssKb": {
+        "baseline": 63988,
+        "candidate": 63868,
+        "delta": -120
+      },
+      "pssKb": {
+        "baseline": 63988,
+        "candidate": 63868,
+        "delta": -120
+      },
+      "privateDirtyKb": {
+        "baseline": 63988,
+        "candidate": 63868,
+        "delta": -120
+      },
+      "privateCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "sharedCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "anonymousKb": {
+        "baseline": 63988,
+        "candidate": 63868,
+        "delta": -120
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "JDK_CDS_IMAGE": {
+      "mappingCount": {
+        "baseline": 2,
+        "candidate": 2,
+        "delta": 0
+      },
+      "rssKb": {
+        "baseline": 14756,
+        "candidate": 14756,
+        "delta": 0
+      },
+      "pssKb": {
+        "baseline": 12686,
+        "candidate": 12686,
+        "delta": 0
+      },
+      "privateDirtyKb": {
+        "baseline": 11652,
+        "candidate": 11652,
+        "delta": 0
+      },
+      "privateCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "sharedCleanKb": {
+        "baseline": 3104,
+        "candidate": 3104,
+        "delta": 0
+      },
+      "anonymousKb": {
+        "baseline": 11652,
+        "candidate": 11652,
+        "delta": 0
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "JDK_IMAGE": {
+      "mappingCount": {
+        "baseline": 1,
+        "candidate": 1,
+        "delta": 0
+      },
+      "rssKb": {
+        "baseline": 2712,
+        "candidate": 2712,
+        "delta": 0
+      },
+      "pssKb": {
+        "baseline": 1101,
+        "candidate": 1101,
+        "delta": 0
+      },
+      "privateDirtyKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "privateCleanKb": {
+        "baseline": 296,
+        "candidate": 296,
+        "delta": 0
+      },
+      "sharedCleanKb": {
+        "baseline": 2416,
+        "candidate": 2416,
+        "delta": 0
+      },
+      "anonymousKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "LIBJVM": {
+      "mappingCount": {
+        "baseline": 5,
+        "candidate": 5,
+        "delta": 0
+      },
+      "rssKb": {
+        "baseline": 18812,
+        "candidate": 18856,
+        "delta": 44
+      },
+      "pssKb": {
+        "baseline": 7225,
+        "candidate": 7136,
+        "delta": -89
+      },
+      "privateDirtyKb": {
+        "baseline": 1144,
+        "candidate": 1144,
+        "delta": 0
+      },
+      "privateCleanKb": {
+        "baseline": 132,
+        "candidate": 8,
+        "delta": -124
+      },
+      "sharedCleanKb": {
+        "baseline": 17536,
+        "candidate": 17704,
+        "delta": 168
+      },
+      "anonymousKb": {
+        "baseline": 1144,
+        "candidate": 1144,
+        "delta": 0
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "MAPPED_FILE_OTHER": {
+      "mappingCount": {
+        "baseline": 7,
+        "candidate": 7,
+        "delta": 0
+      },
+      "rssKb": {
+        "baseline": 448,
+        "candidate": 448,
+        "delta": 0
+      },
+      "pssKb": {
+        "baseline": 154,
+        "candidate": 208,
+        "delta": 54
+      },
+      "privateDirtyKb": {
+        "baseline": 20,
+        "candidate": 8,
+        "delta": -12
+      },
+      "privateCleanKb": {
+        "baseline": 20,
+        "candidate": 120,
+        "delta": 100
+      },
+      "sharedCleanKb": {
+        "baseline": 408,
+        "candidate": 320,
+        "delta": -88
+      },
+      "anonymousKb": {
+        "baseline": 8,
+        "candidate": 8,
+        "delta": 0
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "NATIVE_LIBRARY": {
+      "mappingCount": {
+        "baseline": 86,
+        "candidate": 86,
+        "delta": 0
+      },
+      "rssKb": {
+        "baseline": 3316,
+        "candidate": 3320,
+        "delta": 4
+      },
+      "pssKb": {
+        "baseline": 1058,
+        "candidate": 1020,
+        "delta": -38
+      },
+      "privateDirtyKb": {
+        "baseline": 168,
+        "candidate": 168,
+        "delta": 0
+      },
+      "privateCleanKb": {
+        "baseline": 52,
+        "candidate": 0,
+        "delta": -52
+      },
+      "sharedCleanKb": {
+        "baseline": 3096,
+        "candidate": 3152,
+        "delta": 56
+      },
+      "anonymousKb": {
+        "baseline": 168,
+        "candidate": 168,
+        "delta": 0
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "SPECIAL_MAPPING": {
+      "mappingCount": {
+        "baseline": 2,
+        "candidate": 2,
+        "delta": 0
+      },
+      "rssKb": {
+        "baseline": 4,
+        "candidate": 4,
+        "delta": 0
+      },
+      "pssKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "privateDirtyKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "privateCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "sharedCleanKb": {
+        "baseline": 4,
+        "candidate": 4,
+        "delta": 0
+      },
+      "anonymousKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "SPECIAL_OR_OTHER": {
+      "mappingCount": {
+        "baseline": 1,
+        "candidate": 1,
+        "delta": 0
+      },
+      "rssKb": {
+        "baseline": 108,
+        "candidate": 108,
+        "delta": 0
+      },
+      "pssKb": {
+        "baseline": 108,
+        "candidate": 108,
+        "delta": 0
+      },
+      "privateDirtyKb": {
+        "baseline": 108,
+        "candidate": 108,
+        "delta": 0
+      },
+      "privateCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "sharedCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "anonymousKb": {
+        "baseline": 108,
+        "candidate": 108,
+        "delta": 0
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "THREAD_STACK": {
+      "mappingCount": {
+        "baseline": 1,
+        "candidate": 1,
+        "delta": 0
+      },
+      "rssKb": {
+        "baseline": 32,
+        "candidate": 32,
+        "delta": 0
+      },
+      "pssKb": {
+        "baseline": 32,
+        "candidate": 32,
+        "delta": 0
+      },
+      "privateDirtyKb": {
+        "baseline": 32,
+        "candidate": 32,
+        "delta": 0
+      },
+      "privateCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "sharedCleanKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "anonymousKb": {
+        "baseline": 32,
+        "candidate": 32,
+        "delta": 0
+      },
+      "anonymousHugePagesKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    }
+  },
+  "cgroup": {
+    "anon": {
+      "baseline": 299388928,
+      "candidate": 307859456,
+      "delta": 8470528
+    },
+    "file": {
+      "baseline": 32768,
+      "candidate": 32768,
+      "delta": 0
+    },
+    "shmem": {
+      "baseline": 0,
+      "candidate": 0,
+      "delta": 0
+    },
+    "kernel": {
+      "baseline": 3461120,
+      "candidate": 3457024,
+      "delta": -4096
+    },
+    "kernel_stack": {
+      "baseline": 770048,
+      "candidate": 770048,
+      "delta": 0
+    },
+    "pagetables": {
+      "baseline": 1069056,
+      "candidate": 1069056,
+      "delta": 0
+    },
+    "slab": {
+      "baseline": 1142728,
+      "candidate": 1139712,
+      "delta": -3016
+    },
+    "sock": {
+      "baseline": 0,
+      "candidate": 0,
+      "delta": 0
+    },
+    "active_file": {
+      "baseline": 0,
+      "candidate": 0,
+      "delta": 0
+    },
+    "inactive_file": {
+      "baseline": 32768,
+      "candidate": 32768,
+      "delta": 0
+    },
+    "pgfault": {
+      "baseline": 96259,
+      "candidate": 90037,
+      "delta": -6222
+    },
+    "pgmajfault": {
+      "baseline": 0,
+      "candidate": 0,
+      "delta": 0
+    }
+  },
+  "nmtCategories": {
+    "ARENA_CHUNK": {
+      "reservedKb": {
+        "baseline": 35,
+        "candidate": 259,
+        "delta": 224
+      },
+      "committedKb": {
+        "baseline": 35,
+        "candidate": 259,
+        "delta": 224
+      }
+    },
+    "CLASS": {
+      "reservedKb": {
+        "baseline": 1050199,
+        "candidate": 1050203,
+        "delta": 4
+      },
+      "committedKb": {
+        "baseline": 26775,
+        "candidate": 26523,
+        "delta": -252
+      }
+    },
+    "CODE": {
+      "reservedKb": {
+        "baseline": 57847,
+        "candidate": 57745,
+        "delta": -102
+      },
+      "committedKb": {
+        "baseline": 25211,
+        "candidate": 25045,
+        "delta": -166
+      }
+    },
+    "COMPILER": {
+      "reservedKb": {
+        "baseline": 361,
+        "candidate": 405,
+        "delta": 44
+      },
+      "committedKb": {
+        "baseline": 361,
+        "candidate": 405,
+        "delta": 44
+      }
+    },
+    "GC": {
+      "reservedKb": {
+        "baseline": 878,
+        "candidate": 878,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 306,
+        "candidate": 306,
+        "delta": 0
+      }
+    },
+    "INTERNAL": {
+      "reservedKb": {
+        "baseline": 1487,
+        "candidate": 1484,
+        "delta": -3
+      },
+      "committedKb": {
+        "baseline": 1487,
+        "candidate": 1484,
+        "delta": -3
+      }
+    },
+    "JAVA_HEAP": {
+      "reservedKb": {
+        "baseline": 262144,
+        "candidate": 262144,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 84364,
+        "candidate": 84388,
+        "delta": 24
+      }
+    },
+    "JNI": {
+      "reservedKb": {
+        "baseline": 9,
+        "candidate": 9,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 9,
+        "candidate": 9,
+        "delta": 0
+      }
+    },
+    "LOGGING": {
+      "reservedKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      }
+    },
+    "METASPACE": {
+      "reservedKb": {
+        "baseline": 131442,
+        "candidate": 131442,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 82738,
+        "candidate": 81714,
+        "delta": -1024
+      }
+    },
+    "MODULE": {
+      "reservedKb": {
+        "baseline": 165,
+        "candidate": 165,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 165,
+        "candidate": 165,
+        "delta": 0
+      }
+    },
+    "NATIVE_MEMORY_TRACKING": {
+      "reservedKb": {
+        "baseline": 7334,
+        "candidate": 7280,
+        "delta": -54
+      },
+      "committedKb": {
+        "baseline": 7334,
+        "candidate": 7280,
+        "delta": -54
+      }
+    },
+    "OBJECT_MONITORS": {
+      "reservedKb": {
+        "baseline": 65,
+        "candidate": 65,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 65,
+        "candidate": 65,
+        "delta": 0
+      }
+    },
+    "OTHER": {
+      "reservedKb": {
+        "baseline": 156,
+        "candidate": 142,
+        "delta": -14
+      },
+      "committedKb": {
+        "baseline": 156,
+        "candidate": 142,
+        "delta": -14
+      }
+    },
+    "SAFEPOINT": {
+      "reservedKb": {
+        "baseline": 8,
+        "candidate": 8,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 8,
+        "candidate": 8,
+        "delta": 0
+      }
+    },
+    "SERVICEABILITY": {
+      "reservedKb": {
+        "baseline": 17,
+        "candidate": 17,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 17,
+        "candidate": 17,
+        "delta": 0
+      }
+    },
+    "STRING_DEDUPLICATION": {
+      "reservedKb": {
+        "baseline": 1,
+        "candidate": 1,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 1,
+        "candidate": 1,
+        "delta": 0
+      }
+    },
+    "SYMBOL": {
+      "reservedKb": {
+        "baseline": 23051,
+        "candidate": 22860,
+        "delta": -191
+      },
+      "committedKb": {
+        "baseline": 23051,
+        "candidate": 22860,
+        "delta": -191
+      }
+    },
+    "SYNCHRONIZATION": {
+      "reservedKb": {
+        "baseline": 996,
+        "candidate": 992,
+        "delta": -4
+      },
+      "committedKb": {
+        "baseline": 996,
+        "candidate": 992,
+        "delta": -4
+      }
+    },
+    "THREAD": {
+      "reservedKb": {
+        "baseline": 15784,
+        "candidate": 15784,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 1296,
+        "candidate": 1632,
+        "delta": 336
+      }
+    },
+    "TRACING": {
+      "reservedKb": {
+        "baseline": 12,
+        "candidate": 12,
+        "delta": 0
+      },
+      "committedKb": {
+        "baseline": 12,
+        "candidate": 12,
+        "delta": 0
+      }
+    }
+  },
+  "jvm": {
+    "heapUsedKb": {
+      "baseline": 54300,
+      "candidate": 45990,
+      "delta": -8310
+    },
+    "heapCommittedKb": {
+      "baseline": 81548,
+      "candidate": 81572,
+      "delta": 24
+    },
+    "youngUsedKb": {
+      "baseline": 20579,
+      "candidate": 12255,
+      "delta": -8324
+    },
+    "oldUsedKb": {
+      "baseline": 33721,
+      "candidate": 33735,
+      "delta": 14
+    },
+    "loadedClasses": {
+      "baseline": 24227,
+      "candidate": 23959,
+      "delta": -268
+    },
+    "threads": {
+      "baseline": 46,
+      "candidate": 46,
+      "delta": 0
+    },
+    "metaspaceUsedKb": {
+      "baseline": 106843,
+      "candidate": 105510,
+      "delta": -1333
+    },
+    "metaspaceCommittedKb": {
+      "baseline": 107520,
+      "candidate": 106240,
+      "delta": -1280
+    },
+    "classLoaders": {
+      "baseline": 447,
+      "candidate": 456,
+      "delta": 9
+    },
+    "hiddenClasses": {
+      "baseline": 442,
+      "candidate": 451,
+      "delta": 9
+    },
+    "histogramBytes": {
+      "baseline": 36188240,
+      "candidate": 35930496,
+      "delta": -257744
+    },
+    "histogramInstances": {
+      "baseline": 889790,
+      "candidate": 885513,
+      "delta": -4277
+    }
+  },
+  "timing": {
+    "baseline": {
+      "containerStartUtc": "2026-07-30T08:19:23.7174058Z",
+      "firstHealthUtc": "2026-07-30T08:19:54.2824058Z",
+      "workloadStartUtc": "2026-07-30T08:19:59.5716251Z",
+      "workloadEndUtc": "2026-07-30T08:20:04.8495159Z",
+      "claimCaptureUtc": "2026-07-30T08:20:33.6418325Z",
+      "startupToHealthSeconds": 30.565,
+      "healthToWorkloadSeconds": 5.289,
+      "workloadSeconds": 5.278,
+      "postWorkloadSettleSeconds": 28.792,
+      "jvmAgeAtCaptureSeconds": 69.924,
+      "gcCount": null,
+      "safepointCount": null,
+      "compilationActivity": "NMT_COMPILER_AND_CODE_COMMITTED_ONLY"
+    },
+    "candidate": {
+      "containerStartUtc": "2026-07-30T08:17:46.9363125Z",
+      "firstHealthUtc": "2026-07-30T08:18:29.4013125Z",
+      "workloadStartUtc": "2026-07-30T08:18:35.5880180Z",
+      "workloadEndUtc": "2026-07-30T08:18:42.1026918Z",
+      "claimCaptureUtc": "2026-07-30T08:19:13.1560924Z",
+      "startupToHealthSeconds": 42.465,
+      "healthToWorkloadSeconds": 6.187,
+      "workloadSeconds": 6.515,
+      "postWorkloadSettleSeconds": 31.053,
+      "jvmAgeAtCaptureSeconds": 86.22,
+      "gcCount": null,
+      "safepointCount": null,
+      "compilationActivity": "NMT_COMPILER_AND_CODE_COMMITTED_ONLY"
+    },
+    "jvmAgeDeltaSeconds": 16.296,
+    "classification": "TIMING_CONFOUNDED",
+    "unavailable": [
+      "gcCount",
+      "safepointCount",
+      "exactCompilationCount"
+    ]
+  },
+  "boundaries": [
+    "The B0-first/V1-second order remains confounded until the one reversed diagnostic is evaluated.",
+    "GC count, safepoint count, and exact compilation count were not captured and are not inferred.",
+    "The class histogram is a post-claim perturbing diagnostic; it supports attribution but not claim medians.",
+    "Exact historical application artifacts ran in a reconstructed support environment on the current JDK."
+  ]
+}

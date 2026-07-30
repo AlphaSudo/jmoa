@@ -4,7 +4,11 @@ This is an inventory of recovered scripts and artifacts. It is not an executed c
 
 Classification: **HISTORICAL_COMMANDS_COMPLETE, HISTORICAL_ARTIFACT_COMPLETE, HISTORICAL_RUNTIME_NOT_REPRODUCIBLE**
 
-Phase 33M is the authoritative exploded-Boot, no-CDS full-P2 protocol. Its frozen 2026-07-19 replay reversed direction and is classified as historical runtime drift.
+Phase 33M preserves the historical exploded-Boot, no-CDS commands and
+artifacts, but its artifact named `baseline.jar` is not a valid no-JMOA B0. It
+contains JMOA output and semantic application drift. The comparator is
+therefore `HISTORICAL_PETCLINIC_B0_INVALID`; the artifact name is retained only
+as historical provenance.
 
 ## Scripts
 

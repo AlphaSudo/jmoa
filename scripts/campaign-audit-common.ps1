@@ -22,9 +22,13 @@
     process/scope boundaries. When -LedgerDirectory is empty they fall back to a plain external call so the
     child scripts remain usable stand-alone.
 
-    Depends on runtime-automation-common.ps1 (dot-source it first).
+    Loads runtime-automation-common.ps1 when the caller has not already done so.
 #>
 Set-StrictMode -Version Latest
+
+if (-not (Get-Command New-JmoaDirectory -ErrorAction SilentlyContinue)) {
+    . (Join-Path $PSScriptRoot 'runtime-automation-common.ps1')
+}
 
 function ConvertTo-CampaignAuditIndented {
     param([AllowEmptyString()][string]$Value)
@@ -151,6 +155,41 @@ function Add-CampaignAuditRecord {
     Add-Content -LiteralPath (Join-Path $LedgerDirectory 'command-ledger.md') -Value $MarkdownBlock -Encoding utf8
 }
 
+function Protect-CampaignAuditText {
+    param(
+        [AllowEmptyString()][string]$Value,
+        [string]$SensitiveNamePattern = '(?i)(secret|password|token|key|credential|authorization)'
+    )
+    if ([string]::IsNullOrEmpty($Value)) {
+        return [pscustomobject]@{ text = [string]$Value; redactionCount = 0 }
+    }
+    $redactionCount = 0
+    $lines = foreach ($line in ($Value -split '\r?\n')) {
+        $match = [regex]::Match(
+            $line,
+            '^(?<prefix>\s*["'']?)(?<name>[A-Za-z_][A-Za-z0-9_.-]*)(?<separator>["'']?\s*[:=]\s*["'']?)(?<value>.*?)(?<suffix>["'']?,?\s*)$'
+        )
+        if (-not $match.Success -or $match.Groups['name'].Value -notmatch $SensitiveNamePattern) {
+            $line
+            continue
+        }
+        $rawValue = $match.Groups['value'].Value
+        $valueHash = [Convert]::ToHexString(
+            [Security.Cryptography.SHA256]::HashData([Text.Encoding]::UTF8.GetBytes($rawValue))
+        )
+        $redactionCount++
+        $match.Groups['prefix'].Value +
+            $match.Groups['name'].Value +
+            $match.Groups['separator'].Value +
+            "<REDACTED sha256=$valueHash>" +
+            $match.Groups['suffix'].Value
+    }
+    [pscustomobject]@{
+        text = ($lines -join [Environment]::NewLine)
+        redactionCount = $redactionCount
+    }
+}
+
 # Runs an external process (verbatim, no shell) and, when a ledger directory is supplied, records the
 # exact argument vector, exit code, and SHA-256-addressed raw stdout/stderr. Returns a shape compatible
 # with Invoke-JmoaExternal (.executable/.arguments/.exitCode/.output) plus separated stdout/stderr and
@@ -240,6 +279,9 @@ function Invoke-AuditedExternal {
             rawStderrPath        = "raw/$stderrFile"
             rawStderrSha256      = $stderrSha
         }
+        $redactedStdout = Protect-CampaignAuditText -Value $stdout
+        $redactedStderr = Protect-CampaignAuditText -Value $stderr
+        $record.renderedRedactionCount = [int]$redactedStdout.redactionCount + [int]$redactedStderr.redactionCount
         $md = @"
 
 ## Command ${sequence}: $Step
@@ -254,11 +296,11 @@ function Invoke-AuditedExternal {
 
 stdout:
 
-$(ConvertTo-CampaignAuditIndented -Value $stdout)
+$(ConvertTo-CampaignAuditIndented -Value $redactedStdout.text)
 
 stderr:
 
-$(ConvertTo-CampaignAuditIndented -Value $stderr)
+$(ConvertTo-CampaignAuditIndented -Value $redactedStderr.text)
 "@
         Add-CampaignAuditRecord -LedgerDirectory $ledgerFull -Record $record -MarkdownBlock $md
     }
@@ -286,6 +328,8 @@ function Invoke-AuditedHttp {
         [string]$Step = '',
         [string]$Body = $null,
         [string]$ContentType = 'application/json',
+        [hashtable]$Headers = @{},
+        [string[]]$SensitiveHeaderNames = @('Authorization','Proxy-Authorization','Cookie','Set-Cookie'),
         [int]$TimeoutSeconds = 30,
         [scriptblock]$CanonicalizeBody = $null,
         [string]$CanonicalRuleId = ''
@@ -306,6 +350,7 @@ function Invoke-AuditedHttp {
             $params.ContentType = $ContentType
             $params.Body = $Body
         }
+        if ($Headers.Count -gt 0) { $params.Headers = $Headers }
         $response = Invoke-WebRequest @params
         $status = [int]$response.StatusCode
         $responseBody = ConvertTo-CampaignHttpBodyText -Content $response.Content
@@ -337,6 +382,10 @@ function Invoke-AuditedHttp {
                 $canonicalRel = ''
             }
         }
+        $auditedHeaders = [ordered]@{}
+        foreach ($header in $Headers.GetEnumerator()) {
+            $auditedHeaders[$header.Key] = if ($SensitiveHeaderNames -contains [string]$header.Key) { '<REDACTED>' } else { [string]$header.Value }
+        }
         $record = [ordered]@{
             sequence             = $sequence
             kind                 = 'HTTP'
@@ -347,6 +396,7 @@ function Invoke-AuditedHttp {
             method               = $Method
             uri                  = $Uri
             requestBody          = $Body
+            requestHeaders       = $auditedHeaders
             status               = $status
             error                = $requestError
             rawBodyPath          = $rawBodyRel

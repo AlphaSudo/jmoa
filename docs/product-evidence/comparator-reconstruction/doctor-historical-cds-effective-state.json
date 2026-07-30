@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "jmoa-doctor-historical-cds-effective-state-v1",
+  "generatedAt": "2026-07-29T19:50:54.9677942Z",
+  "historicalIntent": "ARTIFACT_SPECIFIC_APPLICATION_CDS",
+  "observedEffectivePolicy": "BASE_CDS_AFTER_APPLICATION_ARCHIVE_FALLBACK",
+  "evidence": {
+    "diagnosticFilesScanned": 16,
+    "relevantFiles": 12,
+    "b0ArchiveRejectionFiles": 6,
+    "v1ArchiveRejectionFiles": 6,
+    "b0DefaultMappingFiles": 6,
+    "v1DefaultMappingFiles": 6,
+    "sources": [
+      {
+        "sourceFileSha256": "D95BDBA0D00C5D26D06E4DF4AB5C14E99CD4A69E4DF58222390773AC5800D63F",
+        "variant": "B0",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "FF984A7AEAC56894A4300B04417B9C4D67975205C54FE489F66BFFDFA667A7E5",
+        "variant": "B0",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "1868BEC8376AA61BB5F8E357ABC1EEB8E1F0EF10F3CA373E14B7BAD6191FE433",
+        "variant": "B0",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "133C27292A675D3FB097903B1572C379E7D41DBB6BF25D55498D19F0E770DAE1",
+        "variant": "B0",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "A5176333434A3BCE358B737BECDFE0443D75697E1BC8979B73872EE2388AFF79",
+        "variant": "B0",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "077729AC3C55DC724C56A76E046B5E568E97F3DD908E181EBAF214EBF2EE85E0",
+        "variant": "B0",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "FB0C85FA6029808EB9C4CA130C921B885911A5FCF58F5294002BEAC7A7AFD3EC",
+        "variant": "V1",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "01003EBCD21F65BE0D68EAF9FA6E9259EC57DAEE48A000ED2A45A627C542BF60",
+        "variant": "V1",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "3E06F8346BE46E9E86DA0BA10FA503E65B63D6116F8D7E77CB1DBE5CF71C9B58",
+        "variant": "V1",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "7AE25235C65B8638B59DEE6B0C5D30F65823A196C416F91ED2C03ABEA0804ACB",
+        "variant": "V1",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "C2FC55B6A916789658D251E678A3956B50B5E88E2C73329F28A26FF0B91AD443",
+        "variant": "V1",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      },
+      {
+        "sourceFileSha256": "6CDCF355D307A0CCCAF671F3BD51111D0C4136C456FA72CA85A2DE084C5732E9",
+        "variant": "V1",
+        "requestedApplicationArchiveRejected": true,
+        "defaultArchiveMappingObserved": true
+      }
+    ]
+  },
+  "decision": {
+    "applicationCdsClaimSupported": false,
+    "historicalMemoryComparisonUsableAs": "BASE_CDS_COMPARISON_WITH_SILENT_FALLBACK",
+    "correctedDiagnosticPolicy": "EXPLICIT_BASE_CDS",
+    "rationale": "A requested archive is not proof of use. Both variants must be classified by live mappings and startup diagnostics."
+  },
+  "privacyBoundary": "Only source-file hashes and aggregate CDS state are published; local paths and service configuration are omitted."
+}

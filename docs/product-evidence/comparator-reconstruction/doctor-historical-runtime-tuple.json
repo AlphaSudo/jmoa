@@ -1,0 +1,87 @@
+{
+  "schemaVersion": "jmoa-doctor-historical-runtime-tuple-v1",
+  "generatedAt": "2026-07-29T19:34:03.1223901Z",
+  "service": "doctor-service",
+  "exactArtifacts": {
+    "b0": {
+      "sha256": "0B44E107A4699D090D22CF3C6FAFF52630AA803345DF7775510F22FA3FD10F7B",
+      "bytes": 101677278
+    },
+    "v1": {
+      "sha256": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+      "bytes": 101906981
+    },
+    "b0Cds": {
+      "sha256": "3EC503C87E232AB32B8638FED8696058F85F9DC3D9FEF63CD09BBD9DC7F8770C",
+      "bytes": 119812096
+    },
+    "v1Cds": {
+      "sha256": "02955A369BB9F675706E4715E28437220A95637294FC23D07D0A381AD216F6D2",
+      "bytes": 120123392
+    }
+  },
+  "historicalContract": {
+    "sourceComposeSha256": "7EC16D5CD91327EE8FDED0B17D97183421C58C95F023AC51245D22BE8F13E7F4",
+    "sourceRunnerSha256": "F663D679BBAEC026E099C1DDF77257159911BA7EEC53D10B0638940CB529429B",
+    "runtimeFlags": [
+      "-XX:+UseContainerSupport",
+      "-XX:+UseSerialGC",
+      "-XX:+UseCompactObjectHeaders",
+      "-Xms32m",
+      "-Xmx256m",
+      "-Xss256k",
+      "-XX:ReservedCodeCacheSize=48m",
+      "-XX:CICompilerCount=2",
+      "-XX:NativeMemoryTracking=summary",
+      "-Dspring.aot.enabled=true",
+      "-Xshare:auto",
+      "-XX:SharedArchiveFile=/opt/leyden/baseline-doctor-management.jsa",
+      "-Xlog:gc*,safepoint=info"
+    ],
+    "settleSeconds": 20,
+    "workloadRequestCount": 80,
+    "pairOrder": "B0_THEN_V1",
+    "freshStackPerArm": true,
+    "cdsPolicy": "ARTIFACT_SPECIFIC_APPLICATION_CDS"
+  },
+  "historicalB0Envelope": {
+    "pssKb": {
+      "values": [
+        336484.0,
+        335792.0,
+        340896.0
+      ],
+      "min": 335792.0,
+      "median": 336484.0,
+      "max": 340896.0
+    },
+    "privateDirtyKb": {
+      "values": [
+        290148.0,
+        289176.0,
+        294320.0
+      ],
+      "min": 289176.0,
+      "median": 290148.0,
+      "max": 294320.0
+    },
+    "memoryCurrentBytes": {
+      "values": [
+        532750336.0,
+        418836480.0,
+        424136704.0
+      ],
+      "min": 418836480.0,
+      "median": 424136704.0,
+      "max": 532750336.0
+    }
+  },
+  "localReadiness": {
+    "exactHistoricalImageReferencesAvailable": false,
+    "reconstructedImageCandidateCount": 4,
+    "privateConfigAvailable": true,
+    "databaseInitAvailable": true,
+    "decision": "READY_FOR_RECONSTRUCTED_SCREEN_WITH_EXPLICIT_PROVENANCE"
+  },
+  "privacyBoundary": "Private paths, image references, service configuration, endpoint names, and credentials are retained only in the private tuple."
+}

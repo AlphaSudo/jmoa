@@ -28,6 +28,7 @@ Follow the modules in order:
 13. [Read command ledgers](13-read-command-ledgers.md)
 14. [Choose full optimization or reducer-only mode](14-choose-jmoa-mode.md)
 15. [Migrate a historical campaign](15-migrate-historical-campaign.md)
+16. [Validate comparator migration](16-validate-comparator-migration.md)
 
 The current reference outcomes are deliberately mixed: Doctor is a complete
 product win. Corrected Patient and PetClinic both observe direct reductions,

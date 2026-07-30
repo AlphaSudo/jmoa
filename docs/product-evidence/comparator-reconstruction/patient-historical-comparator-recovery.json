@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "jmoa-patient-historical-comparator-recovery-v1",
+  "generatedAt": "2026-07-29T20:25:17.0271774Z",
+  "decision": "PATIENT_HISTORICAL_COMPARATOR_NOT_RECOVERABLE",
+  "search": {
+    "rootsSearched": [
+      "82CBB465DD194DE8DA06D0057BCBF2BAA3B742D3A9594D982411AABDAD3BD73F",
+      "B48CDD761675FE84655BADC96B379516B371116D14E65E0870401CCB5D0C5AC4",
+      "6EE6A33927461D55CF52558FA5E97B61C88A0A32C79B008789814FD2F343C3EE",
+      "912AFA2F5ECF807AD3F9CEF39BC9B13D4F143248BF91B6C586D37ADDA6C82E6A"
+    ],
+    "jarCandidatesInspected": 7,
+    "localPatientImageCandidates": 0,
+    "fullPathsPublished": false
+  },
+  "candidates": [
+    {
+      "pathSha256": "17B99B399BF014168BDD916614F211A0338447315BDAC655ECE6DBD338A2884C",
+      "sha256": "2BE7E1D761ECE8BDC74CE44E7B82FB0B79D7508E45B22E9864577F4D643E0352",
+      "bytes": 99431613,
+      "lastWriteUtc": "2026-07-18T22:24:29.4518337Z",
+      "entryCount": 859,
+      "springBootVersion": "4.0.5",
+      "buildJdkSpec": "26",
+      "jmoaEntryCount": 0,
+      "knownLineageIdentity": "B0",
+      "classification": "KNOWN_CURRENT_OR_LATER_ARTIFACT"
+    },
+    {
+      "pathSha256": "B5E66025E03A536AC9D9F06928BF76EAC053884352D72D852503F420EFD3591B",
+      "sha256": "6BB7313D056CA991A2EABE6BE0F8A081E10B35BBC795504C96D12C910683E494",
+      "bytes": 656011,
+      "lastWriteUtc": "2026-06-08T16:59:16.8580383Z",
+      "entryCount": 385,
+      "springBootVersion": "",
+      "buildJdkSpec": "",
+      "jmoaEntryCount": 0,
+      "knownLineageIdentity": "",
+      "classification": "NOT_PATIENT_DEPLOYABLE_ARTIFACT"
+    },
+    {
+      "pathSha256": "44D8A94D142B70A67B12EB25ABA8EC3529B92375CA4409F12551C7FC35F419EE",
+      "sha256": "FD9994AE0797B9A1B3E89E06DA16DAFADF7DE7DCE2F1CC88817D9A5E539B5A5A",
+      "bytes": 556071,
+      "lastWriteUtc": "2026-06-08T16:59:17.3577455Z",
+      "entryCount": 374,
+      "springBootVersion": "",
+      "buildJdkSpec": "",
+      "jmoaEntryCount": 0,
+      "knownLineageIdentity": "",
+      "classification": "NOT_PATIENT_DEPLOYABLE_ARTIFACT"
+    },
+    {
+      "pathSha256": "4490E482E6D425218D36A2BD8F7A81B962396373252C642C25F52CCC4B81B6C9",
+      "sha256": "8901C427D4294F34C7CF6622126F66F3449BABFFF3C39611468A0A84CD9F7B6D",
+      "bytes": 2002761,
+      "lastWriteUtc": "2026-06-08T16:59:18.8683050Z",
+      "entryCount": 1225,
+      "springBootVersion": "",
+      "buildJdkSpec": "",
+      "jmoaEntryCount": 0,
+      "knownLineageIdentity": "",
+      "classification": "NOT_PATIENT_DEPLOYABLE_ARTIFACT"
+    },
+    {
+      "pathSha256": "C3F2E97B7BEDFD888413308DE6A56B5F93A53B284448D66C02B8F9BBA57BCFFD",
+      "sha256": "3150AB868898359710DE317A38A0156685E30883D8A3585BA7EAE7CC698A331C",
+      "bytes": 99635097,
+      "lastWriteUtc": "2026-06-18T19:36:26.5872540Z",
+      "entryCount": 873,
+      "springBootVersion": "4.0.5",
+      "buildJdkSpec": "26",
+      "jmoaEntryCount": 9,
+      "knownLineageIdentity": "",
+      "classification": "UNVERIFIED_PATIENT_CANDIDATE"
+    },
+    {
+      "pathSha256": "9DB52BA1EDC9066D2EA01B4FF7742B0E6F4897380D94EABDD46E19B4718A1B38",
+      "sha256": "61E007B9777A60BDFC93944F72C597B27D3EE270FD6C40B54186D3DE1FD99A93",
+      "bytes": 18888528,
+      "lastWriteUtc": "2025-05-04T19:27:31.4607779Z",
+      "entryCount": 121,
+      "springBootVersion": "3.1.0",
+      "buildJdkSpec": "17",
+      "jmoaEntryCount": 0,
+      "knownLineageIdentity": "",
+      "classification": "INCOMPATIBLE_SERVICE_UNIVERSE"
+    },
+    {
+      "pathSha256": "F84242F3D88E4FDE88DA961A7AD897D21FE9A202D773D6412DD55F853000CD76",
+      "sha256": "17FDD9B3170E3917A14B3DD2C04551AF13547D1362216AD399E8D5958616E188",
+      "bytes": 99585809,
+      "lastWriteUtc": "2026-06-18T19:36:02.1726628Z",
+      "entryCount": 873,
+      "springBootVersion": "4.0.5",
+      "buildJdkSpec": "26",
+      "jmoaEntryCount": 9,
+      "knownLineageIdentity": "V1",
+      "classification": "KNOWN_CURRENT_OR_LATER_ARTIFACT"
+    }
+  ],
+  "tuple": {
+    "historicalB0ArtifactSha256": null,
+    "historicalB0ArtifactRecovered": false,
+    "historicalB0SourceRevisionRecovered": false,
+    "historicalRuntimePolicyRecovered": true,
+    "historicalStockCdsArchiveRecovered": true,
+    "supportAndConfigIdentityRecovered": false,
+    "workloadIdentityRecovered": true,
+    "captureTimingRecovered": true,
+    "historicalAbsoluteRunVectorsRecovered": true
+  },
+  "missingEssentials": [
+    "historical B0 artifact identity",
+    "historical B0 source revision",
+    "historical support/config identity"
+  ],
+  "authorization": {
+    "patientPerformanceRunAllowed": false,
+    "reason": "The complete historical comparator tuple is unavailable. Later/current artifacts and incompatible service-universe JARs cannot substitute for the missing historical B0."
+  },
+  "currentAuthoritativeResult": {
+    "b0ToV2MedianPssDeltaKb": -1266.5,
+    "pairedWins": "4/6",
+    "confidenceIntervalCrossesZero": true,
+    "verdict": "NOT_CONFIRMED_SUBSTANTIAL_PRODUCT_WIN"
+  }
+}

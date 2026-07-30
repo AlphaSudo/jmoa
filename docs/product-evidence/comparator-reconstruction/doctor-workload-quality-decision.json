@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "jmoa-doctor-workload-quality-decision-v1",
+  "decision": "PROFILE_COVERAGE_HIGH_RUNTIME_PHASE_UNATTRIBUTABLE",
+  "historicalTrainingProfile": {
+    "admittedSites": 542,
+    "admittedSitesObserved": 540,
+    "coveragePercent": 99.63,
+    "exactTier1Sites": 255,
+    "exactTier1SitesObserved": 255,
+    "profileInvocationCount": 26497
+  },
+  "reconstructedRuntimeWorkload": {
+    "requestCount": 80,
+    "actuatorRequests": 60,
+    "businessRequests": 20,
+    "businessPathCount": 1,
+    "phaseSpecificActivationCaptured": false
+  },
+  "conclusion": "The recovered training profile had high admitted-site coverage, but it predates rewriting and has no phase partition. The reconstructed runtime workload cannot prove whether transformed execution was concentrated in startup, Actuator, or the single business read path.",
+  "memoryClaimChanged": false,
+  "nextEngineeringAction": "Add opt-in post-rewrite per-site and per-phase counters before using a workload to explain V1 ROI."
+}

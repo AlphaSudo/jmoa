@@ -19,14 +19,18 @@ six-order B0/V1/V2 campaigns.
 The current balanced matrix remains authoritative for the artifacts it froze.
 This audit does not rewrite those outcomes.
 
-## Decisions
+## Final Reconstruction Decisions
 
-- Doctor: corrected campaign conditionally authorized after a new freeze.
-- Patient: no corrected campaign authorized.
-- PetClinic: corrected campaign conditionally authorized after a new freeze.
-- Mechanism activation counters: blocked pending accepted comparator identity.
+- Doctor: exact historical B0/V1 artifacts were run under reconstructed
+  effective base CDS. V1 measured `+2,661 KB` PSS versus B0, so the historical
+  direction did not reproduce and no six-order campaign is authorized.
+- Patient: the historical B0 artifact, source revision, and support/config
+  identity were not recovered. No performance run is authorized.
+- PetClinic: historical B0 contains JMOA output and semantic application drift.
+  It is not a clean baseline and no performance run is authorized.
 
-No service was launched and no performance campaign was started by this audit.
+The current sealed matrix remains authoritative for its own artifacts and
+protocol. Historical directional budgets remain engineering diagnostics only.
 
 ## Read Next
 
@@ -35,3 +39,4 @@ No service was launched and no performance campaign was started by this audit.
 3. [Engineering budget](historical-expected-engineering-budget.md)
 4. [Baseline acceptance decision](baseline-acceptance-decision.md)
 5. [Mechanism activation contract](mechanism-activation-study-contract.md)
+6. [Final comparator reconstruction closure](../comparator-reconstruction/comparator-reconstruction-closure.md)

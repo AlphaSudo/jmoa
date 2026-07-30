@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "jmoa-doctor-historical-runtime-materialization-v1",
+  "generatedAt": "2026-07-29T19:59:53.5670380Z",
+  "artifacts": {
+    "b0Sha256": "0B44E107A4699D090D22CF3C6FAFF52630AA803345DF7775510F22FA3FD10F7B",
+    "v1Sha256": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+    "b0CdsSha256": "3EC503C87E232AB32B8638FED8696058F85F9DC3D9FEF63CD09BBD9DC7F8770C",
+    "v1CdsSha256": "02955A369BB9F675706E4715E28437220A95637294FC23D07D0A381AD216F6D2"
+  },
+  "imageVerification": {
+    "b0ArtifactHashMatches": true,
+    "v1ArtifactHashMatches": true,
+    "jdkIdentityEqual": true,
+    "jdkIdentitySha256": "E5D739DF076ACC8C1C703E0B69588790F116E18191BB70E1A60DAC489638F7B5"
+  },
+  "protocol": {
+    "requestCount": 80,
+    "requestOrder": "20 x (health, metrics, info), then 20 x doctors",
+    "preWorkloadWarmupSeconds": 0,
+    "settleSeconds": 20,
+    "runtimePolicy": "ARTIFACT_SPECIFIC_APPLICATION_CDS",
+    "correctedHistoricalEffectivePolicy": "EXPLICIT_BASE_CDS",
+    "freshStackPerArm": true
+  },
+  "provenance": {
+    "b0Artifact": "EXACT_HISTORICAL",
+    "v1Artifact": "EXACT_HISTORICAL",
+    "b0Cds": "EXACT_HISTORICAL",
+    "v1Cds": "EXACT_HISTORICAL",
+    "serviceImageBase": "RECONSTRUCTED",
+    "supportImages": "RECONSTRUCTED"
+  },
+  "privateRuntimeFilesWritten": true,
+  "claimBoundary": "Runtime materialization proof only. No memory result is claimed."
+}

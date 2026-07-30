@@ -1,0 +1,9 @@
+{
+  "schemaVersion": "jmoa-redacted-evidence-summary-v1",
+  "sourcePreserved": true,
+  "filesProcessed": 332,
+  "filesRedacted": 10,
+  "totalRedactions": 18,
+  "rawEvidencePublished": false,
+  "transformationManifestPrivate": true
+}

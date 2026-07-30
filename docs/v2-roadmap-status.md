@@ -69,7 +69,12 @@ source/content comparator mismatches for Doctor and PetClinic and a
 runtime-policy mismatch plus incomplete artifact identity for Patient. See the
 [absolute B0 audit](product-evidence/historical-baseline-recovery/historical-vs-current-b0-absolute.md)
 and [baseline decision](product-evidence/historical-baseline-recovery/baseline-acceptance-decision.md).
-No immediate rerun or mechanism-counter study is authorized.
+The bounded follow-up is now closed: Doctor's exact historical V1 did not
+reproduce the old direction (`+2,661 KB` PSS in the reconstructed diagnostic
+pair), PetClinic historical B0 is contaminated by JMOA output and semantic
+drift, and Patient's historical comparator tuple is not recoverable. See the
+[final reconstruction closure](product-evidence/comparator-reconstruction/comparator-reconstruction-closure.md).
+No six-order historical rerun or mechanism-counter study is authorized.
 
 ## Historical Incremental Release Gate
 
@@ -904,3 +909,32 @@ transform, and AOT/proxy families remain safety blocked. The generated mutation
 track is `CLOSED_DISCOVERY_ONLY_FOR_V2`.
 
 See [V2-W Final Verdict](v2-w/v2w-final-verdict.md).
+
+## Historical Comparator Forensics Closure
+
+The bounded Doctor reconstruction is complete:
+
+```text
+B0 first -> V1 second: +2,661 KB PSS
+V1 first -> B0 second: +8,141 KB PSS
+two-order artifact estimate: +5,401 KB PSS
+classification: V1_RUNTIME_COST
+```
+
+Both observations are timing-confounded and use a reconstructed support
+environment, so this is not an exact historical replay. The recovered training
+profile has high admitted-site coverage (`540/542`) but no runtime phase
+partition or post-rewrite counters. No third performance pair or six-order
+historical campaign is authorized.
+
+Permanent comparator states:
+
+```text
+Doctor:    V1_RUNTIME_COST_IN_RECONSTRUCTED_TWO_ORDER_DIAGNOSTIC
+Patient:   PATIENT_HISTORICAL_COMPARATOR_NOT_RECOVERABLE
+PetClinic: HISTORICAL_PETCLINIC_B0_INVALID
+```
+
+The next product-engineering tracks are V1 fixed-overhead reduction and the
+separate `JMOA Metadata Reduction` mode (`B0R`). `B0R` is clean B0 plus raw
+LVT/LVTT reduction and must not be called V2.

@@ -44,6 +44,7 @@ Read the [direct matrix](docs/product-evidence/b0-v1-v2-three-service-matrix.md)
 [forensic matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md),
 [V1 runtime-cost census](docs/product-evidence/v1-runtime-cost-census.md),
 [historical/current B0 reconciliation](docs/product-evidence/historical-baseline-recovery/historical-vs-current-b0-absolute.md),
+[historical comparator closure](docs/product-evidence/comparator-reconstruction/comparator-reconstruction-closure.md),
 [campaign seal](docs/product-evidence/three-artifact-campaign-seal.md),
 [balanced protocol](docs/product-evidence/b0-v1-v2-balanced-protocol.md), and
 the [adoption/evaluation guide](docs/adoption/README.md).

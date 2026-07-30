@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "jmoa-doctor-historical-b0-screen-v1",
+  "generatedAt": "2026-07-29T20:06:47.7625922Z",
+  "decision": "AUTHORIZE_NON_CLAIM_DIRECTIONAL_PAIR",
+  "claimable": false,
+  "current": {
+    "rssKb": 317844,
+    "pssKb": 300139,
+    "pssAnonKb": 290716,
+    "pssFileKb": 9423,
+    "privateDirtyKb": 290716,
+    "privateCleanKb": 652,
+    "sharedCleanKb": 26476,
+    "memoryCurrentBytes": 301727744,
+    "startupMillis": 38345
+  },
+  "historical": {
+    "pssKb": {
+      "values": [
+        336484,
+        335792,
+        340896
+      ],
+      "minimum": 335792,
+      "median": 336484,
+      "maximum": 340896
+    },
+    "pssAnonKb": {
+      "values": [
+        290140,
+        289172,
+        294320
+      ],
+      "minimum": 289172,
+      "median": 290140,
+      "maximum": 294320
+    },
+    "pssFileKb": {
+      "values": [
+        46344,
+        46620,
+        46576
+      ],
+      "minimum": 46344,
+      "median": 46576,
+      "maximum": 46620
+    },
+    "privateDirtyKb": {
+      "values": [
+        290148,
+        289176,
+        294320
+      ],
+      "minimum": 289176,
+      "median": 290148,
+      "maximum": 294320
+    },
+    "memoryCurrentBytes": {
+      "values": [
+        532750336,
+        418836480,
+        424136704
+      ],
+      "minimum": 418836480,
+      "median": 424136704,
+      "maximum": 532750336
+    }
+  },
+  "gates": {
+    "exactHistoricalArtifact": true,
+    "exactHistoricalWorkload": true,
+    "exactHistoricalCaptureTiming": true,
+    "correctedEffectiveBaseCdsPolicy": true,
+    "privateDirtyInsideHistoricalDistribution": true,
+    "anonymousPssInsideHistoricalDistribution": true,
+    "totalPssDifferenceExplainedByFileMapping": true,
+    "memoryCurrentInsideHistoricalDistribution": false
+  },
+  "reconciliation": {
+    "pssDeltaToHistoricalMedianKb": -36345,
+    "filePssDeltaToHistoricalMedianKb": -37153,
+    "unexplainedPssDeltaAfterFileMappingKb": 808,
+    "cgroupAccountingComparable": false,
+    "interpretation": "Anonymous/private-dirty memory reproduced the historical B0 distribution. The total PSS shift is explained by clean/file-page attribution. cgroup memory.current remains environment-sensitive and is not historically equivalent."
+  },
+  "provenance": {
+    "applicationArtifact": "EXACT_HISTORICAL",
+    "workload": "EXACT_HISTORICAL_ORDER_AND_ACCEPTANCE",
+    "effectiveCdsPolicy": "EXPLICIT_BASE_CDS_MATCHING_HISTORICAL_FALLBACK",
+    "serviceJdkAndSupportImages": "RECONSTRUCTED_NOT_ORIGINAL"
+  },
+  "authorization": {
+    "diagnosticPairAllowed": true,
+    "sixOrderCampaignAllowed": false,
+    "rule": "Only one non-claim B0/V1 directional pair is authorized. A final campaign remains blocked until the historical direction returns."
+  }
+}
