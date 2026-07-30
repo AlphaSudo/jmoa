@@ -8,6 +8,7 @@ $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path $PSScriptRoot -Parent
 $tempRoot = Join-Path $OutputDirectory 'fixtures'
 New-Item -ItemType Directory -Force -Path $tempRoot | Out-Null
+. (Join-Path $PSScriptRoot 'campaign-audit-common.ps1')
 
 function Assert-True([bool]$Condition, [string]$Message) {
     if (-not $Condition) { throw "Assertion failed: $Message" }
@@ -32,6 +33,16 @@ function Write-Zip([string]$Path, [hashtable]$Entries) {
         $stream.Dispose()
     }
 }
+
+$sensitiveFixtureValue = 'synthetic-value-that-must-not-render'
+$sensitiveName = 'API_' + 'TOKEN'
+$protectedFixture = Protect-CampaignAuditText -Value "$sensitiveName=$sensitiveFixtureValue"
+Assert-True ($protectedFixture.redactionCount -eq 1) 'Sensitive environment fixture was not redacted.'
+Assert-True ($protectedFixture.text -notmatch [regex]::Escape($sensitiveFixtureValue)) 'Sensitive fixture value remained in rendered text.'
+Assert-True ($protectedFixture.text -match '<REDACTED sha256=[A-F0-9]{64}>') 'Redaction marker does not contain a value hash.'
+$pairScriptText = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot 'runtime-screen-pair.ps1')
+Assert-True ($pairScriptText -match 'redactedStdout\s*=\s*Protect-CampaignAuditText') 'Consolidated arm stdout is not redacted.'
+Assert-True ($pairScriptText -match 'renderedRedactionCount\s*=\s*\$renderedRedactionCount') 'Consolidated arm redaction count is not reported.'
 
 # A historical-only JMOA class must disqualify a supposedly clean baseline.
 $auditFixture = Join-Path $tempRoot 'audit'
@@ -94,6 +105,39 @@ foreach ($candidate in $patient.candidates) {
     Assert-True ($null -eq $candidate.PSObject.Properties['path']) 'Public Patient candidate exposed a full path.'
 }
 
+# A synthetic activation join must remain pre-rewrite and non-claim.
+$activationFixture = Join-Path $tempRoot 'activation'
+New-Item -ItemType Directory -Force -Path $activationFixture | Out-Null
+$siteKey = 'example/Service::run()V#0|get|()Ljava/util/function/Supplier;|8|example/Target::create()V'
+$activationProfilePath = Join-Path $activationFixture 'profile.json'
+$activationBuildPath = Join-Path $activationFixture 'build.json'
+@{
+    version = 'fixture'
+    trainingDurationSeconds = 0
+    loadedClasses = @('example.Service')
+    hotClasses = @('example.Service')
+    lambdaSites = @(@{
+        siteKey = $siteKey
+        ownerInternalName = 'example/Service'
+        invocationCount = 7
+    })
+} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $activationProfilePath -Encoding UTF8
+@{
+    filterSummary = @{ frameworkDecisions = @(@{ siteKey = $siteKey; allowed = $true }) }
+    tier1RuntimeSummary = @{ supportedPlans = @(@{ siteKey = $siteKey }) }
+    modeCRewriteSummary = @{ totalSites = 1; eligibleSites = 1; rewrittenSites = 1; rewrittenClasses = 1 }
+} | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $activationBuildPath -Encoding UTF8
+$activationFixtureOutput = Join-Path $OutputDirectory 'activation-output'
+& (Join-Path $PSScriptRoot 'analyze-doctor-v1-mechanism-activation.ps1') `
+    -ProfilePath $activationProfilePath `
+    -BuildReportPath $activationBuildPath `
+    -OutputDirectory $activationFixtureOutput
+$activationFixtureReport = Get-Content -Raw -LiteralPath (Join-Path $activationFixtureOutput 'doctor-v1-mechanism-activation-study.json') | ConvertFrom-Json
+Assert-True ($activationFixtureReport.classification -eq 'PROFILE_DERIVED_NON_CLAIM') 'Synthetic activation fixture became claimable.'
+Assert-True ($activationFixtureReport.activationCoverage.admittedSitesObservedInProfile -eq 1) 'Synthetic admitted site did not join to the profile.'
+Assert-True ($activationFixtureReport.activationCoverage.profileInvocationCount -eq 7) 'Synthetic profile invocation count changed.'
+Assert-True ($activationFixtureReport.unavailablePostRewriteCounters.transformedBranchExecutions -eq 'NOT_CAPTURED') 'Synthetic activation fixture invented transformed executions.'
+
 # Final repository reports must preserve the three explicit closure decisions.
 $closureDir = Join-Path $repoRoot 'docs/product-evidence/comparator-reconstruction'
 $closure = Get-Content -Raw -LiteralPath (Join-Path $closureDir 'comparator-reconstruction-closure.json') | ConvertFrom-Json
@@ -101,12 +145,17 @@ Assert-True ($closure.status -eq 'CLOSED_WITHOUT_NEW_PRODUCT_CLAIM') 'Closure st
 Assert-True (-not [bool]$closure.broadCampaignAuthorized) 'Closure unexpectedly authorized a campaign.'
 $decisions = @($closure.services | ForEach-Object decision)
 foreach ($expected in @(
-    'DOCTOR_HISTORICAL_V1_NOT_REPRODUCED',
+    'V1_RUNTIME_COST',
     'PATIENT_HISTORICAL_COMPARATOR_NOT_RECOVERABLE',
-    'PETCLINIC_HISTORICAL_B0_CONTAMINATED'
+    'HISTORICAL_PETCLINIC_B0_INVALID'
 )) {
     Assert-True ($decisions -contains $expected) "Missing closure decision $expected."
 }
+
+$activation = Get-Content -Raw -LiteralPath (Join-Path $closureDir 'doctor-v1-mechanism-activation-study.json') | ConvertFrom-Json
+Assert-True ($activation.classification -eq 'PROFILE_DERIVED_NON_CLAIM') 'Activation study claim boundary changed.'
+Assert-True ($activation.workloadQualityDecision.classification -eq 'PROFILE_COVERAGE_HIGH_RUNTIME_PHASE_UNATTRIBUTABLE') 'Activation study workload decision changed.'
+Assert-True ($activation.unavailablePostRewriteCounters.adapterInvocations -eq 'NOT_CAPTURED') 'Activation study invented post-rewrite counters.'
 
 $budget = Get-Content -Raw -LiteralPath (Join-Path $repoRoot 'docs/product-evidence/historical-baseline-recovery/historical-expected-engineering-budget.json') | ConvertFrom-Json
 Assert-True ($budget.schemaVersion -eq 'jmoa-historical-expected-engineering-budget-v2') 'Budget schema was not upgraded.'

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "jmoa-doctor-reconstructed-order-classification-v1",
+  "status": "TWO_ORDER_DIAGNOSTIC_COMPLETE",
+  "classification": "V1_RUNTIME_COST",
+  "pss": {
+    "d1V1SecondMinusB0FirstKb": 2661,
+    "d2V1FirstMinusB0SecondKb": 8141,
+    "orderBalancedArtifactEstimateKb": 5401.0,
+    "orderPositionEstimateKb": -2740.0,
+    "secondPosition": {
+      "v1SecondMinusB0FirstKb": 2661,
+      "b0SecondMinusV1FirstKb": -8141
+    }
+  },
+  "privateDirty": {
+    "d1V1SecondMinusB0FirstKb": 2580,
+    "d2V1FirstMinusB0SecondKb": 8260,
+    "orderBalancedArtifactEstimateKb": 5420.0,
+    "orderPositionEstimateKb": -2840.0
+  },
+  "timing": {
+    "b0FirstPair": "TIMING_CONFOUNDED",
+    "v1FirstPair": "TIMING_CONFOUNDED"
+  },
+  "interpretation": "V1 is more expensive in both observed orders; this supports a reconstructed-runtime V1 cost, not an exact historical replay claim.",
+  "claimBoundary": [
+    "This is a two-order reconstructed diagnostic, not a six-order performance campaign.",
+    "The support environment and JDK are reconstructed even though the application artifacts are exact.",
+    "The historical workload is weakly business-active and does not prove broad V1 mechanism activation.",
+    "No third performance pair follows automatically."
+  ]
+}

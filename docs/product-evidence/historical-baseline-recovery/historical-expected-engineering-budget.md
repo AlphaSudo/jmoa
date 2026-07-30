@@ -4,11 +4,11 @@ These numbers are labeled `HISTORICAL_EXPECTED_ENGINEERING_BUDGET`. They are not
 
 | Service | Historical directional sum | Current direct B0->V2 | Reconstruction decision |
 |---|---:|---:|---|
-| doctor-service | -7884 KB | -4715.5 KB | `DOCTOR_HISTORICAL_V1_NOT_REPRODUCED` |
+| doctor-service | -7884 KB | -4715.5 KB | `V1_RUNTIME_COST` |
 | patient-service | -12591 KB | -1266.5 KB | `PATIENT_HISTORICAL_COMPARATOR_NOT_RECOVERABLE` |
-| spring-petclinic-customers-service | -10770 KB | -2947 KB | `PETCLINIC_HISTORICAL_B0_CONTAMINATED` |
+| spring-petclinic-customers-service | -10770 KB | -2947 KB | `HISTORICAL_PETCLINIC_B0_INVALID` |
 
-Doctor's old published `-6,048 KB` figure was a median-calculation error. The corrected historical independent-median delta is `-2,728 KB`, while the reconstructed exact-artifact diagnostic pair measured `+2,661 KB`.
+Doctor's old published `-6,048 KB` figure was a median-calculation error. The corrected historical independent-median delta is `-2,728 KB`; the reconstructed two-order artifact estimate is `+5,401 KB` and remains timing/provenance scoped.
 
 PetClinic's historical baseline is contaminated. Patient's historical comparator tuple is not recoverable. No row authorizes a new performance campaign.
 

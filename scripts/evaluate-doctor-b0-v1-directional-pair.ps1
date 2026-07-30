@@ -100,7 +100,7 @@ $decision = if (-not $pairValid) {
 } elseif ($historicalDirectionReturned) {
     'DOCTOR_BASELINE_DRIFT_PROVEN'
 } else {
-    'DOCTOR_HISTORICAL_V1_NOT_REPRODUCED'
+    'DOCTOR_HISTORICAL_V1_DIRECTION_NOT_REPRODUCED_IN_SINGLE_ORDER'
 }
 $attribution = if ($delta.pssAnonKb -gt 0 -and $delta.nmtCommittedKb -le 0) {
     'NMT_INVISIBLE_ANONYMOUS_DIRTY_GROWTH'
@@ -143,8 +143,8 @@ $report = [ordered]@{
     authorization = [ordered]@{
         sixOrderCampaignAllowed = ($decision -eq 'DOCTOR_BASELINE_DRIFT_PROVEN')
         mechanismActivationStudyAllowed = $false
-        nextAction = if ($decision -eq 'DOCTOR_HISTORICAL_V1_NOT_REPRODUCED') {
-            'Stop Doctor reruns. Compare historical host/JDK/support-image provenance; runtime equivalence is not complete enough to authorize mechanism instrumentation.'
+        nextAction = if ($decision -eq 'DOCTOR_HISTORICAL_V1_DIRECTION_NOT_REPRODUCED_IN_SINGLE_ORDER') {
+            'Do not claim a regression from this order. Complete semantic comparison, deep attribution, and exactly one reversed V1-first/B0-second diagnostic.'
         } else {
             'A corrected six-order B0/V1/V2 campaign may be prepared.'
         }

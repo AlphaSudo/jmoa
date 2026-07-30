@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "jmoa-doctor-v1-runtime-cost-engineering-roadmap-v1",
+  "trigger": "V1_RUNTIME_COST_IN_RECONSTRUCTED_TWO_ORDER_DIAGNOSTIC",
+  "claimBoundary": "Engineering roadmap only. It does not change the current six-order product matrix or create an exact historical V1 claim.",
+  "easy": [
+    "Add opt-in admitted/observed/transformed-site counters with workload phase.",
+    "Lazy-load runtime support after the first transformed branch.",
+    "Do not initialize runtime support when an artifact has no admitted sites.",
+    "Add whole-artifact admission thresholds based on expected fixed runtime cost."
+  ],
+  "medium": [
+    "Generate runtime adapters only for active SAM and package families.",
+    "Reduce class-loader creation and native lookup/cache structures.",
+    "Specialize the runtime library per artifact and remove unused modules."
+  ],
+  "hard": [
+    "Statically resolve sites that currently require runtime lookup.",
+    "Remove shared runtime support for statically provable transformations.",
+    "Fold safe adapters into existing classes.",
+    "Admit transformations using measured whole-artifact runtime economics."
+  ],
+  "promotionGate": [
+    "semantic safety",
+    "V2-C valid paired confirmation",
+    "V2-D attribution",
+    "post-rewrite activation evidence"
+  ]
+}

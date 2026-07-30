@@ -14,10 +14,10 @@
       "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY",
       "evidenceLabel": "HISTORICAL_EXPECTED_ENGINEERING_BUDGET",
       "currentEffectLabel": "CURRENT_DIRECT_PRODUCT_EFFECT",
-      "reconstructionDecision": "DOCTOR_HISTORICAL_V1_NOT_REPRODUCED",
-      "reconstructedB0ToV1DiagnosticPssKb": 2661.0,
+      "reconstructionDecision": "V1_RUNTIME_COST",
+      "reconstructedB0ToV1DiagnosticPssKb": 5401.0,
       "historicalDirectionReproduced": false,
-      "qualification": "Engineering-only historical budget. The corrected old -2,728 KB direction did not reproduce; the reconstructed diagnostic was +2,661 KB."
+      "qualification": "Engineering-only historical budget. V1 was more expensive in both reconstructed orders; the +5,401 KB order-balanced estimate is not an exact historical replay."
     },
     {
       "service": "patient-service",
@@ -48,7 +48,7 @@
       "comparability": "CROSS_PROTOCOL_DIRECTIONAL_BUDGET_ONLY",
       "evidenceLabel": "HISTORICAL_EXPECTED_ENGINEERING_BUDGET",
       "currentEffectLabel": "CURRENT_DIRECT_PRODUCT_EFFECT",
-      "reconstructionDecision": "PETCLINIC_HISTORICAL_B0_CONTAMINATED",
+      "reconstructionDecision": "HISTORICAL_PETCLINIC_B0_INVALID",
       "reconstructedB0ToV1DiagnosticPssKb": null,
       "historicalDirectionReproduced": null,
       "qualification": "Engineering-only historical budget. The historical baseline is not a clean no-JMOA B0."

@@ -429,7 +429,7 @@ $v1Identity = [ordered]@{
             service = 'doctor-service'; historicalArtifact = $doctorHistoricalV1; currentArtifact = $doctorCurrentV1
             artifactExact = ($doctorHistoricalV1.sha256 -eq $doctorCurrentV1.sha256)
             cdsArchiveExact = ((Get-FileIdentity $DoctorHistoricalV1Cds).sha256 -eq (($doctorFreeze.artifacts | Where-Object variant -eq V1).cdsArchiveSha256))
-            conclusion = 'V1_EXACT_IDENTITY'; qualification = 'JAR exact; application CDS archive not exact, so runtime identity is not exact.'
+            conclusion = 'V1_EXACT_IDENTITY'; qualification = 'JAR exact; requested application archive was rejected historically, so the effective policy was base-CDS fallback and runtime identity is not exact.'
         }
         [ordered]@{
             service = 'patient-service'; historicalArtifact = $null
@@ -462,10 +462,10 @@ foreach ($row in $claims.threeServiceAcceptance.services) {
 }
 $reconstructionStatus = @{
     'doctor-service' = [ordered]@{
-        decision = 'DOCTOR_HISTORICAL_V1_NOT_REPRODUCED'
-        diagnosticPssKb = 2661.0
+        decision = 'V1_RUNTIME_COST'
+        diagnosticPssKb = 5401.0
         directionReproduced = $false
-        qualification = 'Engineering-only historical budget. The reconstructed exact-artifact diagnostic pair did not reproduce the historical V1 direction.'
+        qualification = 'Engineering-only historical budget. V1 was more expensive in both reconstructed orders; the order-balanced +5,401 KB estimate is timing/provenance scoped.'
     }
     'patient-service' = [ordered]@{
         decision = 'PATIENT_HISTORICAL_COMPARATOR_NOT_RECOVERABLE'
@@ -474,7 +474,7 @@ $reconstructionStatus = @{
         qualification = 'Engineering-only historical budget. The historical B0/source/support comparator tuple is not recoverable.'
     }
     'spring-petclinic-customers-service' = [ordered]@{
-        decision = 'PETCLINIC_HISTORICAL_B0_CONTAMINATED'
+        decision = 'HISTORICAL_PETCLINIC_B0_INVALID'
         diagnosticPssKb = $null
         directionReproduced = $null
         qualification = 'Engineering-only historical budget. The historical baseline contains JMOA output and semantic application drift.'

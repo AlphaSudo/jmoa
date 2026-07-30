@@ -1,6 +1,7 @@
 param(
     [string]$ComparatorReportDirectory = (Join-Path (Split-Path $PSScriptRoot -Parent) 'docs/product-evidence/comparator-reconstruction'),
-    [string]$HistoricalBudgetDirectory = (Join-Path (Split-Path $PSScriptRoot -Parent) 'docs/product-evidence/historical-baseline-recovery')
+    [string]$HistoricalBudgetDirectory = (Join-Path (Split-Path $PSScriptRoot -Parent) 'docs/product-evidence/historical-baseline-recovery'),
+    [string]$DoctorOrderClassificationPath = ''
 )
 
 Set-StrictMode -Version Latest
@@ -15,12 +16,21 @@ function Read-RequiredJson([string]$Path) {
 }
 
 $doctor = Read-RequiredJson (Join-Path $ComparatorReportDirectory 'doctor-b0-v1-directional-pair.json')
+$resolvedOrderClassification = if ([string]::IsNullOrWhiteSpace($DoctorOrderClassificationPath)) {
+    Join-Path $ComparatorReportDirectory 'doctor-reconstructed-order-classification.json'
+} else {
+    $DoctorOrderClassificationPath
+}
+$doctorOrder = Read-RequiredJson $resolvedOrderClassification
 $doctorB0 = Read-RequiredJson (Join-Path $ComparatorReportDirectory 'doctor-historical-b0-screen.json')
 $petclinic = Read-RequiredJson (Join-Path $ComparatorReportDirectory 'petclinic-comparator-entry-audit.json')
 $patient = Read-RequiredJson (Join-Path $ComparatorReportDirectory 'patient-historical-comparator-recovery.json')
 
-if ($doctor.decision -ne 'DOCTOR_HISTORICAL_V1_NOT_REPRODUCED') {
+if ($doctor.decision -ne 'DOCTOR_HISTORICAL_V1_DIRECTION_NOT_REPRODUCED_IN_SINGLE_ORDER') {
     throw "Unexpected Doctor decision: $($doctor.decision)"
+}
+if ($doctorOrder.classification -ne 'V1_RUNTIME_COST') {
+    throw "Unexpected Doctor two-order classification: $($doctorOrder.classification)"
 }
 if ($petclinic.summary.comparatorDecision -ne 'HISTORICAL_BASELINE_CONTAMINATED') {
     throw "Unexpected PetClinic decision: $($petclinic.summary.comparatorDecision)"
@@ -31,7 +41,7 @@ if ($patient.decision -ne 'PATIENT_HISTORICAL_COMPARATOR_NOT_RECOVERABLE') {
 
 $petclinicClosure = [ordered]@{
     schemaVersion = 'jmoa-petclinic-historical-comparator-closure-v1'
-    decision = 'PETCLINIC_HISTORICAL_B0_CONTAMINATED'
+    decision = 'HISTORICAL_PETCLINIC_B0_INVALID'
     performanceRunAuthorized = $false
     historicalArtifactSha256 = $petclinic.artifactIdentity.historicalSha256
     currentCleanArtifactSha256 = $petclinic.artifactIdentity.currentSha256
@@ -45,7 +55,7 @@ Write-JmoaJson -Value $petclinicClosure -Path (Join-Path $ComparatorReportDirect
 Write-JmoaText -Value @"
 # PetClinic Historical Comparator Closure
 
-- Decision: **PETCLINIC_HISTORICAL_B0_CONTAMINATED**
+- Decision: **HISTORICAL_PETCLINIC_B0_INVALID**
 - Performance run authorized: **False**
 - Historical JMOA entries: **$($petclinicClosure.historicalJmoaEntryCount)**
 - Disqualifying artifact differences: **$($petclinicClosure.disqualifyingDifferenceCount)**
@@ -62,14 +72,16 @@ artifacts and protocol. No historical-comparator performance run is authorized.
 $services = @(
     [ordered]@{
         service = 'doctor-service'
-        decision = [string]$doctor.decision
+        decision = [string]$doctorOrder.classification
         exactHistoricalB0 = $true
         exactHistoricalV1 = $true
         runtimeEquivalenceComplete = $false
         diagnosticPssDeltaKb = [double]$doctor.deltaCandidateMinusBaseline.pssKb
+        reversedDiagnosticPssDeltaKb = [double]$doctorOrder.pss.d2V1FirstMinusB0SecondKb
+        orderBalancedArtifactEstimatePssKb = [double]$doctorOrder.pss.orderBalancedArtifactEstimateKb
         currentDirectProductEffectPssKb = -4715.5
         performanceCampaignAuthorized = $false
-        reason = 'The exact historical artifacts were paired under reconstructed base CDS, but V1 regressed by 2,661 KB PSS. Historical service JDK/support-image provenance is not exact.'
+        reason = 'V1 was more expensive in both reconstructed orders. The order-balanced estimate is a reconstructed-runtime diagnostic, not an exact historical replay; both observations remain timing-confounded.'
     }
     [ordered]@{
         service = 'patient-service'
@@ -84,7 +96,7 @@ $services = @(
     }
     [ordered]@{
         service = 'spring-petclinic-customers-service'
-        decision = 'PETCLINIC_HISTORICAL_B0_CONTAMINATED'
+        decision = 'HISTORICAL_PETCLINIC_B0_INVALID'
         exactHistoricalB0 = $false
         exactHistoricalV1 = $true
         runtimeEquivalenceComplete = $false
@@ -119,11 +131,13 @@ foreach ($service in $services) {
 }
 $closureLines += @(
     '',
-    'Doctor reproduced the historical anonymous/private-dirty B0 range, but its exact historical V1 artifact did not reproduce the historical direction.',
-    'PetClinic historical B0 is contaminated by JMOA output and semantic application drift.',
+    'Doctor V1 was more expensive in both reconstructed orders. This supports a reconstructed-runtime V1 cost, not an exact historical replay.',
+    'PetClinic historical B0 is invalid because it contains JMOA output and semantic application drift.',
     'Patient lacks the historical B0/source/support tuple required for a valid reconstruction.',
     '',
-    'No six-order historical reconstruction campaign is authorized. The current sealed matrix remains authoritative for its own artifacts and protocol.'
+    'No six-order historical reconstruction campaign is authorized. The current sealed matrix remains authoritative for its own artifacts and protocol.',
+    '',
+    'The [command ledger index](doctor-command-ledger-index.md) records complete and failed scenario attempts. Raw commands and responses remain private; sanitized summaries and hashes are published here.'
 )
 Write-JmoaText -Value ($closureLines -join [Environment]::NewLine) -Path (Join-Path $ComparatorReportDirectory 'comparator-reconstruction-closure.md')
 
@@ -131,10 +145,10 @@ $budgetPath = Join-Path $HistoricalBudgetDirectory 'historical-expected-engineer
 $budget = Read-RequiredJson $budgetPath
 $statusByService = @{
     'doctor-service' = [ordered]@{
-        reconstructionDecision = [string]$doctor.decision
-        reconstructedB0ToV1DiagnosticPssKb = [double]$doctor.deltaCandidateMinusBaseline.pssKb
+        reconstructionDecision = [string]$doctorOrder.classification
+        reconstructedB0ToV1DiagnosticPssKb = [double]$doctorOrder.pss.orderBalancedArtifactEstimateKb
         historicalDirectionReproduced = $false
-        qualification = 'Engineering-only historical budget. The corrected old -2,728 KB direction did not reproduce; the reconstructed diagnostic was +2,661 KB.'
+        qualification = 'Engineering-only historical budget. V1 was more expensive in both reconstructed orders; the +5,401 KB order-balanced estimate is not an exact historical replay.'
     }
     'patient-service' = [ordered]@{
         reconstructionDecision = [string]$patient.decision
@@ -143,7 +157,7 @@ $statusByService = @{
         qualification = 'Engineering-only historical budget. The historical comparator tuple is not recoverable.'
     }
     'spring-petclinic-customers-service' = [ordered]@{
-        reconstructionDecision = 'PETCLINIC_HISTORICAL_B0_CONTAMINATED'
+        reconstructionDecision = 'HISTORICAL_PETCLINIC_B0_INVALID'
         reconstructedB0ToV1DiagnosticPssKb = $null
         historicalDirectionReproduced = $null
         qualification = 'Engineering-only historical budget. The historical baseline is not a clean no-JMOA B0.'
@@ -173,7 +187,7 @@ foreach ($row in $budget.services) {
 }
 $budgetLines += @(
     '',
-    'Doctor''s old published `-6,048 KB` figure was a median-calculation error. The corrected historical independent-median delta is `-2,728 KB`, while the reconstructed exact-artifact diagnostic pair measured `+2,661 KB`.',
+    'Doctor''s old published `-6,048 KB` figure was a median-calculation error. The corrected historical independent-median delta is `-2,728 KB`; the reconstructed two-order artifact estimate is `+5,401 KB` and remains timing/provenance scoped.',
     '',
     'PetClinic''s historical baseline is contaminated. Patient''s historical comparator tuple is not recoverable. No row authorizes a new performance campaign.',
     '',

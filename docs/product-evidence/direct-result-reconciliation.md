@@ -24,10 +24,11 @@ this campaign and contained `JmoaRuntime.class`. It was therefore not a clean
 no-JMOA baseline. A source-frozen B0 JAR was rebuilt with zero JMOA entries and
 used for the published direct screen.
 
-This correction does not invalidate the historical full-P2 or V1-to-V2
-experiments. It narrows what they can answer. The latest clean-B0 campaign is
-the current PetClinic buyer-comparison authority, and its terminal result is
-`ENVIRONMENT_VARIANCE_TOO_HIGH`, with no product pair admitted.
+This correction invalidates the historical artifact as a clean B0 comparator.
+The historical optimized artifact and incremental reducer experiments remain
+useful only within their documented scopes; the Phase 33M B0-to-full-P2 delta
+is not a clean no-JMOA product comparison. The current unified six-order
+campaign is the PetClinic buyer-comparison authority.
 
 ## Claim Rule
 

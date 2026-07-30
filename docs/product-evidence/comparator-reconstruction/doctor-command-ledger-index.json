@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "jmoa-doctor-comparator-command-ledger-index-v1",
+  "rawEvidencePublished": false,
+  "rawCommandResponsesRetainedPrivately": true,
+  "scenarios": [
+    {
+      "scenario": "B0_FIRST_V1_SECOND",
+      "status": "COMPLETE",
+      "ledgerGroups": 8,
+      "commandRecords": 236,
+      "redactedCopyAvailable": true
+    },
+    {
+      "scenario": "V1_FIRST_B0_SECOND_FIRST_ATTEMPT",
+      "status": "FAILED_RETAINED_NOT_COUNTED",
+      "topLevelExitFailures": 1,
+      "reason": "The workload authorization source still referenced the pre-rotation environment name."
+    },
+    {
+      "scenario": "V1_FIRST_B0_SECOND_ACCEPTED",
+      "status": "COMPLETE",
+      "ledgerGroups": 8,
+      "commandRecords": 235,
+      "semanticEquivalence": "SEMANTICALLY_EQUIVALENT_VOLATILE_FIELDS"
+    },
+    {
+      "scenario": "EXISTING_PAIR_ATTRIBUTION",
+      "status": "COMPLETE_AFTER_RETAINED_FAILED_ATTEMPTS",
+      "recordedAttempts": 5,
+      "failedAttempts": 3
+    },
+    {
+      "scenario": "MECHANISM_ACTIVATION_STUDY",
+      "status": "COMPLETE_AFTER_RETAINED_FAILED_ATTEMPT",
+      "recordedAttempts": 3,
+      "failedAttempts": 1
+    },
+    {
+      "scenario": "SECURITY_ROTATION_AND_MIGRATION",
+      "status": "COMPLETE_AFTER_RETAINED_FAILED_ATTEMPT",
+      "rawSecretValuesPublished": false
+    },
+    {
+      "scenario": "CLOSURE_AND_VALIDATION",
+      "status": "COMPLETE_AFTER_RETAINED_DOCUMENTATION_FAILURE",
+      "failedDocumentationAttemptRetained": true
+    }
+  ],
+  "redaction": {
+    "commandLedgerFilesProcessed": 332,
+    "commandLedgerFilesRedacted": 10,
+    "commandLedgerRedactions": 18,
+    "captureFilesProcessed": 45,
+    "captureFilesRedacted": 2,
+    "captureRedactions": 2,
+    "sourceEvidencePreserved": true
+  },
+  "rule": "Every failed attempt remains in its private append-only ledger. Public documents contain sanitized summaries and hashes, not private command responses."
+}

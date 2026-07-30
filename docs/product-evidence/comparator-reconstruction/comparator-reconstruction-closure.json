@@ -6,14 +6,16 @@
   "services": [
     {
       "service": "doctor-service",
-      "decision": "DOCTOR_HISTORICAL_V1_NOT_REPRODUCED",
+      "decision": "V1_RUNTIME_COST",
       "exactHistoricalB0": true,
       "exactHistoricalV1": true,
       "runtimeEquivalenceComplete": false,
       "diagnosticPssDeltaKb": 2661.0,
+      "reversedDiagnosticPssDeltaKb": 8141.0,
+      "orderBalancedArtifactEstimatePssKb": 5401.0,
       "currentDirectProductEffectPssKb": -4715.5,
       "performanceCampaignAuthorized": false,
-      "reason": "The exact historical artifacts were paired under reconstructed base CDS, but V1 regressed by 2,661 KB PSS. Historical service JDK/support-image provenance is not exact."
+      "reason": "V1 was more expensive in both reconstructed orders. The order-balanced estimate is a reconstructed-runtime diagnostic, not an exact historical replay; both observations remain timing-confounded."
     },
     {
       "service": "patient-service",
@@ -28,7 +30,7 @@
     },
     {
       "service": "spring-petclinic-customers-service",
-      "decision": "PETCLINIC_HISTORICAL_B0_CONTAMINATED",
+      "decision": "HISTORICAL_PETCLINIC_B0_INVALID",
       "exactHistoricalB0": false,
       "exactHistoricalV1": true,
       "runtimeEquivalenceComplete": false,

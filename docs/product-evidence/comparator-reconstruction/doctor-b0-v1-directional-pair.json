@@ -1,7 +1,7 @@
 {
   "schemaVersion": "jmoa-doctor-b0-v1-directional-pair-v1",
   "generatedAt": "2026-07-29T20:13:02.3089608Z",
-  "decision": "DOCTOR_HISTORICAL_V1_NOT_REPRODUCED",
+  "decision": "DOCTOR_HISTORICAL_V1_DIRECTION_NOT_REPRODUCED_IN_SINGLE_ORDER",
   "claimable": false,
   "pairValid": true,
   "baseline": {
@@ -43,8 +43,8 @@
     "historicalDirectionReturned": false
   },
   "attribution": {
-    "category": "NMT_INVISIBLE_ANONYMOUS_DIRTY_GROWTH",
-    "explanation": "V1 loaded fewer classes and had slightly lower NMT committed memory, but anonymous PSS and Private_Dirty increased. The reconstructed pair therefore does not reproduce the historical V1 direction."
+    "category": "NMT_PARTIAL_ANONYMOUS_RW_OUTSIDE_HEAP",
+    "explanation": "V1 loaded fewer classes and had slightly lower NMT committed memory, while anonymous writable PSS outside the Java heap increased. This single B0-first/V1-second order is timing-confounded."
   },
   "provenance": {
     "b0Artifact": "EXACT_HISTORICAL",
@@ -54,7 +54,7 @@
   },
   "authorization": {
     "sixOrderCampaignAllowed": false,
-    "mechanismActivationStudyAllowed": false,
-    "nextAction": "Stop Doctor reruns. Compare historical host/JDK/support-image provenance; runtime equivalence is not complete enough to authorize mechanism instrumentation."
+    "mechanismActivationStudyAllowed": true,
+    "nextAction": "Superseded by the completed reversed diagnostic and profile-derived non-claim mechanism activation study."
   }
 }

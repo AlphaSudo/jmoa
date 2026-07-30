@@ -4,7 +4,15 @@
   "artifact": "B0R = clean B0 plus raw LocalVariableTable/LocalVariableTypeTable reduction",
   "separateFrom": "JMOA_FULL_OPTIMIZATION = V1 semantic transform plus V2 reducer",
   "implementationStatus": "SUPPORTED_BY_EXISTING_RAW_REDUCER_ENGINE",
-  "evidenceBoundary": "Reducer-only evidence must use B0 versus B0R. It cannot inherit full-optimization claims or overwrite the B0/V1/V2 matrix.",
+  "evidenceBoundary": "Reducer-only evidence must use clean B0 versus the exact same B0 plus metadata reduction (B0R). B0R is not V2, cannot inherit full-optimization claims, and cannot overwrite the B0/V1/V2 matrix.",
+  "admissionGate": [
+    "clean B0 identity",
+    "same application and dependency universe",
+    "balanced order",
+    "semantic equivalence",
+    "V2-C validation",
+    "V2-D attribution"
+  ],
   "currentEvidence": [
     {
       "service": "spring-petclinic-visits-service",

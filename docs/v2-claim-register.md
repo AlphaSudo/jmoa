@@ -63,16 +63,21 @@ The bounded reconstruction is closed without a new product claim:
 ```text
 Doctor:
   exact historical B0/V1 artifacts recovered
-  reconstructed B0-to-V1 diagnostic: +2,661 KB PSS
-  historical V1 direction not reproduced
+  B0-first/V1-second: +2,661 KB PSS
+  V1-first/B0-second: +8,141 KB PSS
+  two-order artifact estimate: +5,401 KB PSS
+  classification: V1_RUNTIME_COST in the reconstructed runtime
+  not an exact historical replay
 
 Patient:
   historical B0/source/support tuple not recoverable
+  classification: PATIENT_HISTORICAL_COMPARATOR_NOT_RECOVERABLE
   no performance run authorized
 
 PetClinic:
   historical B0 contains JMOA output and semantic application drift
-  baseline contaminated; no performance run authorized
+  classification: HISTORICAL_PETCLINIC_B0_INVALID
+  no performance run authorized
 ```
 
 Doctor's old published `-6,048 KB` value used the wrong median index. The
@@ -80,8 +85,20 @@ corrected historical references are `-2,728 KB` by independent medians and
 `-2,036 KB` by paired-delta median. Those historical numbers remain
 engineering diagnostics, not current product effects.
 
+The recovered Doctor training profile observed `540/542` admitted sites and
+`255/255` exact Tier-1 plans, but it predates rewriting and contains no
+startup/Actuator/business phase partition. Post-rewrite adapter invocations,
+fallbacks, and allocation avoidance remain `NOT_CAPTURED`. The activation study
+is therefore `PROFILE_DERIVED_NON_CLAIM`.
+
+Historical Doctor "AppCDS" wording is corrected: the requested application
+archives were rejected, so the effective historical policy was base CDS
+fallback.
+
 See the
-[comparator reconstruction closure](product-evidence/comparator-reconstruction/comparator-reconstruction-closure.md)
+[comparator reconstruction closure](product-evidence/comparator-reconstruction/comparator-reconstruction-closure.md),
+[mechanism activation study](product-evidence/comparator-reconstruction/doctor-v1-mechanism-activation-study.md),
+the [command ledger index](product-evidence/comparator-reconstruction/doctor-command-ledger-index.md),
 and [migration validation guide](adoption/16-validate-comparator-migration.md).
 
 ## Historical Protocol-Scoped Evidence

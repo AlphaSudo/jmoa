@@ -1,6 +1,6 @@
 # PetClinic Historical Comparator Closure
 
-- Decision: **PETCLINIC_HISTORICAL_B0_CONTAMINATED**
+- Decision: **HISTORICAL_PETCLINIC_B0_INVALID**
 - Performance run authorized: **False**
 - Historical JMOA entries: **1**
 - Disqualifying artifact differences: **2**

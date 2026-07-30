@@ -807,6 +807,7 @@ function Write-CampaignArmCommandLedger {
     [void]$builder.AppendLine()
     [void]$builder.AppendLine('This is the single chronological ledger for the complete arm: launch, health, workload, runtime capture, logs, and teardown. Raw files remain in the hashed source stage ledgers.')
     $globalSequence = 0
+    $renderedRedactionCount = 0
     foreach ($entry in $orderedRecords) {
         $globalSequence++
         $record = $entry.record
@@ -822,6 +823,9 @@ function Write-CampaignArmCommandLedger {
             $stderrPath = Join-Path $entry.sourceDirectory (([string]$record.rawStderrPath) -replace '/', '\')
             $stdout = if (Test-Path -LiteralPath $stdoutPath -PathType Leaf) { Get-Content -Raw -LiteralPath $stdoutPath } else { '<missing raw stdout>' }
             $stderr = if (Test-Path -LiteralPath $stderrPath -PathType Leaf) { Get-Content -Raw -LiteralPath $stderrPath } else { '<missing raw stderr>' }
+            $redactedStdout = Protect-CampaignAuditText -Value $stdout
+            $redactedStderr = Protect-CampaignAuditText -Value $stderr
+            $renderedRedactionCount += [int]$redactedStdout.redactionCount + [int]$redactedStderr.redactionCount
             [void]$builder.AppendLine("- Command: ``$($record.commandLine)``")
             [void]$builder.AppendLine("- Exit code: $($record.exitCode) (nonzero allowed: $($record.failureAllowed))")
             [void]$builder.AppendLine("- stdout SHA-256: $($record.rawStdoutSha256)")
@@ -829,14 +833,16 @@ function Write-CampaignArmCommandLedger {
             [void]$builder.AppendLine()
             [void]$builder.AppendLine('stdout:')
             [void]$builder.AppendLine()
-            [void]$builder.AppendLine((ConvertTo-CampaignAuditIndented -Value $stdout))
+            [void]$builder.AppendLine((ConvertTo-CampaignAuditIndented -Value $redactedStdout.text))
             [void]$builder.AppendLine()
             [void]$builder.AppendLine('stderr:')
             [void]$builder.AppendLine()
-            [void]$builder.AppendLine((ConvertTo-CampaignAuditIndented -Value $stderr))
+            [void]$builder.AppendLine((ConvertTo-CampaignAuditIndented -Value $redactedStderr.text))
         } elseif ($kind -eq 'HTTP') {
             $bodyPath = Join-Path $entry.sourceDirectory (([string]$record.rawBodyPath) -replace '/', '\')
             $responseBody = if (Test-Path -LiteralPath $bodyPath -PathType Leaf) { Get-Content -Raw -LiteralPath $bodyPath } else { '<missing raw response body>' }
+            $redactedResponseBody = Protect-CampaignAuditText -Value $responseBody
+            $renderedRedactionCount += [int]$redactedResponseBody.redactionCount
             [void]$builder.AppendLine("- Request: ``$($record.method) $($record.uri)``")
             if (-not [string]::IsNullOrEmpty([string]$record.requestBody)) { [void]$builder.AppendLine("- Request body: ``$($record.requestBody)``") }
             [void]$builder.AppendLine("- HTTP status: $($record.status)")
@@ -845,7 +851,7 @@ function Write-CampaignArmCommandLedger {
             [void]$builder.AppendLine()
             [void]$builder.AppendLine('response body:')
             [void]$builder.AppendLine()
-            [void]$builder.AppendLine((ConvertTo-CampaignAuditIndented -Value $responseBody))
+            [void]$builder.AppendLine((ConvertTo-CampaignAuditIndented -Value $redactedResponseBody.text))
         }
     }
     [IO.File]::WriteAllText($markdownPath, $builder.ToString(), [Text.UTF8Encoding]::new($false))
@@ -858,6 +864,7 @@ function Write-CampaignArmCommandLedger {
         commandCount = $orderedRecords.Count
         markdownPath = [IO.Path]::GetFileName($markdownPath)
         markdownSha256 = (Get-JmoaSha256 -Path $markdownPath).ToUpperInvariant()
+        renderedRedactionCount = $renderedRedactionCount
         sourceLedgers = $sources.ToArray()
         passed = ($reasons.Count -eq 0 -and $sources.Count -eq 4)
         reasons = $reasons.ToArray()

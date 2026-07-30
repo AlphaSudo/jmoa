@@ -1,0 +1,39 @@
+{
+  "baseline": {
+    "containerStartUtc": "2026-07-30T08:19:23.7174058Z",
+    "firstHealthUtc": "2026-07-30T08:19:54.2824058Z",
+    "workloadStartUtc": "2026-07-30T08:19:59.5716251Z",
+    "workloadEndUtc": "2026-07-30T08:20:04.8495159Z",
+    "claimCaptureUtc": "2026-07-30T08:20:33.6418325Z",
+    "startupToHealthSeconds": 30.565,
+    "healthToWorkloadSeconds": 5.289,
+    "workloadSeconds": 5.278,
+    "postWorkloadSettleSeconds": 28.792,
+    "jvmAgeAtCaptureSeconds": 69.924,
+    "gcCount": null,
+    "safepointCount": null,
+    "compilationActivity": "NMT_COMPILER_AND_CODE_COMMITTED_ONLY"
+  },
+  "candidate": {
+    "containerStartUtc": "2026-07-30T08:17:46.9363125Z",
+    "firstHealthUtc": "2026-07-30T08:18:29.4013125Z",
+    "workloadStartUtc": "2026-07-30T08:18:35.5880180Z",
+    "workloadEndUtc": "2026-07-30T08:18:42.1026918Z",
+    "claimCaptureUtc": "2026-07-30T08:19:13.1560924Z",
+    "startupToHealthSeconds": 42.465,
+    "healthToWorkloadSeconds": 6.187,
+    "workloadSeconds": 6.515,
+    "postWorkloadSettleSeconds": 31.053,
+    "jvmAgeAtCaptureSeconds": 86.22,
+    "gcCount": null,
+    "safepointCount": null,
+    "compilationActivity": "NMT_COMPILER_AND_CODE_COMMITTED_ONLY"
+  },
+  "jvmAgeDeltaSeconds": 16.296,
+  "classification": "TIMING_CONFOUNDED",
+  "unavailable": [
+    "gcCount",
+    "safepointCount",
+    "exactCompilationCount"
+  ]
+}

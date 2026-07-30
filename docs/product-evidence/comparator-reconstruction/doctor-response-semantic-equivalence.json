@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "jmoa-json-response-equivalence-v1",
+  "classification": "SEMANTICALLY_EQUIVALENT_VOLATILE_FIELDS",
+  "memoryComparisonAllowed": true,
+  "baseline": {
+    "responseCount": 20,
+    "distinctRawHashes": 1,
+    "recordCount": 6,
+    "exactCanonicalSha256": "0FE7DB39D0CC38E7EA7AA1D4B3DEFBCC37764F4720DF006D1E4FD8AF5D9C7F72",
+    "semanticCanonicalSha256": "83E3F3D1E06C0A7592BCB06293938B28D669AD412441228C49DACF46FDBE6AD3"
+  },
+  "candidate": {
+    "responseCount": 20,
+    "distinctRawHashes": 1,
+    "recordCount": 6,
+    "exactCanonicalSha256": "202C17EFF83AA7FF166780F5185174BBC2A8E545E2C5BBB1A784F9F33C4CB787",
+    "semanticCanonicalSha256": "83E3F3D1E06C0A7592BCB06293938B28D669AD412441228C49DACF46FDBE6AD3"
+  },
+  "comparison": {
+    "schemaEqual": true,
+    "recordCountEqual": true,
+    "rawCanonicalEqual": false,
+    "semanticCanonicalEqual": true,
+    "fieldNames": [
+      "bio",
+      "consultationFee",
+      "createdAt",
+      "dateOfBirth",
+      "email",
+      "experienceYears",
+      "firstName",
+      "gender",
+      "hireDate",
+      "id",
+      "lastName",
+      "licenseNumber",
+      "mobile",
+      "qualification",
+      "specialization",
+      "status",
+      "updatedAt",
+      "userId"
+    ],
+    "volatileFieldsIgnored": [
+      "createdAt",
+      "updatedAt"
+    ]
+  }
+}
