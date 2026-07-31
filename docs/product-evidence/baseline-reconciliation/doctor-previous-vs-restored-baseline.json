@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "jmoa-doctor-previous-vs-restored-baseline-v1",
+  "generatedAt": "2026-07-31",
+  "previousBaseline": {
+    "runtime": "CURRENT_FULL_JDK_RECONSTRUCTION",
+    "pssKb": 312088,
+    "anonymousPssKb": 302864,
+    "privateDirtyKb": 302872,
+    "filePssKb": 9224,
+    "memoryCurrentBytes": 314286080,
+    "startupMillis": 45493,
+    "verdict": "WRONG_RUNTIME_TUPLE_FOR_HISTORICAL_COMPARISON"
+  },
+  "restoredBaseline": {
+    "runtime": "ARCHIVE_COMPATIBLE_CUSTOM_JRE_OPENJDK_26_PLUS_35",
+    "pssKb": 329020,
+    "anonymousPssKb": 292312,
+    "privateDirtyKb": 292312,
+    "filePssKb": 36560,
+    "memoryCurrentBytes": 302432256,
+    "startupMillis": 41737,
+    "fileNormalizedPssKb": 339036,
+    "verdict": "TARGET_MEMORY_BASELINE_REPRODUCED"
+  },
+  "restoredMinusPrevious": {
+    "pssKb": 16932,
+    "anonymousPssKb": -10552,
+    "privateDirtyKb": -10560,
+    "filePssKb": 27336,
+    "memoryCurrentBytes": -11853824,
+    "startupMillis": -3756
+  },
+  "previousWorkThatRemainsValid": [
+    "exact application artifact identification",
+    "historical workload reconstruction",
+    "JVM flag reconstruction",
+    "command and response ledger infrastructure",
+    "discovery of runtime non-comparability"
+  ],
+  "previousWorkThatIsSuperseded": [
+    "full-JDK baseline as historical comparator",
+    "previous current-runtime V1 cost magnitude",
+    "cross-environment memory.current comparison"
+  ],
+  "nextBoundary": "COMPLETED_SEE_DOCTOR_RESTORED_B0_V2_BALANCED_SCREEN",
+  "subsequentV2Decision": "BALANCED_SCREEN_NO_STABLE_V2_WIN"
+}

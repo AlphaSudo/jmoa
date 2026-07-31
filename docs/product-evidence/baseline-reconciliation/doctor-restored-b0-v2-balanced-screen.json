@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "jmoa-doctor-restored-b0-v2-balanced-screen-public-v1",
+  "generatedAt": "2026-07-31",
+  "decision": "BALANCED_SCREEN_NO_STABLE_V2_WIN",
+  "claimable": false,
+  "runtime": {
+    "java": "Temurin OpenJDK 26+35 custom jlink runtime",
+    "launchMode": "SPRING_BOOT_FAT_JAR",
+    "runtimePolicy": "PER_CANDIDATE_APP_CDS",
+    "compactObjectHeaders": true,
+    "javaagentPresent": false
+  },
+  "artifacts": {
+    "baselineSha256": "0B44E107A4699D090D22CF3C6FAFF52630AA803345DF7775510F22FA3FD10F7B",
+    "candidateSha256": "1818B210028987085C782DF9E5CD8CFBB159B809966D80D0AA0B458C39569B85",
+    "baselineArchiveSha256": "3EC503C87E232AB32B8638FED8696058F85F9DC3D9FEF63CD09BBD9DC7F8770C",
+    "candidateArchiveSha256": "02955A369BB9F675706E4715E28437220A95637294FC23D07D0A381AD216F6D2"
+  },
+  "pairs": [
+    {
+      "pair": 1,
+      "order": "BASELINE_FIRST",
+      "pssDeltaKb": 7560,
+      "privateDirtyDeltaKb": 7628,
+      "memoryCurrentDeltaBytes": 7856128,
+      "valid": true
+    },
+    {
+      "pair": 2,
+      "order": "CANDIDATE_FIRST",
+      "pssDeltaKb": -2744,
+      "privateDirtyDeltaKb": -2708,
+      "memoryCurrentDeltaBytes": -2441216,
+      "valid": true
+    },
+    {
+      "pair": 3,
+      "order": "CANDIDATE_FIRST",
+      "pssDeltaKb": 9712,
+      "privateDirtyDeltaKb": 9804,
+      "memoryCurrentDeltaBytes": 10440704,
+      "valid": true,
+      "provenance": "single allowed replacement for rejected pair 3"
+    },
+    {
+      "pair": 4,
+      "order": "BASELINE_FIRST",
+      "pssDeltaKb": -1700,
+      "privateDirtyDeltaKb": -1380,
+      "memoryCurrentDeltaBytes": -1683456,
+      "valid": true
+    }
+  ],
+  "summary": {
+    "validPairs": 4,
+    "baselineFirstPairs": 2,
+    "candidateFirstPairs": 2,
+    "pssWins": 2,
+    "medianPssDeltaKb": 2930,
+    "medianPrivateDirtyDeltaKb": 3124,
+    "medianMemoryCurrentDeltaBytes": 3086336,
+    "meanPssDeltaKb": 3207,
+    "medianLoadedClassDelta": -119.5,
+    "medianAnonymousRwOutsideHeapPssDeltaKb": 3796,
+    "medianSecondPeriodPssDeltaKb": 522
+  },
+  "excludedEvidence": {
+    "originalPair3": {
+      "reason": "B0 arm missed the frozen one-megabyte baseline envelope",
+      "counted": false,
+      "replacementAttempts": 1
+    }
+  },
+  "artifactOnlyBaseCdsDiagnostic": {
+    "pairs": 1,
+    "pssDeltaKb": 6176,
+    "privateDirtyDeltaKb": 6448,
+    "memoryCurrentDeltaBytes": 6090752,
+    "claimable": false
+  },
+  "historicalBoundary": {
+    "correctedHistoricalPairedDeltaMedianPssKb": -2036,
+    "correctedHistoricalIndependentMedianDeltaPssKb": -2728,
+    "oldInvalidMedianDeltaPssKb": -6048,
+    "currentResultTransfersHistoricalClaim": false,
+    "currentResultInvalidatesHistoricalClaim": false
+  },
+  "nextAction": "Do not promote the current reconstructed Doctor V2 runtime. Investigate anonymous writable residency before a separately frozen confirmation."
+}

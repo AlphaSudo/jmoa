@@ -3,7 +3,10 @@ param(
     [Parameter(Mandatory)][string]$CandidateDirectory,
     [Parameter(Mandatory)][string]$OutputDirectory,
     [string]$Comparison = 'V1_SECOND_MINUS_B0_FIRST',
-    [string]$OutputBaseName = 'doctor-reconstructed-b0-v1'
+    [string]$OutputBaseName = 'doctor-reconstructed-b0-v1',
+    [string]$BaselineLabel = 'B0',
+    [string]$CandidateLabel = 'V1',
+    [string]$ClaimBoundary = 'This is one B0-first/V1-second diagnostic in a reconstructed support environment. It does not establish a performance claim.'
 )
 
 Set-StrictMode -Version Latest
@@ -361,10 +364,11 @@ $report = [ordered]@{
         unavailable = @('gcCount','safepointCount','exactCompilationCount')
     }
     boundaries = @(
-        'The B0-first/V1-second order remains confounded until the one reversed diagnostic is evaluated.',
+        "$BaselineLabel-first/$CandidateLabel-second is one order and remains non-claim evidence until confirmation requirements are met.",
         'GC count, safepoint count, and exact compilation count were not captured and are not inferred.',
         'The class histogram is a post-claim perturbing diagnostic; it supports attribution but not claim medians.',
-        'Exact historical application artifacts ran in a reconstructed support environment on the current JDK.'
+        'Exact frozen application artifacts ran in the disclosed restored runtime and reconstructed support environment.',
+        $ClaimBoundary
     )
 }
 
@@ -375,7 +379,7 @@ $rows = foreach ($name in $mappingCategories.Keys) {
     "| $name | $($value.pssKb.baseline) | $($value.pssKb.candidate) | $($value.pssKb.delta) | $($value.privateDirtyKb.delta) | $($value.anonymousKb.delta) |"
 }
 $markdown = @"
-# Doctor Reconstructed B0/V1 Attribution
+# Doctor Reconstructed $BaselineLabel/$CandidateLabel Attribution
 
 - Status: **DIAGNOSTIC_EXISTING_PAIR**
 - Comparison: **$Comparison**
@@ -387,7 +391,7 @@ $markdown = @"
 - Reconciliation: **$classification**
 - Primary mapping movement: **$primary**
 
-| Mapping category | B0 PSS KB | V1 PSS KB | Delta PSS KB | Delta Private Dirty KB | Delta Anonymous KB |
+| Mapping category | $BaselineLabel PSS KB | $CandidateLabel PSS KB | Delta PSS KB | Delta Private Dirty KB | Delta Anonymous KB |
 |---|---:|---:|---:|---:|---:|
 $($rows -join "`n")
 
@@ -405,9 +409,9 @@ $($rows -join "`n")
 
 ## Timing
 
-- B0 JVM age at capture: **$($baseline.timing.jvmAgeAtCaptureSeconds) s**
-- V1 JVM age at capture: **$($candidate.timing.jvmAgeAtCaptureSeconds) s**
-- V1 - B0 age: **$($report.timing.jvmAgeDeltaSeconds) s**
+- $BaselineLabel JVM age at capture: **$($baseline.timing.jvmAgeAtCaptureSeconds) s**
+- $CandidateLabel JVM age at capture: **$($candidate.timing.jvmAgeAtCaptureSeconds) s**
+- $CandidateLabel - $BaselineLabel age: **$($report.timing.jvmAgeDeltaSeconds) s**
 - Classification: **$timingClass**
 
 GC count, safepoint count, and exact compilation count were not captured. NMT
@@ -416,24 +420,21 @@ event counters.
 
 ## Claim Boundary
 
-This is one B0-first/V1-second diagnostic in a reconstructed support environment.
-It does not prove a V1 regression. The result remains
-`DOCTOR_HISTORICAL_V1_DIRECTION_NOT_REPRODUCED_IN_SINGLE_ORDER` until the one
-reversed diagnostic is classified.
+$ClaimBoundary
 "@
 Write-JmoaText $markdown (Join-Path $OutputDirectory "$OutputBaseName-attribution.md")
 Write-JmoaJson $report.timing (Join-Path $OutputDirectory "$OutputBaseName-timing.json")
 Write-JmoaText @"
 # Doctor Reconstructed Pair Timing
 
-- B0 startup to health: **$($baseline.timing.startupToHealthSeconds) s**
-- V1 startup to health: **$($candidate.timing.startupToHealthSeconds) s**
-- B0 workload: **$($baseline.timing.workloadSeconds) s**
-- V1 workload: **$($candidate.timing.workloadSeconds) s**
-- B0 settle: **$($baseline.timing.postWorkloadSettleSeconds) s**
-- V1 settle: **$($candidate.timing.postWorkloadSettleSeconds) s**
-- B0 JVM age: **$($baseline.timing.jvmAgeAtCaptureSeconds) s**
-- V1 JVM age: **$($candidate.timing.jvmAgeAtCaptureSeconds) s**
+- $BaselineLabel startup to health: **$($baseline.timing.startupToHealthSeconds) s**
+- $CandidateLabel startup to health: **$($candidate.timing.startupToHealthSeconds) s**
+- $BaselineLabel workload: **$($baseline.timing.workloadSeconds) s**
+- $CandidateLabel workload: **$($candidate.timing.workloadSeconds) s**
+- $BaselineLabel settle: **$($baseline.timing.postWorkloadSettleSeconds) s**
+- $CandidateLabel settle: **$($candidate.timing.postWorkloadSettleSeconds) s**
+- $BaselineLabel JVM age: **$($baseline.timing.jvmAgeAtCaptureSeconds) s**
+- $CandidateLabel JVM age: **$($candidate.timing.jvmAgeAtCaptureSeconds) s**
 - Age delta: **$($report.timing.jvmAgeDeltaSeconds) s**
 - Classification: **$timingClass**
 
