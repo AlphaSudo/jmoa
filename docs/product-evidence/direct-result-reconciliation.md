@@ -32,8 +32,28 @@ claim explicitly carries a +19.20% median lifecycle-CPU tradeoff and a +106,496
 byte median cgroup-file tradeoff; both passed prospectively frozen limits.
 
 This result does not turn R41F into a clean B0 comparator, does not isolate
-metadata compaction from packaging, and does not promote R41F. Exact V2E remains
-accepted pending the separate T7R decision. See the [R4.87 result](petclinic-r41f-v2e-r487-result.md).
+metadata compaction from packaging, and does not promote R41F. See the
+[R4.87 result](petclinic-r41f-v2e-r487-result.md).
+
+## PetClinic Direct R41F Confirmation
+
+T7R subsequently made the missing direct comparison using exact R41F and exact
+strict no-JMOA B0 in symmetric fat-JAR images. It completed four qualification
+sessions, eight passing same-artifact controls, and 24 fresh held-out sessions
+in 12 alternating paired blocks. All 36 sessions were valid, and no replacement
+was used.
+
+The direct result is not claimable: 8/12 blocks favored R41F, median PSS was
+-644.5 KiB, exact `p=0.3876953125`, and the bootstrap 95% interval was
+[-1,336.5, +231] KiB. `memory.current` improved in 12/12 blocks by -2,840,576
+bytes median, but missed the frozen 4 MiB materiality gate. R41F also reduced
+cgroup file by -2,027,520 bytes, anonymous-RW PSS by -4,088 KiB, and NMT
+committed by -2,791.5 KiB. A consistent +2,912 KiB median native-process-heap
+PSS offset cancelled most of those reductions in total PSS.
+
+T7R therefore appended no claim row and did not promote R41F. Exact V2E remains
+accepted. This is a valid negative direct result, not a control or protocol
+failure. See the [T7R result](petclinic-r41f-b0-t7r-result.md).
 
 ## PetClinic Baseline Correction
 
@@ -49,8 +69,10 @@ the current PetClinic buyer-comparison authority, and its terminal result is
 
 ## Claim Rule
 
-Never arithmetically combine `B0 -> V1`, `V1 -> V2`, or `V2E -> R41F` medians.
+Never arithmetically combine `B0 -> V1`, `V1 -> V2`, `V2E -> R41F`, or direct
+`B0 -> R41F` medians.
 Never use a screen as a confirmed win. Never turn a failed same-artifact noise
 gate into a product delta. Cite the direct matrix for clean buyer-comparison
-claims, the evolution matrix for V1-to-V2 engineering progress, and R4.87 only
-for the exact PetClinic R41F-versus-V2E candidate claim.
+claims, the evolution matrix for V1-to-V2 engineering progress, R4.87 only for
+the exact PetClinic R41F-versus-V2E candidate claim, and T7R for the exact
+PetClinic R41F-versus-strict-B0 direct nonclaim.

@@ -10,7 +10,8 @@ Evidence-driven, build-time JVM footprint optimization for Spring Boot applicati
 [Architecture](docs/architecture/system-overview.md) |
 [Methodology](docs/methodology/measurement-protocol.md) |
 [Reproduction](docs/reproduction/petclinic-quickstart.md) |
-[PetClinic RAM Result](docs/product-evidence/petclinic-r41f-v2e-r487-result.md) |
+[PetClinic Direct Result](docs/product-evidence/petclinic-r41f-b0-t7r-result.md) |
+[R4.87 Candidate Result](docs/product-evidence/petclinic-r41f-v2e-r487-result.md) |
 [Direct Result](docs/product-evidence/b0-v1-v2-three-service-matrix.md) |
 [Forensic Matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md) |
 [V1 to V2](docs/results/v2-three-service-matrix.md) |
@@ -21,7 +22,41 @@ classfile metadata, materializes optimized bytecode into the real deployment
 shape, proves which artifacts the JVM loaded, and validates memory effects with
 paired PSS, Private_Dirty, cgroup, NMT, and class-level evidence.
 
-## Latest PetClinic Candidate Result
+## Latest Direct PetClinic Result
+
+T7R has now completed the missing exact JMOA-versus-no-JMOA comparison for the
+PetClinic customers service. It compared the strict clean B0 fat JAR with the
+complete R41F fat-JAR candidate using symmetric images, four qualification
+sessions, eight passing same-artifact controls, and 24 fresh held-out sessions
+in 12 alternating paired blocks. All 36 sessions were valid and no replacement
+was used.
+
+The direct result is **not claimable** under the prospectively frozen policy:
+
+| Metric, R41F minus clean B0 | Result | Interpretation |
+| --- | ---: | --- |
+| Process PSS | **-644.5 KiB** median | 8/12 favorable; 95% bootstrap CI [-1,336.5, +231] KiB |
+| Exact sign test | `p=0.3876953125` | Does not establish a consistent PSS reduction |
+| Private Dirty | -518 KiB median | 95% interval crosses zero |
+| `memory.current` | -2,840,576 bytes median | 12/12 favorable, but below the frozen 4 MiB materiality requirement |
+| cgroup file memory | -2,027,520 bytes median | 12/12 favorable and tightly repeatable |
+| Anonymous RW PSS | -4,088 KiB median | 12/12 favorable; 8 KiB short of the frozen -4,096 KiB gate |
+| NMT total committed | -2,791.5 KiB median | 12/12 favorable |
+| Native process `[heap]` PSS | **+2,912 KiB** median | 0/12 favorable; cancels much of the gross reduction |
+| Lifecycle CPU | +1.0872% median | Product-cost gate passed |
+
+This is a successful measurement with a negative claim decision, not a harness
+failure. The stabilized R4.8 lifecycle kept same-artifact PSS spreads between
+206 and 2,293 KiB, far below the 10 MiB control ceiling. The registry received
+no T7R row, R41F was not promoted, and accepted PetClinic remains exact V2E.
+The result applies only to `spring-petclinic-customers-service` under the
+recorded Temurin 17/SerialGC/no-CDS/fat-JAR tuple.
+
+Read the [public direct result](docs/product-evidence/petclinic-r41f-b0-t7r-result.md),
+the [machine-readable result](docs/product-evidence/petclinic-r41f-b0-t7r-result.json),
+or the [full engineering ledger](docs/petclinic-ledger/83-t7r-direct-b0-r41f-terminal-result.md).
+
+## R4.87 Candidate-Versus-V2E Result
 
 R4.87 produced a **claimable PetClinic RAM win with bounded CPU and file
 tradeoffs** for the exact R41F candidate versus accepted exact V2E. This was a
@@ -52,7 +87,8 @@ fat-JAR launch shape, while V2E is the accepted exploded-Boot deployment. The
 result therefore measures that complete candidate deployment; it does not
 attribute the entire delta to metadata removal alone, does not replace the
 clean B0-to-V2 matrix below, and does not transfer to Doctor or Patient.
-Accepted PetClinic remains exact V2E until a separate T7R promotion campaign.
+Accepted PetClinic remains exact V2E because the now-completed direct T7R
+campaign did not establish a claimable R41F-versus-clean-B0 RAM win.
 
 Read the [human-readable result and claim boundary](docs/product-evidence/petclinic-r41f-v2e-r487-result.md)
 or the [machine-readable result](docs/product-evidence/petclinic-r41f-v2e-r487-result.json).
