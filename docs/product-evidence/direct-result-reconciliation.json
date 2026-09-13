@@ -1,7 +1,7 @@
 {
-  "metadataVersion": "direct-result-reconciliation-v2",
+  "metadataVersion": "direct-result-reconciliation-v3",
   "buyerComparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
-  "buyerResult": "DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED",
+  "buyerResult": "DIRECT_PRODUCT_MATRIX_COMPLETE_LAUNCH_CRITERION_NOT_PASSED",
   "engineeringComparison": "ACCEPTED_V1_TO_FINAL_V2",
   "matricesMustNotBeAdded": true,
   "petclinicHistoricalBaseline": {
@@ -10,16 +10,32 @@
     "disposition": "Superseded for the clean buyer comparison; retained as historical provenance."
   },
   "currentDirectServices": {
-    "doctor": "CONFIRMED_SUBSTANTIAL_WIN",
-    "petclinic": "ENVIRONMENT_VARIANCE_TOO_HIGH_NO_PRODUCT_PAIR",
-    "patient": "ACCEPTED_ARTIFACT_COMPARISON_OPEN"
+    "doctor": "COMPLETE_PRODUCT_WIN",
+    "petclinic": "DIRECT_NONWIN",
+    "patient": "DIRECT_NONWIN"
   },
-  "petclinicLatestCampaign": {
-    "validBaselineControlArms": 8,
-    "requests": 648,
-    "workloadErrors": 0,
-    "candidateControlsRun": false,
-    "productPairsRun": false,
-    "nextEnvironment": "DEDICATED_LINUX_HOST"
+  "directMatrix": {
+    "validFinalObservationsPerService": 18,
+    "requiredServices": 3,
+    "completeProductWins": 1,
+    "passed": false
+  },
+  "petclinicR487CandidateCampaign": {
+    "comparison": "R41F_MINUS_ACCEPTED_V2E",
+    "decision": "CLAIMABLE_R487_RAM_WIN_WITH_BOUNDED_CPU_AND_FILE_TRADEOFF",
+    "claimable": true,
+    "freshObservations": 32,
+    "heldoutPairedBlocks": 12,
+    "favorablePssBlocks": 12,
+    "medianPssDeltaKiB": -12797.0,
+    "pssBootstrap95LowerKiB": -13299.5,
+    "pssBootstrap95UpperKiB": -12005.0,
+    "medianMemoryCurrentDeltaBytes": -13932544.0,
+    "medianCgroupFileDeltaBytes": 106496.0,
+    "medianLifecycleCpuDeltaPercent": 19.20168551250344,
+    "acceptedDeployment": "V2E",
+    "acceptedDeploymentChanged": false,
+    "promotionRequires": "T7R",
+    "evidence": "petclinic-r41f-v2e-r487-result.json"
   }
 }

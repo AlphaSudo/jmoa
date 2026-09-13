@@ -1,0 +1,189 @@
+{
+  "schemaVersion": "jmoa-public-petclinic-r41f-v2e-r487-result-v1",
+  "generatedAtUtc": "2026-09-12T10:19:11.1747283Z",
+  "service": "spring-petclinic-customers-service",
+  "programId": "T6R4-R487-BOUNDED-CPU-RAM-CONFIRMATION",
+  "protocol": "PETCLINIC_T6R4_R487_BOUNDED_CPU_RAM_CONFIRMATION_V1",
+  "decision": "CLAIMABLE_R487_RAM_WIN_WITH_BOUNDED_CPU_AND_FILE_TRADEOFF",
+  "claimable": true,
+  "comparison": {
+    "direction": "R41F_MINUS_V2E",
+    "baseline": {
+      "id": "V2E",
+      "status": "ACCEPTED",
+      "launchMode": "EXPLODED_BOOT_APP",
+      "artifactKind": "TREE",
+      "artifactSha256": "A8A1A1565E697411CCB639FC47B4A92C95A900CF5D66845039E04DB1885B53A2",
+      "imageId": "7284AB2A319C09F86764862C254779E268BEB5A8052F1EF518A3F43773C0392E"
+    },
+    "candidate": {
+      "id": "R41F",
+      "status": "CLAIMABLE_NOT_PROMOTED",
+      "launchMode": "FAT_BOOT_JAR",
+      "artifactKind": "FILE",
+      "artifactSha256": "415217CE9926ECA2BC0052800DD456291D438A9C63589CBFE5A55238BE71EB9F",
+      "artifactBytes": 89055441,
+      "imageId": "A4FEE6647E3CB6924860BF9FF4CE5A08718D3E6EF8F5FB6BE92788E0BF51F2D8",
+      "changedDependencyJars": 104,
+      "totalDependencyJars": 161,
+      "changedClasses": 21017,
+      "admittedClassfileChange": "REMOVE_LOCAL_VARIABLE_TABLE_AND_LOCAL_VARIABLE_TYPE_TABLE",
+      "logicalTreeRecords": 56295,
+      "logicalTreeSha256": "A84A1D7EB79C0F476999B74081F2ED3457910D2B15916D5E27576EB486F64C25"
+    },
+    "attributionBoundary": "The observed effect belongs to the complete R41F deployment, which combines audited metadata compaction and deterministic fat-JAR packaging. It is not attributed to metadata removal alone."
+  },
+  "runtime": {
+    "javaVendor": "Eclipse Adoptium",
+    "javaVersion": "17.0.19+10",
+    "runtimePolicy": "NO_CDS_LOW_DIRTY",
+    "cdsMode": "OFF",
+    "garbageCollector": "SerialGC",
+    "xmsMiB": 32,
+    "xmxMiB": 256,
+    "threadStackKiB": 256,
+    "reservedCodeCacheMiB": 48,
+    "ciCompilerCount": 2,
+    "nativeMemoryTracking": "summary",
+    "trimNativeHeapIntervalMillis": 5000,
+    "mallocArenaMax": 1,
+    "javaAgentPresent": false,
+    "nativeAgentPresent": false,
+    "swapRequiredDisabled": true
+  },
+  "design": {
+    "contractFrozenAtUtc": "2026-09-12T08:28:31.4195962Z",
+    "freshObservations": 32,
+    "freshControlSessions": 8,
+    "freshHeldoutSessions": 24,
+    "heldoutPairedBlocks": 12,
+    "discoveryObservationsReusedInInference": 0,
+    "bootstrapSamples": 100000,
+    "postObservationModificationPermitted": false
+  },
+  "primaryPss": {
+    "unit": "KiB",
+    "blockDeltas": [
+      -13320.0,
+      -14763.0,
+      -12972.0,
+      -11872.0,
+      -13279.0,
+      -10433.0,
+      -11575.0,
+      -12138.0,
+      -12622.0,
+      -12215.0,
+      -14652.0,
+      -13054.0
+    ],
+    "favorableBlocks": 12,
+    "totalBlocks": 12,
+    "ties": 0,
+    "medianDelta": -12797.0,
+    "exactTwoSidedSignP": 0.00048828125,
+    "bootstrap": {
+      "method": "SEEDED_NONPARAMETRIC_PAIRED_BLOCK_MEDIAN_BOOTSTRAP",
+      "seed": 480048,
+      "samples": 100000,
+      "lower95": -13299.5,
+      "upper95": -12005.0,
+      "oneSidedUpper95": -12138.0
+    },
+    "passed": true
+  },
+  "baselineDebitedPss": {
+    "unit": "KiB",
+    "aResidualOnly": true,
+    "dResidualCreditPermitted": false,
+    "favorableBlocks": 12,
+    "totalBlocks": 12,
+    "medianDelta": -12797.0,
+    "exactTwoSidedSignP": 0.00048828125,
+    "bootstrap": {
+      "method": "SEEDED_NONPARAMETRIC_PAIRED_BLOCK_MEDIAN_BOOTSTRAP",
+      "seed": 480058,
+      "samples": 100000,
+      "lower95": -13127.5,
+      "upper95": -11867.0,
+      "oneSidedUpper95": -11872.0
+    },
+    "passed": true
+  },
+  "memory": {
+    "medianPrivateDirtyDeltaKiB": -12650.0,
+    "medianMemoryCurrentDeltaBytes": -13932544.0,
+    "memoryCurrentBootstrap95LowerBytes": -14340096.0,
+    "memoryCurrentBootstrap95UpperBytes": -13438976.0,
+    "medianCgroupAnonDeltaBytes": -12959744.0,
+    "medianCgroupFileDeltaBytes": 106496.0,
+    "maximumBlockCgroupFileDeltaBytes": 278528.0,
+    "cgroupFileOneSidedUpper95Bytes": 135168.0,
+    "cgroupFileLimitBytes": 1048576,
+    "medianJavaHeapMappingPssDeltaKiB": -13672.0,
+    "medianNativeProcessHeapPssDeltaKiB": 3080.0,
+    "nativeProcessHeapPssLimitKiB": 4096,
+    "combinedJavaAndNativeHeapPssDeltaKiB": -10592.0,
+    "medianAnonymousRwPssDeltaKiB": -17064.0,
+    "medianNmtTotalCommittedDeltaKiB": -27596.0,
+    "medianMetaspaceUsedDeltaKiB": -2120.0,
+    "medianMetaspaceCommittedDeltaKiB": -2109.0,
+    "medianCompressedClassSpaceUsedDeltaKiB": -10.0,
+    "medianCompressedClassSpaceCommittedDeltaKiB": -11.0,
+    "medianLoadedClassesDelta": -19.0
+  },
+  "tradeoffs": {
+    "lifecycleCpu": {
+      "medianDeltaPercent": 19.20168551250344,
+      "medianMaximumPercent": 20.0,
+      "medianDeltaUsec": 5883954.5,
+      "medianDeltaMaximumUsec": 6500000,
+      "bootstrapLower95Percent": 12.406297421197849,
+      "bootstrapUpper95Percent": 20.075671425938793,
+      "bootstrapUpper95MaximumPercent": 25.0,
+      "passed": true
+    },
+    "startup": {
+      "medianDeltaMillis": 2586.5,
+      "medianDeltaPercent": 6.486107042593503,
+      "maximumPercent": 10.0,
+      "passed": true
+    },
+    "latency": {
+      "medianDeltaMillis": 0.0,
+      "medianDeltaPercent": 0.0,
+      "p95DeltaMillis": 1.0,
+      "p95DeltaPercent": 2.8594771241830066,
+      "passed": true
+    }
+  },
+  "validity": {
+    "allSessionsValid": true,
+    "allResidualHardCapsPassed": true,
+    "semanticsPassed": true,
+    "cleanColdTeardownPassed": true,
+    "swapZeroPassed": true,
+    "hostPressurePassed": true,
+    "failedGates": []
+  },
+  "registry": {
+    "rowCountBefore": 16,
+    "rowCountAfter": 17,
+    "r487RowsAfter": 1,
+    "sha256Before": "4F0513279AB7E065F1D8A0D3DC3B337798ABF3CFB94AC777F663B65503EF7819",
+    "sha256After": "7685CB418742A12458B4C76B1D2A3A1839E2A4FFD2E4E4A9AB15CF96EC15FA97"
+  },
+  "rawEvidenceBindings": {
+    "prospectiveContractSha256": "0D65DFEEDD5A0811860372577A2B19EA8BCB0A8A97036BB2F22D19986CCD5DF6",
+    "freshR486AnalysisSha256": "2311BD9FA3448771C016F94DF2A853BEFC46CA40CC81206D04C531151A8FB9D3",
+    "r487AnalysisSha256": "FABAAE7DB1E8D8757C4D17D4102DF27385041A9C15A71802D8F5F42BF51E2C0D",
+    "terminalRecordSha256": "65D200317F96C7E4E8DE175FA2CD003EC22CE78334AFE44D9CD0D6FE914AEC08"
+  },
+  "deploymentDecision": {
+    "acceptedDeployment": "V2E",
+    "acceptedDeploymentChanged": false,
+    "candidatePromotionRequires": "SEPARATELY_FROZEN_T7R",
+    "otherServicesInScope": false
+  },
+  "claimBoundary": "Claimable only for exact R41F versus exact accepted V2E under the recorded PetClinic R4.87 runtime and workload. This is not a clean B0 comparison, does not isolate metadata compaction from packaging, does not transfer to other services, and does not itself promote R41F."
+}
