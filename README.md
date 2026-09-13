@@ -10,6 +10,7 @@ Evidence-driven, build-time JVM footprint optimization for Spring Boot applicati
 [Architecture](docs/architecture/system-overview.md) |
 [Methodology](docs/methodology/measurement-protocol.md) |
 [Reproduction](docs/reproduction/petclinic-quickstart.md) |
+[PetClinic RAM Result](docs/product-evidence/petclinic-r41f-v2e-r487-result.md) |
 [Direct Result](docs/product-evidence/b0-v1-v2-three-service-matrix.md) |
 [Forensic Matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md) |
 [V1 to V2](docs/results/v2-three-service-matrix.md) |
@@ -19,6 +20,42 @@ JMOA rewrites admitted lambda and adapter call sites, reduces selected dependenc
 classfile metadata, materializes optimized bytecode into the real deployment
 shape, proves which artifacts the JVM loaded, and validates memory effects with
 paired PSS, Private_Dirty, cgroup, NMT, and class-level evidence.
+
+## Latest PetClinic Candidate Result
+
+R4.87 produced a **claimable PetClinic RAM win with bounded CPU and file
+tradeoffs** for the exact R41F candidate versus accepted exact V2E. This was a
+fresh, prospectively frozen campaign: eight same-artifact control sessions and
+24 held-out sessions arranged as 12 paired blocks. All 12 blocks favored R41F.
+
+| Metric, R41F minus V2E | Result | Interpretation |
+| --- | ---: | --- |
+| Process PSS | **-12,797 KiB** median | About 12.5 MiB less; 95% bootstrap CI [-13,299.5, -12,005] KiB |
+| Private Dirty | **-12,650 KiB** median | Corroborates the process-memory reduction |
+| `memory.current` | **-13,932,544 bytes** median | Corroborates the target-cgroup RAM reduction |
+| cgroup anonymous memory | **-12,959,744 bytes** median | The reduction is predominantly anonymous memory |
+| cgroup file memory | +106,496 bytes median | Small adverse tradeoff; worst block +278,528 bytes, below the frozen 1 MiB cap |
+| Lifecycle CPU | +19.20% median | Explicit adverse tradeoff; passed the prospectively frozen 20% median cap |
+| Startup | +2,586.5 ms median | Passed the frozen 10% relative gate |
+| Request latency | 0 ms median; +1 ms p95 | Passed both frozen latency gates |
+
+The paired sign test was exact `p=0.00048828125`; the conservative
+baseline-debited analysis retained the same -12,797 KiB median and a fully
+negative 95% bootstrap interval. All semantic, cold-start, teardown, swap,
+memory-pressure, residual-reclaim, component-compensation, startup, latency,
+file, and CPU predicates passed. The registry therefore contains one claimable
+R4.87 row.
+
+This is deliberately narrower than a product-release claim. R41F combines
+audited dependency `LocalVariableTable`/`LocalVariableTypeTable` removal with a
+fat-JAR launch shape, while V2E is the accepted exploded-Boot deployment. The
+result therefore measures that complete candidate deployment; it does not
+attribute the entire delta to metadata removal alone, does not replace the
+clean B0-to-V2 matrix below, and does not transfer to Doctor or Patient.
+Accepted PetClinic remains exact V2E until a separate T7R promotion campaign.
+
+Read the [human-readable result and claim boundary](docs/product-evidence/petclinic-r41f-v2e-r487-result.md)
+or the [machine-readable result](docs/product-evidence/petclinic-r41f-v2e-r487-result.json).
 
 ## Direct B0 To V2 Product Matrix
 
