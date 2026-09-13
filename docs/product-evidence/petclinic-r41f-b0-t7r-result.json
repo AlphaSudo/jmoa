@@ -1,0 +1,616 @@
+{
+  "schemaVersion": "jmoa-public-petclinic-r41f-b0-t7r-result-v1",
+  "generatedAtUtc": "2026-09-13T15:49:15.5668214Z",
+  "service": "spring-petclinic-customers-service",
+  "programId": "T7R-DIRECT-B0-R41F-PRODUCT-CONFIRMATION",
+  "protocol": "PETCLINIC_T7R_DIRECT_B0_R41F_CONFIRMATION_V1",
+  "comparison": {
+    "direction": "R41F_MINUS_B0",
+    "baseline": {
+      "id": "B0",
+      "meaning": "strict clean PetClinic with no JMOA",
+      "artifactSha256": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+      "imageId": "EA33EE1387AC4E4DC6C16DF8606EF5342499809892EE0A6C9291891B35BA6268",
+      "packaging": "FAT_BOOT_JAR"
+    },
+    "candidate": {
+      "id": "R41F",
+      "meaning": "complete JMOA candidate with metadata compaction and deterministic fat-JAR packaging",
+      "artifactSha256": "415217CE9926ECA2BC0052800DD456291D438A9C63589CBFE5A55238BE71EB9F",
+      "imageId": "7CC8F1766B9AC45983DFD634846060A6C62209259CCB40596972A3168A5CABEB",
+      "packaging": "FAT_BOOT_JAR"
+    },
+    "attributionBoundary": "Complete R41F deployment; not metadata compaction alone."
+  },
+  "design": {
+    "qualificationSessions": 4,
+    "controlSessions": 8,
+    "heldoutSessions": 24,
+    "pairedBlocks": 12,
+    "predecessorObservationReuse": 0,
+    "bootstrapSeed": 700071,
+    "bootstrapSamples": 100000
+  },
+  "decision": {
+    "terminal": "T7R_DIRECT_MEMORY_NOT_CLAIMABLE",
+    "directRamClaimable": false,
+    "promotionAuthorized": false,
+    "acceptedDeploymentAfter": "V2E"
+  },
+  "primaryPss": {
+    "unit": "KiB",
+    "blockDeltas": [
+      194.0,
+      -1242.0,
+      268.0,
+      400.0,
+      -347.0,
+      -1649.0,
+      1487.0,
+      -898.0,
+      -1431.0,
+      -869.0,
+      -2523.0,
+      -420.0
+    ],
+    "favorableBlocks": 8,
+    "ties": 0,
+    "medianDelta": -644.5,
+    "exactTwoSidedSignP": 0.3876953125,
+    "bootstrap": {
+      "method": "SEEDED_NONPARAMETRIC_PAIRED_BLOCK_MEDIAN_BOOTSTRAP",
+      "seed": 700071,
+      "samples": 100000,
+      "lower95": -1336.5,
+      "upper95": 231.0,
+      "oneSidedUpper95": 194.0
+    }
+  },
+  "baselineDebitedPss": {
+    "unit": "KiB",
+    "medianDelta": -644.5,
+    "favorableBlocks": 7,
+    "exactTwoSidedSignP": 0.7744140625,
+    "bootstrap": {
+      "method": "SEEDED_NONPARAMETRIC_PAIRED_BLOCK_MEDIAN_BOOTSTRAP",
+      "seed": 700081,
+      "samples": 100000,
+      "lower95": -1164.5,
+      "upper95": 560.0,
+      "oneSidedUpper95": 268.0
+    },
+    "candidateResidualCreditPermitted": false
+  },
+  "memory": {
+    "privateDirtyMedianDeltaKiB": -518.0,
+    "memoryCurrentMedianDeltaBytes": -2840576.0,
+    "cgroupAnonMedianDeltaBytes": -528384.0,
+    "cgroupFileMedianDeltaBytes": -2027520.0,
+    "cgroupFileMaximumBlockDeltaBytes": -1982464.0,
+    "cgroupKernelMedianDeltaBytes": -14336.0,
+    "javaHeapMappingPssMedianDeltaKiB": -570.0,
+    "nativeProcessHeapPssMedianDeltaKiB": 2912.0,
+    "combinedJavaNativeHeapPssMedianDeltaKiB": 2298.0,
+    "anonymousRwPssMedianDeltaKiB": -4088.0,
+    "nmtTotalCommittedMedianDeltaKiB": -2791.5,
+    "metaspaceUsedMedianDeltaKiB": -3169.0,
+    "metaspaceCommittedMedianDeltaKiB": -3174.5,
+    "compressedClassSpaceUsedMedianDeltaKiB": -93.0,
+    "compressedClassSpaceCommittedMedianDeltaKiB": -103.0,
+    "loadedClassesMedianDelta": -156.0
+  },
+  "tradeoffs": {
+    "lifecycleCpuPercent": {
+      "values": [
+        0.45696266982708905,
+        -4.779842835264482,
+        1.7175209600660712,
+        0.16431205430627047,
+        9.379747007340198,
+        5.353359142109096,
+        -3.0950139559155034,
+        -1.638388128473225,
+        2.670416931536455,
+        5.332455324485834,
+        -1.7843849166325547,
+        12.478118801649615
+      ],
+      "unit": "percent",
+      "favorable": 4,
+      "ties": 0,
+      "median": 1.0872418149465801,
+      "bootstrap": {
+        "method": "SEEDED_NONPARAMETRIC_PAIRED_BLOCK_MEDIAN_BOOTSTRAP",
+        "seed": 700091,
+        "samples": 100000,
+        "lower95": -1.71138652255289,
+        "upper95": 5.342907233297465,
+        "oneSidedUpper95": 5.332455324485834
+      }
+    },
+    "lifecycleCpuUsec": {
+      "values": [
+        229835.0,
+        -2502207.0,
+        872266.0,
+        83130.0,
+        4434354.0,
+        2540930.0,
+        -1665199.0,
+        -843013.0,
+        1371866.0,
+        2532911.0,
+        -900334.0,
+        6054379.0
+      ],
+      "unit": "usec",
+      "favorable": 4,
+      "ties": 0,
+      "median": 551050.5,
+      "bootstrap": {
+        "method": "SEEDED_NONPARAMETRIC_PAIRED_BLOCK_MEDIAN_BOOTSTRAP",
+        "seed": 700092,
+        "samples": 100000,
+        "lower95": -871673.5,
+        "upper95": 2536920.5,
+        "oneSidedUpper95": 2532911.0
+      }
+    },
+    "startupPercent": {
+      "values": [
+        3.2784498932522483,
+        2.020462834457606,
+        -0.5923145957412091,
+        -3.2888136443441183,
+        -0.3122124359142895,
+        1.96895992587445,
+        -6.020684367812495,
+        0.9488692232055064,
+        0.6453073700894373,
+        -3.516683157877662,
+        4.104118787997327,
+        5.539667586299711
+      ],
+      "unit": "percent",
+      "favorable": 5,
+      "ties": 0,
+      "median": 0.7970882966474718,
+      "bootstrap": {
+        "method": "SEEDED_NONPARAMETRIC_PAIRED_BLOCK_MEDIAN_BOOTSTRAP",
+        "seed": 700093,
+        "samples": 100000,
+        "lower95": -1.9405641200426638,
+        "upper95": 2.6494563638549273,
+        "oneSidedUpper95": 2.1136595582288775
+      }
+    },
+    "latencyMedianPercent": {
+      "values": [
+        0.0,
+        5.2631578947368425,
+        -4.761904761904762,
+        -4.761904761904762,
+        5.555555555555555,
+        5.0,
+        0.0,
+        -14.285714285714286,
+        -13.636363636363637,
+        15.0,
+        0.0,
+        10.0
+      ],
+      "unit": "percent",
+      "favorable": 4,
+      "ties": 3,
+      "median": 0.0,
+      "bootstrap": {
+        "method": "SEEDED_NONPARAMETRIC_PAIRED_BLOCK_MEDIAN_BOOTSTRAP",
+        "seed": 700094,
+        "samples": 100000,
+        "lower95": -4.761904761904762,
+        "upper95": 5.409356725146199,
+        "oneSidedUpper95": 5.2631578947368425
+      }
+    },
+    "latencyP95Percent": {
+      "values": [
+        -7.547169811320755,
+        -11.538461538461538,
+        0.0,
+        -6.25,
+        -2.0,
+        -11.764705882352942,
+        0.0,
+        -9.803921568627452,
+        -11.764705882352942,
+        2.0833333333333335,
+        -4.25531914893617,
+        5.660377358490566
+      ],
+      "unit": "percent",
+      "favorable": 8,
+      "ties": 2,
+      "median": -5.252659574468085,
+      "bootstrap": {
+        "method": "SEEDED_NONPARAMETRIC_PAIRED_BLOCK_MEDIAN_BOOTSTRAP",
+        "seed": 700095,
+        "samples": 100000,
+        "lower95": -10.671191553544496,
+        "upper95": 0.0,
+        "oneSidedUpper95": 0.0
+      }
+    },
+    "loadedClasses": {
+      "values": [
+        -157.0,
+        -156.0,
+        -157.0,
+        -157.0,
+        -156.0,
+        -156.0,
+        -157.0,
+        -155.0,
+        -156.0,
+        -156.0,
+        -156.0,
+        -155.0
+      ],
+      "unit": "classes",
+      "favorable": 12,
+      "ties": 0,
+      "median": -156.0,
+      "bootstrap": {
+        "method": "SEEDED_NONPARAMETRIC_PAIRED_BLOCK_MEDIAN_BOOTSTRAP",
+        "seed": 700096,
+        "samples": 100000,
+        "lower95": -157.0,
+        "upper95": -156.0,
+        "oneSidedUpper95": -156.0
+      }
+    },
+    "threadCountMedianDelta": 0.0
+  },
+  "directRamGates": [
+    {
+      "name": "PSS_FAVORABLE_BLOCKS",
+      "passed": false,
+      "observed": 8,
+      "threshold": 10,
+      "comparison": ">=",
+      "unit": "blocks",
+      "evidence": ""
+    },
+    {
+      "name": "PSS_ZERO_TIES",
+      "passed": true,
+      "observed": 0,
+      "threshold": 0,
+      "comparison": "==",
+      "unit": "blocks",
+      "evidence": ""
+    },
+    {
+      "name": "PSS_EXACT_SIGN_P",
+      "passed": false,
+      "observed": 0.3876953125,
+      "threshold": 0.05,
+      "comparison": "<=",
+      "unit": "p",
+      "evidence": ""
+    },
+    {
+      "name": "PSS_MEDIAN_MATERIAL",
+      "passed": false,
+      "observed": -644.5,
+      "threshold": -4096,
+      "comparison": "<=",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "PSS_BOOTSTRAP_UPPER_BELOW_ZERO",
+      "passed": false,
+      "observed": 231.0,
+      "threshold": 0,
+      "comparison": "<",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "PSS_ONE_SIDED_UPPER_BELOW_ZERO",
+      "passed": false,
+      "observed": 194.0,
+      "threshold": 0,
+      "comparison": "<",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "DEBITED_PSS_FAVORABLE_BLOCKS",
+      "passed": false,
+      "observed": 7,
+      "threshold": 10,
+      "comparison": ">=",
+      "unit": "blocks",
+      "evidence": ""
+    },
+    {
+      "name": "DEBITED_PSS_ZERO_TIES",
+      "passed": true,
+      "observed": 0,
+      "threshold": 0,
+      "comparison": "==",
+      "unit": "blocks",
+      "evidence": ""
+    },
+    {
+      "name": "DEBITED_PSS_EXACT_SIGN_P",
+      "passed": false,
+      "observed": 0.7744140625,
+      "threshold": 0.05,
+      "comparison": "<=",
+      "unit": "p",
+      "evidence": ""
+    },
+    {
+      "name": "DEBITED_PSS_MEDIAN_MATERIAL",
+      "passed": false,
+      "observed": -644.5,
+      "threshold": -4096,
+      "comparison": "<=",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "DEBITED_PSS_BOOTSTRAP_UPPER_BELOW_ZERO",
+      "passed": false,
+      "observed": 560.0,
+      "threshold": 0,
+      "comparison": "<",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "MEMORY_CURRENT_FAVORABLE_BLOCKS",
+      "passed": true,
+      "observed": 12,
+      "threshold": 9,
+      "comparison": ">=",
+      "unit": "blocks",
+      "evidence": ""
+    },
+    {
+      "name": "MEMORY_CURRENT_MEDIAN_MATERIAL",
+      "passed": false,
+      "observed": -2840576.0,
+      "threshold": -4194304,
+      "comparison": "<=",
+      "unit": "bytes",
+      "evidence": ""
+    },
+    {
+      "name": "MEMORY_CURRENT_BOOTSTRAP_UPPER_BELOW_ZERO",
+      "passed": true,
+      "observed": -1839104.0,
+      "threshold": 0,
+      "comparison": "<",
+      "unit": "bytes",
+      "evidence": ""
+    },
+    {
+      "name": "PRIVATE_DIRTY_MEDIAN_BELOW_ZERO",
+      "passed": true,
+      "observed": -518.0,
+      "threshold": 0,
+      "comparison": "<",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "PRIVATE_DIRTY_BOOTSTRAP_UPPER_BELOW_ZERO",
+      "passed": false,
+      "observed": 86.0,
+      "threshold": 0,
+      "comparison": "<",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "CGROUP_ANON_MEDIAN_BELOW_ZERO",
+      "passed": true,
+      "observed": -528384.0,
+      "threshold": 0,
+      "comparison": "<",
+      "unit": "bytes",
+      "evidence": ""
+    },
+    {
+      "name": "CGROUP_ANON_BOOTSTRAP_UPPER_BELOW_ZERO",
+      "passed": false,
+      "observed": 83968.0,
+      "threshold": 0,
+      "comparison": "<",
+      "unit": "bytes",
+      "evidence": ""
+    },
+    {
+      "name": "CGROUP_FILE_EVERY_BLOCK",
+      "passed": true,
+      "observed": -1982464.0,
+      "threshold": 1048576,
+      "comparison": "<=",
+      "unit": "bytes",
+      "evidence": ""
+    },
+    {
+      "name": "CGROUP_FILE_MEDIAN",
+      "passed": true,
+      "observed": -2027520.0,
+      "threshold": 1048576,
+      "comparison": "<=",
+      "unit": "bytes",
+      "evidence": ""
+    },
+    {
+      "name": "CGROUP_FILE_ONE_SIDED_UPPER",
+      "passed": true,
+      "observed": -1990656.0,
+      "threshold": 1048576,
+      "comparison": "<=",
+      "unit": "bytes",
+      "evidence": ""
+    },
+    {
+      "name": "CGROUP_KERNEL_MEDIAN",
+      "passed": true,
+      "observed": -14336.0,
+      "threshold": 2097152,
+      "comparison": "<=",
+      "unit": "bytes",
+      "evidence": ""
+    },
+    {
+      "name": "NATIVE_PROCESS_HEAP_BOUND",
+      "passed": true,
+      "observed": 2912.0,
+      "threshold": 4096,
+      "comparison": "<=",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "COMBINED_JAVA_NATIVE_HEAP",
+      "passed": false,
+      "observed": 2298.0,
+      "threshold": -4096,
+      "comparison": "<=",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "ANONYMOUS_RW",
+      "passed": false,
+      "observed": -4088.0,
+      "threshold": -4096,
+      "comparison": "<=",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "NMT_TOTAL_COMMITTED",
+      "passed": true,
+      "observed": -2791.5,
+      "threshold": 0,
+      "comparison": "<=",
+      "unit": "KiB",
+      "evidence": ""
+    },
+    {
+      "name": "ALL_SESSIONS_VALID",
+      "passed": true,
+      "observed": 0,
+      "threshold": 0,
+      "comparison": "==",
+      "unit": "sessions",
+      "evidence": ""
+    }
+  ],
+  "promotionGates": [
+    {
+      "name": "DIRECT_RAM_CLAIMABLE",
+      "passed": false,
+      "observed": false,
+      "threshold": true,
+      "comparison": "==",
+      "unit": "boolean",
+      "evidence": ""
+    },
+    {
+      "name": "CPU_MEDIAN_RELATIVE",
+      "passed": true,
+      "observed": 1.0872418149465801,
+      "threshold": 20.0,
+      "comparison": "<=",
+      "unit": "percent",
+      "evidence": ""
+    },
+    {
+      "name": "CPU_MEDIAN_ABSOLUTE",
+      "passed": true,
+      "observed": 551050.5,
+      "threshold": 6500000,
+      "comparison": "<=",
+      "unit": "usec",
+      "evidence": ""
+    },
+    {
+      "name": "CPU_BOOTSTRAP_UPPER",
+      "passed": true,
+      "observed": 5.342907233297465,
+      "threshold": 25.0,
+      "comparison": "<=",
+      "unit": "percent",
+      "evidence": ""
+    },
+    {
+      "name": "STARTUP_MEDIAN_RELATIVE",
+      "passed": true,
+      "observed": 0.7970882966474718,
+      "threshold": 10.0,
+      "comparison": "<=",
+      "unit": "percent",
+      "evidence": ""
+    },
+    {
+      "name": "LATENCY_MEDIAN_RELATIVE",
+      "passed": true,
+      "observed": 0.0,
+      "threshold": 10.0,
+      "comparison": "<=",
+      "unit": "percent",
+      "evidence": ""
+    },
+    {
+      "name": "LATENCY_P95_RELATIVE",
+      "passed": true,
+      "observed": -5.252659574468085,
+      "threshold": 12.0,
+      "comparison": "<=",
+      "unit": "percent",
+      "evidence": ""
+    },
+    {
+      "name": "LOADED_CLASS_INCREASE",
+      "passed": true,
+      "observed": -156.0,
+      "threshold": 244.77,
+      "comparison": "<=",
+      "unit": "classes",
+      "evidence": ""
+    },
+    {
+      "name": "THREAD_COUNT_INCREASE",
+      "passed": true,
+      "observed": 0.0,
+      "threshold": 2,
+      "comparison": "<=",
+      "unit": "threads",
+      "evidence": ""
+    }
+  ],
+  "evidence": {
+    "contract": {
+      "path": "C:\\jmoa-runs\\petclinic-t7r-direct-20260913-1325\\03-contract\\t7r-contract-v1.json",
+      "bytes": 13982,
+      "sha256": "D98B5A9783A750412DC82968F33017523B7D39EC9BD32232463CC0820A1D48C8",
+      "role": "prospective T7R contract"
+    },
+    "analysis": {
+      "path": "C:\\jmoa-runs\\petclinic-t7r-direct-20260913-1325\\07-analysis\\t7r-analysis-v1.json",
+      "bytes": 47176,
+      "sha256": "91C4D4A3553DA274BD3245EB06E7ED74EBB3A9E71AF3E25A780659D53CB0C823",
+      "role": "fresh direct T7R analysis"
+    }
+  },
+  "scope": "PetClinic customers-service only; no transfer to other services or runtime tuples."
+}

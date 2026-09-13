@@ -1,5 +1,5 @@
 {
-  "metadataVersion": "direct-result-reconciliation-v3",
+  "metadataVersion": "direct-result-reconciliation-v4",
   "buyerComparison": "NO_JMOA_B0_TO_FINAL_JMOA_V2",
   "buyerResult": "DIRECT_PRODUCT_MATRIX_COMPLETE_LAUNCH_CRITERION_NOT_PASSED",
   "engineeringComparison": "ACCEPTED_V1_TO_FINAL_V2",
@@ -35,7 +35,32 @@
     "medianLifecycleCpuDeltaPercent": 19.20168551250344,
     "acceptedDeployment": "V2E",
     "acceptedDeploymentChanged": false,
-    "promotionRequires": "T7R",
+    "promotionRequires": "COMPLETED_T7R_DID_NOT_AUTHORIZE",
     "evidence": "petclinic-r41f-v2e-r487-result.json"
+  },
+  "petclinicT7RDirectCampaign": {
+    "comparison": "R41F_MINUS_STRICT_NO_JMOA_B0",
+    "decision": "T7R_DIRECT_MEMORY_NOT_CLAIMABLE",
+    "claimable": false,
+    "promotionAuthorized": false,
+    "freshObservations": 36,
+    "qualificationObservations": 4,
+    "controlObservations": 8,
+    "heldoutObservations": 24,
+    "heldoutPairedBlocks": 12,
+    "favorablePssBlocks": 8,
+    "medianPssDeltaKiB": -644.5,
+    "exactTwoSidedSignP": 0.3876953125,
+    "pssBootstrap95LowerKiB": -1336.5,
+    "pssBootstrap95UpperKiB": 231.0,
+    "medianMemoryCurrentDeltaBytes": -2840576.0,
+    "medianCgroupFileDeltaBytes": -2027520.0,
+    "medianAnonymousRwPssDeltaKiB": -4088.0,
+    "medianNmtCommittedDeltaKiB": -2791.5,
+    "medianNativeProcessHeapPssDeltaKiB": 2912.0,
+    "acceptedDeployment": "V2E",
+    "acceptedDeploymentChanged": false,
+    "registryRowAppended": false,
+    "evidence": "petclinic-r41f-b0-t7r-result.json"
   }
 }
