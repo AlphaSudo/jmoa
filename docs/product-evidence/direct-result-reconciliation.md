@@ -31,9 +31,9 @@ R4.87 is claimable on that scope: 12/12 favorable paired PSS blocks, median
 claim explicitly carries a +19.20% median lifecycle-CPU tradeoff and a +106,496
 byte median cgroup-file tradeoff; both passed prospectively frozen limits.
 
-This result does not turn R41F into a clean B0 comparator, does not isolate
-metadata compaction from packaging, and does not promote R41F. See the
-[R4.87 result](petclinic-r41f-v2e-r487-result.md).
+This result does not turn R41F into a clean B0 comparator and does not isolate
+metadata compaction from packaging. It did not promote R41F at the time of its
+decision. See the [R4.87 result](petclinic-r41f-v2e-r487-result.md).
 
 ## PetClinic Direct R41F Confirmation
 
@@ -51,9 +51,33 @@ cgroup file by -2,027,520 bytes, anonymous-RW PSS by -4,088 KiB, and NMT
 committed by -2,791.5 KiB. A consistent +2,912 KiB median native-process-heap
 PSS offset cancelled most of those reductions in total PSS.
 
-T7R therefore appended no claim row and did not promote R41F. Exact V2E remains
-accepted. This is a valid negative direct result, not a control or protocol
-failure. See the [T7R result](petclinic-r41f-b0-t7r-result.md).
+T7R therefore appended no claim row and did not promote R41F. This remains a
+valid negative result for its frozen 4 MiB process-PSS endpoint, not a control
+or protocol failure. See the [T7R result](petclinic-r41f-b0-t7r-result.md).
+
+## PetClinic Direct Target-Cgroup Confirmation
+
+T7R2 then tested the unresolved product-RAM hypothesis in a new prospective
+campaign. It reused no T7R observation: four qualification, eight control and
+24 held-out sessions all ran fresh under the same exact B0/R41F fat-JAR image
+pair. The primary endpoint was the exact target cgroup's `memory.current`, with
+a -2 MiB median materiality rule, a wholly favorable bootstrap interval, and a
+one-sided upper bound at least one frozen 1 MiB memcg charge-stock floor below
+zero. PSS, Private Dirty, cgroup anon/file, native `[heap]`, NMT, semantics and
+product costs were separately bounded.
+
+T7R2 passed all 25 gates. Exact R41F minus strict B0 reduced `memory.current`
+in 12/12 blocks by **-3,317,760 bytes median**, exact
+`p=0.00048828125`, bootstrap 95% **[-3,715,072,-2,932,736] bytes**, and
+one-sided upper **-2,953,216 bytes**. Process PSS was also favorable in 12/12
+blocks at **-1,407.5 KiB median**, with bootstrap 95%
+**[-1,725.5,-638.5] KiB**. Cgroup file and anon were both favorable.
+
+Verdict: `T7R2_CGROUP_RAM_WIN_PROMOTED`. A claimable whole-product registry row
+was appended and accepted PetClinic advanced from exact V2E to exact R41F.
+This is a direct target-cgroup total-RAM claim; it does not retroactively alter
+T7R's failed 4 MiB PSS endpoint. See the
+[T7R2 result](petclinic-r41f-b0-t7r2-cgroup-result.md).
 
 ## PetClinic Baseline Correction
 
@@ -72,7 +96,8 @@ the current PetClinic buyer-comparison authority, and its terminal result is
 Never arithmetically combine `B0 -> V1`, `V1 -> V2`, `V2E -> R41F`, or direct
 `B0 -> R41F` medians.
 Never use a screen as a confirmed win. Never turn a failed same-artifact noise
-gate into a product delta. Cite the direct matrix for clean buyer-comparison
-claims, the evolution matrix for V1-to-V2 engineering progress, R4.87 only for
-the exact PetClinic R41F-versus-V2E candidate claim, and T7R for the exact
-PetClinic R41F-versus-strict-B0 direct nonclaim.
+gate into a product delta. Cite the direct matrix for the original B0-to-V2
+buyer comparison, the evolution matrix for V1-to-V2 engineering progress,
+R4.87 only for exact R41F versus V2E, T7R for the failed direct 4 MiB PSS
+hypothesis, and T7R2 for the successful independent direct target-cgroup RAM
+claim and R41F promotion.

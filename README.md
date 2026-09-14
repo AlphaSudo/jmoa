@@ -10,7 +10,8 @@ Evidence-driven, build-time JVM footprint optimization for Spring Boot applicati
 [Architecture](docs/architecture/system-overview.md) |
 [Methodology](docs/methodology/measurement-protocol.md) |
 [Reproduction](docs/reproduction/petclinic-quickstart.md) |
-[PetClinic Direct Result](docs/product-evidence/petclinic-r41f-b0-t7r-result.md) |
+[PetClinic Direct RAM Win](docs/product-evidence/petclinic-r41f-b0-t7r2-cgroup-result.md) |
+[Prior T7R PSS Result](docs/product-evidence/petclinic-r41f-b0-t7r-result.md) |
 [R4.87 Candidate Result](docs/product-evidence/petclinic-r41f-v2e-r487-result.md) |
 [Direct Result](docs/product-evidence/b0-v1-v2-three-service-matrix.md) |
 [Forensic Matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md) |
@@ -24,37 +25,35 @@ paired PSS, Private_Dirty, cgroup, NMT, and class-level evidence.
 
 ## Latest Direct PetClinic Result
 
-T7R has now completed the missing exact JMOA-versus-no-JMOA comparison for the
-PetClinic customers service. It compared the strict clean B0 fat JAR with the
-complete R41F fat-JAR candidate using symmetric images, four qualification
-sessions, eight passing same-artifact controls, and 24 fresh held-out sessions
-in 12 alternating paired blocks. All 36 sessions were valid and no replacement
-was used.
+T7R2 has established a **claimable direct target-cgroup RAM win** for exact
+R41F versus strict no-JMOA B0 under symmetric fat-JAR packaging. The
+prospectively frozen campaign completed four qualification sessions, eight
+passing same-artifact controls, and 24 fresh held-out sessions in 12 alternating
+paired blocks. All 36 sessions were valid; no predecessor observation entered
+the inference; every memory, uncertainty, semantic, and product-cost gate
+passed.
 
-The direct result is **not claimable** under the prospectively frozen policy:
-
-| Metric, R41F minus clean B0 | Result | Interpretation |
+| Metric, R41F minus clean B0 | Fresh result | Interpretation |
 | --- | ---: | --- |
-| Process PSS | **-644.5 KiB** median | 8/12 favorable; 95% bootstrap CI [-1,336.5, +231] KiB |
-| Exact sign test | `p=0.3876953125` | Does not establish a consistent PSS reduction |
-| Private Dirty | -518 KiB median | 95% interval crosses zero |
-| `memory.current` | -2,840,576 bytes median | 12/12 favorable, but below the frozen 4 MiB materiality requirement |
-| cgroup file memory | -2,027,520 bytes median | 12/12 favorable and tightly repeatable |
-| Anonymous RW PSS | -4,088 KiB median | 12/12 favorable; 8 KiB short of the frozen -4,096 KiB gate |
-| NMT total committed | -2,791.5 KiB median | 12/12 favorable |
-| Native process `[heap]` PSS | **+2,912 KiB** median | 0/12 favorable; cancels much of the gross reduction |
-| Lifecycle CPU | +1.0872% median | Product-cost gate passed |
+| `memory.current` | **-3,317,760 bytes** median | About 3.16 MiB less; 12/12 favorable; 95% CI [-3,715,072, -2,932,736] bytes |
+| Exact sign test | **`p=0.00048828125`** | Passes the frozen consistency rule |
+| Process PSS | **-1,407.5 KiB** median | 12/12 favorable; 95% CI [-1,725.5, -638.5] KiB |
+| Private Dirty | **-1,308 KiB** median | 95% upper bound -726 KiB |
+| cgroup file memory | **-2,113,536 bytes** median | Every block favorable; 95% upper -2,076,672 bytes |
+| cgroup anonymous memory | **-1,339,392 bytes** median | 95% upper -739,328 bytes |
+| NMT total committed | **-2,928.5 KiB** median | Favorable JVM/native commitment |
+| Native process `[heap]` PSS | +2,202 KiB median | Adverse component, inside the frozen +4 MiB bound |
+| Lifecycle CPU | +0.1945% / +63,109.5 usec median | Product-cost gates passed |
 
-This is a successful measurement with a negative claim decision, not a harness
-failure. The stabilized R4.8 lifecycle kept same-artifact PSS spreads between
-206 and 2,293 KiB, far below the 10 MiB control ceiling. The registry received
-no T7R row, R41F was not promoted, and accepted PetClinic remains exact V2E.
-The result applies only to `spring-petclinic-customers-service` under the
-recorded Temurin 17/SerialGC/no-CDS/fat-JAR tuple.
+The claim endpoint is target-cgroup total RAM. It does not retroactively turn
+T7R's failed 4 MiB process-PSS endpoint into a win. T7R2 ran a new experiment
+with a 2 MiB cgroup materiality floor and a one-sided confidence bound more
+than one complete 1 MiB memcg charge-stock floor below zero. Exact R41F is now
+the accepted PetClinic deployment (revision 2).
 
-Read the [public direct result](docs/product-evidence/petclinic-r41f-b0-t7r-result.md),
-the [machine-readable result](docs/product-evidence/petclinic-r41f-b0-t7r-result.json),
-or the [full engineering ledger](docs/petclinic-ledger/83-t7r-direct-b0-r41f-terminal-result.md).
+Read the [public direct result](docs/product-evidence/petclinic-r41f-b0-t7r2-cgroup-result.md),
+the [machine-readable result](docs/product-evidence/petclinic-r41f-b0-t7r2-cgroup-result.json),
+or the [terminal engineering ledger](docs/petclinic-ledger/86-t7r2-direct-cgroup-ram-win-terminal-result.md).
 
 ## R4.87 Candidate-Versus-V2E Result
 
@@ -87,8 +86,9 @@ fat-JAR launch shape, while V2E is the accepted exploded-Boot deployment. The
 result therefore measures that complete candidate deployment; it does not
 attribute the entire delta to metadata removal alone, does not replace the
 clean B0-to-V2 matrix below, and does not transfer to Doctor or Patient.
-Accepted PetClinic remains exact V2E because the now-completed direct T7R
-campaign did not establish a claimable R41F-versus-clean-B0 RAM win.
+R4.87 alone did not authorize promotion, but the later fresh T7R2 direct
+R41F-versus-clean-B0 target-cgroup confirmation did. Accepted PetClinic is now
+exact R41F under the recorded `NO_CDS_LOW_DIRTY` runtime policy.
 
 Read the [human-readable result and claim boundary](docs/product-evidence/petclinic-r41f-v2e-r487-result.md)
 or the [machine-readable result](docs/product-evidence/petclinic-r41f-v2e-r487-result.json).

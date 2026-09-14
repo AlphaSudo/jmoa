@@ -105,9 +105,11 @@ result preserves the complete claim statistics, frozen limits, artifact
 identities, per-block PSS deltas, and SHA-256 bindings to the sealed raw
 contract, analysis, terminal record, and registry.
 
-Claimability does not promote R41F. Accepted PetClinic remains exact V2E until
-a separately frozen T7R campaign evaluates the promotion question. The earlier
-clean B0-to-V2 result also remains unchanged: R4.87 is a V2E-to-R41F engineering
+R4.87 claimability did not itself promote R41F. Accepted PetClinic remained
+exact V2E pending a separately frozen direct clean-B0 campaign. T7R later failed
+its 4 MiB process-PSS endpoint; the fully fresh T7R2 target-cgroup campaign then
+passed all frozen gates and promoted exact R41F. The earlier clean B0-to-V2
+result also remains unchanged: R4.87 is a V2E-to-R41F engineering
 comparison and must not be substituted into or arithmetically added to the
 three-service buyer matrix. Doctor and Patient are outside this result.
 
