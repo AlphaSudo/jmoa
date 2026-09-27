@@ -4,7 +4,7 @@ param(
     [string]$WorkDir = "target/v2-clean-clone",
     [string]$MavenLocalRepository = "target/v2-clean-m2",
     [string]$Maven = "mvn",
-    [string]$Version = "2.0.0-rc2",
+    [string]$Version = "2.1.0",
     [string]$JavaHome = $env:JAVA_HOME,
     [string]$PublicCustomersProfile,
     [string]$PublicCustomersAdmission,

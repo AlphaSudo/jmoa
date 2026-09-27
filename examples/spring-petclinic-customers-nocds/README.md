@@ -53,7 +53,7 @@ frozen profile, admission, and SAM inputs:
   -ProfilePath <petclinic-customers-profile.json> `
   -AdmissionPath <petclinic-customers-admission.txt> `
   -SafeSamsPath <jmoa-additional-safe-sams.txt> `
-  -RuntimeJar <jmoa-runtime-lib-2.0.0-rc2.jar>
+  -RuntimeJar <jmoa-runtime-lib-2.1.0.jar>
 ```
 
 Podman must be available for semantic smoke. Add `-SkipSemanticSmoke` only for

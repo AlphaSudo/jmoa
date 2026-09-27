@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "2.0.0-rc2",
+    [string]$Version = "2.1.0",
     [string]$OutputDir = "target/v2-release",
     [string]$Maven = "mvn",
     [string]$PublicCustomersProfile,

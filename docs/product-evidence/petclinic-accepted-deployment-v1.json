@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "jmoa-petclinic-accepted-deployment-v1",
+  "service": "spring-petclinic-customers-service",
+  "revision": 3,
+  "acceptedDeployment": {
+    "id": "R41F",
+    "artifactKind": "FILE",
+    "artifactSha256": "415217CE9926ECA2BC0052800DD456291D438A9C63589CBFE5A55238BE71EB9F",
+    "imageId": "7CC8F1766B9AC45983DFD634846060A6C62209259CCB40596972A3168A5CABEB",
+    "launchMode": "FAT_BOOT_JAR"
+  },
+  "runtimePolicy": {
+    "id": "NO_CDS_LOW_DIRTY",
+    "evidencePath": "docs/product-evidence/petclinic-r41f-b0-t7r23-result.json",
+    "evidenceSha256": "62FBF441A94DF3DDED6366D2BBC18F28AB45246AFC13E13E7C0BBBC126185A45"
+  },
+  "lastDecision": {
+    "programId": "T7R23-ROLE-SCOPED-DEPLOYMENT-FACTORIAL",
+    "decision": "T7R23_R487_SCALE_DIRECT_RAM_WIN",
+    "recordedAtUtc": "2026-09-27T15:39:54.0000000Z"
+  },
+  "status": "ACTIVE"
+}

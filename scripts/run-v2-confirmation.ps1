@@ -28,7 +28,7 @@ param(
     [string]$AttributionOutputDir = "",
     [string]$MavenExecutable = "mvn",
     [string]$JavaHome = "",
-    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2",
+    [string]$PluginCoordinates = "com.yourorg.jmoa:jmoa-maven-plugin:2.1.0",
     [ValidateSet('FIXED_BASELINE_FIRST', 'BALANCED')][string]$PairOrder = 'FIXED_BASELINE_FIRST',
     [int]$WarmupSeconds = 20,
     [switch]$DropPageCacheBeforeVariant,

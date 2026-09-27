@@ -5,7 +5,7 @@
 ## Safe Raw Mutation Profile
 
 ```powershell
-mvn com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2:reduce-bytecode `
+mvn com.yourorg.jmoa:jmoa-maven-plugin:2.1.0:reduce-bytecode `
   -Djmoa.reducer.enabled=true `
   -Djmoa.reducer.reportOnly=false `
   -Djmoa.reducer.optimize=true `

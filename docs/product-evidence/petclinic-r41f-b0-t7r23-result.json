@@ -1,0 +1,189 @@
+{
+  "metadataVersion": "jmoa-v2.1-petclinic-direct-result-v1",
+  "release": "2.1.0",
+  "service": "spring-petclinic-customers-service",
+  "programId": "T7R23-ROLE-SCOPED-DEPLOYMENT-FACTORIAL",
+  "protocol": "PETCLINIC_T7R23_ROLE_SCOPED_DEPLOYMENT_FACTORIAL_V1",
+  "decision": "T7R23_R487_SCALE_DIRECT_RAM_WIN",
+  "claimable": true,
+  "claimBasis": "DIRECT_PRODUCT",
+  "tier": "R487_SCALE",
+  "scope": {
+    "comparison": "R41F_MINUS_STRICT_NO_JMOA_B0E",
+    "comparator": {
+      "id": "B0E",
+      "content": "STRICT_NO_JMOA_B0",
+      "launchMode": "EXPLODED_BOOT"
+    },
+    "treatment": {
+      "id": "R41F",
+      "content": "EXACT_ACCEPTED_R41F_JMOA",
+      "launchMode": "FAT_BOOT_JAR"
+    },
+    "packagingInclusive": true,
+    "contentOnlyClaim": false,
+    "universalClaim": false
+  },
+  "identity": {
+    "b0Sha256": "2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF",
+    "r41fSha256": "415217CE9926ECA2BC0052800DD456291D438A9C63589CBFE5A55238BE71EB9F",
+    "r41fImageId": "7CC8F1766B9AC45983DFD634846060A6C62209259CCB40596972A3168A5CABEB",
+    "r41LogicalSha256": "A84A1D7EB79C0F476999B74081F2ED3457910D2B15916D5E27576EB486F64C25",
+    "acceptedDeploymentBefore": "R41F",
+    "acceptedDeploymentAfter": "R41F",
+    "acceptedPointerRevision": 3
+  },
+  "execution": {
+    "attemptedSessions": 81,
+    "completedSessions": 81,
+    "qualificationSessions": 5,
+    "controlSessions": 20,
+    "screenSessions": 8,
+    "heldoutSessions": 48,
+    "heldoutBlocks": 12,
+    "predecessorObservationsReused": 0,
+    "replacementObservations": 0,
+    "hostRestored": true
+  },
+  "runtime": {
+    "java": "Eclipse Temurin 17.0.19+10",
+    "springBoot": "4.0.1",
+    "gc": "SerialGC",
+    "xmsMiB": 32,
+    "xmxMiB": 256,
+    "xssKiB": 256,
+    "reservedCodeCacheMiB": 48,
+    "ciCompilerCount": 2,
+    "nativeMemoryTracking": "summary",
+    "cds": "off",
+    "trimIntervalMilliseconds": 5000,
+    "mallocArenaMax": 1,
+    "cgroupMemoryLimitBytes": 536870912,
+    "warmupSeconds": 20,
+    "workloadRequests": 81,
+    "workloadPacingMilliseconds": 200,
+    "claimOffsetsSeconds": [10, 15, 20],
+    "runtimeJavaAgentPresent": false
+  },
+  "primary": {
+    "processPssKiB": {
+      "values": [-14427.0, -15622.0, -16234.0, -15227.0, -17816.0, -15256.0, -14801.0, -14996.0, -16261.0, -15207.0, -15985.0, -15109.0],
+      "favorableBlocks": 12,
+      "ties": 0,
+      "median": -15241.5,
+      "exactSignP": 0.00048828125,
+      "bootstrap95": [-16109.5, -15052.5],
+      "oneSided95Upper": -15109.0
+    },
+    "privateDirtyKiB": {
+      "favorableBlocks": 12,
+      "median": -15252.0,
+      "exactSignP": 0.00048828125,
+      "bootstrap95": [-16062.0, -14880.0]
+    },
+    "memoryCurrentBytes": {
+      "favorableBlocks": 12,
+      "median": -17033216.0,
+      "exactSignP": 0.00048828125,
+      "bootstrap95": [-17842176.0, -16713728.0]
+    },
+    "cgroupAnonBytes": {
+      "favorableBlocks": 12,
+      "median": -15616000.0,
+      "bootstrap95": [-16445440.0, -15243264.0]
+    },
+    "cgroupFileBytes": {
+      "favorableBlocks": 12,
+      "median": -411648.0,
+      "bootstrap95": [-450560.0, -362496.0]
+    },
+    "cgroupKernelBytes": {
+      "favorableBlocks": 12,
+      "median": -1079296.0,
+      "bootstrap95": [-1097728.0, -1067008.0]
+    },
+    "memoryPeakBytes": {
+      "favorableBlocks": 10,
+      "median": -19451904.0,
+      "exactSignP": 0.03857421875,
+      "bootstrap95": [-27238400.0, -11542528.0]
+    }
+  },
+  "attribution": {
+    "javaHeapPssMedianKiB": -15092.0,
+    "nativeProcessHeapPssMedianKiB": 2972.0,
+    "anonymousPssMedianKiB": -15250.0,
+    "filePssMedianKiB": -79.0,
+    "shmemPssMedianKiB": 0.0,
+    "rssMedianKiB": -15384.0
+  },
+  "factorial": {
+    "baselinePackagingB0FMinusB0EMedianPssKiB": -14725.5,
+    "fatContentR41FMinusB0FMedianPssKiB": -979.0,
+    "explodedContentR41EMinusB0EMedianPssKiB": -4493.5,
+    "optimizedPackagingR41FMinusR41EMedianPssKiB": -10875.0,
+    "contentMainMedianPssKiB": -2465.0,
+    "packagingMainMedianPssKiB": -12715.25,
+    "interactionMedianPssKiB": 3801.5,
+    "fatContentExactSignP": 0.14599609375
+  },
+  "cost": {
+    "lifecycleCpuMedianUsec": 4841192.0,
+    "lifecycleCpuMedianPercent": 14.70730303365912,
+    "startupMedianMillis": 1652.0,
+    "startupMedianPercent": 3.7611272852372712,
+    "latencyMedianDeltaMillis": 0.0,
+    "latencyP95DeltaMillis": 0.0,
+    "loadedClassesMedian": -175.0,
+    "allFrozenCostGatesPassed": true
+  },
+  "gates": {
+    "pssClaimable": true,
+    "totalRamCorroborated": true,
+    "ramGatesPassed": true,
+    "costGatesPassed": true,
+    "semanticsPassed": true,
+    "publicationCommitted": true
+  },
+  "statistics": {
+    "bootstrapSeed": 72104721,
+    "bootstrapSamples": 100000
+  },
+  "evidenceSeals": {
+    "contract": {
+      "bytes": 281736,
+      "sha256": "56C92307339B26B7B02CD22AA7CDDF223819375F69545509DC7BC68752E95C15"
+    },
+    "analysis": {
+      "bytes": 119111,
+      "sha256": "C747F82302D4FFBE4D62B44BBC1F6BFBF686E0D9F91A42E5EAAE7AE429ABDCF8"
+    },
+    "attribution": {
+      "bytes": 601538,
+      "sha256": "6D3F916D2049BE2FEA6358D7B1CCD568F006FDA3D5D3D4807E8E7C78EFC98267"
+    },
+    "publicResult": {
+      "bytes": 109684,
+      "sha256": "EDF3273DD3358CDA6ED0AEDF20BED70418BED27EC2D5CF1D3B3936706099210B"
+    },
+    "progress": {
+      "bytes": 46899,
+      "sha256": "D7D289E78FA378993C8C74F7BF124B86796CC5F243CCDBBABA0FCFA21A7FE1BC"
+    },
+    "terminalCloseout": {
+      "bytes": 3394,
+      "sha256": "635F83282A700870C5A35010B58F67B3E6BF77D8E05E2D027A430FAFFA4CE340"
+    },
+    "publicationReceipt": {
+      "bytes": 2300,
+      "sha256": "67D3EA6253F43BFB280B9B22878CA15E87278005013FBE27C392C914D99FF941"
+    }
+  },
+  "claimWording": "Under the frozen agent-free, CDS-off PetClinic protocol, the exact accepted R41F JMOA fat-JAR deployment reduced process PSS by 15,241.5 KiB and target-cgroup memory.current by 17,033,216 bytes versus the documented strict no-JMOA B0 exploded-Boot deployment. All 12 held-out blocks favored R41F; median lifecycle CPU increased 14.71%. This is a packaging-inclusive, service-specific result.",
+  "limitations": [
+    "The comparison includes both content and deployment packaging.",
+    "The result does not establish a universal Spring Boot or JVM benefit.",
+    "The fat-layout content-only contrast is descriptive and not independently claimable.",
+    "Additional services require independent prospective confirmation."
+  ]
+}
