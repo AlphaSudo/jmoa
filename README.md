@@ -58,7 +58,8 @@ Read the [human result](docs/product-evidence/petclinic-r41f-b0-t7r23-result.md)
 the [machine-readable record](docs/product-evidence/petclinic-r41f-b0-t7r23-result.json),
 or the [full technical paper](docs/paper/jmoa-v2.1-petclinic-memory-engineering.md).
 
-Open to opportunities
+## Open to opportunities
+
 I’m currently open to JVM performance, Java platform engineering, runtime optimization, developer tooling, and backend infrastructure roles.
 
 Contact: [ahmed.yasser.morra@gmail.com / [LinkedIn](https://www.linkedin.com/in/ahmed-morra-0890ba1b7) / [X DM](https://x.com/uNCle_AYouB1)]
