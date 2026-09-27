@@ -1,6 +1,6 @@
 # Maven Plugin Goals
 
-Coordinates: `com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2`.
+Coordinates: `com.yourorg.jmoa:jmoa-maven-plugin:2.1.0`.
 
 | Goal | Purpose | Mutation |
 | --- | --- | --- |
@@ -22,7 +22,7 @@ Coordinates: `com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2`.
 Invoke a goal directly:
 
 ```powershell
-mvn com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2:<goal> -D<property>=<value>
+mvn com.yourorg.jmoa:jmoa-maven-plugin:2.1.0:<goal> -D<property>=<value>
 ```
 
 The plugin is compiled for Java 22. Use a Java 22-or-newer Maven runtime; the

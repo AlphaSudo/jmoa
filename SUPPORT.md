@@ -1,6 +1,6 @@
 # Support
 
-JMOA V2 is an Apache-2.0 research/tooling release. Use GitHub Issues for
+JMOA 2.1 is an Apache-2.0 research/tooling release. Use GitHub Issues for
 reproducible build defects, unsafe reducer behavior, or documentation gaps.
 
 Include the JMOA version, JDK/Maven versions, launch mode, runtime policy,

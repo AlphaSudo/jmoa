@@ -91,6 +91,33 @@ experiments. It narrows what they can answer. The latest clean-B0 campaign is
 the current PetClinic buyer-comparison authority, and its terminal result is
 `ENVIRONMENT_VARIANCE_TOO_HIGH`, with no product pair admitted.
 
+## PetClinic Four-Arm Direct Product Confirmation
+
+T7R2.3/T7R2.36, published in JMOA 2.1 as T7R23, resolved the remaining role
+and packaging ambiguity with a four-arm factorial. It compared strict B0 and
+exact R41 content in both exploded and fat-JAR layouts. Five qualifications,
+20 same-artifact controls, eight direct-screen sessions and 48 held-out
+sessions completed: 81/81 attempts, with no predecessor observation reuse and
+no replacement observation.
+
+The primary direct product contrast is exact R41F minus documented strict B0E.
+It reduced process PSS in 12/12 held-out blocks by **-15,241.5 KiB median**,
+exact `p=0.00048828125`, bootstrap 95% **[-16,109.5, -15,052.5] KiB**.
+Target-cgroup `memory.current` was **-17,033,216 bytes median**, also favorable
+in 12/12 blocks. Private Dirty, cgroup anonymous, file and kernel memory all
+corroborated the direction.
+
+The factorial estimated a **-12,715.25 KiB packaging main effect**,
+**-2,465 KiB content main effect**, and **+3,801.5 KiB interaction**. Therefore
+the accepted wording is packaging-inclusive. Median lifecycle CPU increased
+14.71% and startup increased 1.652 seconds; all frozen product-cost gates
+passed.
+
+Verdict: `T7R23_R487_SCALE_DIRECT_RAM_WIN`. The experiment registry contains a
+claimable direct-product row. The exact accepted artifact remains R41F; only
+its evidence pointer advances to revision 3. See the
+[JMOA 2.1 result](petclinic-r41f-b0-t7r23-result.md).
+
 ## Claim Rule
 
 Never arithmetically combine `B0 -> V1`, `V1 -> V2`, `V2E -> R41F`, or direct
@@ -99,5 +126,6 @@ Never use a screen as a confirmed win. Never turn a failed same-artifact noise
 gate into a product delta. Cite the direct matrix for the original B0-to-V2
 buyer comparison, the evolution matrix for V1-to-V2 engineering progress,
 R4.87 only for exact R41F versus V2E, T7R for the failed direct 4 MiB PSS
-hypothesis, and T7R2 for the successful independent direct target-cgroup RAM
-claim and R41F promotion.
+hypothesis, T7R2 for the successful independent target-cgroup RAM claim and
+R41F promotion, and T7R23 for the current four-arm packaging-inclusive direct
+PSS and cgroup-RAM claim.

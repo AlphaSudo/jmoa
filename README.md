@@ -1,360 +1,248 @@
-# JMOA
+# JMOA 2.1
 
-Evidence-driven, build-time JVM footprint optimization for Spring Boot applications.
+**Evidence-gated, build-time JVM footprint optimization for Spring Boot.**
 
 [![Build](https://github.com/AlphaSudo/jmoa/actions/workflows/build.yml/badge.svg)](https://github.com/AlphaSudo/jmoa/actions/workflows/build.yml)
-[![Release](https://img.shields.io/github/v/release/AlphaSudo/jmoa)](https://github.com/AlphaSudo/jmoa/releases/tag/v2.0.0)
+[![Release](https://img.shields.io/github/v/release/AlphaSudo/jmoa)](https://github.com/AlphaSudo/jmoa/releases/tag/v2.1.0)
 [![License](https://img.shields.io/github/license/AlphaSudo/jmoa)](LICENSE)
-![Build JDK](https://img.shields.io/badge/build-JDK%2026-E76F00?logo=openjdk&logoColor=white)
+![Runtime JDK](https://img.shields.io/badge/runtime-Java%2017%2B-E76F00?logo=openjdk&logoColor=white)
+![Claim](https://img.shields.io/badge/PetClinic-claimable%20RAM%20win-1f883d)
 
-[Architecture](docs/architecture/system-overview.md) |
-[Methodology](docs/methodology/measurement-protocol.md) |
-[Reproduction](docs/reproduction/petclinic-quickstart.md) |
-[PetClinic Direct RAM Win](docs/product-evidence/petclinic-r41f-b0-t7r2-cgroup-result.md) |
-[Prior T7R PSS Result](docs/product-evidence/petclinic-r41f-b0-t7r-result.md) |
-[R4.87 Candidate Result](docs/product-evidence/petclinic-r41f-v2e-r487-result.md) |
-[Direct Result](docs/product-evidence/b0-v1-v2-three-service-matrix.md) |
-[Forensic Matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md) |
-[V1 to V2](docs/results/v2-three-service-matrix.md) |
-[Portfolio](https://github.com/AlphaSudo/jmoa-jvm-optimization-portfolio)
+[Technical paper](docs/paper/jmoa-v2.1-petclinic-memory-engineering.md) ·
+[PetClinic result](docs/product-evidence/petclinic-r41f-b0-t7r23-result.md) ·
+[Architecture](docs/architecture/system-overview.md) ·
+[Methodology](docs/methodology/measurement-protocol.md) ·
+[Quickstart](docs/reproduction/petclinic-quickstart.md) ·
+[Engineering portfolio](https://github.com/AlphaSudo/jmoa-jvm-optimization-portfolio)
 
-JMOA rewrites admitted lambda and adapter call sites, reduces selected dependency
-classfile metadata, materializes optimized bytecode into the real deployment
-shape, proves which artifacts the JVM loaded, and validates memory effects with
-paired PSS, Private_Dirty, cgroup, NMT, and class-level evidence.
+JMOA treats JVM memory reduction as a delivery problem, not a bytecode trick.
+It profiles real execution, admits only bounded transformations, rewrites at
+build time, materializes the actual Spring Boot deployment, proves what the JVM
+loaded, and accepts a result only after paired process- and cgroup-memory
+evidence passes frozen gates.
 
-## Latest Direct PetClinic Result
+## PetClinic result: 14.88 MiB less process PSS
 
-T7R2 has established a **claimable direct target-cgroup RAM win** for exact
-R41F versus strict no-JMOA B0 under symmetric fat-JAR packaging. The
-prospectively frozen campaign completed four qualification sessions, eight
-passing same-artifact controls, and 24 fresh held-out sessions in 12 alternating
-paired blocks. All 36 sessions were valid; no predecessor observation entered
-the inference; every memory, uncertainty, semantic, and product-cost gate
-passed.
+JMOA 2.1 publishes one current product claim: the exact accepted **R41F JMOA
+fat-JAR deployment** versus the documented strict **no-JMOA B0 exploded-Boot
+deployment** of Spring PetClinic's customers service.
 
-| Metric, R41F minus clean B0 | Fresh result | Interpretation |
+| Held-out metric, R41F minus B0E | Result | Evidence |
 | --- | ---: | --- |
-| `memory.current` | **-3,317,760 bytes** median | About 3.16 MiB less; 12/12 favorable; 95% CI [-3,715,072, -2,932,736] bytes |
-| Exact sign test | **`p=0.00048828125`** | Passes the frozen consistency rule |
-| Process PSS | **-1,407.5 KiB** median | 12/12 favorable; 95% CI [-1,725.5, -638.5] KiB |
-| Private Dirty | **-1,308 KiB** median | 95% upper bound -726 KiB |
-| cgroup file memory | **-2,113,536 bytes** median | Every block favorable; 95% upper -2,076,672 bytes |
-| cgroup anonymous memory | **-1,339,392 bytes** median | 95% upper -739,328 bytes |
-| NMT total committed | **-2,928.5 KiB** median | Favorable JVM/native commitment |
-| Native process `[heap]` PSS | +2,202 KiB median | Adverse component, inside the frozen +4 MiB bound |
-| Lifecycle CPU | +0.1945% / +63,109.5 usec median | Product-cost gates passed |
+| Process PSS | **-15,241.5 KiB (-14.88 MiB)** | 12/12 favorable; 95% bootstrap CI [-16,109.5, -15,052.5] KiB |
+| `memory.current` | **-17,033,216 bytes (-16.24 MiB)** | 12/12 favorable; 95% CI [-17,842,176, -16,713,728] bytes |
+| Private Dirty | **-15,252 KiB** | 12/12 favorable; 95% CI [-16,062, -14,880] KiB |
+| Cgroup anonymous memory | **-15,616,000 bytes** | 12/12 favorable |
+| Cgroup file memory | **-411,648 bytes** | 12/12 favorable |
+| Cgroup kernel memory | **-1,079,296 bytes** | 12/12 favorable |
+| Exact paired sign test | **p = 0.00048828125** | Frozen primary inference |
 
-The claim endpoint is target-cgroup total RAM. It does not retroactively turn
-T7R's failed 4 MiB process-PSS endpoint into a win. T7R2 ran a new experiment
-with a 2 MiB cgroup materiality floor and a one-sided confidence bound more
-than one complete 1 MiB memcg charge-stock floor below zero. Exact R41F is now
-the accepted PetClinic deployment (revision 2).
+The campaign completed **81/81 sessions**: five qualification observations,
+20 same-artifact controls, eight screening observations, and 48 held-out
+four-arm observations. No predecessor observation was reused. All RAM,
+uncertainty, semantic, lifecycle, and product-cost gates passed, and the host
+was restored after execution.
 
-Read the [public direct result](docs/product-evidence/petclinic-r41f-b0-t7r2-cgroup-result.md),
-the [machine-readable result](docs/product-evidence/petclinic-r41f-b0-t7r2-cgroup-result.json),
-or the [terminal engineering ledger](docs/petclinic-ledger/86-t7r2-direct-cgroup-ram-win-terminal-result.md).
+The result includes measured costs: median lifecycle CPU increased **14.71%**
+and median startup increased **1.652 s (3.76%)**. Median request latency and
+p95 latency changed by **0 ms**. These costs passed their prospectively frozen
+limits; they are not hidden from the claim.
 
-## R4.87 Candidate-Versus-V2E Result
+This is a **packaging-inclusive deployment result**. It is not a claim that
+JMOA content alone saves 14.88 MiB, that exploded Boot is universally worse,
+or that every Spring service will reproduce the same effect. The four-arm
+factorial measured packaging as the dominant main effect in this deployment.
+That boundary is part of the result, not a footnote.
 
-R4.87 produced a **claimable PetClinic RAM win with bounded CPU and file
-tradeoffs** for the exact R41F candidate versus accepted exact V2E. This was a
-fresh, prospectively frozen campaign: eight same-artifact control sessions and
-24 held-out sessions arranged as 12 paired blocks. All 12 blocks favored R41F.
+Read the [human result](docs/product-evidence/petclinic-r41f-b0-t7r23-result.md),
+the [machine-readable record](docs/product-evidence/petclinic-r41f-b0-t7r23-result.json),
+or the [full technical paper](docs/paper/jmoa-v2.1-petclinic-memory-engineering.md).
 
-| Metric, R41F minus V2E | Result | Interpretation |
-| --- | ---: | --- |
-| Process PSS | **-12,797 KiB** median | About 12.5 MiB less; 95% bootstrap CI [-13,299.5, -12,005] KiB |
-| Private Dirty | **-12,650 KiB** median | Corroborates the process-memory reduction |
-| `memory.current` | **-13,932,544 bytes** median | Corroborates the target-cgroup RAM reduction |
-| cgroup anonymous memory | **-12,959,744 bytes** median | The reduction is predominantly anonymous memory |
-| cgroup file memory | +106,496 bytes median | Small adverse tradeoff; worst block +278,528 bytes, below the frozen 1 MiB cap |
-| Lifecycle CPU | +19.20% median | Explicit adverse tradeoff; passed the prospectively frozen 20% median cap |
-| Startup | +2,586.5 ms median | Passed the frozen 10% relative gate |
-| Request latency | 0 ms median; +1 ms p95 | Passed both frozen latency gates |
+## The problem JMOA solves
 
-The paired sign test was exact `p=0.00048828125`; the conservative
-baseline-debited analysis retained the same -12,797 KiB median and a fully
-negative 95% bootstrap interval. All semantic, cold-start, teardown, swap,
-memory-pressure, residual-reclaim, component-compensation, startup, latency,
-file, and CPU predicates passed. The registry therefore contains one claimable
-R4.87 row.
+Optimizing a JVM service is harder than deleting a few classfile bytes:
 
-This is deliberately narrower than a product-release claim. R41F combines
-audited dependency `LocalVariableTable`/`LocalVariableTypeTable` removal with a
-fat-JAR launch shape, while V2E is the accepted exploded-Boot deployment. The
-result therefore measures that complete candidate deployment; it does not
-attribute the entire delta to metadata removal alone, does not replace the
-clean B0-to-V2 matrix below, and does not transfer to Doctor or Patient.
-R4.87 alone did not authorize promotion, but the later fresh T7R2 direct
-R41F-versus-clean-B0 target-cgroup confirmation did. Accepted PetClinic is now
-exact R41F under the recorded `NO_CDS_LOW_DIRTY` runtime policy.
+- a transformed class can be valid yet never execute in production;
+- an optimized dependency can be built correctly but omitted from the final
+  Spring Boot artifact;
+- a smaller JAR can consume more RAM after class loading, JIT compilation,
+  allocation, and page residency;
+- CDS, packaging, allocator state, and startup order can move memory by more
+  than the proposed optimization;
+- an attractive RSS snapshot can disappear under a paired cold-start campaign.
 
-Read the [human-readable result and claim boundary](docs/product-evidence/petclinic-r41f-v2e-r487-result.md)
-or the [machine-readable result](docs/product-evidence/petclinic-r41f-v2e-r487-result.json).
+JMOA connects those layers. It answers both questions an optimization project
+must answer: **what can be changed safely?** and **did the deployed process
+actually use less memory?**
 
-## Direct B0 To V2 Product Matrix
-
-The final direct campaign compares strict no-JMOA B0, accepted V1, and accepted
-V2 under one frozen runtime per service. Each service completed three valid
-qualification observations followed by all six B0/V1/V2 order permutations:
-`18/18` final observations and zero semantic errors.
-
-| Service | Deployment and policy | B0 to V2 median PSS | Wins | 95% bootstrap CI | Product gate |
-| --- | --- | ---: | ---: | ---: | --- |
-| Doctor | Fat JAR, application CDS | **-4,715.5 KB** | 5/6 | [-7,107, -268.5] KB | Passed |
-| Patient | Fat JAR, stock JDK base CDS | -1,266.5 KB | 4/6 | [-12,330.5, 3,488.5] KB | Not passed |
-| PetClinic customers | Exploded Boot, `NO_CDS_LOW_DIRTY` | -2,947 KB | 4/6 | [-6,516.5, 4,215] KB | Not passed |
-
-The frozen three-service launch criterion is therefore **not passed**: one of
-three services is a complete product win. Patient and PetClinic show direct
-memory reductions but miss the required `-4,096 KB` PSS magnitude and
-bootstrap-upper-below-zero gates. Patient's row comes from the one corrected
-campaign authorized by a proven capture-timing defect; it is still a valid
-non-win. These observations are retained; no valid losing run was replaced.
-
-Read the [direct matrix](docs/product-evidence/b0-v1-v2-three-service-matrix.md),
-[forensic matrix](docs/product-evidence/b0-v1-v2-final-forensic-matrix.md),
-[V1 runtime-cost census](docs/product-evidence/v1-runtime-cost-census.md),
-[historical/current B0 reconciliation](docs/product-evidence/historical-baseline-recovery/historical-vs-current-b0-absolute.md),
-[campaign seal](docs/product-evidence/three-artifact-campaign-seal.md),
-[balanced protocol](docs/product-evidence/b0-v1-v2-balanced-protocol.md), and
-the [adoption/evaluation guide](docs/adoption/README.md).
-
-The current engineering diagnosis is that V1 has a positive median PSS cost in
-all three unified campaigns, while V2's metadata reduction more than offsets
-that cost in median direct results. Existing captures prove artifact admission
-and shared JMOA runtime-family objects, but not exact transformed-site
-execution. Choose between the [reducer-only B0R path and full
-optimization](docs/adoption/14-choose-jmoa-mode.md) explicitly; do not infer a
-universal full-pipeline recommendation from incremental V1-to-V2 wins.
-
-Run the same workflow with a private frozen service config:
-
-```powershell
-pwsh ./scripts/run-jmoa-evaluation.ps1 `
-  -Service PetClinicCustomers `
-  -ConfigPath <private-campaign-config.json> `
-  -OutputDirectory <private-output-root> `
-  -DryRun
-```
-
-Remove `-DryRun` after reviewing the artifact and implementation freeze. Each
-qualification and final observation gets a complete chronological Markdown
-ledger containing launch commands, support-service logs, warmup and workload
-responses, captures, and teardown. Raw evidence and private configuration stay
-outside the repository.
-
-## V1 To V2 Engineering Evolution
-
-This separate matrix compares the accepted V1 artifact with V2 under one frozen
-runtime policy per service. Every row has `6/6` valid runs, zero workload
-errors, a V2-C `CONFIRMED_WIN` verdict, and V2-D attribution.
-
-| Service | Deployment | Confirmed policy | Median PSS, V1 to V2 | Wins |
-| --- | --- | --- | ---: | ---: |
-| PetClinic customers | Exploded Boot / `JarLauncher` | `NO_CDS_LOW_DIRTY` | `-6,012 KB` | `2/3` |
-| Doctor | Spring Boot fat JAR | Application CDS | `-5,156 KB` | `3/3` |
-| Patient | Spring Boot fat JAR | `JDK_BASE_CDS_LOW_DIRTY` | `-8,279 KB` | `3/3` |
-
-Patient is also independently confirmed under `NO_CDS_LOW_DIRTY` at
-`-8,903 KB` median PSS. Dynamic Patient application CDS was rejected for the
-tested single-replica deployment. Results are protocol-specific: JMOA does not
-claim that CDS, no-CDS, fat JARs, exploded Boot, or one allocator policy is
-universally optimal.
-
-These medians explain how the product improved after V1. They are not added to
-older baseline-to-V1 results and do not replace the direct matrix above.
-
-Read the [engineering-evolution result](docs/results/v2-three-service-matrix.md) or the
-[machine-readable audit matrix](docs/v2-final/v2-three-service-memory-matrix.json).
-
-## What V2 Adds
-
-V1 established build-time lambda and adapter optimization. V2 turns that
-transformer into an evidence-gated delivery system:
-
-- raw dependency `LocalVariableTable` and `LocalVariableTypeTable` reduction;
-- normalized auditing that permits target-attribute changes and rejects
-  unexpected classfile changes;
-- Spring Boot fat-JAR and exploded-Boot materialization;
-- artifact SHA-256, dependency replacement, and runtime-origin proof;
-- paired evidence validation for PSS, Private_Dirty, and `memory.current`;
-- smaps, NMT, heap, histogram, class, and metaspace attribution;
-- reducer and runtime-policy recommendation engines;
-- semantic-smoke and confirmation workflow automation;
-- generated/proxy family discovery with conservative safety classification.
-
-The Patient V1-to-V2 result is therefore not a replay of an older lambda-only
-benchmark. It compares accepted product artifacts after the V2 reducer,
-materialization, policy, evidence, and attribution gates.
-
-## Architecture
+## How it works
 
 ```text
-Artifact analysis
-      |
-Candidate admission
-      |
-Build-time transformation
-      |
-Non-target byte-preservation audit
-      |
-Deployment materialization
-      |
-Runtime-origin and policy proof
-      |
-Semantic workload
-      |
-Balanced paired confirmation
-      |
-V2-C evidence validation
-      |
-V2-D memory attribution
-      |
-Scoped claim or automatic rejection
+representative workload
+        │
+        ▼
+profile lambda and runtime behavior
+        │
+        ▼
+admit safe, useful transformation candidates
+        │
+        ├── build-time lambda/adapter rewriting
+        └── audited dependency LVT/LVTT reduction
+        │
+        ▼
+byte-preservation and reproducibility audit
+        │
+        ▼
+materialize the real fat-JAR or exploded-Boot deployment
+        │
+        ▼
+prove artifact hashes, replacement, runtime origins, and JVM policy
+        │
+        ▼
+run semantic workload + paired PSS/cgroup confirmation
+        │
+        ▼
+publish a scoped claim — or reject the candidate
 ```
 
-The Maven plugin owns scanning, admission, transformation, reporting,
-recommendation, evidence, and attribution. `jmoa-runtime-lib` supplies the
-runtime adapter types referenced by admitted lambda rewrites. PowerShell
-automation materializes and verifies the actual Spring Boot deployment rather
-than measuring an unproven build directory.
+### 1. Profile and admit
 
-Start with [System Overview](docs/architecture/system-overview.md), then read
-[Bytecode Transformation](docs/architecture/bytecode-transformation.md) and
-[Materialization and Origin Proof](docs/architecture/materialization-and-origin-proof.md).
+The training agent records stable lambda-site identities and invocation counts.
+The Maven plugin combines that profile with explicit safety rules. Unsupported
+capturing, serializable, `altMetafactory`, framework-owned, or otherwise risky
+sites remain unchanged.
 
-## Safety Model
+### 2. Transform at build time
 
-JMOA treats bytecode optimization as an artifact-integrity problem, not just a
-transformation problem.
+Admitted non-capturing lambda and adapter sites are rewritten before deployment.
+The production process does not need a JMOA runtime javaagent. The reducer can
+also remove selected `LocalVariableTable` and `LocalVariableTypeTable` debug
+metadata from eligible dependency classes.
 
-- Final optimized services use no runtime javaagent.
-- Mutation is opt-in; discovery and riskier families remain report-only.
-- Artifact and replacement JAR identities are recorded with SHA-256.
-- The raw reducer audits all non-target classfile structures for equivalence.
-- Signed, sealed, and multi-release JARs are skipped by the productized reducer.
-- `jmoa-runtime-lib` can be excluded and its identity proven across variants.
-- Materialization proves that every intended dependency was replaced.
-- Runtime proof verifies mapped CDS archives and loaded artifact origins.
-- Semantic workloads fail on health, request, verifier, class-format, or
-  linkage errors.
-- A single run is diagnostic only. Performance claims require valid paired
-  evidence and survive losing pairs; results are never selected by deleting
-  valid outliers.
+### 3. Audit the artifact
 
-See [Reducer Configuration](docs/reference/reducer-configuration.md) for the
-exact mutation boundary.
+JMOA records classfile component digests and rejects unexplained changes.
+Signed, sealed, and multi-release JARs are conservatively excluded from the
+productized raw reducer. Reports preserve the reason every candidate was
+accepted, rejected, or left report-only.
 
-## Runtime Policy Is Part of the Artifact Contract
+### 4. Materialize and prove the deployment
 
-JMOA records runtime policy with the artifact and launch shape:
+JMOA handles Spring Boot fat JARs and exploded layouts as distinct deployment
+contracts. It verifies replacement hashes and runtime origins so an experiment
+cannot accidentally measure stale or baseline bytecode.
 
-| Service | Accepted policy | Important distinction |
-| --- | --- | --- |
-| PetClinic customers | no-CDS | Sharing is explicitly disabled. |
-| Doctor | application CDS | Each artifact uses its own trained application archive. |
-| Patient | stock JDK base CDS | Both arms map the same JDK archive; no Patient application archive is present. |
+### 5. Measure the whole system
 
-On JDK 26 the stock base archive may be used unless sharing is disabled.
-Application CDS adds an artifact-specific application archive over that base.
-Those are different policies and require different live proof. JMOA therefore
-does not reduce policy to a loose "CDS on/off" label.
+The evidence layer observes process PSS, Private Dirty, `smaps` categories,
+cgroup v2 `memory.current`/`memory.stat`, JVM Native Memory Tracking, heap,
+metaspace, class counts, faults, CPU, startup, latency, and semantic behavior.
+Same-artifact controls qualify the measurement environment before treatment
+results are admitted.
 
-See [Runtime Policy Model](docs/architecture/runtime-policy-model.md) and
-[CDS and Runtime Policy](docs/methodology/cds-and-runtime-policy.md).
+## What ships in 2.1
 
-## Public PetClinic Workflow
+- Maven plugin for profiling-aware lambda/adapter optimization;
+- Java 17-compatible runtime adapter library;
+- raw dependency LVT/LVTT reducer with non-target byte-preservation auditing;
+- Spring Boot fat-JAR and exploded-Boot materialization tooling;
+- artifact identity and runtime-origin verification;
+- evidence validation, attribution, and recommendation engines;
+- PetClinic build/smoke example and the accepted v2.1 evidence record;
+- release JARs, source JARs, POMs, manifest, and SHA-256 checksums.
 
-The public customers-service workflow is clean-clone-qualified for build,
-raw reduction, exploded-Boot materialization, hash proof, and Java 17 semantic
-smoke. The accepted memory result comes from the separate three-pair protocol.
+Generated proxies, CGLIB, ByteBuddy, Hibernate, and Spring AOT families remain
+inventory/report-only. JMOA 2.1 does not silently mutate them.
 
-```powershell
+## Build and install
+
+JMOA is distributed through GitHub Releases rather than Maven Central.
+
+Build from source:
+
+```bash
 git clone https://github.com/AlphaSudo/jmoa.git
 cd jmoa
 mvn -q -pl jmoa-runtime-lib,jmoa-maven-plugin clean install
-./examples/spring-petclinic-customers-nocds/scripts/00-quickstart.ps1 -ProfilePath <profile.json> -AdmissionPath <admission.txt> -SafeSamsPath <safe-sams.txt> -RuntimeJar ./jmoa-runtime-lib/target/jmoa-runtime-lib-2.0.0-rc2.jar
 ```
 
-The quickstart requires the frozen public profile, admission list, and SAM
-allowlist used by the qualified workflow. They are not currently attached to
-the `v2.0.0` GitHub release, so this is not presented as a zero-input command.
-See [PetClinic Quickstart](docs/reproduction/petclinic-quickstart.md) for the
-prerequisite contract, [Extended Confirmation](docs/reproduction/extended-confirmation.md)
-for the claim protocol, and [Interpreting Results](docs/reproduction/interpreting-results.md)
-for verdict rules.
-
-## Results JMOA Rejected
-
-Negative results are release inputs, not discarded experiments:
-
-- the hardened ASM metadata reducer was artifact-safe but failed runtime
-  promotion on the accepted PetClinic protocol;
-- application-class reduction was artifact-safe but failed runtime
-  confirmation;
-- generated-family matched evidence found no safe bounded mutation candidate;
-- Patient dynamic AppCDS failed the frozen single-replica archive-economics
-  gate even though stock base CDS later passed.
-
-The [Negative Results Register](docs/results/negative-results.md) records the
-hypothesis, observed artifact result, runtime result, and final disposition.
-
-## Shipped Scope
-
-- build-time lambda and adapter transformation;
-- raw dependency LVT/LVTT reduction;
-- exploded-Boot and fat-JAR materialization paths;
-- no-CDS, stock base-CDS, and confirmed application-CDS policy proof;
-- evidence validation and memory attribution engines;
-- reducer and runtime-policy recommendations;
-- generated-family inventory and report-only relevance analysis.
-
-## Not Claimed
-
-- universal memory or startup improvement;
-- generated, proxy, CGLIB, ByteBuddy, Hibernate, or Spring AOT mutation;
-- large-method splitting, constant-pool rewriting, or BootstrapMethods rewriting;
-- universal CDS benefit;
-- automatic mutation of a production deployment;
-- transfer of a service result to another launch mode or runtime policy.
-
-## Build And Test
-
-The current CI build uses Temurin 26 and Maven on `ubuntu-latest`. The plugin is
-compiled with `--release 22`; the runtime library is compiled with `--release
-17`. The public PetClinic semantic smoke exercises the materialized runtime on
-Java 17, while the final private confirmation matrix used the recorded Java 26
-container protocols.
+Or download the `v2.1.0` assets and install them into a local Maven repository:
 
 ```powershell
-mvn -q -pl jmoa-runtime-lib,jmoa-maven-plugin clean test
-./scripts/check-documentation-quality.ps1
-./scripts/check-publication-safety.ps1
+gh release download v2.1.0 --repo AlphaSudo/jmoa --dir target/v2-release
+pwsh ./scripts/install-v2-release-artifacts.ps1 `
+  -ReleaseDir target/v2-release `
+  -Version 2.1.0
 ```
 
-See the [Compatibility Matrix](docs/reference/compatibility-matrix.md) for the
-tested boundary and the [Maven Goal Reference](docs/reference/maven-plugin-goals.md)
-for plugin entry points.
+Invoke a plugin goal with:
 
-## Repository Map
+```powershell
+mvn com.yourorg.jmoa:jmoa-maven-plugin:2.1.0:<goal> -D<property>=<value>
+```
+
+See the [goal reference](docs/reference/maven-plugin-goals.md) and
+[reducer configuration](docs/reference/reducer-configuration.md) before using
+mutation goals on a production artifact.
+
+## Public PetClinic workflow
+
+The public customers-service example pins Spring PetClinic source revision
+`305a1f13e4f961001d4e6cb50a9db51dc3fc5967` and demonstrates build, reduction,
+materialization, hash proof, and Java 17 semantic smoke:
+
+```powershell
+./examples/spring-petclinic-customers-nocds/scripts/00-quickstart.ps1 `
+  -ProfilePath <profile.json> `
+  -AdmissionPath <admission.txt> `
+  -SafeSamsPath <safe-sams.txt> `
+  -RuntimeJar ./jmoa-runtime-lib/target/jmoa-runtime-lib-2.1.0.jar
+```
+
+The frozen training/admission inputs and the Linux campaign environment remain
+explicit prerequisites; the quickstart is not advertised as a zero-input
+reproduction of the 81-session memory claim. See
+[PetClinic quickstart](docs/reproduction/petclinic-quickstart.md) and
+[extended confirmation](docs/reproduction/extended-confirmation.md).
+
+## Safety and claim discipline
+
+- Final optimized services run without a JMOA javaagent.
+- Mutation is opt-in; discovery defaults to report-only.
+- Every intended artifact replacement is hash-bound.
+- Semantic failures, verifier errors, workload errors, swap, teardown failure,
+  or invalid controls stop a campaign.
+- A single favorable run is diagnostic only.
+- Valid losing observations are retained; gates are not relaxed after exposure.
+- Service results do not transfer automatically to another service, packaging
+  shape, JVM tuple, CDS policy, or workload.
+
+JMOA's long negative-results history is public because rejecting unsafe or
+non-economic candidates is part of the product. See the
+[negative-results register](docs/results/negative-results.md).
+
+## Repository map
 
 | Path | Purpose |
 | --- | --- |
 | `jmoa-maven-plugin/` | Transformation, reducer, evidence, attribution, and recommendation goals |
 | `jmoa-runtime-lib/` | Java 17-compatible runtime adapters |
-| `scripts/` | Materialization, runtime proof, semantic smoke, and confirmation automation |
-| `examples/` | Public PetClinic build and smoke workflow |
+| `scripts/` | Materialization, proof, release, smoke, and confirmation automation |
+| `examples/` | Public Spring PetClinic workflow |
 | `docs/architecture/` | Product and bytecode architecture |
 | `docs/methodology/` | Measurement, statistics, attribution, and policy rules |
-| `docs/results/` | Authoritative success and rejection summaries |
-| `docs/reference/` | Goals, configuration, schemas, and compatibility |
-| `docs/history/` | Phase-indexed provenance and audit links |
-| `docs/v2-final/` | Frozen machine-readable release evidence |
+| `docs/product-evidence/` | Human and machine-readable product claims |
+| `docs/paper/` | Expert technical papers |
+| `docs/results/` | Accepted and rejected engineering outcomes |
 
-The separate [JMOA portfolio](https://github.com/AlphaSudo/jmoa-jvm-optimization-portfolio)
-is the hiring and case-study narrative. This repository is the source,
-invariant, tooling, and reproduction record. JMOA is licensed under Apache 2.0;
-private Patient and Doctor source, configuration, and raw evidence are not
+## Scope
+
+JMOA 2.1 is a research/tooling release for engineers who can inspect bytecode,
+deployment packaging, and runtime evidence. It does not promise universal RAM
+reduction or automatically modify a production service. PetClinic is the first
+v2.1 published service example; additional service studies will follow as
+independent, service-scoped evidence.
+
+JMOA is licensed under Apache 2.0. The source repository contains public
+tooling and sanitized evidence; private service source and raw evidence are not
 published.

@@ -14,7 +14,7 @@ semantic-smoke path. It is not the accepted memory-confirmation runner.
 - the additional-safe-SAM allowlist.
 
 The last three inputs were used in clean-clone qualification but are not
-currently uploaded to the `v2.0.0` GitHub release. Until they are published,
+currently bundled as public release inputs. Until they are published,
 the workflow is executable only for a reviewer who has those public-safe frozen
 inputs. This limitation is intentional and visible.
 
@@ -33,7 +33,7 @@ mvn -q -pl jmoa-runtime-lib,jmoa-maven-plugin clean install
   -ProfilePath <petclinic-customers-profile.json> `
   -AdmissionPath <petclinic-customers-admission.txt> `
   -SafeSamsPath <jmoa-additional-safe-sams.txt> `
-  -RuntimeJar ./jmoa-runtime-lib/target/jmoa-runtime-lib-2.0.0-rc2.jar
+  -RuntimeJar ./jmoa-runtime-lib/target/jmoa-runtime-lib-2.1.0.jar
 ```
 
 The script pins PetClinic revision

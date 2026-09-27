@@ -19,6 +19,8 @@ historical provenance.
 
 ## Results
 
+- [JMOA 2.1 PetClinic Direct RAM Win](product-evidence/petclinic-r41f-b0-t7r23-result.md)
+- [JMOA 2.1 Technical Paper](paper/jmoa-v2.1-petclinic-memory-engineering.md)
 - [PetClinic Direct R41F-to-B0 T7R2 Target-Cgroup RAM Win](product-evidence/petclinic-r41f-b0-t7r2-cgroup-result.md)
 - [Prior PetClinic Direct R41F-to-B0 T7R PSS Result](product-evidence/petclinic-r41f-b0-t7r-result.md)
 - [PetClinic R41F-to-V2E R4.87 RAM Confirmation](product-evidence/petclinic-r41f-v2e-r487-result.md)
@@ -35,6 +37,11 @@ historical provenance.
 - [Reducer Configuration](reference/reducer-configuration.md)
 - [Compatibility Matrix](reference/compatibility-matrix.md)
 - [Schema Index](reference/schema-index.md)
+
+## Releases
+
+- [JMOA v2.1.0](releases/v2.1.0.md)
+- [JMOA v2.0.0](releases/v2.0.0.md)
 
 ## Decisions And History
 

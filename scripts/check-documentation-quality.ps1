@@ -67,15 +67,18 @@ function Assert-ClaimConsistency {
         foreach ($field in @('runtimePolicy','validRuns','pairedWins','medianPssDeltaKb','medianPrivateDirtyDeltaKb','medianMemoryCurrentDeltaBytes','v2cVerdict')) {
             if ($service.$field -ne $registered.$field) { throw "Matrix/claim-register mismatch: $($service.service).$field" }
         }
-        $formattedPss = '{0:N0}' -f [math]::Abs([long]$service.medianPssDeltaKb)
-        if (-not $readme.Contains("-$formattedPss KB")) { throw "README is missing the matrix PSS value for $($service.service)." }
-        if (-not $readme.Contains([string]$service.runtimePolicy) -and -not ($service.service -eq 'doctor' -and $readme.Contains('Application CDS'))) { throw "README is missing runtime policy $($service.runtimePolicy)." }
     }
-    foreach ($required in @('JDK_BASE_CDS_LOW_DIRTY','NO_CDS_LOW_DIRTY','Dynamic Patient application CDS')) {
-        if (-not $readme.Contains($required)) { throw "README is missing Patient policy taxonomy: $required" }
-    }
-    if ($readme -match 'Patient CDS remains blocked|Patient CDS policy remains blocked') {
-        throw 'README contains stale ambiguous Patient CDS wording.'
+
+    $v21 = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'docs/product-evidence/petclinic-r41f-b0-t7r23-result.json') | ConvertFrom-Json
+    $accepted = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'docs/product-evidence/petclinic-accepted-deployment-v1.json') | ConvertFrom-Json
+    if (-not $v21.claimable -or $v21.decision -ne 'T7R23_R487_SCALE_DIRECT_RAM_WIN') { throw 'JMOA 2.1 result is not the frozen claimable terminal.' }
+    if ($v21.primary.processPssKiB.median -ne -15241.5 -or $v21.primary.processPssKiB.favorableBlocks -ne 12) { throw 'JMOA 2.1 PSS headline drifted.' }
+    if ($v21.primary.memoryCurrentBytes.median -ne -17033216) { throw 'JMOA 2.1 cgroup headline drifted.' }
+    if ($accepted.revision -ne 3 -or $accepted.acceptedDeployment.id -ne 'R41F') { throw 'Accepted PetClinic pointer is not exact R41F revision 3.' }
+    $resultHash = (Get-FileHash -LiteralPath (Join-Path $RepoRoot $accepted.runtimePolicy.evidencePath) -Algorithm SHA256).Hash
+    if ($resultHash -ne $accepted.runtimePolicy.evidenceSha256) { throw 'Accepted PetClinic evidence hash does not match the published result.' }
+    foreach ($required in @('15,241.5 KiB','17,033,216 bytes','14.71%','packaging-inclusive')) {
+        if (-not $readme.Contains($required)) { throw "README is missing the JMOA 2.1 claim boundary: $required" }
     }
 }
 

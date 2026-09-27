@@ -1,6 +1,6 @@
 param(
     [string]$ReleaseDir = "target/v2-release",
-    [string]$Version = "2.0.0-rc2",
+    [string]$Version = "2.1.0",
     [string]$Maven = "mvn",
     [string]$MavenRepoLocal
 )

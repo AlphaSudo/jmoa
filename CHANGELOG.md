@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.1.0
+
+- Publishes the first claimable direct PetClinic whole-deployment result for
+  exact R41F versus the documented strict no-JMOA B0 exploded deployment:
+  median process PSS `-15,241.5 KiB` and target-cgroup `memory.current`
+  `-17,033,216 B`, with 12/12 favorable held-out blocks and exact
+  `p=0.00048828125`.
+- Records the complete 81-session four-arm campaign, including same-artifact
+  controls, screening, held-out factorial reduction, product costs, and sealed
+  evidence hashes. No predecessor observation was reused.
+- Advances the accepted PetClinic evidence pointer to revision 3 while keeping
+  the exact R41F artifact and image identities unchanged.
+- Adds the JMOA 2.1 technical paper, a concise product-oriented README, a
+  sanitized machine-readable result, and explicit packaging/content
+  attribution boundaries.
+- Promotes release coordinates from `2.0.0-rc2` to `2.1.0` and ships GitHub
+  Release JARs, source JARs, POMs, manifest, and SHA-256 checksums.
+
 ## 2.0.0-rc2
 
 - Publishes a sanitized public evidence archive with run manifests, smaps,

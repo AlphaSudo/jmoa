@@ -5,7 +5,7 @@ param(
     [ValidateSet('recommendations', 'preflight', 'all')][string]$ExecuteThrough = 'recommendations',
     [string]$OutputDir = '',
     [string]$MavenExecutable = 'mvn',
-    [string]$PluginCoordinates = 'com.yourorg.jmoa:jmoa-maven-plugin:2.0.0-rc2',
+    [string]$PluginCoordinates = 'com.yourorg.jmoa:jmoa-maven-plugin:2.1.0',
     [switch]$FailOnBlocked
 )
 
