@@ -77,6 +77,13 @@ actually use less memory?**
 
 ## How it works
 
+<p align="center">
+  <img src="docs/assets/jmoa-how-it-works-v21.svg" alt="JMOA evidence pipeline from representative workload through profiling, safe transformation, byte and deployment proof, semantic and memory confirmation, to a scoped claim or rejection" width="100%">
+</p>
+
+<details>
+<summary>Text-only workflow</summary>
+
 ```text
 representative workload
         │
@@ -104,6 +111,8 @@ run semantic workload + paired PSS/cgroup confirmation
         ▼
 publish a scoped claim — or reject the candidate
 ```
+
+</details>
 
 ### 1. Profile and admit
 
