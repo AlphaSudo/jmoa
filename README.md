@@ -25,7 +25,7 @@ evidence passes frozen gates.
 
 The tested Java 26/Leyden Patient configuration showed **8.38 MiB lower median stopped-process PSS** across 12 paired blocks; its conditional lower saving bound was **8.19 MiB**. **The original calibration failed and used an approved exception; performance bounds remain unqualified or failed.** Startup/cache warmth and production or uploaded-binary parity remain unqualified.
 
-JMOA 2.15 publishes this scoped benchmark evidence with exact tested hashes and all cost results. It includes no new Maven binaries and preserves the existing stable 2.1.0 PetClinic release. Read the [Patient result and limitations](docs/product-evidence/patient-plan133-scoped-ram-result.md), [JSON](docs/product-evidence/patient-plan133-scoped-ram-result.json), or [2.15 release](https://github.com/AlphaSudo/jmoa/releases/tag/v2.15).
+JMOA 2.15 publishes this scoped benchmark evidence with exact tested hashes and all cost results. It includes no new Maven binaries and preserves the existing stable 2.1.0 PetClinic release. The next investigation is [Plan1.34](docs/services/patient-service/267-plan-1.34.md), with a [fixed32-item checklist](docs/services/patient-service/268-checklist-1.34.md). Read the [Patient result and limitations](docs/product-evidence/patient-plan133-scoped-ram-result.md), [JSON](docs/product-evidence/patient-plan133-scoped-ram-result.json), or [2.15 release](https://github.com/AlphaSudo/jmoa/releases/tag/v2.15).
 
 ## PetClinic result: 14.88 MiB less process PSS
 

@@ -1,0 +1,455 @@
+{
+  "schemaVersion": "PATIENT_PLAN134_V1",
+  "date": "2026-10-13",
+  "status": "PLANNED_FOR_REVIEW",
+  "predecessorRelease": "https://github.com/AlphaSudo/jmoa/releases/tag/v2.15",
+  "plan": "267-plan-1.34.md",
+  "checklist": "268-checklist-1.34.md",
+  "checklistTotal": 32,
+  "implementationSatisfied": 0,
+  "newRuntimeIssued": 0,
+  "newOfflineIssued": 0,
+  "objective": "CLEAN_SCOPED_RAM_8_MIB_WITH_QUALIFIED_COSTS",
+  "targetSavingKiB": 8192,
+  "lowerSavingBoundMaterialityGuardKiB": 128,
+  "requiredRawLowerSavingBoundKiB": 8320,
+  "materialityGuardIsBiasCorrection": false,
+  "historicalMediansAdded": false,
+  "postObservationCalibrationExceptionAllowed": false,
+  "confirmation": {
+    "units": 24,
+    "pairs": 12,
+    "AB": 6,
+    "BA": 6,
+    "seed": 20261013134,
+    "requiredStrict8MiBExceedances": 10,
+    "lowerBound": "third-smallest of12 positive paired savings",
+    "driftLimitKiB": 1024,
+    "model": "independent exchangeable stable pair distribution; assumptions explicit, not proved"
+  },
+  "null": {
+    "units": 8,
+    "pairs": 4,
+    "maximumAbsolutePairDifferenceKiB": 512,
+    "maximumAbsoluteMedianBiasKiB": 128,
+    "maximumAbsoluteDriftKiB": 1024,
+    "allRequiredStationarityAnd82BidirectionalCostMarginsMustQualify": true
+  },
+  "costs": {
+    "metrics": 82,
+    "earlyGroups": 40,
+    "repeatedGroups": 40,
+    "startupAndLifecycleCpuMetrics": 2,
+    "startupCpuRelativeLimit": 1.2,
+    "repeatedRelativeLimit": 1.2,
+    "repeatedAbsoluteAllowanceNs": 2000000,
+    "earlyRelativeLimit": 1.25,
+    "earlyAbsoluteAllowanceNs": 5000000,
+    "strictFavourablePairs": 10,
+    "warmupOptionsForPilotOnly": [
+      50,
+      100,
+      200
+    ],
+    "maximumFixedWarmupCycles": 200,
+    "measuredCycles": 100,
+    "requestsPerCycle": 44,
+    "primaryRequests": 632,
+    "stationarityFirstLastCycles": 50,
+    "stationarityRelativeAllowance": 0.25,
+    "stationarityAbsoluteAllowanceNs": 2000000,
+    "attachToolsAfterMeasuredCosts": true
+  },
+  "budget": {
+    "approvalStatus": "PROPOSED_NOT_EXECUTION_AUTHORIZATION",
+    "mainRuntime": 36,
+    "runtimeReserve": 36,
+    "runtimeCeiling": 72,
+    "pilotsAndDiagnosticMaximum": 8,
+    "controlsMaximum": 16,
+    "confirmationMaximum": 48,
+    "mainOffline": 6,
+    "offlineReserve": 6,
+    "offlineCeiling": 12,
+    "allIssuedFailuresCount": true,
+    "physicalJvmStartsCountedSeparately": true,
+    "hostSetupsMaximum": 5,
+    "finalRestorationReserved": 1,
+    "prelaunchWaitSeconds": 1800,
+    "perRuntimeSeconds": 3600,
+    "primarySeconds": 900,
+    "costPhaseSeconds": 2100,
+    "postCostToolsSeconds": 300,
+    "teardownSeconds": 300,
+    "independentRawReplaySeconds": 36000,
+    "wholeCampaignHours": 120
+  },
+  "host": {
+    "windowsBeforeAvailableBytes": 1073741824,
+    "windowsAvailableCommitBytes": 2147483648,
+    "guestAvailableKiB": 1572864,
+    "guestAndPatientSwapBytes": 0,
+    "intervalGuestFullPsiMaximumUs": 100000,
+    "intervalPatientFullPsiMaximumUs": 100000,
+    "guestRecentFullAvg10Maximum": 0.2,
+    "withinUnitFileChargeChangeMaximumBytes": 16777216,
+    "cacheScope": "AMBIENT_INITIAL_WITH_EXPLICIT_INTERVAL_FAULTS",
+    "sameRuntimeAndNativePoliciesBothArms": true,
+    "coldWholeStackProductionParityClaimed": false
+  },
+  "savedCostIntake": {
+    "status": "SAVED_EVIDENCE_ONLY_NO_NEW_RUNS",
+    "units": [
+      {
+        "id": "st262-p01-1",
+        "failedStationarityGroups": 10,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p01-2",
+        "failedStationarityGroups": 8,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p02-1",
+        "failedStationarityGroups": 4,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p02-2",
+        "failedStationarityGroups": 2,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p03-1",
+        "failedStationarityGroups": 1,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p03-2",
+        "failedStationarityGroups": 2,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p04-1",
+        "failedStationarityGroups": 4,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p04-2",
+        "failedStationarityGroups": 4,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p05-1",
+        "failedStationarityGroups": 1,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p05-2",
+        "failedStationarityGroups": 4,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p06-1",
+        "failedStationarityGroups": 2,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p06-2",
+        "failedStationarityGroups": 1,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p07-1",
+        "failedStationarityGroups": 1,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p07-2",
+        "failedStationarityGroups": 1,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p08-1",
+        "failedStationarityGroups": 2,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p08-2",
+        "failedStationarityGroups": 2,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p09-1",
+        "failedStationarityGroups": 1,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p09-2",
+        "failedStationarityGroups": 0,
+        "costAssessable": true
+      },
+      {
+        "id": "st262-p10-1",
+        "failedStationarityGroups": 7,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p10-2",
+        "failedStationarityGroups": 8,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p11-1",
+        "failedStationarityGroups": 1,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p11-2",
+        "failedStationarityGroups": 6,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p12-1",
+        "failedStationarityGroups": 5,
+        "costAssessable": false
+      },
+      {
+        "id": "st262-p12-2",
+        "failedStationarityGroups": 3,
+        "costAssessable": false
+      }
+    ],
+    "unitsCostAssessable": 1,
+    "failedStationarityGroupCounts": {
+      "stroke-high": 9,
+      "delete": 7,
+      "stroke-low": 6,
+      "actuator-prometheus": 5,
+      "doctor-list": 5,
+      "duplicate-create": 5,
+      "stroke-staff": 5,
+      "read-user": 5,
+      "patient-self": 4,
+      "update": 4,
+      "list": 4,
+      "patient-update": 3,
+      "stroke-empty-upstream": 3,
+      "mobile-conflict": 2,
+      "status": 2,
+      "history": 2,
+      "stroke-malformed": 2,
+      "missing-id": 1,
+      "doctor": 1,
+      "staff-status": 1,
+      "stroke-upstream-error": 1,
+      "create": 1,
+      "staff-blood-group": 1,
+      "doctor-own-filter": 1
+    }
+  },
+  "checklistItems": [
+    {
+      "id": "A01",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Bind immutable1.33/2.15 evidence, actual tag/commit/assets and excluded historical epochs. Witness: intake hashes and downloaded asset verification."
+    },
+    {
+      "id": "A02",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Complete the issue matrix for calibration, five cost failures, all-group stationarity, identity, cache/pressure and product limits. Witness: observed/inferred/unknown cause table."
+    },
+    {
+      "id": "A03",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Freeze clean8 MiB definition, exact estimator, unchanged precision/cost gates, resources, workloads and finite budgets. Witness: signed/sealed protocol manifest."
+    },
+    {
+      "id": "A04",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Define the public reproduction boundary and sanitized evidence schema without asserting private raw-data replication. Witness: public protocol/sample and privacy check."
+    },
+    {
+      "id": "B01",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Resolve what the shared-core hash names and compare its producer/output to uploaded2.1 artifacts. Witness: entry-level lineage and every difference/unknown."
+    },
+    {
+      "id": "B02",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Freeze the necessary public source and perform two pinned core builds with explained deterministic/content identity. Witness: commit/build/compiler/dependency/binary manifest."
+    },
+    {
+      "id": "B03",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Materialize both arms with feature parity and full788-site T1/T2 proof; audit resources, helpers, MR/debug/CP boundaries and bootstrap/linkage safety. Witness: independent material/coverage admission."
+    },
+    {
+      "id": "B04",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Bind and qualify each exact application's own AOT cache/JRE and actual serving origin. Witness: cache build identity, representative training and runtime load proof."
+    },
+    {
+      "id": "C01",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Reanalyse all saved raw costs/windows for24 confirmation and8 control units, including sample counts and all 82 metrics. Witness: forensics table with missing telemetry marked unknown."
+    },
+    {
+      "id": "C02",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Test tool/warmup/fixture/client/allocator/cache/pressure hypotheses and rank supported causes. Witness: mechanism matrix with evidence for and against each."
+    },
+    {
+      "id": "C03",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Qualify the exact end-to-end CLI/schema/namespace/ownership/accounting/timeout/partial-output/failure paths before target launch. Witness: meaningful zero-target fault tests plus prepare-only for every stage."
+    },
+    {
+      "id": "C04",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Qualify detachment, single-worker ownership, progress, dynamic memory allocation, teardown/restoration and wake-release behavior. Witness: integrated lifecycle and final-reader preflight."
+    },
+    {
+      "id": "D01",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Complete four counterbalanced diagnostic pilots, excluded from RAM inference and fully counted. Witness: raw pilot timings, semantics and bounded instrumentation."
+    },
+    {
+      "id": "D02",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Qualify the minimal demonstrated correction and one equal fixed warmup; test moving attach tools after measured costs. Witness: cause/fix regression proof and fixed clean recipe."
+    },
+    {
+      "id": "D03",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Establish feasible host/cache/pressure, cost stationarity, feature and archive-use admission for the chosen recipe. Witness: pilot qualification; unresolved causes block clean confirmation."
+    },
+    {
+      "id": "D04",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Seal one candidate/protocol/source/workload/resource/budget closure before controls. Witness: immutable preparation and exact permitted recovery rules."
+    },
+    {
+      "id": "E01",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Execute eight fresh identical-B0 controls in four balanced pseudo-arm pairs with new namespaces. Witness: eight raw unit gates; no old observations."
+    },
+    {
+      "id": "E02",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Pass512 KiB maximum difference,128 KiB absolute median bias and1024 KiB drift without exception. Witness: independently recomputed null memory result."
+    },
+    {
+      "id": "E03",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Pass all required control stationarity and bidirectional null-cost margins for all 82 metrics. Witness: raw windows/grouping and qualified cost-calibration result."
+    },
+    {
+      "id": "E04",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Seal an admission decision binding the passing controls and unchanged final candidate/protocol. Witness: final-entry seal; failed old blocks retained."
+    },
+    {
+      "id": "F01",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Preregister12 balanced pairs/seed20261013134, disjoint tested namespaces and numeric-analysis separation. Witness: frozen schedule and reservation audit."
+    },
+    {
+      "id": "F02",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Complete all 24 fresh valid semantic/clock/origin/pressure/cleanup observations without source or recipe changes inside the epoch. Witness: issuance/result/raw gates and all failures counted."
+    },
+    {
+      "id": "F03",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Pass direct8 MiB median, raw lower bound\u22658320 KiB with the fixed128 KiB materiality guard,10/12 strict8 MiB exceedances, drift/order and matched-component gates. Witness: independent paired RAM calculation with assumptions; guard is not a bias correction."
+    },
+    {
+      "id": "F04",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Qualify all 82 cost margins plus required stationarity and null-cost admission. Witness: complete cost tables and no removed route."
+    },
+    {
+      "id": "G01",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Reanalyse raw scientific gates independently and match stored producer values/counts; do not substitute saved verdicts. Witness: final reader receipt and exact disagreements resolved."
+    },
+    {
+      "id": "G02",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Deliver the public source/artifact/cache/JRE/runtime/workload manifest and sanitized usable protocol/schema. Witness: complete source-to-serving lineage and publication safety pass."
+    },
+    {
+      "id": "G03",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "State actual cache/host/feature/observability and external-reproduction scope; resolve ConfigClient intent and retain live-ML limits if untested. Witness: explicit feature matrix and no unsupported production-parity claim."
+    },
+    {
+      "id": "G04",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Preserve every valid unfavorable observation, invalid attempt, failed control and cost margin; publish exact estimator/sensitivity/assumptions. Witness: complete terminal result MD/JSON."
+    },
+    {
+      "id": "H01",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Restore exact original owned support/data/swap/guest state and release temporary wake requests. Witness: independent restoration and lease-release receipts."
+    },
+    {
+      "id": "H02",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Publish a clean successor claim only if every required clean gate passes; otherwise publish the exact limited/failed outcome. Witness: versioned result, checksums, CI and downloaded asset verification."
+    },
+    {
+      "id": "H03",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Validate durable project memory and preserve concurrent2.2 planning plus immutable1.33/2.15 history. Witness: memory validation/views and protected-source checks."
+    },
+    {
+      "id": "H04",
+      "satisfied": false,
+      "status": "PLANNED",
+      "requirement": "Report all 32 terminal dispositions, tasks completed, scientific gates passed, actual budgets, blockers and next action. Witness: final user handoff with honest claim status."
+    }
+  ],
+  "namespaces": {
+    "proposedPoolFirst": 1500000000,
+    "proposedPoolLast": 1599998000,
+    "spanPerAttempt": 650001,
+    "costCycleStride": 2100,
+    "maximumCostCycles": 300,
+    "historicalDisjointnessMustBeVerified": true,
+    "signed32BitBoundaryTestsRequired": true
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "JMOA_2_15_PUBLICATION_RECEIPT_V1",
+  "date": "2026-10-13",
+  "status": "PUBLISHED_AND_VERIFIED",
+  "releaseUrl": "https://github.com/AlphaSudo/jmoa/releases/tag/v2.15",
+  "tag": "v2.15",
+  "commit": "bf89a58b67664048dbe3eabfcd0bd9b4ca7d1d85",
+  "publishedAt": "2026-10-13T12:50:35Z",
+  "isDraft": false,
+  "isPrerelease": true,
+  "evidenceOnly": true,
+  "newMavenExecutableArtifacts": false,
+  "stable2_1_0Unchanged": true,
+  "publicationSafety": "PASS",
+  "documentationQuality": "PASS",
+  "ci": {
+    "conclusion": "success",
+    "status": "completed",
+    "url": "https://github.com/AlphaSudo/jmoa/actions/runs/38400097184"
+  },
+  "assets": [
+    {
+      "name": "jmoa-2.15-evidence-manifest.json",
+      "bytes": 1172,
+      "sha256": "e5d6c9030a4aa2b0fe93af831c2fa30cde6f0e50b5da13d09f1803fea2bfc97a"
+    },
+    {
+      "name": "jmoa-2.15.md",
+      "bytes": 1927,
+      "sha256": "17632f5a2c9dde73b618c732b30d16372c908f353fdc48dd9a1426f29a346b56"
+    },
+    {
+      "name": "patient-plan133-scoped-ram-result.json",
+      "bytes": 118393,
+      "sha256": "0844f16ef9c8ce6b9ea0127e580e5c0d51b112ed2f65944fee226033a34fd323"
+    },
+    {
+      "name": "patient-plan133-scoped-ram-result.md",
+      "bytes": 12904,
+      "sha256": "3e70038b6da21b685e1ea7adadff83008f09c6df9953c7f4f5aee7a6f57c38a4"
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "bytes": 386,
+      "sha256": "4a40b0ed19c07293f6a5cc879a65ba5f85286e0636c5bf4f54dd93943c269c4d"
+    }
+  ],
+  "allAssetsDownloadedAndByteVerified": true,
+  "newPatientRuntimeSessions": 0,
+  "newPatientOfflineJobs": 0
+}
