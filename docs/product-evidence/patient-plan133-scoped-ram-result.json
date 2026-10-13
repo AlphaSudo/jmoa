@@ -1,0 +1,4929 @@
+{
+  "schemaVersion": "JMOA_2_15_SCOPED_PATIENT_BENCHMARK_V1",
+  "release": "2.15",
+  "tag": "v2.15",
+  "date": "2026-10-13",
+  "releaseType": "PROVISIONAL_BENCHMARK_EVIDENCE_ONLY",
+  "status": "SCOPED_RAM_8_MIB_WITH_APPROVED_CALIBRATION_EXCEPTION_AND_COST_LIMITATIONS",
+  "observedRamResultVerifiedWithinDeclaredScope": true,
+  "performanceBoundsQualified": false,
+  "fullProductAcceptance": false,
+  "endpoint": "Stopped Patient-process PSS after fixed 632-request primary workload; ambient cache; Java 26/Leyden; constrained Windows/WSL host",
+  "estimator": "Median of 12 adjacent paired candidate-minus-baseline PSS deltas; savings shown positive",
+  "medianSavingKiB": 8586,
+  "medianSavingMiB": 8.384765625,
+  "lowerSavingBoundKiB": 8384,
+  "lowerSavingBoundMiB": 8.1875,
+  "lowerBoundScope": "INDEPENDENT_EXCHANGEABLE_STABLE_PAIR_DISTRIBUTION_ASSUMED_NOT_PROVED_WITH_POST_OBSERVATION_NULL_PRECISION_EXCEPTION",
+  "conditionalOrderStatisticCoverage": 0.980712890625,
+  "strict8MiBExceedances": 11,
+  "conditionalOneSidedSignP": 0.003173828125,
+  "originalNull": {
+    "memoryPassed": false,
+    "costsPassed": false,
+    "costsAssessable": false,
+    "maximumAbsoluteNullDeltaKiB": 540,
+    "medianNullBiasKiB": -176.0,
+    "baselineDriftKiB": -532.0
+  },
+  "calibrationException": {
+    "postObservation": true,
+    "userApproved": true,
+    "approvedBeforeFreshConfirmation": true,
+    "originalMaximumDifferenceLimitKiB": 512,
+    "originalAbsoluteBiasLimitKiB": 128,
+    "observedMaximumDifferenceKiB": 540,
+    "observedAbsoluteBiasKiB": 176,
+    "originalNullRemainsFailed": true
+  },
+  "sensitivity": {
+    "observedAbsoluteMedianNullBiasKiB": 176,
+    "observedMaximumAbsoluteNullDifferenceKiB": 540,
+    "lowerSavingMinusObservedBiasKiB": 8208,
+    "lowerSavingMinusMaximumNullDifferenceKiB": 7844,
+    "diagnosticOnly": true,
+    "neitherIsAProvedSystematicBiasCorrectionOrConfidenceBound": true
+  },
+  "pairs": [
+    {
+      "pair": 1,
+      "order": "BA",
+      "baselinePssKiB": 334808,
+      "candidatePssKiB": 326360,
+      "pssDeltaKiB": -8448,
+      "anonPlusKernelDeltaKiB": -6948.0,
+      "fileChargeDeltaKiB": -8324.0
+    },
+    {
+      "pair": 2,
+      "order": "BA",
+      "baselinePssKiB": 334672,
+      "candidatePssKiB": 326288,
+      "pssDeltaKiB": -8384,
+      "anonPlusKernelDeltaKiB": -6976.0,
+      "fileChargeDeltaKiB": 624.0
+    },
+    {
+      "pair": 3,
+      "order": "BA",
+      "baselinePssKiB": 334460,
+      "candidatePssKiB": 326064,
+      "pssDeltaKiB": -8396,
+      "anonPlusKernelDeltaKiB": -7024.0,
+      "fileChargeDeltaKiB": 1664.0
+    },
+    {
+      "pair": 4,
+      "order": "AB",
+      "baselinePssKiB": 335252,
+      "candidatePssKiB": 325544,
+      "pssDeltaKiB": -9708,
+      "anonPlusKernelDeltaKiB": -8212.0,
+      "fileChargeDeltaKiB": 22948.0
+    },
+    {
+      "pair": 5,
+      "order": "BA",
+      "baselinePssKiB": 334348,
+      "candidatePssKiB": 326252,
+      "pssDeltaKiB": -8096,
+      "anonPlusKernelDeltaKiB": -6320.0,
+      "fileChargeDeltaKiB": -43384.0
+    },
+    {
+      "pair": 6,
+      "order": "AB",
+      "baselinePssKiB": 334708,
+      "candidatePssKiB": 325784,
+      "pssDeltaKiB": -8924,
+      "anonPlusKernelDeltaKiB": -7224.0,
+      "fileChargeDeltaKiB": 23176.0
+    },
+    {
+      "pair": 7,
+      "order": "BA",
+      "baselinePssKiB": 334944,
+      "candidatePssKiB": 325840,
+      "pssDeltaKiB": -9104,
+      "anonPlusKernelDeltaKiB": -7644.0,
+      "fileChargeDeltaKiB": -42428.0
+    },
+    {
+      "pair": 8,
+      "order": "AB",
+      "baselinePssKiB": 334344,
+      "candidatePssKiB": 325916,
+      "pssDeltaKiB": -8428,
+      "anonPlusKernelDeltaKiB": -6680.0,
+      "fileChargeDeltaKiB": 23340.0
+    },
+    {
+      "pair": 9,
+      "order": "AB",
+      "baselinePssKiB": 334660,
+      "candidatePssKiB": 326288,
+      "pssDeltaKiB": -8372,
+      "anonPlusKernelDeltaKiB": -6860.0,
+      "fileChargeDeltaKiB": 248.0
+    },
+    {
+      "pair": 10,
+      "order": "BA",
+      "baselinePssKiB": 334548,
+      "candidatePssKiB": 325720,
+      "pssDeltaKiB": -8828,
+      "anonPlusKernelDeltaKiB": -7068.0,
+      "fileChargeDeltaKiB": -12652.0
+    },
+    {
+      "pair": 11,
+      "order": "AB",
+      "baselinePssKiB": 334836,
+      "candidatePssKiB": 325860,
+      "pssDeltaKiB": -8976,
+      "anonPlusKernelDeltaKiB": -7256.0,
+      "fileChargeDeltaKiB": 26052.0
+    },
+    {
+      "pair": 12,
+      "order": "AB",
+      "baselinePssKiB": 334508,
+      "candidatePssKiB": 325784,
+      "pssDeltaKiB": -8724,
+      "anonPlusKernelDeltaKiB": -7176.0,
+      "fileChargeDeltaKiB": 9272.0
+    }
+  ],
+  "costs": {
+    "startupNs": {
+      "marginsNs": [
+        -225763620.0,
+        315607960.0,
+        -1632981880.0,
+        483400180.0,
+        -2332900360.0,
+        1625282760.0,
+        -990581080.0,
+        -2268378300.0,
+        -630556500.0,
+        -2147358200.0,
+        596436680.0,
+        -1121759920.0
+      ],
+      "medianMarginNs": -810568790.0,
+      "upperOrderStatisticNs": 483400180.0,
+      "strictFavourable": 8,
+      "signP": 0.19384765625,
+      "passed": false,
+      "ratios": [
+        1.159648875059739,
+        1.2647665031497355,
+        0.9176384372461063,
+        1.3102332065393487,
+        0.768456456349356,
+        1.5833327338659324,
+        1.0199670300375463,
+        0.8652665000115469,
+        1.0825277392733264,
+        0.8000770286675707,
+        1.3352620521814982,
+        0.9967510717379298
+      ],
+      "medianRatio": 1.0512473846554364,
+      "medianDeltaNs": 276423800.0,
+      "samplesPerUnit": null,
+      "singleton": false,
+      "oldPoint10Violations": 5
+    },
+    "lifecycleCpuNs": {
+      "marginsNs": [
+        -6035900000.0,
+        -4801485400.0,
+        -7296816000.0,
+        -2370547000.0,
+        -8148793400.0,
+        889391800.0,
+        -6955394600.0,
+        -6913750800.0,
+        -6157109800.0,
+        -9620982000.0,
+        -2158716000.0,
+        -7148688200.0
+      ],
+      "medianMarginNs": -6535430300.0,
+      "upperOrderStatisticNs": -2370547000.0,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        0.9685662873406806,
+        1.0074078510048214,
+        0.9264216021780344,
+        1.098950241493691,
+        0.8882307351532718,
+        1.2381918258175602,
+        0.9368697669657164,
+        0.9384107688446666,
+        0.9574582598899682,
+        0.8412360431479629,
+        1.1088941784203996,
+        0.928178399099805
+      ],
+      "medianRatio": 0.9479345143673175,
+      "medianDeltaNs": -1353873000.0,
+      "samplesPerUnit": null,
+      "singleton": false,
+      "oldPoint10Violations": 2
+    },
+    "early:create": {
+      "marginsNs": [
+        -4228538,
+        -5788222,
+        -6154771,
+        -1631792,
+        -3629387,
+        -2329052.5,
+        -3450166,
+        -7050379,
+        -4552714,
+        -1128243,
+        -9840916.0,
+        -6269351
+      ],
+      "medianMarginNs": -4390626.0,
+      "upperOrderStatisticNs": -2329052.5,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0432369849284082,
+        0.9578786884510029,
+        0.9373091553841485,
+        1.2111662957274067,
+        1.0746830346612413,
+        1.1381520112926944,
+        1.0898928240964556,
+        0.8973803493368042,
+        1.0281912032247258,
+        1.2314389219338366,
+        0.7696190973077157,
+        0.9301112075249801
+      ],
+      "medianRatio": 1.035714094076567,
+      "medianDeltaNs": 609374.0,
+      "samplesPerUnit": 52,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    },
+    "early:read-user": {
+      "marginsNs": [
+        -6487094,
+        -420512,
+        -10104413.75,
+        -13387601.25,
+        10524955,
+        -15444844.25,
+        -4359973,
+        -315090,
+        -7084123,
+        -1940450,
+        1422575,
+        597614
+      ],
+      "medianMarginNs": -3150211.5,
+      "upperOrderStatisticNs": 597614,
+      "strictFavourable": 9,
+      "signP": 0.072998046875,
+      "passed": false,
+      "ratios": [
+        0.9135396189099867,
+        1.2602837057198966,
+        0.8445375664382021,
+        0.73222508100143,
+        1.9185448621569305,
+        0.705669067350645,
+        1.0370618361071982,
+        1.3042229554883071,
+        0.8917619614151049,
+        1.1754330134363609,
+        1.3584965480632343,
+        1.3235077033721039
+      ],
+      "medianRatio": 1.1062474247717795,
+      "medianDeltaNs": 1849788.5,
+      "samplesPerUnit": 50,
+      "singleton": false,
+      "oldPoint10Violations": 6
+    },
+    "early:details": {
+      "marginsNs": [
+        -2350912,
+        -6444582,
+        -4970161,
+        -4431867,
+        -3834376,
+        -2366011,
+        -5225256,
+        -3436709,
+        -1916157,
+        -9689320,
+        -7625181,
+        -4949538
+      ],
+      "medianMarginNs": -4690702.5,
+      "upperOrderStatisticNs": -2366011,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.2099188554675468,
+        0.895543628577265,
+        1.0022875071170765,
+        1.0523309741396287,
+        1.0878841961064996,
+        1.2526653960441105,
+        0.9799955507382355,
+        1.1463432511810594,
+        1.2698511481639605,
+        0.7176442819643367,
+        0.8009669232108274,
+        1.0043870218848598
+      ],
+      "medianRatio": 1.0283589980122443,
+      "medianDeltaNs": 309297.5,
+      "samplesPerUnit": 50,
+      "singleton": false,
+      "oldPoint10Violations": 4
+    },
+    "early:history": {
+      "marginsNs": [
+        -1470383,
+        -4352075,
+        -5882565,
+        -4034091,
+        -7758261,
+        -926115,
+        -4557406,
+        -4670644,
+        -3854744,
+        -4795892,
+        -7957640,
+        -7244093
+      ],
+      "medianMarginNs": -4614025.0,
+      "upperOrderStatisticNs": -3854744,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.3221804214449397,
+        1.049589302532975,
+        0.9327870740137639,
+        1.0875967940543199,
+        0.7982817985271576,
+        1.3666819950187805,
+        1.0371748604495952,
+        1.0287371109621422,
+        1.1036332387993213,
+        1.016060215974292,
+        0.7912321807542334,
+        0.847613053153067
+      ],
+      "medianRatio": 1.0329559857058688,
+      "medianDeltaNs": 385975.0,
+      "samplesPerUnit": 50,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    },
+    "early:list": {
+      "marginsNs": [
+        1065994.0,
+        -4748569.0,
+        -5704989.75,
+        -2735172,
+        -10146604.75,
+        4344110,
+        -6390209.5,
+        -449531,
+        -3884329,
+        -9288246.75,
+        -2636955.5,
+        -1703564
+      ],
+      "medianMarginNs": -3309750.5,
+      "upperOrderStatisticNs": -449531,
+      "strictFavourable": 10,
+      "signP": 0.019287109375,
+      "passed": true,
+      "ratios": [
+        1.3003124676695739,
+        1.033748654966691,
+        1.0009517545316713,
+        1.1184671891056728,
+        0.8183416876885122,
+        1.53599791064233,
+        0.9308755698231849,
+        1.2399842354518487,
+        1.0581721872674839,
+        0.8783545780053934,
+        1.1307559081538199,
+        1.1672309202759492
+      ],
+      "medianRatio": 1.0883196881865782,
+      "medianDeltaNs": 1690249.5,
+      "samplesPerUnit": 50,
+      "singleton": false,
+      "oldPoint10Violations": 6
+    },
+    "early:status": {
+      "marginsNs": [
+        -2325268,
+        -3970992,
+        -4294177,
+        -1163228,
+        -6816097,
+        -1285236,
+        -4609444,
+        -5423779,
+        -3366549,
+        -4987614,
+        -2528211,
+        -3660658
+      ],
+      "medianMarginNs": -3815825.0,
+      "upperOrderStatisticNs": -2325268,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.1992762604070815,
+        1.088782921577335,
+        1.0490914175794268,
+        1.3208330347382395,
+        0.8768742621155424,
+        1.3318765869555371,
+        1.027630596869736,
+        0.9652089410063652,
+        1.1377804012275519,
+        1.0007380590524706,
+        1.1839152667538453,
+        1.107914380886741
+      ],
+      "medianRatio": 1.0983486512320382,
+      "medianDeltaNs": 1184175.0,
+      "samplesPerUnit": 50,
+      "singleton": false,
+      "oldPoint10Violations": 6
+    },
+    "early:doctor": {
+      "marginsNs": [
+        -5943404,
+        -5246810,
+        -2917387,
+        -1743635,
+        -6223440,
+        -2471510,
+        -5322285,
+        -7136357,
+        -3684875,
+        -6038452,
+        -1872945,
+        -4316490
+      ],
+      "medianMarginNs": -4781650.0,
+      "upperOrderStatisticNs": -2471510,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9343616766213759,
+        0.982002878839364,
+        1.1503697668113484,
+        1.2931560946046239,
+        0.9147625003770908,
+        1.2350807287243197,
+        0.9777975463596822,
+        0.8480476316675565,
+        1.1231933746062168,
+        0.9340084881017555,
+        1.2573521000368533,
+        1.0627533797043573
+      ],
+      "medianRatio": 1.0223781292718606,
+      "medianDeltaNs": 218350.0,
+      "samplesPerUnit": 50,
+      "singleton": false,
+      "oldPoint10Violations": 5
+    },
+    "early:blood-group": {
+      "marginsNs": [
+        -3730895,
+        -5458390,
+        -5920831,
+        -3162987,
+        -7258276,
+        -4574311,
+        -5932066,
+        -7182992,
+        -3244242,
+        -6067555,
+        -4279904,
+        -2861901
+      ],
+      "medianMarginNs": -5016350.5,
+      "upperOrderStatisticNs": -3244242,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.1230980667054844,
+        0.9536304488698794,
+        0.9236734607267255,
+        1.2067555112559403,
+        0.7887207905704272,
+        1.048813828855234,
+        0.9121971558037809,
+        0.8251818359818422,
+        1.2268863529078213,
+        0.8943647930601591,
+        1.0791523822075537,
+        1.2181888186775676
+      ],
+      "medianRatio": 1.0012221388625566,
+      "medianDeltaNs": -16350.5,
+      "samplesPerUnit": 50,
+      "singleton": false,
+      "oldPoint10Violations": 4
+    },
+    "early:update": {
+      "marginsNs": [
+        -11297275.25,
+        -3648372.0,
+        805392.5,
+        -10875820.75,
+        -5884102.25,
+        -410944,
+        -4487941.75,
+        -43571110.25,
+        -5895324,
+        -19119279.5,
+        -4443801.0,
+        -4576085.0
+      ],
+      "medianMarginNs": -5230093.625,
+      "upperOrderStatisticNs": -3648372.0,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        0.8347258847756911,
+        1.0906410259994213,
+        1.2841466145652483,
+        0.8319799666862214,
+        0.9565181588234875,
+        1.2504573697450643,
+        1.045595278408264,
+        0.3721182886953175,
+        0.9519764876148734,
+        0.657742561638449,
+        1.0415576407396039,
+        1.0323751391042164
+      ],
+      "medianRatio": 0.9944466489638519,
+      "medianDeltaNs": -95507.5,
+      "samplesPerUnit": 50,
+      "singleton": false,
+      "oldPoint10Violations": 2
+    },
+    "early:read-id": {
+      "marginsNs": [
+        -2926628,
+        -3701048,
+        -1107443,
+        -2202246,
+        -7644002,
+        -2561915,
+        -3961437,
+        -7473930,
+        -4915023,
+        -9246359,
+        -2264714,
+        -3214467
+      ],
+      "medianMarginNs": -3457757.5,
+      "upperOrderStatisticNs": -2264714,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.155386038045437,
+        1.100419186354979,
+        1.3747070252712001,
+        1.25684792164403,
+        0.7914298067563912,
+        1.2123002179179665,
+        1.0829389016552833,
+        0.8128246721312715,
+        1.0082865399041991,
+        0.7238827234124013,
+        1.2018593173647205,
+        1.188652809279497
+      ],
+      "medianRatio": 1.127902612200208,
+      "medianDeltaNs": 1542242.5,
+      "samplesPerUnit": 50,
+      "singleton": false,
+      "oldPoint10Violations": 7
+    },
+    "early:delete": {
+      "marginsNs": [
+        -4758354.75,
+        -17971092.5,
+        -2708156.75,
+        -361994.5,
+        -10790866.0,
+        13562968,
+        -5719873.25,
+        -3319985,
+        -4981371,
+        -10345220.5,
+        -1703410.25,
+        7665534
+      ],
+      "medianMarginNs": -4039169.875,
+      "upperOrderStatisticNs": -361994.5,
+      "strictFavourable": 10,
+      "signP": 0.019287109375,
+      "passed": true,
+      "ratios": [
+        1.0189904977116568,
+        0.6805483793099274,
+        1.1323157567082545,
+        1.232029566875203,
+        0.8220729880994284,
+        2.017404202402345,
+        1.0051240150961684,
+        1.0883772069643143,
+        1.000972484011489,
+        0.8096767078667687,
+        1.1671328181108411,
+        1.7247839330789114
+      ],
+      "medianRatio": 1.0536838523379854,
+      "medianDeltaNs": 1035591.5,
+      "samplesPerUnit": 52,
+      "singleton": false,
+      "oldPoint10Violations": 5
+    },
+    "early:missing-user": {
+      "marginsNs": [
+        -3250260,
+        -5951453,
+        -4042561,
+        -3505868,
+        -4676272,
+        -5015345,
+        -6883557,
+        -3535460,
+        -2518994,
+        -2922539,
+        -6335941,
+        -7051384
+      ],
+      "medianMarginNs": -4359416.5,
+      "upperOrderStatisticNs": -3250260,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.1784948829644264,
+        0.9015190721903448,
+        1.1037579346011357,
+        1.165203864455902,
+        1.033874220630703,
+        0.9987391674807917,
+        0.840938390340156,
+        1.1593342111616196,
+        1.3217702534819775,
+        1.2173344163119681,
+        0.8726801581466139,
+        0.8137646551173948
+      ],
+      "medianRatio": 1.0688160776159195,
+      "medianDeltaNs": 640583.5,
+      "samplesPerUnit": 50,
+      "singleton": false,
+      "oldPoint10Violations": 6
+    },
+    "early:duplicate-create": {
+      "marginsNs": [
+        -5643424,
+        -5413041,
+        -3511639,
+        -7470462,
+        -4277184,
+        -4662038,
+        -3915310,
+        -5845486,
+        -4964094,
+        -3406253,
+        -2621693,
+        -4432364
+      ],
+      "medianMarginNs": -4547201.0,
+      "upperOrderStatisticNs": -3511639,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9234550124032992,
+        0.937990313937538,
+        1.2170375436375886,
+        0.7336228358342046,
+        1.1030114505780442,
+        1.0460367755322715,
+        1.1611423369256308,
+        0.904409643174679,
+        1.005414637647852,
+        1.2234591698842512,
+        1.402940817193356,
+        1.0788526801404144
+      ],
+      "medianRatio": 1.062444727836343,
+      "medianDeltaNs": 452799.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 5
+    },
+    "early:patient-self": {
+      "marginsNs": [
+        -5133025,
+        -3822482,
+        -2239241,
+        -8904696,
+        -1196697,
+        -7346161,
+        -5378913,
+        -5285510,
+        -6919570,
+        96012,
+        -2096273,
+        -3032250
+      ],
+      "medianMarginNs": -4477753.5,
+      "upperOrderStatisticNs": -2096273,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        0.987423329820091,
+        1.1251204963685326,
+        1.2384681802468918,
+        0.7536892557827447,
+        1.3665118149928683,
+        0.8292727262539643,
+        0.9685258587872098,
+        0.9767445516347764,
+        0.82771520184903,
+        1.4716099528344886,
+        1.2519343680503305,
+        1.2047210425453554
+      ],
+      "medianRatio": 1.056271913094312,
+      "medianDeltaNs": 522246.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 6
+    },
+    "early:patient-update": {
+      "marginsNs": [
+        -6037709,
+        -6665631,
+        -4341868,
+        -8221519,
+        -6052964,
+        -4635519,
+        -1962122,
+        -2346636,
+        -7740292,
+        -2832859,
+        -5762568,
+        -5333924
+      ],
+      "medianMarginNs": -5548246.0,
+      "upperOrderStatisticNs": -2832859,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9284030852710686,
+        0.8546518441533056,
+        1.0617055422683976,
+        0.7568188637699232,
+        0.9282476167411324,
+        1.0278920557141673,
+        1.2586362917728646,
+        1.2185506683413605,
+        0.7813591865832675,
+        1.1877853857538483,
+        0.9345145314539663,
+        0.9728048188449793
+      ],
+      "medianRatio": 0.9536596751494728,
+      "medianDeltaNs": -548246.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 3
+    },
+    "early:mobile-conflict": {
+      "marginsNs": [
+        -5193929,
+        -5195077,
+        -4250257,
+        -5848055,
+        -6002965,
+        -3578459,
+        -3970844,
+        -4803430,
+        -5321596,
+        -4280974,
+        -5072146,
+        -4672948
+      ],
+      "medianMarginNs": -4937788.0,
+      "upperOrderStatisticNs": -4250257,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9718343140952752,
+        0.969086717780751,
+        1.108583498919586,
+        0.888280663980834,
+        0.8943679624016866,
+        1.2164858304478272,
+        1.1592547327386455,
+        1.0305968764631461,
+        0.9461460902596726,
+        1.0944189394129402,
+        0.9882190781827929,
+        1.047299190097616
+      ],
+      "medianRatio": 1.0094079773229696,
+      "medianDeltaNs": 62212.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 3
+    },
+    "early:cross-user-denied": {
+      "marginsNs": [
+        -6177253,
+        -6839776,
+        -4512832,
+        -9351891,
+        -4340836,
+        -6065608,
+        -4059715,
+        -3265941,
+        -7138475,
+        -3577369,
+        -3539134,
+        -7019165
+      ],
+      "medianMarginNs": -5289220.0,
+      "upperOrderStatisticNs": -3577369,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.8644903451415495,
+        0.7973617249436454,
+        1.0610356801540326,
+        0.6373047568105822,
+        1.0648885587406915,
+        0.8807170668349928,
+        1.1346064291735996,
+        1.2226115581020789,
+        0.7621255644647813,
+        1.1966053494118898,
+        1.1859901554949026,
+        0.782462267721493
+      ],
+      "medianRatio": 0.9708763734945127,
+      "medianDeltaNs": -289220.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 4
+    },
+    "early:no-auth": {
+      "marginsNs": [
+        -5026169,
+        -5979727,
+        -5930919,
+        -6402326,
+        -4636939,
+        -5642932,
+        -5519615,
+        -3387202,
+        -6842868,
+        -5239992,
+        -4250375,
+        -5742275
+      ],
+      "medianMarginNs": -5581273.5,
+      "upperOrderStatisticNs": -4636939,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9937248832872413,
+        0.7968022276681495,
+        0.8245541194922444,
+        0.7585892217758367,
+        1.0639461758773905,
+        0.8721010313765573,
+        0.8881038631478257,
+        1.3617437559985097,
+        0.6768978569938303,
+        0.9482725026425011,
+        1.2164674987604647,
+        0.8520994201137616
+      ],
+      "medianRatio": 0.8801024472621914,
+      "medianDeltaNs": -581273.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 2
+    },
+    "early:invalid-auth": {
+      "marginsNs": [
+        -5922950,
+        -4903120,
+        -4753224,
+        -5933679,
+        -4723801,
+        -4954251,
+        -5903453,
+        -4547900,
+        -5813262,
+        -5079479,
+        -4853050,
+        -6314892
+      ],
+      "medianMarginNs": -5016865.0,
+      "upperOrderStatisticNs": -4753224,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.7633514329295731,
+        1.027889939527656,
+        1.0612306979241568,
+        0.7926529954176992,
+        1.0748924061753649,
+        1.01266560817704,
+        0.775123452073166,
+        1.1192501877379366,
+        0.7977778645309473,
+        0.9785154148701799,
+        1.0426220616663935,
+        0.7129817554910117
+      ],
+      "medianRatio": 0.9955905115236099,
+      "medianDeltaNs": -16865.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 1
+    },
+    "early:staff-list-denied": {
+      "marginsNs": [
+        -4704968,
+        -4501554,
+        -4331473,
+        -5364898,
+        -5719755,
+        -4878726,
+        -5615146,
+        -5350526,
+        -5834032,
+        -4828721,
+        -5053914,
+        -5789782
+      ],
+      "medianMarginNs": -5202220.0,
+      "upperOrderStatisticNs": -4704968,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.104176163618638,
+        1.1627450705103697,
+        1.2341952608640667,
+        0.8847605855672344,
+        0.8307010538918493,
+        1.0393134331648295,
+        0.8240429565094518,
+        0.9136399147648532,
+        0.7552447942359719,
+        1.0531364922140687,
+        0.9812850142304567,
+        0.7785584888922037
+      ],
+      "medianRatio": 0.9474624644976549,
+      "medianDeltaNs": -202220.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 3
+    },
+    "early:doctor-list": {
+      "marginsNs": [
+        -4281090,
+        -3201272,
+        -1488031,
+        -6301666,
+        -8296140,
+        -5886263,
+        -6430765,
+        -4246531,
+        -6528505,
+        -2434061,
+        -4162472,
+        -4796865
+      ],
+      "medianMarginNs": -4538977.5,
+      "upperOrderStatisticNs": -3201272,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.083854084957505,
+        1.2222095116346556,
+        1.4134207300542454,
+        0.8562156408595518,
+        0.7233751730195498,
+        0.8963740148075707,
+        0.8613259839863843,
+        1.0717780248275495,
+        0.8373861653687391,
+        1.2913944384357265,
+        1.1045560964964953,
+        1.0230646254602762
+      ],
+      "medianRatio": 1.0474213251439128,
+      "medianDeltaNs": 461022.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 4
+    },
+    "early:staff-status": {
+      "marginsNs": [
+        -4871581,
+        -3595231,
+        -3552756,
+        -7216382,
+        -4527138,
+        -4528170,
+        -5253298,
+        -5522609,
+        -5586358,
+        -3804473,
+        -4559312,
+        -5216936
+      ],
+      "medianMarginNs": -4715446.5,
+      "upperOrderStatisticNs": -3804473,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0228844586015637,
+        1.2647626629665418,
+        1.2865126186837292,
+        0.7084620485245474,
+        1.061386437582995,
+        1.0919472360095333,
+        0.9583337377169504,
+        0.9208100150422014,
+        0.9051672049104393,
+        1.2211781582667425,
+        1.0897429396531026,
+        0.9608929141211019
+      ],
+      "medianRatio": 1.0421354480922793,
+      "medianDeltaNs": 284553.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 3
+    },
+    "early:doctor-own-filter": {
+      "marginsNs": [
+        -5948618,
+        -4914611,
+        -1983544,
+        -6280826,
+        -7733818,
+        -4940882,
+        -4810027,
+        -6237879,
+        -6077277,
+        -3819018,
+        -4563593,
+        -4751081
+      ],
+      "medianMarginNs": -4927746.5,
+      "upperOrderStatisticNs": -4563593,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.8560427001482189,
+        1.0115609918171753,
+        1.5486997454461713,
+        0.8163715332909445,
+        0.7778743762660439,
+        1.0099611095824836,
+        1.0304874398770443,
+        0.8243288578698572,
+        0.8349911665621522,
+        1.2024497652078348,
+        1.0729530795852842,
+        1.0445890347649698
+      ],
+      "medianRatio": 1.0107610506998295,
+      "medianDeltaNs": 72253.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 2
+    },
+    "early:doctor-cross-filter-denied": {
+      "marginsNs": [
+        -5085113,
+        -4662092,
+        -4290906,
+        -5809857,
+        -4627911,
+        -4900717,
+        -6153225,
+        -5505991,
+        -5663772,
+        -3675023,
+        -4757035,
+        -4940832
+      ],
+      "medianMarginNs": -4920774.5,
+      "upperOrderStatisticNs": -4627911,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9740272144673477,
+        1.1008518330931232,
+        1.2245789860573624,
+        0.8007960219074517,
+        1.0648949354641686,
+        1.0335385287881127,
+        0.7355967915554216,
+        0.8820896325814976,
+        0.816110130243735,
+        1.3899917261451165,
+        1.0772809350368124,
+        1.019320756294234
+      ],
+      "medianRatio": 1.0264296425411734,
+      "medianDeltaNs": 79225.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 3
+    },
+    "early:staff-history": {
+      "marginsNs": [
+        -5619827,
+        -5740086,
+        -4397576,
+        -7552589,
+        -5867443,
+        -5513641,
+        -4731150,
+        -4621628,
+        -6838296,
+        -5425144,
+        -4945272,
+        -4793666
+      ],
+      "medianMarginNs": -5469392.5,
+      "upperOrderStatisticNs": -4731150,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.8887765178302425,
+        0.8793595453491826,
+        1.1097887816518617,
+        0.6694135361015029,
+        0.8928846533322039,
+        0.9127688351459188,
+        1.045070296922479,
+        1.0698764439861181,
+        0.7335697484842516,
+        0.9312236777013387,
+        1.0101765632231634,
+        1.0399953323853373
+      ],
+      "medianRatio": 0.9219962564236288,
+      "medianDeltaNs": -469392.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 1
+    },
+    "early:staff-blood-group": {
+      "marginsNs": [
+        -4987464,
+        -6193620,
+        -4098776,
+        -6971817,
+        -5767661,
+        -4918581,
+        -6079024,
+        -4617032,
+        -5535980,
+        -4762127,
+        -5338097,
+        -4785030
+      ],
+      "medianMarginNs": -5162780.5,
+      "upperOrderStatisticNs": -4762127,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0033589056012484,
+        0.7512408053277257,
+        1.2362567359688943,
+        0.6491891995754298,
+        0.8700822481905449,
+        1.023215397740363,
+        0.7804276458032802,
+        1.098376472752064,
+        0.8819488158539847,
+        1.0636476745492784,
+        0.9239548250315677,
+        1.0602007288385211
+      ],
+      "medianRatio": 0.963656865316408,
+      "medianDeltaNs": -162780.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 1
+    },
+    "early:missing-id": {
+      "marginsNs": [
+        -4997889,
+        -5590860,
+        -3523691,
+        -5789711,
+        -5356822,
+        -5036629,
+        -4503844,
+        -5032915,
+        -5906405,
+        -4856084,
+        -5027818,
+        -4110464
+      ],
+      "medianMarginNs": -5030366.5,
+      "upperOrderStatisticNs": -4503844,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.000534157080643,
+        0.8726673861622382,
+        1.3851043294300553,
+        0.8317901352902235,
+        0.9441924466130751,
+        0.990908501986508,
+        1.1257552765758885,
+        0.9929572627919879,
+        0.8102876520631104,
+        1.039420757336746,
+        0.9930391255792492,
+        1.243602509374004
+      ],
+      "medianRatio": 0.9929981941856185,
+      "medianDeltaNs": -30366.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 3
+    },
+    "early:missing-update": {
+      "marginsNs": [
+        -5344153,
+        -4627093,
+        -3909317,
+        -7402933,
+        -3844195,
+        -5343013,
+        -4685727,
+        -4920646,
+        -6387049,
+        -4281020,
+        -5675023,
+        -4328273
+      ],
+      "medianMarginNs": -4803186.5,
+      "upperOrderStatisticNs": -4281020,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9319309160695634,
+        1.0658145353323352,
+        1.2139123026301208,
+        0.6479030746699274,
+        1.2163608774501948,
+        0.928484546992837,
+        1.0661912617921872,
+        1.0143135462814703,
+        0.7677777669883732,
+        1.1486028873166079,
+        0.8781992801191189,
+        1.1468898521276414
+      ],
+      "medianRatio": 1.0400640408069028,
+      "medianDeltaNs": 196813.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 4
+    },
+    "early:malformed-create": {
+      "marginsNs": [
+        -6746946,
+        -5836967,
+        -1902772,
+        -9197169,
+        -1591476,
+        -7325300,
+        -6017908,
+        -2415827,
+        -9641503,
+        -714379,
+        -2637959,
+        -2779901
+      ],
+      "medianMarginNs": -4308434.0,
+      "upperOrderStatisticNs": -1902772,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.8392867755330793,
+        0.9250993211422079,
+        1.328217216539277,
+        0.7147481049217121,
+        1.314178141669425,
+        0.7964480611224813,
+        0.8933497563010269,
+        1.2363803841198506,
+        0.6292151732897696,
+        1.4481764059536393,
+        1.2327572445173909,
+        1.2586880648863275
+      ],
+      "medianRatio": 1.0789282828297995,
+      "medianDeltaNs": 691566.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 6
+    },
+    "early:empty-status": {
+      "marginsNs": [
+        -5039625,
+        -5372067,
+        -3907921,
+        -5758860,
+        -5076004,
+        -4948431,
+        -4472009,
+        -5779133,
+        -5520317,
+        -3730545,
+        -5244430,
+        -5075180
+      ],
+      "medianMarginNs": -5075592.0,
+      "upperOrderStatisticNs": -4472009,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9891936867677275,
+        0.9108158069212688,
+        1.3290778291112768,
+        0.8192211257288174,
+        0.9812843113161411,
+        1.0144218372719853,
+        1.1552025030357598,
+        0.8261969506006224,
+        0.8904210071418823,
+        1.3412851973757611,
+        0.9360136585171756,
+        0.9802250108633553
+      ],
+      "medianRatio": 0.9807546610897482,
+      "medianDeltaNs": -75592.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 3
+    },
+    "early:actuator-info-disabled": {
+      "marginsNs": [
+        -5688927,
+        -5430417,
+        -6011247,
+        -3661808,
+        -4094121,
+        -5180168,
+        -3788717,
+        -5079257,
+        -5636288,
+        -4609129,
+        -4029015,
+        -4882972
+      ],
+      "medianMarginNs": -4981114.5,
+      "upperOrderStatisticNs": -4029015,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.8578982889471107,
+        0.9468118063734585,
+        0.8020296499286521,
+        1.2404926048351488,
+        1.1872703641861468,
+        0.9632018071489407,
+        1.2473689240801802,
+        0.9856970979673988,
+        0.8872259688239412,
+        1.0793388305615796,
+        1.2030205576648971,
+        1.025244865139466
+      ],
+      "medianRatio": 1.0054709815534324,
+      "medianDeltaNs": 18885.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 4
+    },
+    "early:actuator-prometheus": {
+      "marginsNs": [
+        -372397,
+        -13404556.5,
+        -1246721,
+        -6161951.25,
+        -2225112.25,
+        890348,
+        -8961163.75,
+        -4364545.25,
+        -15377985.75,
+        336533,
+        -612864,
+        524783
+      ],
+      "medianMarginNs": -1735916.625,
+      "upperOrderStatisticNs": 336533,
+      "strictFavourable": 9,
+      "signP": 0.072998046875,
+      "passed": false,
+      "ratios": [
+        1.2418917115552457,
+        0.7705153430508767,
+        1.22648073174208,
+        1.0100883230029425,
+        1.1559766210091043,
+        1.3153719032335542,
+        0.8101622697195098,
+        1.0603092867516242,
+        0.6665404615223103,
+        1.320970545413187,
+        1.2685948571464956,
+        1.3303358191307766
+      ],
+      "medianRatio": 1.1912286763755922,
+      "medianDeltaNs": 3722273.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 7
+    },
+    "early:stroke-health": {
+      "marginsNs": [
+        -6115562,
+        -1805754,
+        939837,
+        -5569169,
+        -4782897,
+        -5792988,
+        -3059775,
+        -5509323,
+        -3493942,
+        -5708817,
+        -4861328,
+        -6663485
+      ],
+      "medianMarginNs": -5185325.5,
+      "upperOrderStatisticNs": -3059775,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        0.8722132905683071,
+        1.3571757557392237,
+        1.810284096947014,
+        0.9357216038220398,
+        1.0186437675244484,
+        0.9152736739141003,
+        1.2583237161069325,
+        0.9313589280778363,
+        1.1931872931269534,
+        0.9236659002926968,
+        1.0150743952582704,
+        0.8341442739476741
+      ],
+      "medianRatio": 0.9753979995401552,
+      "medianDeltaNs": -185325.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 4
+    },
+    "early:stroke-low": {
+      "marginsNs": [
+        10947203.0,
+        -13164994.5,
+        5051224.25,
+        3250690.75,
+        -1713402.25,
+        -2725053.5,
+        -26213233.5,
+        -21448223.5,
+        2574124.0,
+        -6708586.0,
+        12867356.75,
+        -15849928.25
+      ],
+      "medianMarginNs": -2219227.875,
+      "upperOrderStatisticNs": 5051224.25,
+      "strictFavourable": 7,
+      "signP": 0.38720703125,
+      "passed": false,
+      "ratios": [
+        1.6502884787945014,
+        0.8409945029513961,
+        1.421862146955244,
+        1.3263538005178883,
+        1.1833692742381974,
+        1.1864155594907912,
+        0.6404831605062835,
+        0.7165224300754447,
+        1.351727915988645,
+        1.0213948941141031,
+        1.5477659782123359,
+        0.8396069934495543
+      ],
+      "medianRatio": 1.1848924168644943,
+      "medianDeltaNs": 6352289.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 7
+    },
+    "early:stroke-high": {
+      "marginsNs": [
+        -2903796,
+        -4399270,
+        -4168133,
+        -18296225.5,
+        -4887890,
+        33934924,
+        -7116025,
+        -13487994,
+        -6768534,
+        -5728856,
+        -5752202,
+        -2648020
+      ],
+      "medianMarginNs": -5308373.0,
+      "upperOrderStatisticNs": -2903796,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        1.2083582697808029,
+        1.0603947530468572,
+        1.0738152685206785,
+        0.4678014875098169,
+        1.0098791781186471,
+        4.585327083577742,
+        0.7872824559056116,
+        0.5523676907546249,
+        0.8312136104590004,
+        0.9365433533268518,
+        0.9313856781438608,
+        1.2271837523598768
+      ],
+      "medianRatio": 0.9732112657227494,
+      "medianDeltaNs": -308373.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 3
+    },
+    "early:stroke-staff": {
+      "marginsNs": [
+        -6191100,
+        -6010924,
+        -5431562,
+        -6526481,
+        -5896575,
+        -3072526,
+        -7458787,
+        -7132716,
+        -8079392,
+        -4295669,
+        -2517593,
+        -2947508
+      ],
+      "medianMarginNs": -5953749.5,
+      "upperOrderStatisticNs": -3072526,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.8845066063268389,
+        0.8977761558255236,
+        0.9586163725015527,
+        0.8709659558900104,
+        0.9120384859523527,
+        1.1696570127076797,
+        0.7763599746634559,
+        0.8128641814095598,
+        0.7318814459110291,
+        1.0649392223107443,
+        1.2416592081302558,
+        1.205956144465879
+      ],
+      "medianRatio": 0.9049073208889382,
+      "medianDeltaNs": -953749.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 3
+    },
+    "early:stroke-upstream-error": {
+      "marginsNs": [
+        -7215928,
+        -6108596,
+        -7021109,
+        -11207600.25,
+        -4935882,
+        4410722,
+        -9105792,
+        -4861294,
+        -8039213,
+        -5462450,
+        -470609,
+        -5801912
+      ],
+      "medianMarginNs": -5955254.0,
+      "upperOrderStatisticNs": -4861294,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        0.844418249630183,
+        0.922800543977491,
+        0.8678998702338183,
+        0.7457547156016797,
+        1.0043202377040361,
+        1.6396527353150125,
+        0.7240164377845343,
+        1.0085883675067877,
+        0.8123860482535933,
+        0.9726358809429754,
+        1.3840858697432943,
+        0.9524449731815366
+      ],
+      "medianRatio": 0.9376227585795138,
+      "medianDeltaNs": -955254.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 2
+    },
+    "early:stroke-empty-upstream": {
+      "marginsNs": [
+        -5274541,
+        -5719656,
+        -2113151,
+        -8932881,
+        -2780376,
+        21468496,
+        -6684669,
+        -7593698,
+        -8841577,
+        -7695804,
+        -4359176,
+        -2984425
+      ],
+      "medianMarginNs": -5497098.5,
+      "upperOrderStatisticNs": -2780376,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        0.9739011828651157,
+        0.9353123900571483,
+        1.3007435745123626,
+        0.7127136633512933,
+        1.2218597233200474,
+        3.9282212042255518,
+        0.8544444842844757,
+        0.8091820601128841,
+        0.7254235211728065,
+        0.807102244674533,
+        1.0683512791386014,
+        1.1599077892783338
+      ],
+      "medianRatio": 0.9546067864611321,
+      "medianDeltaNs": -497098.5,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 4
+    },
+    "early:stroke-malformed": {
+      "marginsNs": [
+        -6452111,
+        -6464644,
+        -5735772,
+        -6265894,
+        -3919547,
+        756112,
+        -6082391,
+        -5114303,
+        -6438925,
+        -5425160,
+        -4557312,
+        -4481765
+      ],
+      "medianMarginNs": -5580466.0,
+      "upperOrderStatisticNs": -4481765,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        0.7332417631371604,
+        0.732692515469276,
+        0.835547131687997,
+        0.7560107618671866,
+        1.277664046068795,
+        2.4792358492360087,
+        0.798599937889967,
+        0.9722295918367347,
+        0.7671619789188892,
+        0.9258910125857684,
+        1.1110346669810267,
+        1.0946924639610058
+      ],
+      "medianRatio": 0.8807190721368827,
+      "medianDeltaNs": -580466.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 3
+    },
+    "early:missing-supplement": {
+      "marginsNs": [
+        -3642870,
+        -6039640,
+        -5038140,
+        -6384743,
+        -5618027,
+        -3637062,
+        -3788802,
+        -4503617,
+        -5732142,
+        -4868349,
+        -3697164,
+        -4054505
+      ],
+      "medianMarginNs": -4685983.0,
+      "upperOrderStatisticNs": -3697164,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.325917362286688,
+        0.8246812520541741,
+        0.9919699684399127,
+        0.7553255719155626,
+        0.8785145454784913,
+        1.2768074745886084,
+        1.2714846910803055,
+        1.1076991238189628,
+        0.8661873740838034,
+        1.0252918190760152,
+        1.2835154509257412,
+        1.1667087775324396
+      ],
+      "medianRatio": 1.066495471447489,
+      "medianDeltaNs": 314017.0,
+      "samplesPerUnit": 1,
+      "singleton": true,
+      "oldPoint10Violations": 6
+    },
+    "repeated:create": {
+      "marginsNs": [
+        -1596560.0,
+        -1287557.4000000004,
+        -2287384.4000000004,
+        -2087183.7999999989,
+        -1483910.7999999989,
+        -5952828.3999999985,
+        -3043068.4000000004,
+        -1636530.1999999993,
+        -1374809.0,
+        -2495254.1999999993,
+        -3401741.5999999996,
+        -2587613.4000000004
+      ],
+      "medianMarginNs": -2187284.0999999996,
+      "upperOrderStatisticNs": -1483910.7999999989,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0534431084131417,
+        1.075941511366816,
+        0.9887459389837885,
+        1.0052527670193112,
+        1.063593449481362,
+        0.769214592532775,
+        0.9325245789708044,
+        1.0506344791506375,
+        1.0673005273968372,
+        0.986131322046903,
+        0.9113046397683201,
+        0.9781070025331995
+      ],
+      "medianRatio": 0.9969993530015498,
+      "medianDeltaNs": -32779.5,
+      "samplesPerUnit": 300,
+      "singleton": false,
+      "oldPoint10Violations": 0
+    },
+    "repeated:read-user": {
+      "marginsNs": [
+        -1042276,
+        -3275105,
+        -2438150,
+        -5373000.199999999,
+        -3765950,
+        -4210336,
+        -2261941,
+        -1488078,
+        -2175002,
+        -2823852,
+        -1686780,
+        -2438637
+      ],
+      "medianMarginNs": -2438393.5,
+      "upperOrderStatisticNs": -1686780,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.1256783237816088,
+        0.8598059015865697,
+        0.9459050232213938,
+        0.7235276757427266,
+        0.8224581158693661,
+        0.7727870016915029,
+        0.9643325942253719,
+        1.065406496876875,
+        0.9768742389233825,
+        0.9094411083937342,
+        1.0388224557452883,
+        0.953903723657533
+      ],
+      "medianRatio": 0.9499043734394634,
+      "medianDeltaNs": -438393.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 1
+    },
+    "repeated:details": {
+      "marginsNs": [
+        -1295554,
+        -1993946,
+        -2250230,
+        -2163725,
+        -3187112,
+        -4170709,
+        -2298713,
+        -1763951,
+        -2075219,
+        -2316297,
+        -2558628,
+        -2403756
+      ],
+      "medianMarginNs": -2274471.5,
+      "upperOrderStatisticNs": -1993946,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.105468887437281,
+        1.0008748910179734,
+        0.9616702477150042,
+        0.975971980886186,
+        0.8338459083691352,
+        0.7375422243684874,
+        0.9545205199142581,
+        1.034580558245817,
+        0.9882641728924689,
+        0.9559088180691085,
+        0.9173524153973639,
+        0.9402275184418497
+      ],
+      "medianRatio": 0.9587895328920564,
+      "medianDeltaNs": -274471.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 1
+    },
+    "repeated:history": {
+      "marginsNs": [
+        -1470365,
+        -1432412,
+        -1980820,
+        -2179295,
+        -2913806,
+        -4214806,
+        -2070620,
+        -2478598,
+        -2377639,
+        -2574492,
+        -3480133,
+        -2518504
+      ],
+      "medianMarginNs": -2428118.5,
+      "upperOrderStatisticNs": -1980820,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0797967547044731,
+        1.0866242916986657,
+        1.0030088110474507,
+        0.9745153590108556,
+        0.8697819610297504,
+        0.7326152064608722,
+        0.988688585482147,
+        0.9346844670661494,
+        0.9449260888479701,
+        0.9177568980304471,
+        0.8134984261563603,
+        0.9241412778431184
+      ],
+      "medianRatio": 0.9398052779570598,
+      "medianDeltaNs": -428118.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 0
+    },
+    "repeated:list": {
+      "marginsNs": [
+        -1967223.5999999996,
+        -1295899.1999999993,
+        -1259892,
+        -2324592.4000000004,
+        -3066189.799999999,
+        -6539401.3999999985,
+        -2616063.799999999,
+        -2183072.4000000004,
+        -1980483.5999999996,
+        -2545085.799999999,
+        -2948607.4000000004,
+        -3702628.5999999996
+      ],
+      "medianMarginNs": -2434839.0999999996,
+      "upperOrderStatisticNs": -1967223.5999999996,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0129970793977194,
+        1.0806924903430275,
+        1.0756803540178461,
+        0.983378337967986,
+        0.9189872914233008,
+        0.7293854852652508,
+        0.947925417035471,
+        1.001061637681376,
+        1.0042932323337728,
+        0.9844490984178166,
+        0.9322049568750796,
+        0.8845122225646574
+      ],
+      "medianRatio": 0.9839137181929013,
+      "medianDeltaNs": -180992.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 0
+    },
+    "repeated:status": {
+      "marginsNs": [
+        -2227342,
+        -1416380,
+        -2287733,
+        -1227329,
+        -2422851,
+        -3637716,
+        -1630293,
+        -2347867,
+        -1752884,
+        -2710656,
+        -2601943,
+        -1340236
+      ],
+      "medianMarginNs": -2257537.5,
+      "upperOrderStatisticNs": -1416380,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9688861194637138,
+        1.0817600274130463,
+        0.9588397546632914,
+        1.1155437354013453,
+        0.9452706285624647,
+        0.8035948377499578,
+        1.056427250442351,
+        0.953987897629431,
+        1.036221026886838,
+        0.9063303118693842,
+        0.9217961513307216,
+        1.101893786533688
+      ],
+      "medianRatio": 0.9638629370635026,
+      "medianDeltaNs": -257537.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 2
+    },
+    "repeated:doctor": {
+      "marginsNs": [
+        -2110468,
+        -1345083,
+        -2188351,
+        -2012349,
+        -1688351,
+        -3245330,
+        -2098929,
+        -2342139,
+        -2918452,
+        -2920628,
+        -2132044,
+        -2407174
+      ],
+      "medianMarginNs": -2160197.5,
+      "upperOrderStatisticNs": -2012349,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9834444971476571,
+        1.098960331521349,
+        0.972536183586509,
+        0.9981208719555851,
+        1.0494037135732641,
+        0.838905551745219,
+        0.9834475491316442,
+        0.9492805507969799,
+        0.865601647340193,
+        0.8727523103543933,
+        0.9810267951759171,
+        0.9409066217110338
+      ],
+      "medianRatio": 0.976781489381213,
+      "medianDeltaNs": -160197.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 0
+    },
+    "repeated:blood-group": {
+      "marginsNs": [
+        -2440225,
+        -2068381,
+        -1987847,
+        -2089924,
+        -2012052,
+        -2905197,
+        -1960616,
+        -2401598,
+        -1756548,
+        -2233790,
+        -2767027,
+        -1887339
+      ],
+      "medianMarginNs": -2079152.5,
+      "upperOrderStatisticNs": -1960616,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9057659729592386,
+        0.9853530499503386,
+        1.0029029819283224,
+        0.9798385813019231,
+        0.9970977659395911,
+        0.8276968520498851,
+        1.0092816326472898,
+        0.9166542145450742,
+        1.0580827390110723,
+        0.9532838950029613,
+        0.8520340930771176,
+        1.0261665324983777
+      ],
+      "medianRatio": 0.9825958156261309,
+      "medianDeltaNs": -79152.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 0
+    },
+    "repeated:update": {
+      "marginsNs": [
+        -2982206.4000000004,
+        -1055290.7999999989,
+        -3061786.4000000004,
+        -1721722.7999999989,
+        -3419611.0,
+        -6892944.3999999985,
+        -957096.5999999996,
+        -2445445.5999999996,
+        -2228861.5999999996,
+        -3491860.5999999996,
+        -4474795.6,
+        -2120001.799999999
+      ],
+      "medianMarginNs": -2713826.0,
+      "upperOrderStatisticNs": -1721722.7999999989,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9552446288654945,
+        1.1120430405251491,
+        0.9459459369755931,
+        1.05653641820251,
+        0.9285839917772231,
+        0.7543526449606918,
+        1.1162993933499104,
+        1.0031727282041847,
+        1.0141864027021592,
+        0.929671118471562,
+        0.8702621693923291,
+        1.022991690051365
+      ],
+      "medianRatio": 0.9792086785348396,
+      "medianDeltaNs": -252950.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 2
+    },
+    "repeated:read-id": {
+      "marginsNs": [
+        -1912445,
+        -761121,
+        -2379635,
+        -2692360,
+        -2176951,
+        -3312574,
+        -2143376,
+        -2059488,
+        -2586755,
+        -2602654,
+        -2167567,
+        -2187911
+      ],
+      "medianMarginNs": -2182431.0,
+      "upperOrderStatisticNs": -2059488,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0140612134543754,
+        1.1989263351524801,
+        0.9434190043050352,
+        0.896094166574996,
+        0.9722564061156288,
+        0.8237941655999823,
+        0.977225818236691,
+        0.991003675172908,
+        0.9138496943617289,
+        0.91755249435396,
+        0.9745374777747876,
+        0.9716371414870596
+      ],
+      "medianRatio": 0.9719467738013442,
+      "medianDeltaNs": -182431.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 1
+    },
+    "repeated:delete": {
+      "marginsNs": [
+        -10830483.2,
+        5269859.6000000015,
+        -4072604.3999999985,
+        -1526078.5999999978,
+        2348038.8000000007,
+        14992731.2,
+        -3894696.1999999993,
+        -20229555.0,
+        -579670.8000000007,
+        -3349562.5999999978,
+        -2710993.0,
+        49029.60000000149
+      ],
+      "medianMarginNs": -2118535.799999999,
+      "upperOrderStatisticNs": 2348038.8000000007,
+      "strictFavourable": 8,
+      "signP": 0.19384765625,
+      "passed": false,
+      "ratios": [
+        0.7995949989835047,
+        1.6065455421826538,
+        0.9178012244860909,
+        1.0909464644749607,
+        1.363136068170296,
+        2.093305339062316,
+        0.9453569158414475,
+        0.6677512799376758,
+        1.1625784145011204,
+        1.000080276758452,
+        1.0319984061187193,
+        1.203154562198141
+      ],
+      "medianRatio": 1.06147243529684,
+      "medianDeltaNs": 894520.0,
+      "samplesPerUnit": 300,
+      "singleton": false,
+      "oldPoint10Violations": 5
+    },
+    "repeated:missing-user": {
+      "marginsNs": [
+        -1905725,
+        -1770613,
+        -1873149,
+        -1684802,
+        -2112941,
+        -3251983,
+        -1976712,
+        -1322249,
+        -1847204,
+        -2132507,
+        -1737229,
+        -1811045
+      ],
+      "medianMarginNs": -1860176.5,
+      "upperOrderStatisticNs": -1737229,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0207241163425842,
+        1.0543844300928429,
+        1.030330469196824,
+        1.0718360377615639,
+        0.9769842408453356,
+        0.7731769392457415,
+        1.0054776103148804,
+        1.1421492217512004,
+        1.034968568658737,
+        0.971184076183103,
+        1.0588290473836544,
+        1.0394484173659468
+      ],
+      "medianRatio": 1.0326495189277805,
+      "medianDeltaNs": 139823.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 1
+    },
+    "repeated:duplicate-create": {
+      "marginsNs": [
+        -1167604,
+        -2692602,
+        -1731465,
+        -1618548,
+        -2038669,
+        -3147573,
+        -194481,
+        -1885886,
+        -1180841,
+        -3168225,
+        -2285868,
+        -1834677
+      ],
+      "medianMarginNs": -1860281.5,
+      "upperOrderStatisticNs": -1180841,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.1473719545078083,
+        0.8937751106263232,
+        1.0463515951500975,
+        1.0643348925193814,
+        0.9942085797908206,
+        0.8385521858995173,
+        1.3142425659049621,
+        1.0206596779984043,
+        1.1382427841654137,
+        0.8310887012586673,
+        0.9535481396864189,
+        1.0250386924987214
+      ],
+      "medianRatio": 1.0228491852485628,
+      "medianDeltaNs": 139718.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    },
+    "repeated:patient-self": {
+      "marginsNs": [
+        -1479943,
+        -2806255,
+        -2598159,
+        -986488,
+        -2131692,
+        -4117097,
+        -600145,
+        -1335561,
+        -1220829,
+        -2028411,
+        -2349597,
+        -2973359
+      ],
+      "medianMarginNs": -2080051.5,
+      "upperOrderStatisticNs": -1220829,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0709062309247355,
+        0.9066617241582503,
+        0.9250893960666858,
+        1.1277060992643284,
+        0.9845215044272126,
+        0.7773063124403912,
+        1.1961061610189947,
+        1.093421995595476,
+        1.1013839581499758,
+        0.9966021687470326,
+        0.9570168080968439,
+        0.8910047225811133
+      ],
+      "medianRatio": 0.9905618365871226,
+      "medianDeltaNs": -80051.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    },
+    "repeated:patient-update": {
+      "marginsNs": [
+        -4121752.0,
+        -2209280.0,
+        -2574847.1999999993,
+        -1546096.1999999993,
+        -2085820.4000000004,
+        -5874715.800000001,
+        -2042107.7999999989,
+        -2671826.4000000004,
+        -2705595.799999999,
+        -3534678.0,
+        -2450473.1999999993,
+        -2492695.5999999996
+      ],
+      "medianMarginNs": -2533771.3999999994,
+      "upperOrderStatisticNs": -2085820.4000000004,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9002515871004432,
+        1.0238688455583742,
+        0.9956185153149555,
+        1.0764304463788261,
+        1.0284872929469728,
+        0.8176487429732643,
+        1.0297470835514184,
+        0.9876259433355242,
+        0.9795026642926112,
+        0.9282990934663239,
+        0.9986010820348146,
+        1.0105583488459369
+      ],
+      "medianRatio": 0.997109798674885,
+      "medianDeltaNs": -36110.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 0
+    },
+    "repeated:mobile-conflict": {
+      "marginsNs": [
+        -2151279,
+        -1840643,
+        -1445421,
+        -1627925,
+        -1984334,
+        -3290435,
+        -1643463,
+        -1911911,
+        -2427551,
+        -2160304,
+        -1017144,
+        -1704243
+      ],
+      "medianMarginNs": -1876277.0,
+      "upperOrderStatisticNs": -1627925,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9786019943220226,
+        1.024814066178006,
+        1.0844024820687397,
+        1.0583517723836269,
+        1.002387781072209,
+        0.8417380914945852,
+        1.0563690227368883,
+        1.013319317826663,
+        0.9403657466001372,
+        0.9759377766129731,
+        1.1546903622598426,
+        1.0445882861090612
+      ],
+      "medianRatio": 1.0190666920023346,
+      "medianDeltaNs": 123723.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 1
+    },
+    "repeated:cross-user-denied": {
+      "marginsNs": [
+        -1973654,
+        -1954082,
+        -2044042,
+        -1617680,
+        -2448833,
+        -2815544,
+        -1502082,
+        -2241110,
+        -1903517,
+        -2928718,
+        -1096368,
+        -2317462
+      ],
+      "medianMarginNs": -2008848.0,
+      "upperOrderStatisticNs": -1617680,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0061977900994385,
+        1.0121149024011347,
+        0.989020686739317,
+        1.0966679005528215,
+        0.8905747087204667,
+        0.8280093627030957,
+        1.1315614530158429,
+        0.9406735183327465,
+        1.0247670651401306,
+        0.8077016412233972,
+        1.2453965338288162,
+        0.9282048498623291
+      ],
+      "medianRatio": 0.9976092384193778,
+      "medianDeltaNs": -8848.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 2
+    },
+    "repeated:no-auth": {
+      "marginsNs": [
+        -1702632,
+        -2205857,
+        -1828921,
+        -1706199,
+        -1512545,
+        -2430896,
+        -1667535,
+        -2331457,
+        -2085544,
+        -2001263,
+        -1940427,
+        -2216455
+      ],
+      "medianMarginNs": -1970845.0,
+      "upperOrderStatisticNs": -1702632,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.1203436679225736,
+        0.9224895429391824,
+        1.0672163023666894,
+        1.118590609092696,
+        1.2023934876011646,
+        0.8575456699465519,
+        1.1354872573554913,
+        0.8735363703549109,
+        0.9665637777646621,
+        0.9995438457093325,
+        1.0231039754521474,
+        0.9250222208982438
+      ],
+      "medianRatio": 1.01132391058074,
+      "medianDeltaNs": 29155.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 4
+    },
+    "repeated:invalid-auth": {
+      "marginsNs": [
+        -2115578,
+        -2050612,
+        -1897020,
+        -1946662,
+        -2107491,
+        -2447280,
+        -1714878,
+        -2184899,
+        -1659234,
+        -2213434,
+        -1831772,
+        -2095274
+      ],
+      "medianMarginNs": -2072943.0,
+      "upperOrderStatisticNs": -1831772,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9579269471318445,
+        0.9810809063012933,
+        1.0389995985669598,
+        1.0194855889277958,
+        0.9630682130527519,
+        0.8647303255932111,
+        1.1043998333246676,
+        0.9313766097263882,
+        1.1281435531495323,
+        0.9254244607936313,
+        1.0614440827728073,
+        0.9665698107924415
+      ],
+      "medianRatio": 0.9738253585468675,
+      "medianDeltaNs": -72943.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 2
+    },
+    "repeated:staff-list-denied": {
+      "marginsNs": [
+        -1983168,
+        -1568837,
+        -1610407,
+        -1758317,
+        -2399676,
+        -2772601,
+        -1945178,
+        -2084606,
+        -1497061,
+        -2048630,
+        -1847578,
+        -1988715
+      ],
+      "medianMarginNs": -1964173.0,
+      "upperOrderStatisticNs": -1610407,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.004624733587375,
+        1.128404752693917,
+        1.1193841920354972,
+        1.0741560208829697,
+        0.8933098851911261,
+        0.8088675354284816,
+        1.0165919471159302,
+        0.975999067263943,
+        1.1515161283325541,
+        0.986188739690546,
+        1.0490702308060553,
+        1.0029474402323895
+      ],
+      "medianRatio": 1.0106083403516526,
+      "medianDeltaNs": 35827.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    },
+    "repeated:doctor-list": {
+      "marginsNs": [
+        -1092741,
+        -1682135.1999999993,
+        -1936046.1999999993,
+        -1047205,
+        -3057443.1999999993,
+        -5400227.799999999,
+        -967948,
+        -3328009.1999999993,
+        -2206525.799999999,
+        -2295375.1999999993,
+        -1356135,
+        -1169709.0
+      ],
+      "medianMarginNs": -1809090.6999999993,
+      "upperOrderStatisticNs": -1092741,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0926920276758434,
+        1.0437286723504478,
+        1.0163185150693022,
+        1.0977470359502313,
+        0.9270951648219623,
+        0.7868747852700145,
+        1.1079778422217708,
+        0.9040134701958931,
+        0.9953977314032483,
+        0.9746125614448596,
+        1.0666065771441056,
+        1.0845069490795778
+      ],
+      "medianRatio": 1.030023593709875,
+      "medianDeltaNs": 321352.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 1
+    },
+    "repeated:staff-status": {
+      "marginsNs": [
+        -1374018,
+        -1272544,
+        -481605,
+        -1109070,
+        -1890999,
+        -2676959,
+        -1481063,
+        -2879106,
+        -2342299,
+        -1978950,
+        -1426417,
+        -1226209
+      ],
+      "medianMarginNs": -1453740.0,
+      "upperOrderStatisticNs": -1226209,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.102468346846667,
+        1.1132992558397423,
+        1.2442489352680282,
+        1.1453210134058158,
+        1.017947733386726,
+        0.9112501740362325,
+        1.082441236806808,
+        0.8786327271361758,
+        0.9489014602909595,
+        1.0032684863569807,
+        1.1003917600005741,
+        1.1234947998476805
+      ],
+      "medianRatio": 1.091416498403691,
+      "medianDeltaNs": 546260.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 6
+    },
+    "repeated:doctor-own-filter": {
+      "marginsNs": [
+        -1851020,
+        -1376871,
+        -1707624,
+        -849399,
+        -1633633,
+        -3910323,
+        -1392938,
+        -2549345,
+        -1751628,
+        -1732098,
+        -1495118,
+        -1735880
+      ],
+      "medianMarginNs": -1719861.0,
+      "upperOrderStatisticNs": -1392938,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.023354146395603,
+        1.0933283169138956,
+        1.0422525766938546,
+        1.1871584312799277,
+        1.0588523402498558,
+        0.7666687878709781,
+        1.0982172875188123,
+        0.9216319700533966,
+        1.038892387788919,
+        1.0407813210461556,
+        1.0783772946434684,
+        1.0380529762204918
+      ],
+      "medianRatio": 1.0415169488700051,
+      "medianDeltaNs": 280139.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 1
+    },
+    "repeated:doctor-cross-filter-denied": {
+      "marginsNs": [
+        -1714171,
+        -1748198,
+        -1596982,
+        -689855,
+        -1939971,
+        -2932952,
+        -948348,
+        -2213127,
+        -1733715,
+        -1976835,
+        -1858492,
+        -1638806
+      ],
+      "medianMarginNs": -1740956.5,
+      "upperOrderStatisticNs": -1596982,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0832452328154478,
+        1.0641321345796297,
+        1.0988020722502625,
+        1.3649385258059583,
+        1.0157175496447717,
+        0.7962844120734226,
+        1.3080399248743122,
+        0.946144092166588,
+        1.0736878778688144,
+        1.0060720504552925,
+        1.038565698745064,
+        1.101782921488896
+      ],
+      "medianRatio": 1.068910006224222,
+      "medianDeltaNs": 259043.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    },
+    "repeated:staff-history": {
+      "marginsNs": [
+        -1945052,
+        -1525193,
+        -1206225,
+        -795157,
+        -2549809,
+        -3663023,
+        -1075021,
+        -2191934,
+        -2205198,
+        -2369168,
+        -1986256,
+        -618153
+      ],
+      "medianMarginNs": -1965654.0,
+      "upperOrderStatisticNs": -1075021,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0088983793995747,
+        1.0722576986870993,
+        1.1225725417432255,
+        1.2128610629387628,
+        0.919758192688687,
+        0.8005783268453235,
+        1.1507074449538743,
+        0.972545150149566,
+        0.966368454220415,
+        0.9468012103629619,
+        1.0021967220189256,
+        1.2099067193992905
+      ],
+      "medianRatio": 1.0055475507092502,
+      "medianDeltaNs": 34346.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 4
+    },
+    "repeated:staff-blood-group": {
+      "marginsNs": [
+        -2061634,
+        -1360983,
+        -1476141,
+        -907381,
+        -1924185,
+        -3075732,
+        -1171890,
+        -1535541,
+        -1748394,
+        -1883855,
+        -2071928,
+        -1228373
+      ],
+      "medianMarginNs": -1641967.5,
+      "upperOrderStatisticNs": -1228373,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.9865019735448843,
+        1.139997090591701,
+        1.1215840821238379,
+        1.2751346187162824,
+        1.0174834770015544,
+        0.8075404954454812,
+        1.2107443453325437,
+        1.1120170541424164,
+        1.0602340501477208,
+        1.0261678423364125,
+        0.9836367991842969,
+        1.177782769775222
+      ],
+      "medianRatio": 1.0861255521450686,
+      "medianDeltaNs": 358032.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 6
+    },
+    "repeated:missing-id": {
+      "marginsNs": [
+        -877299,
+        -1784729,
+        -1318747,
+        -1062160,
+        -2094096,
+        -3497792,
+        -2154653,
+        -1299432,
+        -1730171,
+        -2338179,
+        -2197514,
+        -1347888
+      ],
+      "medianMarginNs": -1757450.0,
+      "upperOrderStatisticNs": -1299432,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.24983516056796,
+        1.0437126879309924,
+        1.1354270141561111,
+        1.204468775583397,
+        0.9814016479907688,
+        0.7654455141802239,
+        0.9712988214465001,
+        1.14682841584478,
+        1.0594714792392348,
+        0.9362734059494787,
+        0.9602786291849531,
+        1.1301579191083717
+      ],
+      "medianRatio": 1.0515920835851136,
+      "medianDeltaNs": 242550.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 5
+    },
+    "repeated:missing-update": {
+      "marginsNs": [
+        -1540875,
+        -1921007,
+        -2393833,
+        -828965,
+        -1544935,
+        -3403366,
+        -1730812,
+        -1878867,
+        -1922813,
+        -2306298,
+        -2211346,
+        -1355641
+      ],
+      "medianMarginNs": -1899937.0,
+      "upperOrderStatisticNs": -1540875,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0886987932907102,
+        1.0140075573035225,
+        0.9345158729169005,
+        1.2052778135673887,
+        1.0884093447957648,
+        0.7872344554508884,
+        1.0503903932011118,
+        1.0214851773152795,
+        1.0146181104576675,
+        0.9460863788802263,
+        0.9614621713099536,
+        1.1149851780313655
+      ],
+      "medianRatio": 1.0180516438864735,
+      "medianDeltaNs": 100063.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 2
+    },
+    "repeated:malformed-create": {
+      "marginsNs": [
+        -951072,
+        -1533284,
+        -1821921,
+        -985136,
+        -2287133,
+        -3649752,
+        -1023582,
+        -2271975,
+        -1835953,
+        -2042242,
+        -1754956,
+        -2076574
+      ],
+      "medianMarginNs": -1828937.0,
+      "upperOrderStatisticNs": -1023582,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.2558135734877978,
+        1.0999532054281704,
+        1.0362374018971836,
+        1.2321229378030725,
+        0.9390138714222026,
+        0.7441018236959485,
+        1.2403698732788662,
+        0.9455064211157985,
+        1.037412977032733,
+        0.9908454669219297,
+        1.0514739600083436,
+        0.9857775733873796
+      ],
+      "medianRatio": 1.0368251894649583,
+      "medianDeltaNs": 171063.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    },
+    "repeated:empty-status": {
+      "marginsNs": [
+        -1333927,
+        -1768775,
+        -1761219,
+        -1849611,
+        -2110648,
+        -3466122,
+        -1627396,
+        -2038536,
+        -1958987,
+        -2415648,
+        -1543323,
+        -1568907
+      ],
+      "medianMarginNs": -1809193.0,
+      "upperOrderStatisticNs": -1568907,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.1794390262431795,
+        1.0551960824567048,
+        1.0569443944299755,
+        1.0389684120298897,
+        0.9742166040148724,
+        0.7312735620116221,
+        1.0954087282941711,
+        0.9907995944143396,
+        1.010174933536569,
+        0.9061994845178193,
+        1.1241369168403865,
+        1.1007867149216324
+      ],
+      "medianRatio": 1.0470822472432972,
+      "medianDeltaNs": 190807.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    },
+    "repeated:actuator-info-disabled": {
+      "marginsNs": [
+        -1817281,
+        -1906508,
+        -1855604,
+        -1890080,
+        -985727,
+        -2620087,
+        -1647058,
+        -1912659,
+        -2002607,
+        -2412810,
+        -1865793,
+        -1377478
+      ],
+      "medianMarginNs": -1877936.5,
+      "upperOrderStatisticNs": -1647058,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0515779751356216,
+        1.0220423423654943,
+        1.03350844533679,
+        1.0263276833722428,
+        1.2674815008793658,
+        0.861297965996375,
+        1.0948059811184216,
+        1.0226706933897802,
+        0.9992959431526083,
+        0.9039570907055376,
+        1.0323143837737283,
+        1.1620631933000627
+      ],
+      "medianRatio": 1.0293210335729857,
+      "medianDeltaNs": 122063.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 2
+    },
+    "repeated:actuator-prometheus": {
+      "marginsNs": [
+        -1891471,
+        -1080852,
+        -698481,
+        -553161,
+        -1782965,
+        -2853584,
+        -75403,
+        -1188446,
+        -1909785,
+        -3011318,
+        -1290172,
+        220908
+      ],
+      "medianMarginNs": -1239309.0,
+      "upperOrderStatisticNs": -553161,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        1.016909258780883,
+        1.1249120048967407,
+        1.1910584763987875,
+        1.2082318743630556,
+        1.0312617122490715,
+        0.8920652157832039,
+        1.2983895374040224,
+        1.1210882806876818,
+        1.01425937698464,
+        0.8723204242022535,
+        1.1086703517394072,
+        1.3154387905510452
+      ],
+      "medianRatio": 1.1148793162135444,
+      "medianDeltaNs": 760691.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 7
+    },
+    "repeated:stroke-health": {
+      "marginsNs": [
+        -1904142,
+        -1927482,
+        -1972511,
+        -1970639,
+        -1734731,
+        -2235129,
+        -2023809,
+        -1975592,
+        -1716954,
+        -1904063,
+        -1956721,
+        -1860898
+      ],
+      "medianMarginNs": -1942101.5,
+      "upperOrderStatisticNs": -1860898,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0280334993561753,
+        1.0221604802832904,
+        1.008172943273429,
+        1.0087723884733069,
+        1.0804389026523984,
+        0.9361871258817629,
+        0.9931288049650149,
+        1.006945503634381,
+        1.0855150735853936,
+        1.0285864803829052,
+        1.012452980137786,
+        1.0416020040452956
+      ],
+      "medianRatio": 1.0173067302105383,
+      "medianDeltaNs": 57898.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 0
+    },
+    "repeated:stroke-low": {
+      "marginsNs": [
+        -4157873.799999999,
+        -4113765.4000000004,
+        -1618844.4000000004,
+        -2205882.0,
+        -1486038.7999999989,
+        -5630524.800000001,
+        -1456379.1999999993,
+        -2610313.799999999,
+        -4644150.799999999,
+        -3406848.1999999993,
+        670486.8000000007,
+        -1823663.5999999996
+      ],
+      "medianMarginNs": -2408097.8999999994,
+      "upperOrderStatisticNs": -1486038.7999999989,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        0.8936712158387545,
+        0.8553303717759634,
+        1.0412518986146402,
+        0.9968600957921269,
+        1.0629150148787752,
+        0.8265551450698034,
+        1.065976687671989,
+        0.9669354146742859,
+        0.8367840982296615,
+        0.9261729554850073,
+        1.261424071619404,
+        1.0501328918889024
+      ],
+      "medianRatio": 0.9818977552332064,
+      "medianDeltaNs": -202209.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 1
+    },
+    "repeated:stroke-high": {
+      "marginsNs": [
+        -13414679.799999997,
+        1637733.4000000022,
+        -3829902.0,
+        -3559836.8000000007,
+        -2301337.0,
+        14044759.0,
+        -3850445.0,
+        -6175053.3999999985,
+        -1536497.0,
+        -10533950.599999998,
+        -559982.5999999996,
+        -5046434.0
+      ],
+      "medianMarginNs": -3694869.4000000004,
+      "upperOrderStatisticNs": -559982.5999999996,
+      "strictFavourable": 10,
+      "signP": 0.019287109375,
+      "passed": true,
+      "ratios": [
+        0.6858606266157546,
+        1.3125814896488253,
+        0.9526883241041099,
+        0.9567624804504254,
+        1.0419859613996854,
+        2.0314417043989024,
+        0.9526343802970678,
+        0.9375547119317051,
+        1.0863603703483193,
+        0.6759615198540326,
+        1.1586945234538677,
+        0.8848397604838286
+      ],
+      "medianRatio": 0.9547254022772677,
+      "medianDeltaNs": -682733.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    },
+    "repeated:stroke-staff": {
+      "marginsNs": [
+        -2229436.0,
+        -892962.0,
+        -7073237.599999998,
+        -3712794.0,
+        -3013512.799999999,
+        -5989054.0,
+        -4556734.6,
+        -1731291.7999999989,
+        -2265873.4000000004,
+        -3061401.799999999,
+        -2738912.799999999,
+        -2849292.5999999996
+      ],
+      "medianMarginNs": -2931402.6999999993,
+      "upperOrderStatisticNs": -2229436.0,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.0394395816018909,
+        1.12648397747663,
+        0.7187613429679433,
+        0.9238414718957962,
+        0.9446856936229475,
+        0.7898676515050091,
+        0.8598675832240236,
+        1.0478544190226728,
+        1.0159425708735832,
+        0.969330567773177,
+        0.9629045985679986,
+        0.9590164516757081
+      ],
+      "medianRatio": 0.9609605251218534,
+      "medianDeltaNs": -456548.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 1
+    },
+    "repeated:stroke-upstream-error": {
+      "marginsNs": [
+        -1285749.5999999978,
+        -3716343.3999999985,
+        -5595664.0,
+        -2516597.5999999996,
+        -4419241.3999999985,
+        -3987419.1999999993,
+        -3584901.0,
+        -708539.0,
+        -3038275.5999999978,
+        -3751593.0,
+        1211043.0,
+        -3501318.3999999985
+      ],
+      "medianMarginNs": -3543109.6999999993,
+      "upperOrderStatisticNs": -1285749.5999999978,
+      "strictFavourable": 11,
+      "signP": 0.003173828125,
+      "passed": true,
+      "ratios": [
+        1.112959903730882,
+        0.9575582104987035,
+        0.8284930291785924,
+        1.0029408556553312,
+        0.898488684596206,
+        0.9240163327502318,
+        0.9549508640698487,
+        1.1452785350746442,
+        0.989898985707996,
+        0.9581147538605418,
+        1.297239062700107,
+        0.9647320295570759
+      ],
+      "medianRatio": 0.9614233917088089,
+      "medianDeltaNs": -587249.5,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    },
+    "repeated:stroke-empty-upstream": {
+      "marginsNs": [
+        -1203359.5999999996,
+        164463.20000000112,
+        -3436043.5999999978,
+        -2309835.3999999985,
+        -2809462.5999999996,
+        -6929100.3999999985,
+        617173.0,
+        -3392248.799999999,
+        -1539930.7999999989,
+        -3806807.3999999985,
+        -714095.3999999985,
+        -4700714.3999999985
+      ],
+      "medianMarginNs": -2559648.999999999,
+      "upperOrderStatisticNs": -714095.3999999985,
+      "strictFavourable": 10,
+      "signP": 0.019287109375,
+      "passed": true,
+      "ratios": [
+        1.1092626737735818,
+        1.2131342874500197,
+        0.9649236459660937,
+        1.0246645483723877,
+        0.9855629549215197,
+        0.7854976157933828,
+        1.2506219131441874,
+        0.9361340278597761,
+        1.0766980067977683,
+        0.9466117912883428,
+        1.1440955221954967,
+        0.8845687791217878
+      ],
+      "medianRatio": 1.0051137516469537,
+      "medianDeltaNs": 67889.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 4
+    },
+    "repeated:stroke-malformed": {
+      "marginsNs": [
+        -2831655,
+        -2302709,
+        -2736070,
+        -2574732,
+        -1862948,
+        -4138949,
+        -2167945,
+        -1476673,
+        -2459266,
+        -1533574,
+        -1132202,
+        -1687528
+      ],
+      "medianMarginNs": -2235327.0,
+      "upperOrderStatisticNs": -1533574,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        0.856631748106435,
+        0.9507925384394432,
+        0.8801171157422691,
+        0.9000466086956522,
+        1.0252505395485296,
+        0.7104364364394177,
+        0.9687011669156174,
+        1.106995242811264,
+        0.9194846072379458,
+        1.088667165740187,
+        1.174074652080576,
+        1.0559133035305124
+      ],
+      "medianRatio": 0.9597468526775303,
+      "medianDeltaNs": -235327.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 2
+    },
+    "repeated:missing-supplement": {
+      "marginsNs": [
+        -1424388,
+        -1598700,
+        -2252839,
+        -2014813,
+        -1464030,
+        -2928884,
+        -1886250,
+        -1578730,
+        -2233334,
+        -2175513,
+        -1749218,
+        -931669
+      ],
+      "medianMarginNs": -1817734.0,
+      "upperOrderStatisticNs": -1464030,
+      "strictFavourable": 12,
+      "signP": 0.000244140625,
+      "passed": true,
+      "ratios": [
+        1.138383937219815,
+        1.093648122953708,
+        0.9414293663255052,
+        0.9967017488546409,
+        1.1222771283342916,
+        0.8268055030893627,
+        1.0257724425863615,
+        1.0976141567985467,
+        0.9524583577153345,
+        0.9635789809634897,
+        1.0528373346581539,
+        1.2432997715558185
+      ],
+      "medianRatio": 1.0393048886222576,
+      "medianDeltaNs": 182266.0,
+      "samplesPerUnit": 100,
+      "singleton": false,
+      "oldPoint10Violations": 3
+    }
+  },
+  "nullCostMargins": {
+    "startupNs": {
+      "forwardMarginsNs": [
+        -4728118880.0,
+        -3292154300.0,
+        -1461968900.0,
+        -1916512180.0
+      ],
+      "reverseMarginsNs": [
+        2024432200.0,
+        1212648420.0,
+        -413451760.0,
+        -186861620.0
+      ],
+      "medianForwardNs": -2604333240.0,
+      "medianReverseNs": 512893400.0,
+      "passed": false
+    },
+    "lifecycleCpuNs": {
+      "forwardMarginsNs": [
+        -20818780400.0,
+        -15770102400.0,
+        -4491930600.0,
+        -10077764400.0
+      ],
+      "reverseMarginsNs": [
+        7838298600.0,
+        4813913800.0,
+        -5312750600.0,
+        -728767600.0
+      ],
+      "medianForwardNs": -12923933400.0,
+      "medianReverseNs": 2042573100.0,
+      "passed": false
+    },
+    "early:create": {
+      "forwardMarginsNs": [
+        -33605189.75,
+        -15649151.5,
+        -4259612,
+        -14977648.5
+      ],
+      "reverseMarginsNs": [
+        18237944,
+        3273976.25,
+        -5740388,
+        3413709
+      ],
+      "medianForwardNs": -15313400.0,
+      "medianReverseNs": 3343842.625,
+      "passed": false
+    },
+    "early:read-user": {
+      "forwardMarginsNs": [
+        -14730365.5,
+        -10319994.0,
+        -2312843,
+        -6947325
+      ],
+      "reverseMarginsNs": [
+        3840299,
+        -238072,
+        -8094753.25,
+        -3052675
+      ],
+      "medianForwardNs": -8633659.5,
+      "medianReverseNs": -1645373.5,
+      "passed": true
+    },
+    "early:details": {
+      "forwardMarginsNs": [
+        -7192675,
+        -6574284,
+        -5015451,
+        -6441574
+      ],
+      "reverseMarginsNs": [
+        -2807325,
+        -3425716,
+        -4984549,
+        -3558426
+      ],
+      "medianForwardNs": -6507929.0,
+      "medianReverseNs": -3492071.0,
+      "passed": true
+    },
+    "early:history": {
+      "forwardMarginsNs": [
+        -14618172.5,
+        -8463242,
+        -3136108,
+        -4318611
+      ],
+      "reverseMarginsNs": [
+        4374445,
+        -1536758,
+        -6863892,
+        -5681389
+      ],
+      "medianForwardNs": -6390926.5,
+      "medianReverseNs": -3609073.5,
+      "passed": true
+    },
+    "early:list": {
+      "forwardMarginsNs": [
+        -16684729.0,
+        -24589207.75,
+        -1985087.0,
+        -2462243.5
+      ],
+      "reverseMarginsNs": [
+        4390102,
+        11069389,
+        -9204416.75,
+        -9392457.25
+      ],
+      "medianForwardNs": -9573486.25,
+      "medianReverseNs": -2407157.375,
+      "passed": true
+    },
+    "early:status": {
+      "forwardMarginsNs": [
+        -11717646,
+        -12433097,
+        -2666619,
+        -5289710
+      ],
+      "reverseMarginsNs": [
+        1717646,
+        2433097,
+        -7333381,
+        -4710290
+      ],
+      "medianForwardNs": -8503678.0,
+      "medianReverseNs": -1496322.0,
+      "passed": true
+    },
+    "early:doctor": {
+      "forwardMarginsNs": [
+        -9255394,
+        -8772027,
+        -2501458,
+        -6061498
+      ],
+      "reverseMarginsNs": [
+        -744606,
+        -1227973,
+        -7498542,
+        -3938502
+      ],
+      "medianForwardNs": -7416762.5,
+      "medianReverseNs": -2583237.5,
+      "passed": true
+    },
+    "early:blood-group": {
+      "forwardMarginsNs": [
+        -7770380,
+        -7165549,
+        -4147499,
+        -8595438
+      ],
+      "reverseMarginsNs": [
+        -2229620,
+        -2834451,
+        -5852501,
+        -1404562
+      ],
+      "medianForwardNs": -7467964.5,
+      "medianReverseNs": -2532035.5,
+      "passed": true
+    },
+    "early:update": {
+      "forwardMarginsNs": [
+        -20678096.5,
+        -17800823.75,
+        2360515,
+        -9469119.25
+      ],
+      "reverseMarginsNs": [
+        6794754.5,
+        5524416,
+        -13736068.5,
+        -1680751.0
+      ],
+      "medianForwardNs": -13634971.5,
+      "medianReverseNs": 1921832.5,
+      "passed": false
+    },
+    "early:read-id": {
+      "forwardMarginsNs": [
+        -7879708,
+        -10825411,
+        -2632060,
+        -7576957
+      ],
+      "reverseMarginsNs": [
+        -2120292,
+        825411,
+        -7367940,
+        -2423043
+      ],
+      "medianForwardNs": -7728332.5,
+      "medianReverseNs": -2271667.5,
+      "passed": true
+    },
+    "early:delete": {
+      "forwardMarginsNs": [
+        -8586545.75,
+        -14123770.5,
+        2694251,
+        -3902311
+      ],
+      "reverseMarginsNs": [
+        -2914430.75,
+        2370478,
+        -13750589.5,
+        -6319415.5
+      ],
+      "medianForwardNs": -6244428.375,
+      "medianReverseNs": -4616923.125,
+      "passed": true
+    },
+    "early:missing-user": {
+      "forwardMarginsNs": [
+        -11301844,
+        -7372248,
+        -5470141,
+        -8275617
+      ],
+      "reverseMarginsNs": [
+        1301844,
+        -2627752,
+        -4529859,
+        -1724383
+      ],
+      "medianForwardNs": -7823932.5,
+      "medianReverseNs": -2176067.5,
+      "passed": true
+    },
+    "early:duplicate-create": {
+      "forwardMarginsNs": [
+        -5303150,
+        -7396595,
+        -4478380,
+        -5184739
+      ],
+      "reverseMarginsNs": [
+        -4696850,
+        -2603405,
+        -5521620,
+        -4815261
+      ],
+      "medianForwardNs": -5243944.5,
+      "medianReverseNs": -4756055.5,
+      "passed": true
+    },
+    "early:patient-self": {
+      "forwardMarginsNs": [
+        -1521832,
+        -11112705,
+        1412119,
+        -6352868
+      ],
+      "reverseMarginsNs": [
+        -8478168,
+        1112705,
+        -11412119,
+        -3647132
+      ],
+      "medianForwardNs": -3937350.0,
+      "medianReverseNs": -6062650.0,
+      "passed": true
+    },
+    "early:patient-update": {
+      "forwardMarginsNs": [
+        -375463,
+        -6171009,
+        -3675443,
+        -6828207
+      ],
+      "reverseMarginsNs": [
+        -9624537,
+        -3828991,
+        -6324557,
+        -3171793
+      ],
+      "medianForwardNs": -4923226.0,
+      "medianReverseNs": -5076774.0,
+      "passed": true
+    },
+    "early:mobile-conflict": {
+      "forwardMarginsNs": [
+        -3085214,
+        -4971256,
+        -5829459,
+        -6903335
+      ],
+      "reverseMarginsNs": [
+        -6914786,
+        -5028744,
+        -4170541,
+        -3096665
+      ],
+      "medianForwardNs": -5400357.5,
+      "medianReverseNs": -4599642.5,
+      "passed": true
+    },
+    "early:cross-user-denied": {
+      "forwardMarginsNs": [
+        -3085407,
+        -9418520,
+        -3319667,
+        -6004861
+      ],
+      "reverseMarginsNs": [
+        -6914593,
+        -581480,
+        -6680333,
+        -3995139
+      ],
+      "medianForwardNs": -4662264.0,
+      "medianReverseNs": -5337736.0,
+      "passed": true
+    },
+    "early:no-auth": {
+      "forwardMarginsNs": [
+        -4714024,
+        -7134079,
+        -7113647,
+        -4514968
+      ],
+      "reverseMarginsNs": [
+        -5285976,
+        -2865921,
+        -2886353,
+        -5485032
+      ],
+      "medianForwardNs": -5913835.5,
+      "medianReverseNs": -4086164.5,
+      "passed": true
+    },
+    "early:invalid-auth": {
+      "forwardMarginsNs": [
+        -5303858,
+        -5548129,
+        -5365271,
+        -5064376
+      ],
+      "reverseMarginsNs": [
+        -4696142,
+        -4451871,
+        -4634729,
+        -4935624
+      ],
+      "medianForwardNs": -5334564.5,
+      "medianReverseNs": -4665435.5,
+      "passed": true
+    },
+    "early:staff-list-denied": {
+      "forwardMarginsNs": [
+        -4520986,
+        -5453269,
+        -5228080,
+        -6446674
+      ],
+      "reverseMarginsNs": [
+        -5479014,
+        -4546731,
+        -4771920,
+        -3553326
+      ],
+      "medianForwardNs": -5340674.5,
+      "medianReverseNs": -4659325.5,
+      "passed": true
+    },
+    "early:doctor-list": {
+      "forwardMarginsNs": [
+        -4475074,
+        -7471555,
+        -5749322,
+        -5783748
+      ],
+      "reverseMarginsNs": [
+        -5524926,
+        -2528445,
+        -4250678,
+        -4216252
+      ],
+      "medianForwardNs": -5766535.0,
+      "medianReverseNs": -4233465.0,
+      "passed": true
+    },
+    "early:staff-status": {
+      "forwardMarginsNs": [
+        -4730685,
+        -6999221,
+        -3870880,
+        -6050805
+      ],
+      "reverseMarginsNs": [
+        -5269315,
+        -3000779,
+        -6129120,
+        -3949195
+      ],
+      "medianForwardNs": -5390745.0,
+      "medianReverseNs": -4609255.0,
+      "passed": true
+    },
+    "early:doctor-own-filter": {
+      "forwardMarginsNs": [
+        -3907062,
+        -6725431,
+        -5680064,
+        -4636743
+      ],
+      "reverseMarginsNs": [
+        -6092938,
+        -3274569,
+        -4319936,
+        -5363257
+      ],
+      "medianForwardNs": -5158403.5,
+      "medianReverseNs": -4841596.5,
+      "passed": true
+    },
+    "early:doctor-cross-filter-denied": {
+      "forwardMarginsNs": [
+        -5368414,
+        -8110242,
+        -5228745,
+        -5064644
+      ],
+      "reverseMarginsNs": [
+        -4631586,
+        -1889758,
+        -4771255,
+        -4935356
+      ],
+      "medianForwardNs": -5298579.5,
+      "medianReverseNs": -4701420.5,
+      "passed": true
+    },
+    "early:staff-history": {
+      "forwardMarginsNs": [
+        -4168761,
+        -9841221,
+        -6684456,
+        -5353833
+      ],
+      "reverseMarginsNs": [
+        -5831239,
+        -158779,
+        -3315544,
+        -4646167
+      ],
+      "medianForwardNs": -6019144.5,
+      "medianReverseNs": -3980855.5,
+      "passed": true
+    },
+    "early:staff-blood-group": {
+      "forwardMarginsNs": [
+        -4978412,
+        -8611946,
+        -7468801,
+        -4911042
+      ],
+      "reverseMarginsNs": [
+        -5021588,
+        -1388054,
+        -2531199,
+        -5088958
+      ],
+      "medianForwardNs": -6223606.5,
+      "medianReverseNs": -3776393.5,
+      "passed": true
+    },
+    "early:missing-id": {
+      "forwardMarginsNs": [
+        -4836910,
+        -10822869,
+        -5059195,
+        -5013670
+      ],
+      "reverseMarginsNs": [
+        -5163090,
+        822869,
+        -4940805,
+        -4986330
+      ],
+      "medianForwardNs": -5036432.5,
+      "medianReverseNs": -4963567.5,
+      "passed": true
+    },
+    "early:missing-update": {
+      "forwardMarginsNs": [
+        -5003131,
+        -7821068,
+        -5829080,
+        -4880942
+      ],
+      "reverseMarginsNs": [
+        -4996869,
+        -2178932,
+        -4170920,
+        -5119058
+      ],
+      "medianForwardNs": -5416105.5,
+      "medianReverseNs": -4583894.5,
+      "passed": true
+    },
+    "early:malformed-create": {
+      "forwardMarginsNs": [
+        -4046931,
+        -13167988.0,
+        -3887188,
+        -5130826
+      ],
+      "reverseMarginsNs": [
+        -5953069,
+        2990137,
+        -6112812,
+        -4869174
+      ],
+      "medianForwardNs": -4588878.5,
+      "medianReverseNs": -5411121.5,
+      "passed": true
+    },
+    "early:empty-status": {
+      "forwardMarginsNs": [
+        -4961124,
+        -7934575,
+        -5716849,
+        -4427393
+      ],
+      "reverseMarginsNs": [
+        -5038876,
+        -2065425,
+        -4283151,
+        -5572607
+      ],
+      "medianForwardNs": -5338986.5,
+      "medianReverseNs": -4661013.5,
+      "passed": true
+    },
+    "early:actuator-info-disabled": {
+      "forwardMarginsNs": [
+        -6147090,
+        -17667751,
+        -6165820,
+        -5095911
+      ],
+      "reverseMarginsNs": [
+        -3852910,
+        7667751,
+        -3834180,
+        -4904089
+      ],
+      "medianForwardNs": -6156455.0,
+      "medianReverseNs": -3843545.0,
+      "passed": true
+    },
+    "early:actuator-prometheus": {
+      "forwardMarginsNs": [
+        -5202717,
+        -46294859.75,
+        -10368256.0,
+        -4986108
+      ],
+      "reverseMarginsNs": [
+        -4797283,
+        28218330,
+        -218866,
+        -5013892
+      ],
+      "medianForwardNs": -7785486.5,
+      "medianReverseNs": -2508074.5,
+      "passed": true
+    },
+    "early:stroke-health": {
+      "forwardMarginsNs": [
+        -4890908,
+        -16810942.5,
+        -3663734,
+        -7307868
+      ],
+      "reverseMarginsNs": [
+        -5109092,
+        6364572,
+        -6336266,
+        -2692132
+      ],
+      "medianForwardNs": -6099388.0,
+      "medianReverseNs": -3900612.0,
+      "passed": true
+    },
+    "early:stroke-low": {
+      "forwardMarginsNs": [
+        -39168790.25,
+        -71460276.0,
+        -5149388.25,
+        -11925467.0
+      ],
+      "reverseMarginsNs": [
+        18672164.5,
+        46165451.25,
+        -7703565.75,
+        -2678201.0
+      ],
+      "medianForwardNs": -25547128.625,
+      "medianReverseNs": 7996981.75,
+      "passed": false
+    },
+    "early:stroke-high": {
+      "forwardMarginsNs": [
+        -4472667,
+        -19430704.25,
+        -3896197,
+        -8143717
+      ],
+      "reverseMarginsNs": [
+        -5527333,
+        8881713,
+        -6103803,
+        -1856283
+      ],
+      "medianForwardNs": -6308192.0,
+      "medianReverseNs": -3691808.0,
+      "passed": true
+    },
+    "early:stroke-staff": {
+      "forwardMarginsNs": [
+        -7796962,
+        -17314868.75,
+        -3701402,
+        -6305652
+      ],
+      "reverseMarginsNs": [
+        -2203038,
+        7189506,
+        -6298598,
+        -3694348
+      ],
+      "medianForwardNs": -7051307.0,
+      "medianReverseNs": -2948693.0,
+      "passed": true
+    },
+    "early:stroke-upstream-error": {
+      "forwardMarginsNs": [
+        -7811368,
+        -29314306.0,
+        -4886455,
+        -7392769
+      ],
+      "reverseMarginsNs": [
+        -2188632,
+        15985595,
+        -5113545,
+        -2607231
+      ],
+      "medianForwardNs": -7602068.5,
+      "medianReverseNs": -2397931.5,
+      "passed": true
+    },
+    "early:stroke-empty-upstream": {
+      "forwardMarginsNs": [
+        -9935628,
+        -12909789,
+        -4774861,
+        -11304956
+      ],
+      "reverseMarginsNs": [
+        -64372,
+        2909789,
+        -5225139,
+        1304956
+      ],
+      "medianForwardNs": -10620292.0,
+      "medianReverseNs": 620292.0,
+      "passed": false
+    },
+    "early:stroke-malformed": {
+      "forwardMarginsNs": [
+        -5640943,
+        -8528258,
+        -4979247,
+        -5142395
+      ],
+      "reverseMarginsNs": [
+        -4359057,
+        -1471742,
+        -5020753,
+        -4857605
+      ],
+      "medianForwardNs": -5391669.0,
+      "medianReverseNs": -4608331.0,
+      "passed": true
+    },
+    "early:missing-supplement": {
+      "forwardMarginsNs": [
+        -4180870,
+        -6394669,
+        -4410792,
+        -8493652
+      ],
+      "reverseMarginsNs": [
+        -5819130,
+        -3605331,
+        -5589208,
+        -1506348
+      ],
+      "medianForwardNs": -5402730.5,
+      "medianReverseNs": -4597269.5,
+      "passed": true
+    },
+    "repeated:create": {
+      "forwardMarginsNs": [
+        -3710009.799999999,
+        -1495597.4000000004,
+        -2618640.4000000004,
+        -2686146.1999999993
+      ],
+      "reverseMarginsNs": [
+        -813879.1999999993,
+        -3491290.0,
+        -1930324.1999999993,
+        -2284377.799999999
+      ],
+      "medianForwardNs": -2652393.3,
+      "medianReverseNs": -2107350.999999999,
+      "passed": true
+    },
+    "repeated:read-user": {
+      "forwardMarginsNs": [
+        -1971237,
+        1423369,
+        -2054590,
+        -3601032.0
+      ],
+      "reverseMarginsNs": [
+        -2028763,
+        -5639786.199999999,
+        -1945410,
+        -416836
+      ],
+      "medianForwardNs": -2012913.5,
+      "medianReverseNs": -1987086.5,
+      "passed": true
+    },
+    "repeated:details": {
+      "forwardMarginsNs": [
+        -2037195,
+        698003,
+        -1818028,
+        -3601807
+      ],
+      "reverseMarginsNs": [
+        -1962805,
+        -4698003,
+        -2181972,
+        -398193
+      ],
+      "medianForwardNs": -1927611.5,
+      "medianReverseNs": -2072388.5,
+      "passed": true
+    },
+    "repeated:history": {
+      "forwardMarginsNs": [
+        -2117806,
+        -423605,
+        -1679362,
+        -4115053
+      ],
+      "reverseMarginsNs": [
+        -1882194,
+        -3576395,
+        -2320638,
+        115053
+      ],
+      "medianForwardNs": -1898584.0,
+      "medianReverseNs": -2101416.0,
+      "passed": true
+    },
+    "repeated:list": {
+      "forwardMarginsNs": [
+        -2071155.1999999993,
+        471184,
+        -2017009.7999999989,
+        -5653463.199999999
+      ],
+      "reverseMarginsNs": [
+        -2113404.0,
+        -4923666.4,
+        -2249538.799999999,
+        944000.2000000011
+      ],
+      "medianForwardNs": -2044082.499999999,
+      "medianReverseNs": -2181471.3999999994,
+      "passed": true
+    },
+    "repeated:status": {
+      "forwardMarginsNs": [
+        -1886049,
+        -634436,
+        -1672156,
+        -3277653
+      ],
+      "reverseMarginsNs": [
+        -2113951,
+        -3365564,
+        -2327844,
+        -722347
+      ],
+      "medianForwardNs": -1779102.5,
+      "medianReverseNs": -2220897.5,
+      "passed": true
+    },
+    "repeated:doctor": {
+      "forwardMarginsNs": [
+        -2566128,
+        80993,
+        -1692934,
+        -3399355
+      ],
+      "reverseMarginsNs": [
+        -1433872,
+        -4080993,
+        -2307066,
+        -600645
+      ],
+      "medianForwardNs": -2129531.0,
+      "medianReverseNs": -1870469.0,
+      "passed": true
+    },
+    "repeated:blood-group": {
+      "forwardMarginsNs": [
+        -2358024,
+        -618469,
+        -1643401,
+        -3991156
+      ],
+      "reverseMarginsNs": [
+        -1641976,
+        -3381531,
+        -2356599,
+        -8844
+      ],
+      "medianForwardNs": -2000712.5,
+      "medianReverseNs": -1999287.5,
+      "passed": true
+    },
+    "repeated:update": {
+      "forwardMarginsNs": [
+        -3985406.1999999993,
+        -237575.79999999888,
+        -2257925.5999999996,
+        -6874417.199999999
+      ],
+      "reverseMarginsNs": [
+        -820026.4000000004,
+        -5783230.199999999,
+        -2752404.1999999993,
+        1081854.2000000011
+      ],
+      "medianForwardNs": -3121665.8999999994,
+      "medianReverseNs": -1786215.2999999998,
+      "passed": true
+    },
+    "repeated:read-id": {
+      "forwardMarginsNs": [
+        -2722634,
+        -109772,
+        -1617526,
+        -2599314
+      ],
+      "reverseMarginsNs": [
+        -1277366,
+        -3890228,
+        -2382474,
+        -1400686
+      ],
+      "medianForwardNs": -2108420.0,
+      "medianReverseNs": -1891580.0,
+      "passed": true
+    },
+    "repeated:delete": {
+      "forwardMarginsNs": [
+        -3801177.5999999996,
+        -1065921.5999999996,
+        -1514017.7999999989,
+        -4184109.0
+      ],
+      "reverseMarginsNs": [
+        -1349466.7999999989,
+        -4391861.800000001,
+        -3691390.799999999,
+        -1320241.3999999985
+      ],
+      "medianForwardNs": -2657597.6999999993,
+      "medianReverseNs": -2520428.799999999,
+      "passed": true
+    },
+    "repeated:missing-user": {
+      "forwardMarginsNs": [
+        -2782057,
+        -502466,
+        -1946587,
+        -2966258
+      ],
+      "reverseMarginsNs": [
+        -1217943,
+        -3497534,
+        -2053413,
+        -1033742
+      ],
+      "medianForwardNs": -2364322.0,
+      "medianReverseNs": -1635678.0,
+      "passed": true
+    },
+    "repeated:duplicate-create": {
+      "forwardMarginsNs": [
+        -2381458,
+        181874,
+        -1065133,
+        -3707618
+      ],
+      "reverseMarginsNs": [
+        -1618542,
+        -4181874,
+        -2934867,
+        -292382
+      ],
+      "medianForwardNs": -1723295.5,
+      "medianReverseNs": -2276704.5,
+      "passed": true
+    },
+    "repeated:patient-self": {
+      "forwardMarginsNs": [
+        -2021650,
+        -308223,
+        -1617971,
+        -3713914
+      ],
+      "reverseMarginsNs": [
+        -1978350,
+        -3691777,
+        -2382029,
+        -286086
+      ],
+      "medianForwardNs": -1819810.5,
+      "medianReverseNs": -2180189.5,
+      "passed": true
+    },
+    "repeated:patient-update": {
+      "forwardMarginsNs": [
+        -4547110.199999999,
+        -1837370.7999999989,
+        -2188369.4000000004,
+        -5291967.3999999985
+      ],
+      "reverseMarginsNs": [
+        -490068.19999999925,
+        -3683096.0,
+        -2560833.799999999,
+        -11113.799999998882
+      ],
+      "medianForwardNs": -3367739.8,
+      "medianReverseNs": -1525450.999999999,
+      "passed": true
+    },
+    "repeated:mobile-conflict": {
+      "forwardMarginsNs": [
+        -2794309,
+        -335648,
+        -1767485,
+        -3871091
+      ],
+      "reverseMarginsNs": [
+        -1205691,
+        -3664352,
+        -2232515,
+        -128909
+      ],
+      "medianForwardNs": -2280897.0,
+      "medianReverseNs": -1719103.0,
+      "passed": true
+    },
+    "repeated:cross-user-denied": {
+      "forwardMarginsNs": [
+        -2511375,
+        -766734,
+        -2435849,
+        -2655118
+      ],
+      "reverseMarginsNs": [
+        -1488625,
+        -3233266,
+        -1564151,
+        -1344882
+      ],
+      "medianForwardNs": -2473612.0,
+      "medianReverseNs": -1526388.0,
+      "passed": true
+    },
+    "repeated:no-auth": {
+      "forwardMarginsNs": [
+        -2293685,
+        -1754255,
+        -1907121,
+        -2698209
+      ],
+      "reverseMarginsNs": [
+        -1706315,
+        -2245745,
+        -2092879,
+        -1301791
+      ],
+      "medianForwardNs": -2100403.0,
+      "medianReverseNs": -1899597.0,
+      "passed": true
+    },
+    "repeated:invalid-auth": {
+      "forwardMarginsNs": [
+        -2013741,
+        -1385534,
+        -1868329,
+        -2749786
+      ],
+      "reverseMarginsNs": [
+        -1986259,
+        -2614466,
+        -2131671,
+        -1250214
+      ],
+      "medianForwardNs": -1941035.0,
+      "medianReverseNs": -2058965.0,
+      "passed": true
+    },
+    "repeated:staff-list-denied": {
+      "forwardMarginsNs": [
+        -1923383,
+        -1192249,
+        -1882073,
+        -3104702
+      ],
+      "reverseMarginsNs": [
+        -2076617,
+        -2807751,
+        -2117927,
+        -895298
+      ],
+      "medianForwardNs": -1902728.0,
+      "medianReverseNs": -2097272.0,
+      "passed": true
+    },
+    "repeated:doctor-list": {
+      "forwardMarginsNs": [
+        -4009216.5999999996,
+        2706605,
+        -1339194,
+        -5563648.199999999
+      ],
+      "reverseMarginsNs": [
+        -262819,
+        -7600080.599999998,
+        -2710280.4000000004,
+        917701.4000000004
+      ],
+      "medianForwardNs": -2674205.3,
+      "medianReverseNs": -1486549.7000000002,
+      "passed": true
+    },
+    "repeated:staff-status": {
+      "forwardMarginsNs": [
+        -2749022,
+        1247441,
+        -1684432,
+        -3963752
+      ],
+      "reverseMarginsNs": [
+        -1250978,
+        -5247441,
+        -2315568,
+        -36248
+      ],
+      "medianForwardNs": -2216727.0,
+      "medianReverseNs": -1783273.0,
+      "passed": true
+    },
+    "repeated:doctor-own-filter": {
+      "forwardMarginsNs": [
+        -2950314,
+        -33846,
+        -1858302,
+        -3591681
+      ],
+      "reverseMarginsNs": [
+        -1049686,
+        -3966154,
+        -2141698,
+        -408319
+      ],
+      "medianForwardNs": -2404308.0,
+      "medianReverseNs": -1595692.0,
+      "passed": true
+    },
+    "repeated:doctor-cross-filter-denied": {
+      "forwardMarginsNs": [
+        -2844733,
+        -1168716,
+        -1922537,
+        -2879705
+      ],
+      "reverseMarginsNs": [
+        -1155267,
+        -2831284,
+        -2077463,
+        -1120295
+      ],
+      "medianForwardNs": -2383635.0,
+      "medianReverseNs": -1616365.0,
+      "passed": true
+    },
+    "repeated:staff-history": {
+      "forwardMarginsNs": [
+        -2137594,
+        -982871,
+        -2221764,
+        -3095357
+      ],
+      "reverseMarginsNs": [
+        -1862406,
+        -3017129,
+        -1778236,
+        -904643
+      ],
+      "medianForwardNs": -2179679.0,
+      "medianReverseNs": -1820321.0,
+      "passed": true
+    },
+    "repeated:staff-blood-group": {
+      "forwardMarginsNs": [
+        -2287088,
+        -723101,
+        -1877305,
+        -3025242
+      ],
+      "reverseMarginsNs": [
+        -1712912,
+        -3276899,
+        -2122695,
+        -974758
+      ],
+      "medianForwardNs": -2082196.5,
+      "medianReverseNs": -1917803.5,
+      "passed": true
+    },
+    "repeated:missing-id": {
+      "forwardMarginsNs": [
+        -1618898,
+        534292,
+        -1707051,
+        -2785523
+      ],
+      "reverseMarginsNs": [
+        -2381102,
+        -4534292,
+        -2292949,
+        -1214477
+      ],
+      "medianForwardNs": -1662974.5,
+      "medianReverseNs": -2337025.5,
+      "passed": true
+    },
+    "repeated:missing-update": {
+      "forwardMarginsNs": [
+        -2031894,
+        357144,
+        -2123442,
+        -3939349
+      ],
+      "reverseMarginsNs": [
+        -1968106,
+        -4357144,
+        -1876558,
+        -60651
+      ],
+      "medianForwardNs": -2077668.0,
+      "medianReverseNs": -1922332.0,
+      "passed": true
+    },
+    "repeated:malformed-create": {
+      "forwardMarginsNs": [
+        -2641745,
+        -566092,
+        -1840715,
+        -3198496
+      ],
+      "reverseMarginsNs": [
+        -1358255,
+        -3433908,
+        -2159285,
+        -801504
+      ],
+      "medianForwardNs": -2241230.0,
+      "medianReverseNs": -1758770.0,
+      "passed": true
+    },
+    "repeated:empty-status": {
+      "forwardMarginsNs": [
+        -2115752,
+        -1424531,
+        -1719466,
+        -3536197
+      ],
+      "reverseMarginsNs": [
+        -1884248,
+        -2575469,
+        -2280534,
+        -463803
+      ],
+      "medianForwardNs": -1917609.0,
+      "medianReverseNs": -2082391.0,
+      "passed": true
+    },
+    "repeated:actuator-info-disabled": {
+      "forwardMarginsNs": [
+        -2284132,
+        -893985,
+        -2153345,
+        -2685970
+      ],
+      "reverseMarginsNs": [
+        -1715868,
+        -3106015,
+        -1846655,
+        -1314030
+      ],
+      "medianForwardNs": -2218738.5,
+      "medianReverseNs": -1781261.5,
+      "passed": true
+    },
+    "repeated:actuator-prometheus": {
+      "forwardMarginsNs": [
+        -3103736,
+        878326,
+        -1768047,
+        -3812441
+      ],
+      "reverseMarginsNs": [
+        -896264,
+        -4878326,
+        -2231953,
+        -187559
+      ],
+      "medianForwardNs": -2435891.5,
+      "medianReverseNs": -1564108.5,
+      "passed": true
+    },
+    "repeated:stroke-health": {
+      "forwardMarginsNs": [
+        -2082246,
+        -1777861,
+        -1919209,
+        -2510872
+      ],
+      "reverseMarginsNs": [
+        -1917754,
+        -2222139,
+        -2080791,
+        -1489128
+      ],
+      "medianForwardNs": -2000727.5,
+      "medianReverseNs": -1999272.5,
+      "passed": true
+    },
+    "repeated:stroke-low": {
+      "forwardMarginsNs": [
+        -1485725,
+        -1638880.4000000004,
+        359239,
+        -3776277.1999999993
+      ],
+      "reverseMarginsNs": [
+        -2613393.0,
+        -2739252.1999999993,
+        -4684317.799999999,
+        -460121
+      ],
+      "medianForwardNs": -1562302.7000000002,
+      "medianReverseNs": -2676322.5999999996,
+      "passed": true
+    },
+    "repeated:stroke-high": {
+      "forwardMarginsNs": [
+        -5154921.3999999985,
+        -3192505.0,
+        -3176458.1999999993,
+        -4063041.5999999978
+      ],
+      "reverseMarginsNs": [
+        -590079.7999999989,
+        -2599803.0,
+        -2610756.8000000007,
+        -2014953.8000000007
+      ],
+      "medianForwardNs": -3627773.299999999,
+      "medianReverseNs": -2307378.4000000004,
+      "passed": true
+    },
+    "repeated:stroke-staff": {
+      "forwardMarginsNs": [
+        -3216320.799999999,
+        -2345336.8000000007,
+        1192358.5999999996,
+        -1354901.4000000004
+      ],
+      "reverseMarginsNs": [
+        -1531149.4000000004,
+        -3339736.8000000007,
+        -6372235.800000001,
+        -3832233.3999999985
+      ],
+      "medianForwardNs": -1850119.1000000006,
+      "medianReverseNs": -3585985.0999999996,
+      "passed": true
+    },
+    "repeated:stroke-upstream-error": {
+      "forwardMarginsNs": [
+        -2312968.3999999985,
+        -1031740.3999999985,
+        -1594171.0,
+        -5540433.800000001
+      ],
+      "reverseMarginsNs": [
+        -3501956.1999999993,
+        -5418357.800000001,
+        -4203657.0,
+        -579165.3999999985
+      ],
+      "medianForwardNs": -1953569.6999999993,
+      "medianReverseNs": -3852806.5999999996,
+      "passed": true
+    },
+    "repeated:stroke-empty-upstream": {
+      "forwardMarginsNs": [
+        -1780338.5999999996,
+        -766095.0,
+        -3547033.3999999985,
+        -3313057.3999999985
+      ],
+      "reverseMarginsNs": [
+        -3286799.5999999996,
+        -5227805.0,
+        -1687454.7999999989,
+        -1752590.7999999989
+      ],
+      "medianForwardNs": -2546697.999999999,
+      "medianReverseNs": -2519695.1999999993,
+      "passed": true
+    },
+    "repeated:stroke-malformed": {
+      "forwardMarginsNs": [
+        -1922411,
+        -978070,
+        -2408501,
+        -2644257
+      ],
+      "reverseMarginsNs": [
+        -2077589,
+        -3021930,
+        -1591499,
+        -1355743
+      ],
+      "medianForwardNs": -2165456.0,
+      "medianReverseNs": -1834544.0,
+      "passed": true
+    },
+    "repeated:missing-supplement": {
+      "forwardMarginsNs": [
+        -1600060,
+        -1131740,
+        -2061873,
+        -3125888
+      ],
+      "reverseMarginsNs": [
+        -2399940,
+        -2868260,
+        -1938127,
+        -874112
+      ],
+      "medianForwardNs": -1830966.5,
+      "medianReverseNs": -2169033.5,
+      "passed": true
+    }
+  },
+  "failedConfirmationCostMetrics": [
+    "startupNs",
+    "early:read-user",
+    "early:actuator-prometheus",
+    "early:stroke-low",
+    "repeated:delete"
+  ],
+  "failedNullCostMetrics": [
+    "startupNs",
+    "lifecycleCpuNs",
+    "early:create",
+    "early:update",
+    "early:stroke-low",
+    "early:stroke-empty-upstream"
+  ],
+  "drift": {
+    "firstLastDeltaDifferenceKiB": -354.0,
+    "orderMedianDifferenceKiB": -402.0,
+    "baselineDriftKiB": -86.0
+  },
+  "identities": {
+    "B0": {
+      "applicationSha256": "AB51B5D2015A76922CF8DC4BB4B49A541D7FC673A029D65BB7FF2A95391EF7FA",
+      "applicationBytes": 99432183,
+      "ownAotCacheSha256": "D8DA947E4C4F28C3EBE056AF40A1984B1746AFD6D286789B1ABD387956C79ABA",
+      "cacheBytes": 182857728
+    },
+    "COMPOSED": {
+      "applicationSha256": "4A240E3091282F5D6DA34D42AFFFA7B64AE60EC29A97FDB09BE496FAB7177C5A",
+      "applicationBytes": 86779853,
+      "ownAotCacheSha256": "925274D15ED32DC765FD4E8793CE75A514DCAF4F64D870148BC5F5C447CF460F",
+      "cacheBytes": 174170112
+    }
+  },
+  "sharedCoreSha256": "C6CB1CEB1B1A17EED1D08E63C5A637B6723AA8A6FEDBFBB28D5B5C9A64AD0E6E",
+  "jre": "Temurin 26.0.2.1+1",
+  "jreFileHashes": {
+    "jdk-release.txt": "70140895C1A8F7C8CEBE488BDFB1CFC46EAF07F73FA90930601C6A15FA509076",
+    "base-archive.jsa": "ABBC70DC1909B3B5DC95C05C5E7A838D5444C759FD4AA274139672E3CC766E9A",
+    "runtime-modules": "966E33988D568E62F46700B6886F79E9F99E49CC85B24694B4F80A5E4F550D7E",
+    "libjvm.so": "EEB46B0DD526396A6E34A34E9D78F55970EB5A0CC4FC9324CEF483511875A5E8",
+    "java": "A719FAB9108BA87EBA82655BA904EDBEE0A91FF13365579519F44F99100382B2"
+  },
+  "rewriteCoverage": {
+    "sites": 788,
+    "tier1": 455,
+    "tier2": 333,
+    "owners": 498,
+    "logicalHelpers": 192,
+    "physicalHelpers": 195
+  },
+  "deployment": {
+    "patientMemoryMiB": 576,
+    "patientSwapMiB": 0,
+    "xmsMiB": 32,
+    "xmxMiB": 256,
+    "gc": "Serial",
+    "compactHeaders": true,
+    "threadStackKiB": 256,
+    "codeCacheMiB": 48,
+    "compilerCount": 2,
+    "nmt": "summary",
+    "trimNativeHeapIntervalMillisBothArms": 5000,
+    "mallocArenaMaxBothArms": 1,
+    "syntheticStrokeMemoryMiB": 384
+  },
+  "accounting": {
+    "freshConfirmationUnits": 24,
+    "pairedBlocks": 12,
+    "freshControlUnits": 8,
+    "campaignRuntimeAttemptsIncludingFailures": 96,
+    "campaignOfflineJobs": 0,
+    "rawSuccessfulUnitsReanalysed": 76,
+    "rawReplayIsExternalReplication": false,
+    "ownedInfrastructureRestored": true,
+    "priorIncompleteEpochsExcluded": true,
+    "historicalMediansAdded": false
+  },
+  "limitations": [
+    "Original null precision gates failed; exact observed block admitted by user after observation.",
+    "Pair independence, exchangeability and stability are model assumptions, not proved.",
+    "Startup and primary cache warmth unqualified; actual paging/pressure and Windows interference retained.",
+    "Performance bounds and null cost calibration are not qualified; five confirmation cost metrics failed.",
+    "Finite synthetic stroke fixture; no live ML; ConfigClient absent.",
+    "Dependency line-number observability reduced.",
+    "Uploaded JMOA 2.1 binary lineage unresolved; this evidence release publishes no new plugin/runtime JARs.",
+    "No cold-start, whole-stack, production-parity or universal RAM-saving claim.",
+    "Private raw requests, source snapshots and host logs are not distributed; public aggregates are not a public independent reproduction."
+  ],
+  "provenance": {
+    "archivalReportSha256": "B501FBA7A5A0129FB517CD0FF6ACDB09F7E8CE7F2D07737F10E825319353E3C5",
+    "archivalRawReplaySha256": "86B8B5F8A3CD018276DA312973A22914C6C78B7F7F6D06F993A899D2CC17FDDE",
+    "archivalPreparationSha256": "A7BE36EB8AEAE1084B4BBD74708B502847BEB8D5D6109AD3BC800AE4F7A77746"
+  }
+}

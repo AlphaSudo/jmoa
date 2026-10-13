@@ -21,6 +21,12 @@ build time, materializes the actual Spring Boot deployment, proves what the JVM
 loaded, and accepts a result only after paired process- and cgroup-memory
 evidence passes frozen gates.
 
+## Patient benchmark: JMOA 2.15 (provisional)
+
+The tested Java 26/Leyden Patient configuration showed **8.38 MiB lower median stopped-process PSS** across 12 paired blocks; its conditional lower saving bound was **8.19 MiB**. **The original calibration failed and used an approved exception; performance bounds remain unqualified or failed.** Startup/cache warmth and production or uploaded-binary parity remain unqualified.
+
+JMOA 2.15 publishes this scoped benchmark evidence with exact tested hashes and all cost results. It includes no new Maven binaries and preserves the existing stable 2.1.0 PetClinic release. Read the [Patient result and limitations](docs/product-evidence/patient-plan133-scoped-ram-result.md), [JSON](docs/product-evidence/patient-plan133-scoped-ram-result.json), or [2.15 release](https://github.com/AlphaSudo/jmoa/releases/tag/v2.15).
+
 ## PetClinic result: 14.88 MiB less process PSS
 
 JMOA 2.1 publishes one current product claim: the exact accepted **R41F JMOA
