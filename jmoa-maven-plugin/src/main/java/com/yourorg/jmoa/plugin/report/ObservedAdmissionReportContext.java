@@ -8,7 +8,8 @@ public record ObservedAdmissionReportContext(
     String resolvedFile,
     boolean loaded,
     Set<String> siteKeys,
-    String tierMode
+    String tierMode,
+    boolean strictAllowlist
 ) {
 
     public ObservedAdmissionReportContext {
@@ -19,6 +20,6 @@ public record ObservedAdmissionReportContext(
     }
 
     public static ObservedAdmissionReportContext disabled() {
-        return new ObservedAdmissionReportContext(false, "", "", false, Set.of(), "");
+        return new ObservedAdmissionReportContext(false, "", "", false, Set.of(), "", false);
     }
 }

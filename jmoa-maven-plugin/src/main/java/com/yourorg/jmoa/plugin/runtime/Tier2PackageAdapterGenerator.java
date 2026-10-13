@@ -295,7 +295,84 @@ public final class Tier2PackageAdapterGenerator {
         for (Map.Entry<String, List<LambdaFilterDecision>> entry : grouped.entrySet()) {
             artifacts.add(new Tier2AdapterArtifact(
                 entry.getKey(),
-                generatePackageSignatureClassBytes(entry.getKey(), entry.getValue(), classFileVersion)
+                generatePackageSignatureClassBytes(entry.getKey(), entry.getValue(), classFileVersion, false)
+            ));
+        }
+        return List.copyOf(artifacts);
+    }
+
+    /**
+     * ROOT_PACKAGE_SIGNATURE mode (track T4): groups Tier-2 sites by physical
+     * root ordinal + package + erased SAM descriptor. Each adapter is written
+     * to exactly one root, so multi-root fan-out and cross-root references
+     * are impossible by construction.
+     */
+    public List<Tier2AdapterArtifact> generateRootPackageSignatureAdapters(
+        List<LambdaFilterDecision> decisions,
+        java.util.Map<String, Integer> rootOrdinalBySiteKey,
+        int classFileVersion
+    ) {
+        Map<String, List<LambdaFilterDecision>> groupedByLogicalKey = new LinkedHashMap<>();
+        Map<String, String> internalNameByLogicalKey = new LinkedHashMap<>();
+        Map<String, String> logicalKeyByInternalName = new LinkedHashMap<>();
+        decisions.stream()
+            .sorted(Comparator.comparing(decision -> decision.meta().siteKey()))
+            .forEach(decision -> {
+                if (!decision.eligible() || decision.tier() != LambdaTier.TIER2) {
+                    throw new IllegalArgumentException("Tier 2 adapter generation requires Tier 2 eligible decisions");
+                }
+                Integer rootOrdinal = rootOrdinalBySiteKey.get(decision.meta().siteKey());
+                if (rootOrdinal == null || rootOrdinal < 0) {
+                    throw new IllegalArgumentException("ROOT_PACKAGE_SIGNATURE requires a non-negative physical-root ordinal for site "
+                            + decision.meta().siteKey());
+                }
+                String erasedSignature = Tier2AdapterNamingStrategy.eraseSamMethodDesc(
+                    decision.meta().samMethodTypeDesc());
+                String logicalKey = rootOrdinal + "\u0000" + decision.meta().packageInternalName()
+                    + "\u0000" + erasedSignature;
+                String internalName = Tier2AdapterNamingStrategy.rootPackageSignatureInternalName(
+                    decision.meta(), rootOrdinal, compact);
+                String previousKey = logicalKeyByInternalName.putIfAbsent(internalName, logicalKey);
+                if (previousKey != null && !previousKey.equals(logicalKey)) {
+                    throw new IllegalStateException("ROOT_PACKAGE_SIGNATURE internal-name collision: "
+                        + internalName + " represents both " + previousKey + " and " + logicalKey);
+                }
+                internalNameByLogicalKey.put(logicalKey, internalName);
+                groupedByLogicalKey.computeIfAbsent(logicalKey, ignored -> new ArrayList<>()).add(decision);
+            });
+
+        List<Tier2AdapterArtifact> artifacts = new ArrayList<>();
+        for (Map.Entry<String, List<LambdaFilterDecision>> entry : groupedByLogicalKey.entrySet()) {
+            String internalName = internalNameByLogicalKey.get(entry.getKey());
+            artifacts.add(new Tier2AdapterArtifact(
+                internalName,
+                generatePackageSignatureClassBytes(internalName, entry.getValue(), classFileVersion, compact)
+            ));
+        }
+        return List.copyOf(artifacts);
+    }
+
+    public List<Tier2AdapterArtifact> generateTier1DirectAdapters(
+        List<Tier1RuntimePlan> plans,
+        int classFileVersion
+    ) {
+        Map<String, List<LambdaFilterDecision>> grouped = new LinkedHashMap<>();
+        plans.stream()
+            .sorted(Comparator.comparing(plan -> plan.decision().meta().siteKey()))
+            .forEach(plan -> {
+                LambdaFilterDecision decision = plan.decision();
+                if (!decision.eligible() || decision.tier() != LambdaTier.TIER1) {
+                    throw new IllegalArgumentException("Tier 1 direct generation requires Tier 1 eligible decisions");
+                }
+                String internalName = Tier1DirectAdapterNamingStrategy.internalName(decision.meta());
+                grouped.computeIfAbsent(internalName, ignored -> new ArrayList<>()).add(decision);
+            });
+
+        List<Tier2AdapterArtifact> artifacts = new ArrayList<>();
+        for (Map.Entry<String, List<LambdaFilterDecision>> entry : grouped.entrySet()) {
+            artifacts.add(new Tier2AdapterArtifact(
+                entry.getKey(),
+                generatePackageSignatureClassBytes(entry.getKey(), entry.getValue(), classFileVersion, true)
             ));
         }
         return List.copyOf(artifacts);
@@ -335,7 +412,8 @@ public final class Tier2PackageAdapterGenerator {
     private byte[] generatePackageSignatureClassBytes(
         String internalName,
         List<LambdaFilterDecision> decisions,
-        int classFileVersion
+        int classFileVersion,
+        boolean publicClass
     ) {
         if (decisions.isEmpty()) {
             throw new IllegalArgumentException("At least one Tier 2 decision is required");
@@ -360,7 +438,7 @@ public final class Tier2PackageAdapterGenerator {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         cw.visit(
             classFileVersion,
-            Opcodes.ACC_FINAL | Opcodes.ACC_SUPER | Opcodes.ACC_SYNTHETIC,
+            (publicClass ? Opcodes.ACC_PUBLIC : 0) | Opcodes.ACC_FINAL | Opcodes.ACC_SUPER | Opcodes.ACC_SYNTHETIC,
             internalName,
             null,
             "java/lang/Object",

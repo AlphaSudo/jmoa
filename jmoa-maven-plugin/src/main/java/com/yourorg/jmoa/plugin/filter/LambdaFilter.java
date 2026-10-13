@@ -77,6 +77,18 @@ public final class LambdaFilter {
                 frameworkSafetyDecision
             );
         }
+        if (config.enforceObservedSiteAllowlist()
+            && !config.frameworkSafetyConfig().isSiteKeyAdmitted(meta.siteKey())) {
+            return LambdaFilterDecision.excluded(
+                meta,
+                observedInProfile,
+                inferredCold,
+                invocationCount,
+                ExclusionReason.OBSERVED_ADMISSION_NOT_LISTED,
+                AccessResolver.Visibility.UNKNOWN,
+                frameworkSafetyDecision
+            );
+        }
         if (isFrameworkExcluded(meta)) {
             return LambdaFilterDecision.excluded(
                 meta,

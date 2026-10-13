@@ -13,7 +13,8 @@ public record LambdaFilterConfig(
     JmoaExecutionMode executionMode,
     FrameworkSafetyConfig frameworkSafetyConfig,
     boolean disableTier1FrameworkSites,
-    boolean disableTier2FrameworkSites
+    boolean disableTier2FrameworkSites,
+    boolean enforceObservedSiteAllowlist
 ) {
 
     public LambdaFilterConfig {
@@ -43,6 +44,7 @@ public record LambdaFilterConfig(
             JmoaExecutionMode.MODE_A,
             FrameworkSafetyConfig.defaults(),
             false,
+            false,
             false
         );
     }
@@ -56,7 +58,8 @@ public record LambdaFilterConfig(
             executionMode,
             frameworkSafetyConfig,
             disableTier1FrameworkSites,
-            disableTier2FrameworkSites
+            disableTier2FrameworkSites,
+            enforceObservedSiteAllowlist
         );
     }
 
@@ -69,7 +72,8 @@ public record LambdaFilterConfig(
             executionMode,
             frameworkSafetyConfig,
             disableTier1FrameworkSites,
-            disableTier2FrameworkSites
+            disableTier2FrameworkSites,
+            enforceObservedSiteAllowlist
         );
     }
 
@@ -82,7 +86,8 @@ public record LambdaFilterConfig(
             executionMode,
             frameworkSafetyConfig,
             disableTier1FrameworkSites,
-            disableTier2FrameworkSites
+            disableTier2FrameworkSites,
+            enforceObservedSiteAllowlist
         );
     }
 
@@ -95,7 +100,8 @@ public record LambdaFilterConfig(
             executionMode,
             frameworkSafetyConfig,
             disableTier1FrameworkSites,
-            disableTier2FrameworkSites
+            disableTier2FrameworkSites,
+            enforceObservedSiteAllowlist
         );
     }
 
@@ -111,7 +117,22 @@ public record LambdaFilterConfig(
             executionMode,
             frameworkSafetyConfig,
             disableTier1FrameworkSites,
-            disableTier2FrameworkSites
+            disableTier2FrameworkSites,
+            enforceObservedSiteAllowlist
+        );
+    }
+
+    public LambdaFilterConfig withObservedSiteAllowlist(boolean enforceObservedSiteAllowlist) {
+        return new LambdaFilterConfig(
+            hotInvocationThreshold,
+            requireObservedSite,
+            allowColdClassInference,
+            frameworkPackageExclusions,
+            executionMode,
+            frameworkSafetyConfig,
+            disableTier1FrameworkSites,
+            disableTier2FrameworkSites,
+            enforceObservedSiteAllowlist
         );
     }
 

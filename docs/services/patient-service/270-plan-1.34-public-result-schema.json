@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Patient1.34 public paired result format",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "scope",
+    "artifacts",
+    "calibration",
+    "pairs",
+    "costsQualified",
+    "externalReplication"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "PATIENT_PLAN134_PUBLIC_RESULT_V1"
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 20
+    },
+    "artifacts": {
+      "type": "object",
+      "minProperties": 2,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[A-Fa-f0-9]{64}$"
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "required": [
+        "memoryPassed",
+        "costsPassed",
+        "postObservationException"
+      ],
+      "properties": {
+        "memoryPassed": {
+          "type": "boolean"
+        },
+        "costsPassed": {
+          "type": "boolean"
+        },
+        "postObservationException": {
+          "const": false
+        }
+      }
+    },
+    "pairs": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "required": [
+          "order",
+          "baselinePssKiB",
+          "candidatePssKiB"
+        ],
+        "properties": {
+          "order": {
+            "enum": [
+              "AB",
+              "BA"
+            ]
+          },
+          "baselinePssKiB": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "candidatePssKiB": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "costsQualified": {
+      "type": "boolean"
+    },
+    "externalReplication": {
+      "type": "boolean"
+    }
+  }
+}

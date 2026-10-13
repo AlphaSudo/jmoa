@@ -28,6 +28,15 @@ public final class Tier1RuntimeClassGenerator {
         ClassLoader projectClassLoader,
         int classFileVersion
     ) {
+        return generate(planResult, projectClassLoader, classFileVersion, false);
+    }
+
+    public byte[] generate(
+        Tier1RuntimePlanResult planResult,
+        ClassLoader projectClassLoader,
+        int classFileVersion,
+        boolean lazyAdapters
+    ) {
         Map<RuntimeAdapterKind, List<Tier1RuntimePlan>> plansByKind = groupByKind(planResult.supportedPlans());
 
         ProjectAwareClassWriter cw = new ProjectAwareClassWriter(
@@ -51,17 +60,22 @@ public final class Tier1RuntimeClassGenerator {
                 null,
                 null
             ).visitEnd();
-            cw.visitField(
-                Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
-                cacheFieldName(kind),
-                cacheDescriptor(kind),
-                null,
-                null
-            ).visitEnd();
+            if (!lazyAdapters) {
+                cw.visitField(
+                    Opcodes.ACC_PRIVATE | Opcodes.ACC_STATIC | Opcodes.ACC_FINAL,
+                    cacheFieldName(kind),
+                    cacheDescriptor(kind),
+                    null,
+                    null
+                ).visitEnd();
+            }
         }
 
         generateConstructor(cw);
-        generateClinit(cw, plansByKind);
+        if (lazyAdapters) {
+            generateLazyAdapterMarker(cw);
+        }
+        generateClinit(cw, plansByKind, lazyAdapters);
         generateCountMethod(cw, RuntimeAdapterKind.FUNCTION, "functionCount");
         generateCountMethod(cw, RuntimeAdapterKind.PREDICATE, "predicateCount");
         generateCountMethod(cw, RuntimeAdapterKind.SUPPLIER, "supplierCount");
@@ -72,11 +86,11 @@ public final class Tier1RuntimeClassGenerator {
         generateInvokeSupplier(cw);
         generateInvokeConsumer(cw);
         generateInvokeBiConsumer(cw);
-        generateCreateMethod(cw, RuntimeAdapterKind.FUNCTION, "createFunction");
-        generateCreateMethod(cw, RuntimeAdapterKind.PREDICATE, "createPredicate");
-        generateCreateMethod(cw, RuntimeAdapterKind.SUPPLIER, "createSupplier");
-        generateCreateMethod(cw, RuntimeAdapterKind.CONSUMER, "createConsumer");
-        generateCreateMethod(cw, RuntimeAdapterKind.BI_CONSUMER, "createBiConsumer");
+        generateCreateMethod(cw, RuntimeAdapterKind.FUNCTION, "createFunction", lazyAdapters);
+        generateCreateMethod(cw, RuntimeAdapterKind.PREDICATE, "createPredicate", lazyAdapters);
+        generateCreateMethod(cw, RuntimeAdapterKind.SUPPLIER, "createSupplier", lazyAdapters);
+        generateCreateMethod(cw, RuntimeAdapterKind.CONSUMER, "createConsumer", lazyAdapters);
+        generateCreateMethod(cw, RuntimeAdapterKind.BI_CONSUMER, "createBiConsumer", lazyAdapters);
 
         cw.visitEnd();
         return cw.toByteArray();
@@ -100,7 +114,22 @@ public final class Tier1RuntimeClassGenerator {
         mv.visitEnd();
     }
 
-    private void generateClinit(ClassWriter cw, Map<RuntimeAdapterKind, List<Tier1RuntimePlan>> plansByKind) {
+    private void generateLazyAdapterMarker(ClassWriter cw) {
+        MethodVisitor mv = cw.visitMethod(
+            Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
+            "usesLazyAdapters",
+            "()Z",
+            null,
+            null
+        );
+        mv.visitCode();
+        mv.visitInsn(Opcodes.ICONST_1);
+        mv.visitInsn(Opcodes.IRETURN);
+        mv.visitMaxs(0, 0);
+        mv.visitEnd();
+    }
+
+    private void generateClinit(ClassWriter cw, Map<RuntimeAdapterKind, List<Tier1RuntimePlan>> plansByKind, boolean lazyAdapters) {
         MethodVisitor mv = cw.visitMethod(Opcodes.ACC_STATIC, "<clinit>", "()V", null, null);
         mv.visitCode();
 
@@ -132,24 +161,26 @@ public final class Tier1RuntimeClassGenerator {
                 false
             );
 
-            pushInt(mv, plans.size());
-            mv.visitTypeInsn(Opcodes.ANEWARRAY, cacheComponentInternalName(kind));
-            mv.visitFieldInsn(Opcodes.PUTSTATIC, GENERATED_INTERNAL_NAME, cacheFieldName(kind), cacheDescriptor(kind));
+            if (!lazyAdapters) {
+                pushInt(mv, plans.size());
+                mv.visitTypeInsn(Opcodes.ANEWARRAY, cacheComponentInternalName(kind));
+                mv.visitFieldInsn(Opcodes.PUTSTATIC, GENERATED_INTERNAL_NAME, cacheFieldName(kind), cacheDescriptor(kind));
 
-            for (Tier1RuntimePlan plan : plans) {
-                mv.visitFieldInsn(Opcodes.GETSTATIC, GENERATED_INTERNAL_NAME, cacheFieldName(kind), cacheDescriptor(kind));
-                pushInt(mv, plan.slotId());
-                mv.visitTypeInsn(Opcodes.NEW, adapterInternalName(kind));
-                mv.visitInsn(Opcodes.DUP);
-                pushInt(mv, plan.slotId());
-                mv.visitMethodInsn(
-                    Opcodes.INVOKESPECIAL,
-                    adapterInternalName(kind),
-                    "<init>",
-                    "(I)V",
-                    false
-                );
-                mv.visitInsn(Opcodes.AASTORE);
+                for (Tier1RuntimePlan plan : plans) {
+                    mv.visitFieldInsn(Opcodes.GETSTATIC, GENERATED_INTERNAL_NAME, cacheFieldName(kind), cacheDescriptor(kind));
+                    pushInt(mv, plan.slotId());
+                    mv.visitTypeInsn(Opcodes.NEW, adapterInternalName(kind));
+                    mv.visitInsn(Opcodes.DUP);
+                    pushInt(mv, plan.slotId());
+                    mv.visitMethodInsn(
+                        Opcodes.INVOKESPECIAL,
+                        adapterInternalName(kind),
+                        "<init>",
+                        "(I)V",
+                        false
+                    );
+                    mv.visitInsn(Opcodes.AASTORE);
+                }
             }
         }
 
@@ -372,7 +403,7 @@ public final class Tier1RuntimeClassGenerator {
         mv.visitEnd();
     }
 
-    private void generateCreateMethod(ClassWriter cw, RuntimeAdapterKind kind, String methodName) {
+    private void generateCreateMethod(ClassWriter cw, RuntimeAdapterKind kind, String methodName, boolean lazyAdapters) {
         MethodVisitor mv = cw.visitMethod(
             Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC,
             methodName,
@@ -381,10 +412,16 @@ public final class Tier1RuntimeClassGenerator {
             null
         );
         mv.visitCode();
-        mv.visitFieldInsn(Opcodes.GETSTATIC, GENERATED_INTERNAL_NAME, cacheFieldName(kind), cacheDescriptor(kind));
-        mv.visitVarInsn(Opcodes.ILOAD, 0);
-        mv.visitInsn(Opcodes.AALOAD);
-        mv.visitTypeInsn(Opcodes.CHECKCAST, cacheComponentInternalName(kind));
+        if (lazyAdapters) {
+            mv.visitVarInsn(Opcodes.ILOAD, 0);
+            mv.visitMethodInsn(Opcodes.INVOKESTATIC, "jmoa/runtime/JmoaRuntimeSupport", supportAdapterMethodName(kind),
+                "(I)" + cacheElementDescriptor(kind), false);
+        } else {
+            mv.visitFieldInsn(Opcodes.GETSTATIC, GENERATED_INTERNAL_NAME, cacheFieldName(kind), cacheDescriptor(kind));
+            mv.visitVarInsn(Opcodes.ILOAD, 0);
+            mv.visitInsn(Opcodes.AALOAD);
+            mv.visitTypeInsn(Opcodes.CHECKCAST, cacheComponentInternalName(kind));
+        }
         mv.visitInsn(Opcodes.ARETURN);
         mv.visitMaxs(0, 0);
         mv.visitEnd();
@@ -447,6 +484,16 @@ public final class Tier1RuntimeClassGenerator {
             case SUPPLIER -> "installSupplierTargets";
             case CONSUMER -> "installConsumerTargets";
             case BI_CONSUMER -> "installBiConsumerTargets";
+        };
+    }
+
+    private static String supportAdapterMethodName(RuntimeAdapterKind kind) {
+        return switch (kind) {
+            case FUNCTION -> "functionAdapter";
+            case PREDICATE -> "predicateAdapter";
+            case SUPPLIER -> "supplierAdapter";
+            case CONSUMER -> "consumerAdapter";
+            case BI_CONSUMER -> "biConsumerAdapter";
         };
     }
 

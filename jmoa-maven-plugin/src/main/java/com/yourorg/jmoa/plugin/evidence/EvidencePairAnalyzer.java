@@ -88,11 +88,12 @@ public final class EvidencePairAnalyzer {
         long medianPrivateDirty = median(pairs, PairResult::deltaPrivateDirtyKb);
         long medianMemoryCurrent = median(pairs, PairResult::deltaMemoryCurrentBytes);
         Verdict verdict;
+        int requiredWins = (int) Math.ceil(pairs.size() * 2.0 / 3.0);
         if (pairs.size() == 1) {
             verdict = Verdict.NO_CLAIM;
-        } else if (wins >= 2 && medianPss <= -1024 && medianPrivateDirty <= -1024 && medianMemoryCurrent <= -1024L * 1024L) {
+        } else if (wins >= requiredWins && medianPss <= -1024 && medianPrivateDirty <= -1024 && medianMemoryCurrent <= -1024L * 1024L) {
             verdict = pairs.size() >= 3 ? Verdict.CONFIRMED_WIN : Verdict.MARGINAL_WIN_NEEDS_5PAIR;
-        } else if (wins == 0 && medianPss > 1024 && medianPrivateDirty > 1024 && medianMemoryCurrent > 1024L * 1024L) {
+        } else if ((pairs.size() - wins) >= requiredWins && medianPss > 1024 && medianPrivateDirty > 1024 && medianMemoryCurrent > 1024L * 1024L) {
             verdict = Verdict.CONFIRMED_REGRESSION;
         } else {
             verdict = Verdict.MIXED_METRICS_NEEDS_RERUN;

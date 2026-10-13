@@ -54,10 +54,14 @@ public final class DebugMetadataSavingsEstimator {
             config.reportOnly(),
             config.profile(),
             config.parsedEngine().propertyValue(),
+            config.parsedOperation().propertyValue(),
+            config.parsedJarLayout().propertyValue(),
             jars.size(),
             jars.stream().mapToInt(JarReductionRecord::classCount).sum() + application.classCount(),
             jars.stream().mapToLong(JarReductionRecord::originalBytes).sum(),
             jars.stream().mapToLong(JarReductionRecord::reducedBytes).sum(),
+            jars.stream().mapToLong(record -> record.reducedBytes() - record.originalBytes()).sum(),
+            jars.stream().mapToLong(record -> record.originalBytes() - record.reducedBytes()).sum(),
             jars.stream().mapToLong(JarReductionRecord::estimatedRemovableBytes).sum() + application.estimatedRemovableBytes(),
             jars.stream().mapToLong(JarReductionRecord::removedBytes).sum() + application.removedBytes(),
             new ReducerSafetyPolicy().taxonomy(),
@@ -69,6 +73,7 @@ public final class DebugMetadataSavingsEstimator {
                 "LineNumberTable, StackMapTable, annotations, signatures, and BootstrapMethods are preserved.",
                 "The default asm engine skips BootstrapMethods-bearing classes during mutation; the opt-in raw engine preserves BootstrapMethods while rewriting only Code attribute debug tables.",
                 "V2-Q application-class reduction is raw-engine-only and admits only ORDINARY_APPLICATION classes; generated/proxy families remain report-only or blocked.",
+                "Reducer operation=" + config.parsedOperation().propertyValue() + "; jar layout=" + config.parsedJarLayout().propertyValue() + ".",
                 "Performance claims require V2-C confirmation and V2-D attribution."
             )
         );
@@ -128,7 +133,8 @@ public final class DebugMetadataSavingsEstimator {
             skipReason,
             "preserve",
             selectionSkip == null && safety.mutationAllowed() ? "ESTIMATED" : skipReason,
-            classes.stream().limit(200).toList()
+            classes.stream().limit(200).toList(),
+            null
         );
     }
 

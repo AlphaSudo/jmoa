@@ -17,6 +17,8 @@ import java.util.List;
  */
 public final class RawReducerBytePreservationAuditor {
 
+    private final ClassfileComponentHasher componentHasher = new ClassfileComponentHasher();
+
     public RawReducerClassAuditRecord audit(
         String artifact,
         String entryName,
@@ -32,6 +34,12 @@ public final class RawReducerBytePreservationAuditor {
         byte[] normalizedReduced = new Normalizer(reduced).normalize();
         if (!Arrays.equals(normalizedOriginal, normalizedReduced)) {
             throw new IllegalStateException("Raw reducer changed non-target classfile bytes: " + entryName);
+        }
+        ClassfileComponentDigests originalDigests = componentHasher.hash(original);
+        ClassfileComponentDigests reducedDigests = componentHasher.hash(reduced);
+        boolean componentDigestsPreserved = originalDigests.equals(reducedDigests);
+        if (!componentDigestsPreserved) {
+            throw new IllegalStateException("Raw reducer changed a protected classfile component: " + entryName);
         }
         List<String> removed = new ArrayList<>();
         if (before.localVariableTableBytes() > 0) {
@@ -50,6 +58,18 @@ public final class RawReducerBytePreservationAuditor {
             original.length,
             reduced.length,
             removed,
+            sha256(normalizedOriginal),
+            originalDigests.constantPoolSha256(),
+            reducedDigests.constantPoolSha256(),
+            originalDigests.bytecodeSha256(),
+            reducedDigests.bytecodeSha256(),
+            originalDigests.stackMapTableSha256(),
+            reducedDigests.stackMapTableSha256(),
+            originalDigests.bootstrapMethodsSha256(),
+            reducedDigests.bootstrapMethodsSha256(),
+            originalDigests.annotationsSha256(),
+            reducedDigests.annotationsSha256(),
+            true,
             true,
             before.lineNumberTableBytes() == after.lineNumberTableBytes(),
             before.sourceFileAttributeBytes() == after.sourceFileAttributeBytes(),

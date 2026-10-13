@@ -166,7 +166,7 @@ class LambdaFilterTest {
         LambdaMeta serializable = meta("com/example/A", "serializable", false, true, "java/lang/String", "length", "()I");
 
         LambdaFilterResult result = new LambdaFilter(
-            new LambdaFilterConfig(10_000, true, true, List.of(), JmoaExecutionMode.MODE_A, FrameworkSafetyConfig.defaults(), false, false),
+            new LambdaFilterConfig(10_000, true, true, List.of(), JmoaExecutionMode.MODE_A, FrameworkSafetyConfig.defaults(), false, false, false),
             ignored -> AccessResolver.Visibility.PUBLIC
         ).filter(List.of(capturing, serializable), LambdaProfileIndex.empty());
 

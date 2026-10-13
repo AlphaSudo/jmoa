@@ -29,6 +29,7 @@ import com.yourorg.jmoa.plugin.roi.RewriteRoiAnalyzer;
 import com.yourorg.jmoa.plugin.roi.RewriteRoiReport;
 import com.yourorg.jmoa.plugin.roi.RewriteRoiReportWriter;
 import com.yourorg.jmoa.plugin.modec.HybridPackagingSummary;
+import com.yourorg.jmoa.plugin.modec.HybridOriginManifestGenerator;
 import com.yourorg.jmoa.plugin.modec.ModeCOptimizedClasspathWriter;
 import com.yourorg.jmoa.plugin.modec.ModeCOptimizedClasspathResult;
 import com.yourorg.jmoa.plugin.modec.OptimizedDependencyJarPackager;
@@ -150,13 +151,28 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
     @Parameter(property = "jmoa.observedAdmissionSitesFile")
     private String observedAdmissionSitesFile;
 
+    @Parameter(property = "jmoa.enforceObservedSiteAllowlist", defaultValue = "false")
+    private boolean enforceObservedSiteAllowlist;
+
     private ObservedAdmissionReportContext observedAdmissionReportContext = ObservedAdmissionReportContext.disabled();
 
     @Parameter(property = "jmoa.generateTier1Runtime", defaultValue = "false")
     private boolean generateTier1Runtime;
 
+    @Parameter(property = "jmoa.lazyTier1Runtime", defaultValue = "false")
+    private boolean lazyTier1Runtime;
+
+    @Parameter(property = "jmoa.tier1AdapterMode", defaultValue = "RUNTIME")
+    private String tier1AdapterMode;
+
     @Parameter(property = "jmoa.tier2AdapterConsolidation", defaultValue = "CURRENT")
     private String tier2AdapterConsolidation;
+
+    private com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier1AdapterMode effectiveTier1AdapterMode;
+    private com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier2ConsolidationMode effectiveTier2ConsolidationMode;
+
+    @Parameter(property = "jmoa.servicePolicyOverlayPath")
+    private File servicePolicyOverlayPath;
 
     @Parameter(property = "jmoa.compactGeneratedAdapters", defaultValue = "false")
     private boolean compactGeneratedAdapters;
@@ -186,6 +202,10 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
      */
     @Parameter(property = "jmoa.failOnMissingAdapterReferences", defaultValue = "true")
     private boolean failOnMissingAdapterReferences;
+
+    /** Additional reflection/resource allowlists that act as T14 roots. */
+    @Parameter(property = "jmoa.pruningReflectionAllowlists")
+    private List<File> pruningReflectionAllowlists = new ArrayList<>();
 
     @Parameter(property = "jmoa.mode", defaultValue = "MODE_A")
     private JmoaExecutionMode mode;
@@ -222,6 +242,9 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
 
     @Parameter(property = "jmoa.hybridOverlayCoordinates")
     private String hybridOverlayCoordinates;
+
+    @Parameter(property = "jmoa.hybridOriginRuntimeJdkFeature", defaultValue = "0")
+    private int hybridOriginRuntimeJdkFeature;
 
     @Parameter(property = "jmoa.debugProfileMatches", defaultValue = "false")
     private boolean debugProfileMatches;
@@ -323,6 +346,12 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
 
         getLog().info("JMOA scanning classes directory: " + classesDir.getAbsolutePath());
 
+        // T10 boundary: when a service policy overlay is configured, it is
+        // loaded, validated, and enforced once before any engine work; the
+        // effective policy is embedded in the build summary reports below.
+        com.yourorg.jmoa.plugin.overlay.ServicePolicyOverlayBoundary.OverlayPolicyReport overlayReport =
+                enforceServicePolicyOverlay();
+
         try {
             // Construct the project classloader from compile classpath elements.
             List<String> classpathElements = new ArrayList<>(project.getCompileClasspathElements());
@@ -408,12 +437,21 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             maybeWriteFrameworkAdmissionReport(filterResult);
             LambdaFilterResult executionFilterResult = filterResult;
             Tier1RuntimePlanResult runtimePlanResult = new Tier1RuntimePlanner().plan(executionFilterResult);
+            validateTier2ConsolidationMode();
             boolean packageSamTier2Consolidation = isPackageSamTier2Consolidation();
             boolean packageTier2Consolidation = isPackageTier2Consolidation();
             boolean packageSignatureTier2Consolidation = isPackageSignatureTier2Consolidation();
+            boolean directTier1 = isDirectTier1AdapterMode();
+            if (directTier1 && !generateTier1Runtime) {
+                throw new MojoExecutionException("jmoa.tier1AdapterMode=DIRECT requires jmoa.generateTier1Runtime=true.");
+            }
+            java.util.Map<String, java.io.File> siteKeyToRootForPlan =
+                buildSiteKeyToRootMap(classRoots, scanResult.sites());
             LambdaWeavingPlan weavingPlan = new LambdaWeavingPlanBuilder(
                 packageSamTier2Consolidation, packageTier2Consolidation,
-                packageSignatureTier2Consolidation, compactGeneratedAdapters)
+                packageSignatureTier2Consolidation, compactGeneratedAdapters, directTier1,
+                isRootPackageSignatureTier2Consolidation(),
+                buildRootOrdinalBySiteKey(classRoots, siteKeyToRootForPlan))
                 .build(executionFilterResult, runtimePlanResult);
             getLog().info("V3.3 filter preview: " + filterResult.eligible().size()
                 + " eligible sites (" + filterResult.tier1Eligible().size() + " Tier 1, "
@@ -477,8 +515,10 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             }
 
             int classFileVersion = resolveProjectClassFileVersion(classesDir);
-            GeneratedRuntimeArtifact generatedRuntimeArtifact =
-                maybeGenerateTier1Runtime(classesDir, runtimePlanResult, projectClassLoader, classFileVersion);
+            writeTier2StaticModeAudit(classRoots, sites, filterResult, classFileVersion);
+            GeneratedRuntimeArtifact generatedRuntimeArtifact = directTier1
+                ? maybeGenerateTier1DirectAdapters(classesDir, runtimePlanResult, classFileVersion)
+                : maybeGenerateTier1Runtime(classesDir, runtimePlanResult, projectClassLoader, classFileVersion);
             List<Tier2AdapterArtifact> tier2Artifacts = maybeGenerateTier2Adapters(classRoots, sites, filterResult, classFileVersion);
             WeaveExecutionResult weaveExecutionResult = new WeaveExecutionResult(
                 failFastRewrite,
@@ -596,6 +636,7 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
                 if (hybridPackagingSummary.enabled()) {
                     getLog().info("MODE_C hybrid overlay coordinates: "
                         + String.join(", ", hybridPackagingSummary.hybridOverlayCoordinates()));
+                    writeHybridOriginManifests(optimizedModeCClasspathFile, hybridPackagingSummary);
                 }
             }
 
@@ -605,6 +646,57 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             // it can ship a fat JAR that throws ClassNotFoundException at runtime.
             if (!reportOnly && failOnMissingAdapterReferences) {
                 validateAdapterReferences(classRoots);
+            }
+
+            // T14: report-only generated-class pruning manifest after the
+            // final weave/self-heal pass. Deletion is disabled by design.
+            if (!reportOnly) {
+                try {
+                    java.util.Set<String> knownGeneratedClasses = new java.util.LinkedHashSet<>();
+                    if (generatedRuntimeArtifact != null
+                            && generatedRuntimeArtifact.internalName() != null
+                            && !generatedRuntimeArtifact.internalName().startsWith("MULTI:")) {
+                        knownGeneratedClasses.add(generatedRuntimeArtifact.internalName());
+                    }
+                    tier2Artifacts.stream()
+                        .map(Tier2AdapterArtifact::internalName)
+                        .filter(java.util.Objects::nonNull)
+                        .forEach(knownGeneratedClasses::add);
+                    java.util.Set<String> entryPoints = new java.util.LinkedHashSet<>();
+                    weavingPlan.targetsBySiteKey().values().stream()
+                        .map(com.yourorg.jmoa.plugin.weave.LambdaWeaveTarget::tier2AdapterInternalName)
+                        .filter(java.util.Objects::nonNull)
+                        .filter(name -> !name.isBlank())
+                        .forEach(name -> {
+                            knownGeneratedClasses.add(name);
+                            entryPoints.add(name);
+                        });
+                    if (!isDirectTier1AdapterMode()) {
+                        knownGeneratedClasses.add("jmoa/runtime/JmoaRuntime");
+                        entryPoints.add("jmoa/runtime/JmoaRuntime");
+                    }
+                    com.yourorg.jmoa.plugin.generated.pruning.GeneratedClassPruningReport.PruningManifest pruning =
+                        com.yourorg.jmoa.plugin.generated.pruning.GeneratedClassPruningReport.build(
+                            classRoots.stream().map(root -> root.rootDirectory()).toList(),
+                            entryPoints,
+                            pruningReflectionAllowlists == null ? java.util.List.of() : pruningReflectionAllowlists,
+                            knownGeneratedClasses);
+                    File pruningReportFile = new File(project.getBuild().getDirectory(),
+                        "jmoa-generated-pruning-report.json");
+                    new com.fasterxml.jackson.databind.ObjectMapper()
+                        .enable(com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT)
+                        .writeValue(pruningReportFile, pruning);
+                    getLog().info("Generated-class pruning manifest (report-only, deletion disabled) written to: "
+                        + pruningReportFile.getAbsolutePath() + " (removable candidates: " + pruning.removableCount() + ")");
+                    // The report is non-mutating, but rerun the shipping guard
+                    // after it so integration order remains safe if T14 ever
+                    // grows an explicitly gated deletion phase.
+                    if (failOnMissingAdapterReferences) {
+                        validateAdapterReferences(classRoots);
+                    }
+                } catch (Exception e) {
+                    throw new MojoExecutionException("Generated-class pruning report failed", e);
+                }
             }
 
             File reportFile = new File(project.getBuild().getDirectory(), "jmoa-lambda-report.json");
@@ -628,6 +720,22 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             );
             getLog().info("Deduplication report written to: " + reportFile.getAbsolutePath());
 
+            // T10: embed the effective overlay policy into the build summary
+            // and emit the standalone overlay report next to it.
+            if (overlayReport != null) {
+                com.fasterxml.jackson.databind.ObjectMapper mapper =
+                        new com.fasterxml.jackson.databind.ObjectMapper().enable(
+                                com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT);
+                File overlayReportFile = new File(project.getBuild().getDirectory(),
+                        "jmoa-service-policy-overlay-report.json");
+                mapper.writeValue(overlayReportFile, overlayReport);
+                com.fasterxml.jackson.databind.node.ObjectNode mainReport =
+                        (com.fasterxml.jackson.databind.node.ObjectNode) mapper.readTree(reportFile);
+                mainReport.set("servicePolicyOverlay", mapper.valueToTree(overlayReport));
+                mapper.writeValue(reportFile, mainReport);
+                getLog().info("Service policy overlay report written to: " + overlayReportFile.getAbsolutePath());
+            }
+
             // Phase 20: ROI report generation
             if (mode == JmoaExecutionMode.MODE_C && rewriteRoiReport) {
                 RewriteRoiAnalyzer roiAnalyzer = new RewriteRoiAnalyzer();
@@ -648,12 +756,43 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
         }
     }
 
+    /**
+     * T10 boundary: enforces the configured service policy overlay (if any)
+     * against this build's typed mode selections. Package-private so the
+     * integration fixture can exercise the real parameter wiring on the real
+     * Mojo without running the whole rewrite engine.
+     */
+    public com.yourorg.jmoa.plugin.overlay.ServicePolicyOverlayBoundary.OverlayPolicyReport enforceServicePolicyOverlay()
+            throws MojoFailureException {
+        try {
+            effectiveTier1AdapterMode = com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier1AdapterMode.parse(
+                    tier1AdapterMode == null ? "RUNTIME" : tier1AdapterMode);
+            effectiveTier2ConsolidationMode = com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier2ConsolidationMode.parse(
+                    tier2AdapterConsolidation == null ? "CURRENT" : tier2AdapterConsolidation);
+        } catch (IllegalArgumentException e) {
+            throw new MojoFailureException(e.getMessage(), e);
+        }
+        if (servicePolicyOverlayPath == null) {
+            return null;
+        }
+        try {
+            return com.yourorg.jmoa.plugin.overlay.ServicePolicyOverlayBoundary.enforce(
+                    servicePolicyOverlayPath,
+                    message -> getLog().info(message),
+                    effectiveTier1AdapterMode.name(),
+                    effectiveTier2ConsolidationMode.name());
+        } catch (IllegalArgumentException e) {
+            throw new MojoFailureException(e.getMessage(), e);
+        }
+    }
+
     private LambdaFilterConfig buildFilterConfig() {
         LambdaFilterConfig defaults = LambdaFilterConfig.defaults()
             .withHotInvocationThreshold(hotThreshold)
             .withExecutionMode(mode)
             .withFrameworkSafetyConfig(buildFrameworkSafetyConfig())
-            .withDiagnosticTierDisables(disableTier1FrameworkSites, disableTier2FrameworkSites);
+            .withDiagnosticTierDisables(disableTier1FrameworkSites, disableTier2FrameworkSites)
+            .withObservedSiteAllowlist(enforceObservedSiteAllowlist);
         if (frameworkExclusions == null || frameworkExclusions.isEmpty()) {
             return defaults;
         }
@@ -671,6 +810,13 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             ? defaults.denyPrefixes()
             : frameworkDenyPrefixes;
         Set<String> admissionSiteKeys = loadObservedAdmissionSiteKeys();
+        if (enforceObservedSiteAllowlist
+            && (!enableObservedSiteAdmission || !observedAdmissionReportContext.loaded() || admissionSiteKeys.isEmpty())) {
+            throw new IllegalArgumentException(
+                "jmoa.enforceObservedSiteAllowlist=true requires a loaded, non-empty "
+                    + "jmoa.observedAdmissionSitesFile and jmoa.enableObservedSiteAdmission=true."
+            );
+        }
         List<String> safeSamInterfaces = mergeSafeSamInterfaces(defaults.safeSamInterfaces(), additionalSafeSamInterfaces);
         return new FrameworkSafetyConfig(
             frameworkFiltering,
@@ -709,7 +855,8 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
                 "",
                 false,
                 Set.of(),
-                "EXPLICIT_SITE_KEYS"
+                "EXPLICIT_SITE_KEYS",
+                enforceObservedSiteAllowlist
             );
             return Set.of();
         }
@@ -726,7 +873,8 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
                     path.toAbsolutePath().toString(),
                     false,
                     Set.of(),
-                    "EXPLICIT_SITE_KEYS"
+                    "EXPLICIT_SITE_KEYS",
+                    enforceObservedSiteAllowlist
                 );
                 return Set.of();
             }
@@ -745,7 +893,8 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
                 path.toAbsolutePath().toString(),
                 true,
                 keys,
-                "EXPLICIT_SITE_KEYS"
+                "EXPLICIT_SITE_KEYS",
+                enforceObservedSiteAllowlist
             );
             return keys;
         } catch (IOException e) {
@@ -756,7 +905,8 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
                 "",
                 false,
                 Set.of(),
-                "EXPLICIT_SITE_KEYS"
+                "EXPLICIT_SITE_KEYS",
+                enforceObservedSiteAllowlist
             );
             return Set.of();
         }
@@ -812,13 +962,38 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
 
         try {
             Tier1RuntimeClassGenerator generator = new Tier1RuntimeClassGenerator();
-            byte[] runtimeBytes = generator.generate(runtimePlanResult, projectClassLoader, classFileVersion);
+            byte[] runtimeBytes = generator.generate(runtimePlanResult, projectClassLoader, classFileVersion, lazyTier1Runtime);
             generator.writeTo(classesDir, runtimeBytes);
             getLog().info("Generated Tier 1 runtime class: " + new File(classesDir, Tier1RuntimeClassGenerator.GENERATED_INTERNAL_NAME + ".class").getAbsolutePath());
             getLog().info("Generated Tier 1 runtime classfile version: " + classFileVersion);
+            getLog().info("Generated Tier 1 runtime adapter policy: " + (lazyTier1Runtime ? "LAZY_SUPPORT_CACHE" : "LEGACY_EAGER_CACHE"));
             return new GeneratedRuntimeArtifact(Tier1RuntimeClassGenerator.GENERATED_INTERNAL_NAME, runtimeBytes);
         } catch (Exception e) {
             throw new MojoExecutionException("Failed to generate Tier 1 runtime class", e);
+        }
+    }
+
+    private GeneratedRuntimeArtifact maybeGenerateTier1DirectAdapters(
+        File classesDir,
+        Tier1RuntimePlanResult runtimePlanResult,
+        int classFileVersion
+    ) throws MojoExecutionException {
+        if (reportOnly || runtimePlanResult.supportedPlans().isEmpty()) {
+            return null;
+        }
+        try {
+            List<Tier2AdapterArtifact> artifacts = new Tier2PackageAdapterGenerator(true)
+                .generateTier1DirectAdapters(runtimePlanResult.supportedPlans(), classFileVersion);
+            int bytes = 0;
+            for (Tier2AdapterArtifact artifact : artifacts) {
+                writeGeneratedClass(classesDir, artifact.internalName(), artifact.classBytes());
+                bytes += artifact.classBytes().length;
+            }
+            getLog().info("Generated " + artifacts.size() + " Tier 1 direct adapter class(es), " + bytes
+                + " bytes, with no JmoaRuntime registry or MethodHandle arrays.");
+            return new GeneratedRuntimeArtifact("MULTI:jmoa/runtime/JmoaDirectAdapters", new byte[bytes]);
+        } catch (Exception e) {
+            throw new MojoExecutionException("Failed to generate Tier 1 direct adapters", e);
         }
     }
 
@@ -842,7 +1017,21 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
         int physicalEmittedAdapterClasses = 0;
         int multiRootAdapters = 0;
         try {
-            if (isPackageSignatureTier2Consolidation()) {
+            if (isRootPackageSignatureTier2Consolidation()) {
+                // Track T4: adapter key = physical root ordinal + package +
+                // erased signature; each adapter is written to exactly one
+                // root, so multi-root fan-out cannot occur by construction.
+                Map<String, Integer> rootOrdinalBySiteKey = buildRootOrdinalBySiteKey(classRoots, siteKeyToRoot);
+                Tier2PackageAdapterGenerator rootSigGen = new Tier2PackageAdapterGenerator(compactGeneratedAdapters);
+                for (Tier2AdapterArtifact artifact : rootSigGen.generateRootPackageSignatureAdapters(
+                        filterResult.tier2Eligible(), rootOrdinalBySiteKey, classFileVersion)) {
+                    File singleRoot = rootForKey(
+                        artifact, siteKeyToRoot, filterResult, rootOrdinalBySiteKey);
+                    writeGeneratedClass(singleRoot, artifact.internalName(), artifact.classBytes());
+                    physicalEmittedAdapterClasses++;
+                    artifacts.add(artifact);
+                }
+            } else if (isPackageSignatureTier2Consolidation()) {
                 Tier2PackageAdapterGenerator sigGen = new Tier2PackageAdapterGenerator(compactGeneratedAdapters);
                 for (Tier2AdapterArtifact artifact : sigGen.generatePackageSignatureAdapters(filterResult.tier2Eligible(), classFileVersion)) {
                     List<File> outputRoots = resolvePackageSignatureTier2OutputRoots(artifact, filterResult, siteKeyToRoot);
@@ -1089,15 +1278,119 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
     }
 
     private boolean isPackageTier2Consolidation() {
-        return "PACKAGE".equalsIgnoreCase(tier2AdapterConsolidation == null ? "" : tier2AdapterConsolidation.trim());
+        return typedTier2Consolidation() == com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier2ConsolidationMode.PACKAGE;
     }
 
     private boolean isPackageSamTier2Consolidation() {
-        return "PACKAGE_SAM".equalsIgnoreCase(tier2AdapterConsolidation == null ? "" : tier2AdapterConsolidation.trim());
+        return typedTier2Consolidation() == com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier2ConsolidationMode.PACKAGE_SAM;
     }
 
     private boolean isPackageSignatureTier2Consolidation() {
-        return "PACKAGE_SIGNATURE".equalsIgnoreCase(tier2AdapterConsolidation == null ? "" : tier2AdapterConsolidation.trim());
+        return typedTier2Consolidation() == com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier2ConsolidationMode.PACKAGE_SIGNATURE;
+    }
+
+    private boolean isRootPackageSignatureTier2Consolidation() {
+        return typedTier2Consolidation() == com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier2ConsolidationMode.ROOT_PACKAGE_SIGNATURE;
+    }
+
+    private void validateTier2ConsolidationMode() throws MojoExecutionException {
+        try { typedTier2Consolidation(); }
+        catch (IllegalArgumentException e) { throw new MojoExecutionException(e.getMessage(), e); }
+    }
+
+    private Map<String, Integer> buildRootOrdinalBySiteKey(List<ClassRootDescriptor> classRoots, Map<String, File> siteKeyToRoot) {
+        Map<String, Integer> rootOrdinals = new LinkedHashMap<>();
+        for (ClassRootDescriptor descriptor : classRoots) {
+            rootOrdinals.putIfAbsent(canonicalPath(descriptor.rootDirectory()), rootOrdinals.size());
+        }
+        Map<String, Integer> bySiteKey = new LinkedHashMap<>();
+        siteKeyToRoot.forEach((siteKey, root) -> {
+            Integer ordinal = rootOrdinals.get(canonicalPath(root));
+            if (ordinal == null) {
+                throw new IllegalStateException("Site root is absent from the frozen output-root list: " + root);
+            }
+            bySiteKey.put(siteKey, ordinal);
+        });
+        return bySiteKey;
+    }
+
+    private void writeTier2StaticModeAudit(
+            List<ClassRootDescriptor> classRoots,
+            List<LambdaSite> sites,
+            LambdaFilterResult filterResult,
+            int classFileVersion) throws MojoExecutionException {
+        try {
+            Map<String, File> siteKeyToRoot = buildSiteKeyToRootMap(classRoots, sites);
+            Map<String, Integer> rootOrdinalBySiteKey = buildRootOrdinalBySiteKey(classRoots, siteKeyToRoot);
+            Map<Integer, String> rootsByOrdinal = new LinkedHashMap<>();
+            int ordinal = 0;
+            for (ClassRootDescriptor descriptor : classRoots) {
+                String canonical = canonicalPath(descriptor.rootDirectory());
+                if (!rootsByOrdinal.containsValue(canonical)) {
+                    rootsByOrdinal.put(ordinal++, canonical);
+                }
+            }
+            com.yourorg.jmoa.plugin.runtime.Tier2StaticModeAudit.AuditReport audit =
+                com.yourorg.jmoa.plugin.runtime.Tier2StaticModeAudit.build(
+                    filterResult.tier2Eligible(), rootOrdinalBySiteKey, rootsByOrdinal, classFileVersion);
+            File output = new File(project.getBuild().getDirectory(), "jmoa-tier2-static-mode-audit.json");
+            new com.fasterxml.jackson.databind.ObjectMapper()
+                .enable(com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT)
+                .writeValue(output, audit);
+            getLog().info("Tier-2 all-mode static audit written to: " + output.getAbsolutePath());
+        } catch (Exception e) {
+            throw new MojoExecutionException("Tier-2 all-mode static audit failed", e);
+        }
+    }
+
+    private String canonicalPath(File file) {
+        try { return file.getCanonicalPath(); }
+        catch (IOException e) { throw new IllegalStateException("Cannot canonicalize class root: " + file, e); }
+    }
+
+    private File rootForKey(Tier2AdapterArtifact artifact,
+            Map<String, File> siteKeyToRoot,
+            LambdaFilterResult filterResult,
+            Map<String, Integer> rootOrdinalBySiteKey) throws MojoExecutionException {
+        // The root-aware adapter name encodes its root ordinal; resolve the
+        // ordinal from the members' site keys to pick the single output root.
+        for (var decision : filterResult.tier2Eligible()) {
+            File root = siteKeyToRoot.get(decision.meta().siteKey());
+            if (root == null) {
+                continue;
+            }
+            Integer ordinal = rootOrdinalBySiteKey.get(decision.meta().siteKey());
+            if (ordinal == null) {
+                throw new MojoExecutionException("Root-aware adapter site has no frozen physical-root ordinal: "
+                        + decision.meta().siteKey());
+            }
+            String expected = com.yourorg.jmoa.plugin.runtime.Tier2AdapterNamingStrategy
+                .rootPackageSignatureInternalName(decision.meta(), ordinal, compactGeneratedAdapters);
+            if (expected.equals(artifact.internalName())) {
+                return root;
+            }
+        }
+        throw new MojoExecutionException("Root-aware adapter has no member site: " + artifact.internalName());
+    }
+
+    private boolean isDirectTier1AdapterMode() throws MojoExecutionException {
+        try {
+            if (effectiveTier1AdapterMode == null) {
+                effectiveTier1AdapterMode = com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier1AdapterMode.parse(
+                        tier1AdapterMode == null ? "RUNTIME" : tier1AdapterMode);
+            }
+            return effectiveTier1AdapterMode == com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier1AdapterMode.DIRECT;
+        } catch (IllegalArgumentException e) {
+            throw new MojoExecutionException(e.getMessage(), e);
+        }
+    }
+
+    private com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier2ConsolidationMode typedTier2Consolidation() {
+        if (effectiveTier2ConsolidationMode == null) {
+            effectiveTier2ConsolidationMode = com.yourorg.jmoa.plugin.overlay.PluginModeEnums.Tier2ConsolidationMode.parse(
+                    tier2AdapterConsolidation == null ? "CURRENT" : tier2AdapterConsolidation);
+        }
+        return effectiveTier2ConsolidationMode;
     }
 
     private boolean isRuntimeLibraryAvailable(ClassLoader projectClassLoader) {
@@ -1185,6 +1478,56 @@ public class LambdaDeduplicationMojo extends AbstractMojo {
             files.addAll(ClassFileWalker.findClassFiles(root.rootDirectory()));
         }
         return files;
+    }
+
+    private void writeHybridOriginManifests(File classpathFile, HybridPackagingSummary summary) throws IOException {
+        List<String> effectiveOrder = Files.readAllLines(classpathFile.toPath()).stream()
+            .filter(value -> !value.isBlank()).toList();
+        List<Map<String, Object>> indexEntries = new ArrayList<>();
+        for (int i = 0; i < effectiveOrder.size(); i++) {
+            File entry = new File(effectiveOrder.get(i)).getCanonicalFile();
+            indexEntries.add(Map.of(
+                "ordinal", i,
+                "path", entry.getAbsolutePath(),
+                "kind", entry.isDirectory() ? "DIRECTORY" : "FILE"
+            ));
+        }
+        com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper()
+            .enable(com.fasterxml.jackson.databind.SerializationFeature.INDENT_OUTPUT);
+        File targetDirectory = new File(project.getBuild().getDirectory());
+        Map<String, Object> classpathIndex = new LinkedHashMap<>();
+        classpathIndex.put("schemaVersion", "jmoa-hybrid-effective-classpath-index-v1");
+        classpathIndex.put("classpathFile", classpathFile.getCanonicalPath());
+        classpathIndex.put("classpathFileSha256", sha256File(classpathFile));
+        classpathIndex.put("entries", indexEntries);
+        mapper.writeValue(new File(targetDirectory, "jmoa-hybrid-effective-classpath-index.json"), classpathIndex);
+
+        HybridOriginManifestGenerator.MultiReleasePolicy multiReleasePolicy = hybridOriginRuntimeJdkFeature > 0
+            ? HybridOriginManifestGenerator.MultiReleasePolicy.jdkFloorProof(hybridOriginRuntimeJdkFeature)
+            : HybridOriginManifestGenerator.MultiReleasePolicy.refuse();
+        for (com.yourorg.jmoa.plugin.modec.HybridOverlayClasspathEntry overlay : summary.overlayEntries()) {
+            String expanded = overlay.expandedRoot().getCanonicalPath();
+            String fallback = overlay.originalJar().getCanonicalPath();
+            int expandedIndex = effectiveOrder.indexOf(expanded);
+            int fallbackIndex = effectiveOrder.indexOf(fallback);
+            if (expandedIndex < 0 || fallbackIndex != expandedIndex + 1) {
+                throw new IOException("Hybrid classpath order drift for " + overlay.coordinate().displayName()
+                    + ": expanded root must immediately precede its original fallback JAR");
+            }
+            HybridOriginManifestGenerator.OriginManifest manifest = HybridOriginManifestGenerator.generate(
+                List.of(overlay.expandedRoot().toPath(), overlay.originalJar().toPath()), multiReleasePolicy);
+            String safeCoordinate = overlay.coordinate().displayName().replaceAll("[^A-Za-z0-9._-]", "_");
+            mapper.writeValue(new File(targetDirectory, "jmoa-hybrid-origin-manifest-" + safeCoordinate + ".json"), manifest);
+        }
+    }
+
+    private static String sha256File(File file) throws IOException {
+        try {
+            byte[] digest = java.security.MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(file.toPath()));
+            return java.util.HexFormat.of().formatHex(digest).toUpperCase();
+        } catch (java.security.NoSuchAlgorithmException e) {
+            throw new IOException("SHA-256 unavailable", e);
+        }
     }
 
     private void maybeWriteGeneratedClassInventory(

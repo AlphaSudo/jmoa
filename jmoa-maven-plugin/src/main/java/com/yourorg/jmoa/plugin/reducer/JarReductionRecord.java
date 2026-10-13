@@ -21,7 +21,8 @@ public record JarReductionRecord(
     String skipReason,
     String timestampPolicy,
     String status,
-    List<ClassReductionRecord> classes
+    List<ClassReductionRecord> classes,
+    JarLayoutAuditRecord layoutAudit
 ) {
     public JarReductionRecord(
         String artifact,
@@ -55,7 +56,8 @@ public record JarReductionRecord(
             null,
             "preserve",
             status,
-            classes
+            classes,
+            null
         );
     }
 

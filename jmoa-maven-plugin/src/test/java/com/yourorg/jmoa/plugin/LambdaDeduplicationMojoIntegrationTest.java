@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yourorg.jmoa.plugin.scanner.ClassFileWalker;
 import com.yourorg.jmoa.plugin.scanner.LambdaScanner;
+import com.yourorg.jmoa.plugin.weave.AdapterReferenceValidator;
+import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.handler.DefaultArtifactHandler;
@@ -44,6 +46,70 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class LambdaDeduplicationMojoIntegrationTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    @Test
+    void directCompactRecipeWeavesDuplicateRootsAndRejectsMissingPhysicalCopy() throws Exception {
+        Path projectDir = Files.createTempDirectory("jmoa-it-direct-compact-multiroot");
+        Path source = projectDir.resolve("src/main/java/example/SampleFlow.java");
+        Path app = projectDir.resolve("target/classes");
+        Path extra = projectDir.resolve("target/second-root");
+        Path runtime = projectDir.resolve("target/runtime-classes");
+        Files.createDirectories(source.getParent());
+        Files.createDirectories(app);
+        Files.createDirectories(extra.resolve("example"));
+        Files.createDirectories(runtime);
+        Files.writeString(source, sampleFlowSource());
+        compileProject(source, app);
+        compileRuntimeLibrary(runtime);
+        Files.copy(app.resolve("example/SampleFlow.class"), extra.resolve("example/SampleFlow.class"));
+        Path untouched = app.resolve("retained-resource.txt");
+        byte[] originalResource = "unchanged product resource".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        Files.write(untouched, originalResource);
+        Path profile = projectDir.resolve("target/profile.json");
+        writeAlignedProfile(app, profile);
+
+        OptimizeMojo mojo = new OptimizeMojo();
+        setField(mojo, "project", buildProject(projectDir, app, runtime));
+        setField(mojo, "excludes", List.of());
+        setField(mojo, "reportOnly", false);
+        setField(mojo, "widenSynthetics", true);
+        setField(mojo, "skip", false);
+        setField(mojo, "verbose", false);
+        setField(mojo, "profilePath", profile.toFile());
+        setField(mojo, "hotThreshold", 10_000L);
+        setField(mojo, "frameworkExclusions", List.of());
+        setField(mojo, "generateTier1Runtime", true);
+        setField(mojo, "failOnMissingRuntimeLibrary", false);
+        setField(mojo, "failFastRewrite", true);
+        setField(mojo, "mode", JmoaExecutionMode.MODE_A);
+        setField(mojo, "additionalClassDirectories", List.of(extra.toFile()));
+        setField(mojo, "debugProfileMatches", false);
+        setField(mojo, "tier1AdapterMode", "DIRECT");
+        setField(mojo, "tier2AdapterConsolidation", "PACKAGE_SIGNATURE");
+        setField(mojo, "compactGeneratedAdapters", true);
+        // A directly constructed Mojo does not receive Maven's @Parameter
+        // defaults. This gate is true in the admitted production recipe.
+        setField(mojo, "failOnMissingAdapterReferences", true);
+        mojo.execute();
+
+        assertEquals(0, countLambdaInvokeDynamicSites(app.resolve("example/SampleFlow.class")));
+        assertEquals(0, countLambdaInvokeDynamicSites(extra.resolve("example/SampleFlow.class")));
+        assertEquals(List.of("A", "B"), invokeOptimizedSample(app, runtime));
+        assertEquals(List.of("A", "B"), invokeOptimizedSample(extra, app));
+        org.junit.jupiter.api.Assertions.assertArrayEquals(originalResource, Files.readAllBytes(untouched));
+        assertFalse(Files.exists(app.resolve("jmoa/runtime/JmoaRuntime.class")));
+        var validator = new AdapterReferenceValidator(new SystemStreamLog());
+        var complete = validator.validate(List.of(app.toFile(), extra.toFile()));
+        assertTrue(complete.allRootsClean());
+        assertFalse(complete.roots().get(1).referencedAdapters().isEmpty());
+        String necessary = complete.roots().get(1).referencedAdapters().get(0);
+        assertTrue(necessary.substring(necessary.lastIndexOf('/') + 1).startsWith("J$"));
+        Files.delete(extra.resolve(necessary + ".class"));
+        var broken = validator.validate(List.of(app.toFile(), extra.toFile()));
+        assertFalse(broken.allRootsClean(), "another root's adapter copy must not hide a broken output root");
+        assertEquals(1, broken.missingReferences().size());
+        deleteRecursively(projectDir);
+    }
 
     @Test
     void optimizeGoalRewritesCleanProjectAgainstAlignedProfile() throws Exception {

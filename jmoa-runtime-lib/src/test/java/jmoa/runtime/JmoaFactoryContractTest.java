@@ -68,7 +68,7 @@ class JmoaFactoryContractTest {
     private static void resetGeneratedRuntimeBridge() throws Exception {
         Class<?> bridge = Class.forName("jmoa.runtime.JmoaFactory$GeneratedRuntimeBridge");
         for (String fieldName : new String[]{
-            "resolved", "createFunction", "createPredicate", "createSupplier", "createConsumer", "createBiConsumer"
+            "resolved", "lazyAdapters", "createFunction", "createPredicate", "createSupplier", "createConsumer", "createBiConsumer"
         }) {
             Field field = bridge.getDeclaredField(fieldName);
             field.setAccessible(true);

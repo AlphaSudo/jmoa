@@ -313,6 +313,7 @@ public final class DeduplicationReport {
         report.put("observedAdmissionSitesLoaded", observedAdmissionContext != null && observedAdmissionContext.loaded());
         report.put("observedAdmissionSiteKeyCount", observedAdmissionContext == null ? 0 : observedAdmissionContext.siteKeys().size());
         report.put("observedAdmissionTierMode", observedAdmissionContext == null ? "" : observedAdmissionContext.tierMode());
+        report.put("observedAdmissionStrictAllowlist", observedAdmissionContext != null && observedAdmissionContext.strictAllowlist());
         report.put("phase21aObservedAdmissionSummary", buildObservedAdmissionSummary(filterResult, observedAdmissionContext));
         report.put("tier1RuntimeSummary", buildTier1RuntimeSummary(runtimePlanResult));
         report.put("tier2AdapterSummary", buildTier2AdapterSummary(tier2Artifacts));
@@ -394,6 +395,7 @@ public final class DeduplicationReport {
         summary.put("observedAdmissionSitesResolvedFile", safeContext.resolvedFile());
         summary.put("observedAdmissionSitesLoaded", safeContext.loaded());
         summary.put("observedAdmissionTierMode", safeContext.tierMode());
+        summary.put("observedAdmissionStrictAllowlist", safeContext.strictAllowlist());
 
         if (filterResult == null || loadedSiteKeys.isEmpty()) {
             summary.put("matchedSites", 0L);

@@ -9,6 +9,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.util.CheckClassAdapter;
 
 import java.io.PrintWriter;
@@ -29,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class Tier1RuntimeClassGeneratorTest {
 
@@ -220,6 +226,63 @@ class Tier1RuntimeClassGeneratorTest {
 
         int majorVersion = ((classBytes[6] & 0xFF) << 8) | (classBytes[7] & 0xFF);
         assertEquals(Opcodes.V26, majorVersion);
+    }
+
+    @Test
+    void lazyRuntimeUsesSupportCacheWithoutEagerAdapterAllocation() throws Exception {
+        Tier1RuntimePlanResult planResult = new Tier1RuntimePlanResult(
+            List.of(new Tier1RuntimePlan(0, RuntimeAdapterKind.FUNCTION, decision(
+                "lazy-function-site",
+                "apply",
+                "()Ljava/util/function/Function;",
+                Opcodes.H_INVOKESTATIC,
+                Type.getInternalName(PublicTargets.class),
+                "upper",
+                "(Ljava/lang/String;)Ljava/lang/String;"
+            ))),
+            List.of()
+        );
+
+        byte[] classBytes = new Tier1RuntimeClassGenerator().generate(
+            planResult,
+            getClass().getClassLoader(),
+            Opcodes.V17,
+            true
+        );
+        ClassNode classNode = new ClassNode();
+        new org.objectweb.asm.ClassReader(classBytes).accept(classNode, 0);
+
+        assertTrue(classNode.fields.stream().map(field -> field.name).noneMatch(name -> name.endsWith("_CACHE")));
+        MethodNode clinit = classNode.methods.stream().filter(method -> method.name.equals("<clinit>")).findFirst().orElseThrow();
+        assertTrue(clinit.instructions.iterator().hasNext());
+        for (var instruction : clinit.instructions) {
+            if (instruction instanceof TypeInsnNode typeInsn && typeInsn.getOpcode() == Opcodes.NEW) {
+                assertTrue(!typeInsn.desc.startsWith("jmoa/runtime/adapter/"));
+            }
+        }
+
+        MethodNode createFunction = classNode.methods.stream()
+            .filter(method -> method.name.equals("createFunction"))
+            .findFirst()
+            .orElseThrow();
+        assertTrue(createFunction.instructions.iterator().hasNext());
+        boolean delegatesToSupport = false;
+        for (var instruction : createFunction.instructions) {
+            if (instruction instanceof MethodInsnNode methodInsn
+                && methodInsn.owner.equals("jmoa/runtime/JmoaRuntimeSupport")
+                && methodInsn.name.equals("functionAdapter")) {
+                delegatesToSupport = true;
+            }
+        }
+        assertTrue(delegatesToSupport);
+
+        GeneratedClassLoader loader = new GeneratedClassLoader(getClass().getClassLoader());
+        Class<?> generated = loader.define("jmoa.runtime.JmoaRuntime", classBytes);
+        assertEquals(true, generated.getMethod("usesLazyAdapters").invoke(null));
+        Function<Object, Object> first = cast(generated.getMethod("createFunction", int.class).invoke(null, 0));
+        Function<Object, Object> second = cast(generated.getMethod("createFunction", int.class).invoke(null, 0));
+        assertSame(first, second);
+        assertEquals("HELLO", first.apply("hello"));
     }
 
     @Test

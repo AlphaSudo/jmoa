@@ -10,6 +10,8 @@ public final class ReducerSafetyPolicy {
             throw new IllegalArgumentException("jmoa.reducer.inputDir must point to a directory containing dependency jars.");
         }
         config.parsedEngine();
+        config.parsedOperation();
+        config.parsedJarLayout();
         if (config.stripLineNumberTable()) {
             unsafe("LineNumberTable", ReducerSafetyCategory.UNSAFE_DIAGNOSTIC_CRITICAL);
         }
@@ -37,8 +39,14 @@ public final class ReducerSafetyPolicy {
         if (config.optimize() && config.parsedProfile() != ReducerProfile.RELEASE_LOW_FOOTPRINT) {
             throw new IllegalArgumentException("Reducer mutation requires jmoa.reducer.profile=release-low-footprint.");
         }
-        if (config.optimize() && (!config.stripLocalVariableTable() || !config.stripLocalVariableTypeTable())) {
+        if (config.optimize()
+            && config.parsedOperation() == ReducerOperation.STRIP
+            && (!config.stripLocalVariableTable() || !config.stripLocalVariableTypeTable())) {
             throw new IllegalArgumentException("Reducer mutation requires both stripLocalVariableTable and stripLocalVariableTypeTable.");
+        }
+        if (config.parsedOperation() == ReducerOperation.REPACK_ONLY
+            && (config.stripLocalVariableTable() || config.stripLocalVariableTypeTable())) {
+            throw new IllegalArgumentException("REPACK_ONLY must not request LocalVariableTable or LocalVariableTypeTable stripping.");
         }
         if (config.includeApplicationClasses()) {
             if (config.applicationInputDir() == null || !config.applicationInputDir().isDirectory()) {

@@ -45,6 +45,60 @@ class EvidenceEngineTest {
     }
 
     @Test
+    void requiresTwoThirdsOfEightPairsForConfirmation() throws Exception {
+        for (int pair = 1; pair <= 8; pair++) {
+            long baselinePss = 100_000 + pair;
+            long baselinePrivateDirty = 90_000 + pair;
+            long baselineMemoryCurrent = 120_000_000L + pair;
+            writeRun("b" + pair, "BASELINE", pair, baselinePss, baselinePrivateDirty,
+                baselineMemoryCurrent, 40_000, 8_000, 20_000);
+
+            long pssDelta = -2_000;
+            long privateDirtyDelta = -2_000;
+            long memoryCurrentDelta = -2_000_000;
+            if (pair == 6) pssDelta = 100;
+            if (pair == 7) privateDirtyDelta = 100;
+            if (pair == 8) memoryCurrentDelta = 100;
+            writeRun("c" + pair, "CANDIDATE", pair, baselinePss + pssDelta,
+                baselinePrivateDirty + privateDirtyDelta, baselineMemoryCurrent + memoryCurrentDelta,
+                39_000, 7_500, 19_900);
+        }
+
+        EvidenceAnalysisReport report = new EvidenceEngine().analyze(tempDir.toFile(),
+            new EvidenceConfig(RuntimePolicy.NO_CDS_LOW_DIRTY, true, true, true, true, true));
+
+        assertEquals(8, report.confirmation().pairs());
+        assertEquals(5, report.confirmation().pairedWins());
+        assertEquals(-2_000, report.confirmation().medianPssDeltaKb());
+        assertEquals(Verdict.MIXED_METRICS_NEEDS_RERUN, report.verdict());
+    }
+
+    @Test
+    void confirmsEightPairWinAtSixPassingPairs() throws Exception {
+        for (int pair = 1; pair <= 8; pair++) {
+            long baselinePss = 100_000 + pair;
+            long baselinePrivateDirty = 90_000 + pair;
+            long baselineMemoryCurrent = 120_000_000L + pair;
+            writeRun("b" + pair, "BASELINE", pair, baselinePss, baselinePrivateDirty,
+                baselineMemoryCurrent, 40_000, 8_000, 20_000);
+
+            long pssDelta = pair == 7 ? 100 : -2_000;
+            long privateDirtyDelta = pair == 8 ? 100 : -2_000;
+            long memoryCurrentDelta = -2_000_000;
+            writeRun("c" + pair, "CANDIDATE", pair, baselinePss + pssDelta,
+                baselinePrivateDirty + privateDirtyDelta, baselineMemoryCurrent + memoryCurrentDelta,
+                39_000, 7_500, 19_900);
+        }
+
+        EvidenceAnalysisReport report = new EvidenceEngine().analyze(tempDir.toFile(),
+            new EvidenceConfig(RuntimePolicy.NO_CDS_LOW_DIRTY, true, true, true, true, true));
+
+        assertEquals(8, report.confirmation().pairs());
+        assertEquals(6, report.confirmation().pairedWins());
+        assertEquals(Verdict.CONFIRMED_WIN, report.verdict());
+    }
+
+    @Test
     void acceptsJdkBaseCdsLowDirtyPolicy() throws Exception {
         writeRun("b1", "BASELINE", 1, 100_000, 90_000, 120_000_000, 40_000, 8_000, 20_000);
         Path manifest = tempDir.resolve("b1/run-manifest.json");

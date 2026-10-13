@@ -2,10 +2,13 @@ package com.yourorg.jmoa.plugin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.maven.plugin.MojoFailureException;
 import com.yourorg.jmoa.plugin.reducer.DebugMetadataSavingsEstimator;
 import com.yourorg.jmoa.plugin.reducer.JarReducer;
+import com.yourorg.jmoa.plugin.reducer.ReducerCapabilityVerdicts;
 import com.yourorg.jmoa.plugin.reducer.ReducerConfig;
 import com.yourorg.jmoa.plugin.reducer.ReducerFailureReport;
+import com.yourorg.jmoa.plugin.reducer.ReducerReproducibilityProof;
 import com.yourorg.jmoa.plugin.reducer.ReducerReport;
 import com.yourorg.jmoa.plugin.reducer.ReducerReportWriter;
 import com.yourorg.jmoa.plugin.reducer.ReducerSafetyPolicy;
@@ -86,11 +89,43 @@ public class ReduceBytecodeMojo extends AbstractMojo {
     @Parameter(property = "jmoa.reducer.artifactExcludes", defaultValue = "")
     private String artifactExcludes;
 
+    @Parameter(property = "jmoa.reducer.operation", defaultValue = "strip")
+    private String operation;
+
+    @Parameter(property = "jmoa.reducer.jarLayout", defaultValue = "current")
+    private String jarLayout;
+
+    @Parameter(property = "jmoa.servicePolicyOverlayPath")
+    private File servicePolicyOverlayPath;
+
     @Override
-    public void execute() throws MojoExecutionException {
+    public void execute() throws MojoExecutionException, MojoFailureException {
         if (skip || !reducerEnabled) {
             getLog().info("JMOA bytecode reducer is disabled.");
             return;
+        }
+        final com.yourorg.jmoa.plugin.overlay.PluginModeEnums.ReducerOperationMode operationMode;
+        final com.yourorg.jmoa.plugin.overlay.PluginModeEnums.ReducerJarLayoutMode layoutMode;
+        try {
+            operationMode = com.yourorg.jmoa.plugin.overlay.PluginModeEnums.ReducerOperationMode.parse(operation);
+            layoutMode = com.yourorg.jmoa.plugin.overlay.PluginModeEnums.ReducerJarLayoutMode.parse(jarLayout);
+        } catch (IllegalArgumentException e) {
+            throw new MojoFailureException(e.getMessage(), e);
+        }
+        com.yourorg.jmoa.plugin.overlay.ServicePolicyOverlayBoundary.OverlayPolicyReport overlayReport = null;
+        // T10 boundary: the same service policy overlay governs reducer mode
+        // selections. Both the operation and the JAR layout must be allowed
+        // by the overlay before the reducer runs.
+        if (servicePolicyOverlayPath != null) {
+            try {
+                overlayReport = com.yourorg.jmoa.plugin.overlay.ServicePolicyOverlayBoundary.enforceReducer(
+                        servicePolicyOverlayPath,
+                        message -> getLog().info(message),
+                        operationMode.wireName(),
+                        layoutMode.wireName());
+            } catch (IllegalArgumentException e) {
+                throw new MojoFailureException(e.getMessage(), e);
+            }
         }
         ReducerConfig config = new ReducerConfig(
             reportOnly,
@@ -111,7 +146,9 @@ public class ReduceBytecodeMojo extends AbstractMojo {
             applicationInputDir,
             generatedFamilies,
             artifactIncludes,
-            artifactExcludes
+            artifactExcludes,
+            operationMode.wireName(),
+            layoutMode.wireName()
         );
         try {
             new ReducerSafetyPolicy().validate(config);
@@ -119,6 +156,27 @@ public class ReduceBytecodeMojo extends AbstractMojo {
                 ? new JarReducer(config).reduce()
                 : new DebugMetadataSavingsEstimator(config).estimate();
             new ReducerReportWriter().write(outputDir, report);
+            ObjectMapper outputMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+            if (overlayReport != null) {
+                outputMapper.writeValue(new File(outputDir, "reducer-service-policy-overlay-report.json"), overlayReport);
+                File buildReportPath = new File(outputDir, "reducer-build-report.json");
+                com.fasterxml.jackson.databind.node.ObjectNode buildReport =
+                        (com.fasterxml.jackson.databind.node.ObjectNode) outputMapper.readTree(buildReportPath);
+                buildReport.set("servicePolicyOverlay", outputMapper.valueToTree(overlayReport));
+                outputMapper.writeValue(buildReportPath, buildReport);
+            }
+            // T5: a reproducible-layout claim requires an attached two-build
+            // proof; compute it whenever the stable layout actually ran.
+            if (config.mutationEnabled() && layoutMode == com.yourorg.jmoa.plugin.overlay.PluginModeEnums.ReducerJarLayoutMode.STABLE_RAW_COPY) {
+                ReducerReproducibilityProof.ProofRecord proof =
+                        ReducerReproducibilityProof.prove(inputDir.toPath(), config.mutationEnabled(), operationMode.wireName(), layoutMode.wireName());
+                ReducerCapabilityVerdicts.CapabilityVerdictReport verdict =
+                        ReducerCapabilityVerdicts.compute(report, proof);
+                java.util.Map<String, Object> verdictView = new java.util.LinkedHashMap<>(ReducerCapabilityVerdicts.toJsonView(verdict));
+                if (overlayReport != null) { verdictView.put("servicePolicyOverlay", overlayReport); }
+                outputMapper.writeValue(new File(outputDir, "reducer-capability-verdict.json"), verdictView);
+                getLog().info("Reducer two-build reproducibility proof passed=" + proof.passed());
+            }
             getLog().info("JMOA bytecode reducer reports written to: " + outputDir.getAbsolutePath());
             getLog().info("JMOA bytecode reducer summary: jars=" + report.jarCount()
                 + ", classes=" + report.classCount()

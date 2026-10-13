@@ -1,5 +1,8 @@
 package com.yourorg.jmoa.plugin.reducer;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+import org.apache.commons.compress.archivers.zip.ZipFile;
 import org.objectweb.asm.ClassReader;
 
 import java.io.File;
@@ -11,9 +14,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
+import java.util.zip.CRC32;
 
 public final class JarReducer {
 
@@ -80,8 +85,12 @@ public final class JarReducer {
                     skipReason,
                     "preserve",
                     skipReason,
-                    scan.records().stream().limit(200).toList()
+                    scan.records().stream().limit(200).toList(),
+                    new JarLayoutAuditor().audit(jar, output, Set.of())
                 );
+            }
+            if (config.parsedJarLayout() == JarLayoutMode.STABLE_RAW_COPY) {
+                return reduceStableJar(jar, output, safety);
             }
             try (JarOutputStream target = new JarOutputStream(new FileOutputStream(output))) {
                 Enumeration<JarEntry> entries = source.entries();
@@ -96,6 +105,10 @@ public final class JarReducer {
                     }
                     if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
                     classCount++;
+                    if (config.parsedOperation() == ReducerOperation.REPACK_ONLY) {
+                        target.write(bytes);
+                        continue;
+                    }
                     ClassDebugMetadata before = inspector.inspect(bytes);
                     estimated += before.removableBytes();
                     if (isModuleInfo(entry.getName())) {
@@ -179,9 +192,131 @@ public final class JarReducer {
             safety.sealedJar(),
             safety.skipReason(),
             "preserve",
-            "REDUCED",
-            classRecords.stream().limit(200).toList()
+            config.parsedOperation() == ReducerOperation.REPACK_ONLY ? "REPACKED_ONLY" : "REDUCED",
+            classRecords.stream().limit(200).toList(),
+            new JarLayoutAuditor().audit(jar, output, changedEntries(classRecords))
         );
+    }
+
+    private JarReductionRecord reduceStableJar(File jar, File output, JarSafetyAssessment safety) throws IOException {
+        List<ClassReductionRecord> classRecords = new ArrayList<>();
+        long estimated = 0;
+        int classCount = 0;
+        int reducedClassCount = 0;
+        int skippedBootstrapMethodsClassCount = 0;
+        try (ZipFile source = ZipFile.builder().setFile(jar).get();
+             ZipArchiveOutputStream target = new ZipArchiveOutputStream(output)) {
+            Enumeration<ZipArchiveEntry> entries = source.getEntries();
+            while (entries.hasMoreElements()) {
+                ZipArchiveEntry entry = entries.nextElement();
+                byte[] original = null;
+                byte[] replacement = null;
+                ClassDebugMetadata before = null;
+                ClassDebugMetadata after = null;
+                RawReducerClassAuditRecord rawAudit = null;
+                String status = null;
+
+                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
+                    classCount++;
+                    try (var input = source.getInputStream(entry)) {
+                        original = input.readAllBytes();
+                    }
+                    before = inspector.inspect(original);
+                    estimated += before.removableBytes();
+                    if (config.parsedOperation() == ReducerOperation.STRIP
+                        && !isModuleInfo(entry.getName())
+                        && before.removableBytes() > 0) {
+                        if (before.bootstrapMethodsAttributeBytes() > 0 && config.parsedEngine() != ReducerEngine.RAW) {
+                            skippedBootstrapMethodsClassCount++;
+                            status = "SKIPPED_BOOTSTRAP_METHODS";
+                        } else {
+                            replacement = reduceClass(original);
+                            verifyClass(replacement, entry.getName());
+                            after = inspector.inspect(replacement);
+                            verifyPreserved(before, after, entry.getName());
+                            if (config.parsedEngine() == ReducerEngine.RAW) {
+                                rawAudit = rawAuditor.audit(jar.getName(), entry.getName(), before, after, original, replacement);
+                                rawClassAudits.add(rawAudit);
+                            }
+                            reducedClassCount++;
+                            status = rawAudit == null ? "REDUCED" : "REDUCED_RAW_AUDITED";
+                        }
+                    } else if (isModuleInfo(entry.getName()) && before.removableBytes() > 0) {
+                        status = "SKIPPED_MODULE_INFO";
+                    }
+                }
+
+                if (replacement == null) {
+                    try (var raw = source.getRawInputStream(entry)) {
+                        if (raw == null) {
+                            throw new IOException("Raw compressed payload unavailable for " + entry.getName());
+                        }
+                        target.addRawArchiveEntry(new ZipArchiveEntry(entry), raw);
+                    }
+                } else {
+                    writeChangedEntry(target, entry, replacement);
+                }
+
+                if (before != null && before.removableBytes() > 0) {
+                    if (replacement == null) {
+                        classRecords.add(skippedRecord(jar.getName(), entry.getName(), before, original.length,
+                            status == null ? "UNCHANGED" : status));
+                    } else {
+                        classRecords.add(new ClassReductionRecord(
+                            before.className(), jar.getName(), entry.getName(), original.length, replacement.length,
+                            before.localVariableTableBytes() - after.localVariableTableBytes(),
+                            before.localVariableTypeTableBytes() - after.localVariableTypeTableBytes(),
+                            after.lineNumberTableBytes() == before.lineNumberTableBytes(),
+                            after.sourceFileAttributeBytes() == before.sourceFileAttributeBytes(),
+                            attributeStillPresent(before.stackMapTableBytes(), after.stackMapTableBytes()),
+                            attributeStillPresent(before.annotationAttributeBytes(), after.annotationAttributeBytes()),
+                            attributeStillPresent(before.signatureAttributeBytes(), after.signatureAttributeBytes()),
+                            attributeStillPresent(before.bootstrapMethodsAttributeBytes(), after.bootstrapMethodsAttributeBytes()),
+                            status
+                        ));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            if (output.isFile() && !output.delete()) {
+                output.deleteOnExit();
+            }
+            throw new IOException("Failed stable-layout reduction for jar " + jar.getAbsolutePath(), e);
+        }
+
+        classRecords.sort(Comparator.comparingLong((ClassReductionRecord r) ->
+            r.localVariableTableBytesRemoved() + r.localVariableTypeTableBytesRemoved()).reversed());
+        return new JarReductionRecord(
+            jar.getName(), jar.getAbsolutePath(), output.getAbsolutePath(),
+            JarSafetyInspector.sha256(jar), JarSafetyInspector.sha256(output),
+            jar.length(), output.length(), estimated, Math.max(0, jar.length() - output.length()),
+            classCount, reducedClassCount, skippedBootstrapMethodsClassCount,
+            safety.signedJar(), safety.multiReleaseJar(), safety.sealedJar(), safety.skipReason(),
+            "preserve-entry-metadata-and-raw-unchanged-payload",
+            config.parsedOperation() == ReducerOperation.REPACK_ONLY ? "REPACKED_STABLE" : "REDUCED_STABLE_RAW_COPY",
+            classRecords.stream().limit(200).toList(),
+            new JarLayoutAuditor().audit(jar, output, changedEntries(classRecords))
+        );
+    }
+
+    private static Set<String> changedEntries(List<ClassReductionRecord> records) {
+        return records.stream()
+            .filter(record -> record.status() != null && record.status().startsWith("REDUCED"))
+            .map(ClassReductionRecord::entryName)
+            .collect(java.util.stream.Collectors.toUnmodifiableSet());
+    }
+
+    private static void writeChangedEntry(ZipArchiveOutputStream target, ZipArchiveEntry source, byte[] bytes)
+        throws IOException {
+        ZipArchiveEntry changed = new ZipArchiveEntry(source);
+        changed.setSize(bytes.length);
+        CRC32 crc = new CRC32();
+        crc.update(bytes);
+        changed.setCrc(crc.getValue());
+        changed.setCompressedSize(-1);
+        target.putArchiveEntry(changed);
+        target.write(bytes);
+        target.closeArchiveEntry();
     }
 
     private static String reducedName(String name) {

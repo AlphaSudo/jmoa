@@ -62,6 +62,28 @@ public final class Tier2AdapterNamingStrategy {
         return pkg + "/" + className;
     }
 
+    /**
+     * ROOT_PACKAGE_SIGNATURE mode (track T4): one adapter class per physical
+     * class root + package + erased SAM descriptor. The root ordinal is the
+     * adapter's position in the frozen output-root list, so names are
+     * deterministic for a build without embedding absolute paths. Keying by
+     * root retains compactness inside a root while preventing multi-root
+     * fan-out and cross-root adapter references by construction.
+     */
+    public static String rootPackageSignatureInternalName(LambdaMeta meta, int rootOrdinal) {
+        return rootPackageSignatureInternalName(meta, rootOrdinal, false);
+    }
+
+    public static String rootPackageSignatureInternalName(LambdaMeta meta, int rootOrdinal, boolean compact) {
+        String pkg = meta.packageInternalName();
+        String sigTag = collisionResistantTag(eraseSamMethodDesc(meta.samMethodTypeDesc()));
+        String className = (compact ? "J$R" : "JmoaPkgAdapters$R") + rootOrdinal + "_" + sigTag;
+        if (pkg == null || pkg.isEmpty()) {
+            return className;
+        }
+        return pkg + "/" + className;
+    }
+
     public static String fieldName(LambdaMeta meta) {
         return "INSTANCE_S" + meta.siteOrdinalInMethod() + "_" + shortHash(meta.siteKey());
     }
@@ -127,10 +149,20 @@ public final class Tier2AdapterNamingStrategy {
     }
 
     private static String shortHash(String value) {
+        return hashPrefix(value, 3);
+    }
+
+    private static String collisionResistantTag(String value) {
+        // T4 is new, so use 96 bits rather than inheriting the historical
+        // 24-bit A-D tag. Generation also verifies logical-key/name uniqueness.
+        return hashPrefix(value, 12);
+    }
+
+    private static String hashPrefix(String value, int byteCount) {
         try {
             byte[] digest = MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < byteCount; i++) {
                 sb.append(String.format("%02x", digest[i]));
             }
             return sb.toString();

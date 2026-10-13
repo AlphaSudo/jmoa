@@ -2,6 +2,7 @@ package com.yourorg.jmoa.plugin.weave;
 
 import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
@@ -20,6 +21,45 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AdapterReferenceValidatorTest {
+
+    @TempDir
+    Path compactFixture;
+
+    @Test
+    void compactSharedAdapterMustRemainPresentInBothRoots() throws IOException {
+        String adapter = "example/J$262c52";
+        Path rootA = compactFixture.resolve("root-a");
+        Path rootB = compactFixture.resolve("root-b");
+        writeFile(rootA, "example/CallerA.class", classWithAdapterFieldReference("example/CallerA", adapter));
+        writeFile(rootB, "example/CallerB.class", classWithAdapterFieldReference("example/CallerB", adapter));
+        writeAdapterClass(rootA, adapter);
+        writeAdapterClass(rootB, adapter);
+        AdapterReferenceValidator validator = new AdapterReferenceValidator(silentLog());
+        var complete = validator.validate(Arrays.asList(rootA.toFile(), rootB.toFile()));
+        assertTrue(complete.allRootsClean());
+        assertEquals(2, complete.roots().stream().mapToInt(r -> r.referencedAdapters().size()).sum());
+        Files.delete(rootB.resolve(adapter + ".class"));
+        var missing = validator.validate(Arrays.asList(rootA.toFile(), rootB.toFile()));
+        assertFalse(missing.allRootsClean());
+        assertEquals(1, missing.missingReferences().size());
+        assertEquals(adapter, missing.missingReferences().get(0).referencedAdapterInternal());
+        assertTrue(missing.roots().get(0).clean());
+        assertFalse(missing.roots().get(1).clean());
+    }
+
+    @Test
+    void recognizesPackageOnlyAndRootCompactNamesButNotUnrelatedJNames() throws IOException {
+        for (String name : new String[] { "example/JmoaPkgAdapters", "example/J$R2_0123456789abcdef01234567" }) {
+            Path root = compactFixture.resolve(name.substring(name.lastIndexOf('/') + 1));
+            writeFile(root, "example/Caller.class", classWithAdapterFieldReference("example/Caller", name));
+            var result = new AdapterReferenceValidator(silentLog()).validate(Arrays.asList(root.toFile()));
+            assertFalse(result.allRootsClean(), name);
+            assertEquals(name, result.missingReferences().get(0).referencedAdapterInternal());
+        }
+        Path ordinary = compactFixture.resolve("ordinary");
+        writeFile(ordinary, "example/Caller.class", classWithAdapterFieldReference("example/Caller", "example/J$Ordinary"));
+        assertTrue(new AdapterReferenceValidator(silentLog()).validate(Arrays.asList(ordinary.toFile())).allRootsClean());
+    }
 
     private static final String ADAPTER_INTERNAL = "org/springframework/security/config/annotation/method/configuration/JmoaPkgAdapters$Supplier";
 

@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LambdaFilterFrameworkSafetyTest {
 
@@ -66,6 +67,44 @@ class LambdaFilterFrameworkSafetyTest {
         ).filter(List.of(meta), profileIndex);
 
         assertEquals(ExclusionReason.FRAMEWORK_SAFETY_DENIED, result.excluded().getFirst().exclusionReason());
+    }
+
+    @Test
+    void strictObservedAllowlistRejectsOtherwiseEligibleProfileSites() {
+        LambdaMeta admitted = meta("org/springframework/context/AdmittedThing");
+        LambdaMeta unlisted = meta("org/springframework/context/FreshOnlyThing");
+        LambdaProfileIndex profileIndex = new LambdaProfileIndex(
+            Map.of(admitted.siteKey(), 1L, unlisted.siteKey(), 1L),
+            Set.of(),
+            Set.of()
+        );
+        LambdaSourceIndex sourceIndex = LambdaSourceIndex.of(Map.of(
+            admitted.ownerInternalName(),
+            new ClassRootDescriptor(new File("."), false, ClassRootKind.EXPANDED_DEPENDENCY),
+            unlisted.ownerInternalName(),
+            new ClassRootDescriptor(new File("."), false, ClassRootKind.EXPANDED_DEPENDENCY)
+        ));
+
+        LambdaFilterResult result = new LambdaFilter(
+            LambdaFilterConfig.defaults()
+                .withExecutionMode(JmoaExecutionMode.MODE_C)
+                .withFrameworkSafetyConfig(new FrameworkSafetyConfig(
+                    true, true, true, false,
+                    List.of("org.springframework.context"),
+                    List.of("com.fasterxml.jackson"),
+                    10_000,
+                    FrameworkSafetyConfig.defaults().safeSamInterfaces(),
+                    Set.of(admitted.siteKey())
+                ))
+                .withObservedSiteAllowlist(true),
+            ignored -> AccessResolver.Visibility.PUBLIC,
+            sourceIndex
+        ).filter(List.of(admitted, unlisted), profileIndex);
+
+        assertEquals(List.of(admitted.siteKey()), result.eligible().stream().map(decision -> decision.meta().siteKey()).toList());
+        assertEquals(1, result.excluded().size());
+        assertEquals(ExclusionReason.OBSERVED_ADMISSION_NOT_LISTED, result.excluded().getFirst().exclusionReason());
+        assertTrue(result.excluded().getFirst().frameworkSafetyDecision().allowed());
     }
 
     private static LambdaMeta meta(String ownerInternalName) {

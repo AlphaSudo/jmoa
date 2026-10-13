@@ -17,6 +17,7 @@ public record LambdaWeaveTarget(
 
     public enum WeaveKind {
         TIER1_FACTORY,
+        TIER1_DIRECT_ADAPTER,
         TIER2_ADAPTER
     }
 
@@ -66,6 +67,28 @@ public record LambdaWeaveTarget(
             implName,
             implDesc,
             requiresAccessWidening
+        );
+    }
+
+    public static LambdaWeaveTarget tier1Direct(
+        String siteKey,
+        String samInterfaceInternalName,
+        String adapterInternalName,
+        String adapterFieldName
+    ) {
+        return new LambdaWeaveTarget(
+            siteKey,
+            WeaveKind.TIER1_DIRECT_ADAPTER,
+            samInterfaceInternalName,
+            -1,
+            null,
+            null,
+            adapterInternalName,
+            adapterFieldName,
+            null,
+            null,
+            null,
+            false
         );
     }
 }

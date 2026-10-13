@@ -1,11 +1,11 @@
 package jmoa.runtime;
 
+import java.lang.reflect.Method;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.lang.reflect.Method;
 
 public final class JmoaFactory {
 
@@ -34,85 +34,92 @@ public final class JmoaFactory {
 
     private static final class GeneratedRuntimeBridge {
         private static volatile boolean resolved;
-        private static volatile Method createFunction;
-        private static volatile Method createPredicate;
-        private static volatile Method createSupplier;
-        private static volatile Method createConsumer;
-        private static volatile Method createBiConsumer;
+        private static boolean lazyAdapters;
+        private static Method createFunction;
+        private static Method createPredicate;
+        private static Method createSupplier;
+        private static Method createConsumer;
+        private static Method createBiConsumer;
 
+        @SuppressWarnings("unchecked")
         private static Function<Object, Object> createFunction(int id) {
-            Method method = resolveMethod("createFunction");
-            if (method == null) {
-                return JmoaRuntimeSupport.functionAdapter(id);
-            }
-            return invoke(method, id, Function.class);
-        }
-
-        private static Predicate<Object> createPredicate(int id) {
-            Method method = resolveMethod("createPredicate");
-            if (method == null) {
-                return JmoaRuntimeSupport.predicateAdapter(id);
-            }
-            return invoke(method, id, Predicate.class);
-        }
-
-        private static Supplier<Object> createSupplier(int id) {
-            Method method = resolveMethod("createSupplier");
-            if (method == null) {
-                return JmoaRuntimeSupport.supplierAdapter(id);
-            }
-            return invoke(method, id, Supplier.class);
-        }
-
-        private static Consumer<Object> createConsumer(int id) {
-            Method method = resolveMethod("createConsumer");
-            if (method == null) {
-                return JmoaRuntimeSupport.consumerAdapter(id);
-            }
-            return invoke(method, id, Consumer.class);
-        }
-
-        private static BiConsumer<Object, Object> createBiConsumer(int id) {
-            Method method = resolveMethod("createBiConsumer");
-            if (method == null) {
-                return JmoaRuntimeSupport.biConsumerAdapter(id);
-            }
-            return invoke(method, id, BiConsumer.class);
-        }
-
-        private static Method resolveMethod(String methodName) {
             ensureResolved();
-            return switch (methodName) {
-                case "createFunction" -> createFunction;
-                case "createPredicate" -> createPredicate;
-                case "createSupplier" -> createSupplier;
-                case "createConsumer" -> createConsumer;
-                case "createBiConsumer" -> createBiConsumer;
-                default -> null;
-            };
+            return lazyAdapters || createFunction == null
+                ? JmoaRuntimeSupport.functionAdapter(id)
+                : (Function<Object, Object>) invoke(createFunction, id);
+        }
+
+        @SuppressWarnings("unchecked")
+        private static Predicate<Object> createPredicate(int id) {
+            ensureResolved();
+            return lazyAdapters || createPredicate == null
+                ? JmoaRuntimeSupport.predicateAdapter(id)
+                : (Predicate<Object>) invoke(createPredicate, id);
+        }
+
+        @SuppressWarnings("unchecked")
+        private static Supplier<Object> createSupplier(int id) {
+            ensureResolved();
+            return lazyAdapters || createSupplier == null
+                ? JmoaRuntimeSupport.supplierAdapter(id)
+                : (Supplier<Object>) invoke(createSupplier, id);
+        }
+
+        @SuppressWarnings("unchecked")
+        private static Consumer<Object> createConsumer(int id) {
+            ensureResolved();
+            return lazyAdapters || createConsumer == null
+                ? JmoaRuntimeSupport.consumerAdapter(id)
+                : (Consumer<Object>) invoke(createConsumer, id);
+        }
+
+        @SuppressWarnings("unchecked")
+        private static BiConsumer<Object, Object> createBiConsumer(int id) {
+            ensureResolved();
+            return lazyAdapters || createBiConsumer == null
+                ? JmoaRuntimeSupport.biConsumerAdapter(id)
+                : (BiConsumer<Object, Object>) invoke(createBiConsumer, id);
         }
 
         private static synchronized void ensureResolved() {
             if (resolved) {
                 return;
             }
-            resolved = true;
             Class<?> runtimeClass = loadGeneratedRuntimeClass();
-            if (runtimeClass == null) {
-                return;
+            if (runtimeClass != null) {
+                lazyAdapters = hasLazyAdapters(runtimeClass);
+                if (!lazyAdapters) {
+                    createFunction = resolveMethod(runtimeClass, "createFunction");
+                    createPredicate = resolveMethod(runtimeClass, "createPredicate");
+                    createSupplier = resolveMethod(runtimeClass, "createSupplier");
+                    createConsumer = resolveMethod(runtimeClass, "createConsumer");
+                    createBiConsumer = resolveMethod(runtimeClass, "createBiConsumer");
+                }
             }
+            resolved = true;
+        }
+
+        private static boolean hasLazyAdapters(Class<?> runtimeClass) {
             try {
-                createFunction = runtimeClass.getMethod("createFunction", int.class);
-                createPredicate = runtimeClass.getMethod("createPredicate", int.class);
-                createSupplier = runtimeClass.getMethod("createSupplier", int.class);
-                createConsumer = runtimeClass.getMethod("createConsumer", int.class);
-                createBiConsumer = runtimeClass.getMethod("createBiConsumer", int.class);
+                return Boolean.TRUE.equals(runtimeClass.getMethod("usesLazyAdapters").invoke(null));
             } catch (ReflectiveOperationException ignored) {
-                createFunction = null;
-                createPredicate = null;
-                createSupplier = null;
-                createConsumer = null;
-                createBiConsumer = null;
+                return false;
+            }
+        }
+
+        private static Method resolveMethod(Class<?> runtimeClass, String methodName) {
+            try {
+                return runtimeClass.getMethod(methodName, int.class);
+            } catch (NoSuchMethodException e) {
+                return null;
+            }
+        }
+
+        private static Object invoke(Method method, int id) {
+            try {
+                return method.invoke(null, id);
+            } catch (ReflectiveOperationException e) {
+                throw new IllegalStateException("Generated JMOA runtime factory invocation failed", e);
             }
         }
 
@@ -136,13 +143,5 @@ public final class JmoaFactory {
             };
         }
 
-        @SuppressWarnings("unchecked")
-        private static <T> T invoke(Method method, int id, Class<T> type) {
-            try {
-                return (T) type.cast(method.invoke(null, id));
-            } catch (ReflectiveOperationException e) {
-                throw new IllegalStateException("Failed to invoke generated runtime factory: " + method.getName(), e);
-            }
-        }
     }
 }

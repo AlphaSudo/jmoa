@@ -33,7 +33,14 @@ import java.util.TreeSet;
  */
 public final class AdapterReferenceValidator {
 
-    private static final String ADAPTER_BINARY_PREFIX = "JmoaPkgAdapters$";
+    private static final List<String> ADAPTER_BINARY_PREFIXES = List.of("JmoaPkgAdapters", "J$");
+
+    private static boolean isAdapterName(String internalName) {
+        String simple = internalName.substring(internalName.lastIndexOf('/') + 1);
+        return simple.equals("JmoaPkgAdapters") || simple.startsWith("JmoaPkgAdapters$")
+            || simple.matches("J\\$[0-9a-f]{6}")
+            || simple.matches("J\\$R[0-9]+_[0-9a-f]{24}");
+    }
 
     private final Log log;
 
@@ -69,7 +76,7 @@ public final class AdapterReferenceValidator {
                     String internalNameNoSuffix = internalName.endsWith(".class")
                         ? internalName.substring(0, internalName.length() - ".class".length())
                         : internalName;
-                    if (internalNameNoSuffix.contains(ADAPTER_BINARY_PREFIX)) {
+                    if (isAdapterName(internalNameNoSuffix)) {
                         presentAdapters.add(internalNameNoSuffix);
                     }
                     try {
@@ -163,9 +170,15 @@ public final class AdapterReferenceValidator {
      * are stripped so the result matches the bare internal name.
      */
     private void extractAdapterNamesFromString(String s, Set<String> refs) {
+        for (String prefix : ADAPTER_BINARY_PREFIXES) {
+            extractAdapterNamesFromString(s, prefix, refs);
+        }
+    }
+
+    private void extractAdapterNamesFromString(String s, String prefix, Set<String> refs) {
         int idx = 0;
         while (true) {
-            int hit = s.indexOf(ADAPTER_BINARY_PREFIX, idx);
+            int hit = s.indexOf(prefix, idx);
             if (hit < 0) {
                 return;
             }
@@ -173,7 +186,7 @@ public final class AdapterReferenceValidator {
             while (start > 0 && isInternalNameChar(s.charAt(start - 1))) {
                 start--;
             }
-            int end = hit + ADAPTER_BINARY_PREFIX.length();
+            int end = hit + prefix.length();
             while (end < s.length() && isInternalNameChar(s.charAt(end))) {
                 end++;
             }
@@ -191,7 +204,7 @@ public final class AdapterReferenceValidator {
             if (name.endsWith(";")) {
                 name = name.substring(0, name.length() - 1);
             }
-            refs.add(name);
+            if (isAdapterName(name)) refs.add(name);
             idx = end;
         }
     }

@@ -20,11 +20,15 @@ public final class ReducerReportWriter {
         }
         ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
         mapper.writeValue(new File(outputDir, "reducer-build-report.json"), report);
+        mapper.writeValue(new File(outputDir, "reducer-capability-verdict.json"),
+            ReducerCapabilityVerdicts.toJsonView(ReducerCapabilityVerdicts.compute(report)));
         mapper.writeValue(new File(outputDir, "debug-metadata-savings-estimate.json"), savings(report));
         mapper.writeValue(new File(outputDir, "bytecode-reducer-safety-taxonomy.json"), report.safetyTaxonomy());
         mapper.writeValue(new File(outputDir, "v2f-jar-safety-report.json"), jarSafety(report));
         mapper.writeValue(new File(outputDir, "jmoa-reducer-manifest.json"), reducerManifest(report));
         mapper.writeValue(new File(outputDir, "raw-reducer-byte-preservation-report.json"), rawBytePreservation(report));
+        mapper.writeValue(new File(outputDir, "rfd-reducer-classfile-diff.json"), classfileDiff(report));
+        mapper.writeValue(new File(outputDir, "rfd-jar-layout-audit.json"), jarLayoutAudit(report));
         mapper.writeValue(new File(outputDir, "jmoa-reducer-manifest-v2.json"), reducerManifestV2(report));
         mapper.writeValue(new File(outputDir, "application-raw-reducer-report.json"), report.application());
         mapper.writeValue(new File(outputDir, "v2q-generated-inventory.json"), generatedInventory(report.application()));
@@ -35,6 +39,8 @@ public final class ReducerReportWriter {
         writeTaxonomyMarkdown(new File(outputDir, "bytecode-reducer-safety-taxonomy.md"), report.safetyTaxonomy());
         writeJarSafetyMarkdown(new File(outputDir, "v2f-jar-safety-report.md"), report);
         writeRawBytePreservationMarkdown(new File(outputDir, "raw-reducer-byte-preservation-report.md"), report);
+        writeClassfileDiffMarkdown(new File(outputDir, "rfd-reducer-classfile-diff.md"), report);
+        writeJarLayoutAuditMarkdown(new File(outputDir, "rfd-jar-layout-audit.md"), report);
         writeApplicationReducerMarkdown(new File(outputDir, "application-raw-reducer-report.md"), report.application());
         writeGeneratedInventoryMarkdown(new File(outputDir, "v2q-generated-inventory.md"), report.application());
         writeGeneratedAdmissionMarkdown(new File(outputDir, "v2q-generated-admission-policy.md"), report.application());
@@ -47,8 +53,12 @@ public final class ReducerReportWriter {
         root.put("generatedAt", report.generatedAt());
         root.put("mutationEnabled", report.mutationEnabled());
         root.put("engine", report.engine());
+        root.put("operation", report.operation());
+        root.put("jarLayout", report.jarLayout());
         root.put("jarCount", report.jarCount());
         root.put("classCount", report.classCount());
+        root.put("totalOutputDeltaBytes", report.totalOutputDeltaBytes());
+        root.put("totalNetBytesSaved", report.totalNetBytesSaved());
         root.put("totalEstimatedRemovableBytes", report.totalEstimatedRemovableBytes());
         root.put("totalRemovedBytes", report.totalRemovedBytes());
         root.put("artifacts", report.artifacts());
@@ -91,6 +101,8 @@ public final class ReducerReportWriter {
         root.put("generatedAt", report.generatedAt());
         root.put("profile", report.profile());
         root.put("engine", report.engine());
+        root.put("operation", report.operation());
+        root.put("jarLayout", report.jarLayout());
         root.put("mutationEnabled", report.mutationEnabled());
         root.put("timestampPolicy", "preserve");
         root.put("strippedAttributes", report.mutationEnabled()
@@ -115,6 +127,8 @@ public final class ReducerReportWriter {
                 entry.put("outputSha256", jar.outputSha256());
                 entry.put("originalBytes", jar.originalBytes());
                 entry.put("reducedBytes", jar.reducedBytes());
+                entry.put("outputDeltaBytes", jar.reducedBytes() - jar.originalBytes());
+                entry.put("netBytesSaved", jar.originalBytes() - jar.reducedBytes());
                 entry.put("removedBytes", jar.removedBytes());
                 entry.put("classesScanned", jar.classCount());
                 entry.put("classesReduced", jar.reducedClassCount());
@@ -141,6 +155,47 @@ public final class ReducerReportWriter {
         root.put("preservedNonTargetStructures", report.rawClassAudits().stream()
             .allMatch(RawReducerClassAuditRecord::preservedNonTargetStructures));
         root.put("records", report.rawClassAudits());
+        return root;
+    }
+
+    private static Map<String, Object> classfileDiff(ReducerReport report) {
+        Map<String, Object> root = new LinkedHashMap<>();
+        root.put("metadataVersion", "rfd-reducer-classfile-diff-v1");
+        root.put("generatedAt", report.generatedAt());
+        root.put("engine", report.engine());
+        root.put("operation", report.operation());
+        root.put("jarLayout", report.jarLayout());
+        root.put("auditedClassCount", report.rawClassAudits().size());
+        root.put("failedAuditCount", report.rawClassAudits().stream()
+            .filter(audit -> !audit.preservedNonTargetStructures() || !audit.componentDigestsPreserved()).count());
+        root.put("allowedRemovedAttributes", List.of("LocalVariableTable", "LocalVariableTypeTable"));
+        root.put("allProtectedComponentsPreserved", report.rawClassAudits().stream()
+            .allMatch(audit -> audit.preservedNonTargetStructures() && audit.componentDigestsPreserved()));
+        root.put("records", report.rawClassAudits());
+        return root;
+    }
+
+    private static Map<String, Object> jarLayoutAudit(ReducerReport report) {
+        Map<String, Object> root = new LinkedHashMap<>();
+        root.put("metadataVersion", "rfd-jar-layout-audit-v1");
+        root.put("generatedAt", report.generatedAt());
+        root.put("operation", report.operation());
+        root.put("jarLayout", report.jarLayout());
+        root.put("artifactCount", report.artifacts().size());
+        root.put("entryOrderPreservedForAll", report.artifacts().stream()
+            .filter(jar -> jar.layoutAudit() != null)
+            .allMatch(jar -> jar.layoutAudit().entryOrderPreserved()));
+        root.put("allUnchangedRawPayloadsPreserved", report.artifacts().stream()
+            .filter(jar -> jar.layoutAudit() != null)
+            .allMatch(jar -> jar.layoutAudit().allUnchangedRawPayloadsPreserved()));
+        root.put("allUnchangedMetadataPreserved", report.artifacts().stream()
+            .filter(jar -> jar.layoutAudit() != null)
+            .allMatch(jar -> jar.layoutAudit().allUnchangedMetadataPreserved()));
+        root.put("artifacts", report.artifacts().stream().map(jar -> Map.of(
+            "artifact", jar.artifact(),
+            "status", jar.status(),
+            "layoutAudit", jar.layoutAudit() == null ? Map.of() : jar.layoutAudit()
+        )).toList());
         return root;
     }
 
@@ -192,8 +247,12 @@ public final class ReducerReportWriter {
         md.append("- Report only: `").append(report.reportOnly()).append("`\n");
         md.append("- Profile: `").append(report.profile()).append("`\n");
         md.append("- Engine: `").append(report.engine()).append("`\n");
+        md.append("- Operation: `").append(report.operation()).append("`\n");
+        md.append("- JAR layout: `").append(report.jarLayout()).append("`\n");
         md.append("- Jars: `").append(report.jarCount()).append("`\n");
         md.append("- Classes: `").append(report.classCount()).append("`\n");
+        md.append("- Signed output delta bytes: `").append(report.totalOutputDeltaBytes()).append("`\n");
+        md.append("- Net bytes saved: `").append(report.totalNetBytesSaved()).append("`\n");
         md.append("- Estimated removable bytes: `").append(report.totalEstimatedRemovableBytes()).append("`\n");
         md.append("- Removed bytes: `").append(report.totalRemovedBytes()).append("`\n\n");
         md.append("- Signed jars detected: `").append(report.artifacts().stream().filter(JarReductionRecord::signedJar).count()).append("`\n");
@@ -221,6 +280,51 @@ public final class ReducerReportWriter {
         md.append("\n## Boundary\n\n");
         for (String boundary : report.boundaries()) {
             md.append("- ").append(boundary).append('\n');
+        }
+        Files.writeString(file.toPath(), md.toString(), StandardCharsets.UTF_8);
+    }
+
+    private static void writeClassfileDiffMarkdown(File file, ReducerReport report) throws IOException {
+        long failed = report.rawClassAudits().stream()
+            .filter(audit -> !audit.preservedNonTargetStructures() || !audit.componentDigestsPreserved()).count();
+        StringBuilder md = new StringBuilder("# RFD Reducer Classfile Semantic-Minimality Audit\n\n");
+        md.append("- Audited classes: `").append(report.rawClassAudits().size()).append("`\n");
+        md.append("- Failed audits: `").append(failed).append("`\n");
+        md.append("- Allowed removals: `LocalVariableTable`, `LocalVariableTypeTable`\n");
+        md.append("- Protected component digests preserved: `")
+            .append(report.rawClassAudits().stream().allMatch(RawReducerClassAuditRecord::componentDigestsPreserved))
+            .append("`\n\n");
+        md.append("The normalized original and reduced classfiles must be byte-identical after independently removing only the two allowed attributes. Exact hashes additionally cover the constant pool, executable method code and exception tables, StackMapTable, BootstrapMethods, and annotation attributes.\n\n");
+        md.append("| Class | Artifact | Removed | Constant pool | Bytecode | Stack maps | Bootstrap | Annotations | Status |\n");
+        md.append("| --- | --- | --- | --- | --- | --- | --- | --- | --- |\n");
+        for (RawReducerClassAuditRecord audit : report.rawClassAudits().stream().limit(500).toList()) {
+            md.append("| `").append(audit.className()).append("` | `").append(audit.artifact()).append("` | `")
+                .append(String.join(",", audit.removedAttributes())).append("` | ")
+                .append(audit.originalConstantPoolSha256().equals(audit.reducedConstantPoolSha256())).append(" | ")
+                .append(audit.originalBytecodeSha256().equals(audit.reducedBytecodeSha256())).append(" | ")
+                .append(audit.originalStackMapTableSha256().equals(audit.reducedStackMapTableSha256())).append(" | ")
+                .append(audit.originalBootstrapMethodsSha256().equals(audit.reducedBootstrapMethodsSha256())).append(" | ")
+                .append(audit.originalAnnotationsSha256().equals(audit.reducedAnnotationsSha256())).append(" | `")
+                .append(audit.status()).append("` |\n");
+        }
+        Files.writeString(file.toPath(), md.toString(), StandardCharsets.UTF_8);
+    }
+
+    private static void writeJarLayoutAuditMarkdown(File file, ReducerReport report) throws IOException {
+        StringBuilder md = new StringBuilder("# RFD JAR Layout Audit\n\n");
+        md.append("- Operation: `").append(report.operation()).append("`\n");
+        md.append("- Writer: `").append(report.jarLayout()).append("`\n\n");
+        md.append("| Artifact | Order | Changed entries | Unchanged entries | Raw payloads preserved | Metadata preserved | Status |\n");
+        md.append("| --- | --- | ---: | ---: | ---: | ---: | --- |\n");
+        for (JarReductionRecord jar : report.artifacts()) {
+            JarLayoutAuditRecord audit = jar.layoutAudit();
+            if (audit == null) continue;
+            md.append("| `").append(jar.artifact()).append("` | ").append(audit.entryOrderPreserved())
+                .append(" | ").append(audit.intentionallyChangedEntryCount())
+                .append(" | ").append(audit.unchangedEntryCount())
+                .append(" | ").append(audit.unchangedRawPayloadPreservedCount()).append('/').append(audit.unchangedEntryCount())
+                .append(" | ").append(audit.unchangedMetadataPreservedCount()).append('/').append(audit.unchangedEntryCount())
+                .append(" | `").append(jar.status()).append("` |\n");
         }
         Files.writeString(file.toPath(), md.toString(), StandardCharsets.UTF_8);
     }
