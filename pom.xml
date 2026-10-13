@@ -13,7 +13,5 @@
     <modules>
         <module>jmoa-runtime-lib</module>
         <module>jmoa-maven-plugin</module>
-        <module>jmoa-activation-agent</module>
-        <module>jmoa-profile-agent</module>
     </modules>
 </project>
