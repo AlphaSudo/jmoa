@@ -574,7 +574,8 @@ class LambdaDeduplicationMojoIntegrationTest {
     }
 
     private static void compileRuntimeLibrary(Path outputDir) throws Exception {
-        Path runtimeSourceDir = Path.of("..", "jmoa-runtime-lib", "src", "main", "java", "jmoa", "runtime")
+        Path runtimeSourceDir = Path.of(System.getProperty("jmoa.runtime.sources",
+                Path.of("..", "jmoa-runtime-lib", "src", "main", "java", "jmoa", "runtime").toString()))
             .toAbsolutePath()
             .normalize();
         assertTrue(Files.isDirectory(runtimeSourceDir), "expected runtime library sources to be available");
