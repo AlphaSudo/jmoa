@@ -1,5 +1,9 @@
 # RC2 Downloaded-Asset Consumer Qualification
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 ## Result
 
 `PASSED`

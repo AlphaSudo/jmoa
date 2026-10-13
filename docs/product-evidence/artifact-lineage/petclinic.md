@@ -1,5 +1,10 @@
 # petclinic Artifact Lineage
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 | Variant | Classification | Source revision | Artifact SHA-256 | JMOA entries |
 |---|---|---|---|---:|
 | B0 | STRICT_NO_JMOA_REBUILD | 305a1f13e4f961001d4e6cb50a9db51dc3fc5967 | 2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF | 0 |

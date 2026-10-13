@@ -1,5 +1,9 @@
 # V2 Performance Discrepancy Analysis
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 The failed fresh B0-to-V2 run was not caused by different application classes,
 a stale V2 artifact, or shadowed dependencies. Byte-level freezing proved that
 the application and Boot-loader layers are identical and that V2 is the audited

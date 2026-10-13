@@ -1,5 +1,10 @@
 # V1 Runtime Activation: patient-service
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 - Admitted logical site decisions: `549`
 - Rewritten site events: `666`
 - Exact activation ratio: `UNMEASURABLE_FROM_EXISTING_CAPTURES`

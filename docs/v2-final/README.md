@@ -1,5 +1,9 @@
 # V2 Final Audit
 
+Historical final-V2 audit. The measured values and original acceptance
+contracts in this directory are retained for provenance. Current publications
+are [stable 2.1 and provisional 2.15](../releases/current-state.md).
+
 This folder is the release-readiness layer for V2. It freezes scope, records the
 passed final performance gates, and preserves the qualification trail that led
 to the stable `v2.0.0` release.

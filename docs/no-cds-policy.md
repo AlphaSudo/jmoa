@@ -1,5 +1,13 @@
 # No-CDS Runtime Policy
 
+This policy applies to the stable 2.1 PetClinic measurement. Its final
+accepted contrast is R41F fat JAR versus strict B0 exploded Boot, not the
+earlier same-layout comparison. Patient 2.15 retains Java 26/Leyden caches
+and is outside this no-CDS policy; both its arms share native trimming and
+allocator settings.
+
+See [current release boundaries](releases/current-state.md).
+
 The public PetClinic case intentionally disables CDS, AppCDS, Leyden, and the
 runtime javaagent.
 
@@ -13,7 +21,11 @@ with:
 
 ```text
 MALLOC_ARENA_MAX=1
+-XX:TrimNativeHeapInterval=5000
 ```
+
+The accepted 2.1 runtime record freezes both settings for the compared arms.
+They are deployment policy, not flags implicitly injected by the optimizer.
 
 ## Why This Exists
 

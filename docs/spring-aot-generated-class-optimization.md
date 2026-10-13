@@ -1,7 +1,14 @@
 # Spring AOT Generated-Class Optimization
 
-JMOA V2-A selects Spring AOT BeanDefinition helper classes as the first
-generated-class prototype family.
+Stable 2.1 ships report-only Spring AOT inventory and safety analysis. The
+historical prototype selection below did not lead to an admitted production
+mutation. Provisional 2.15 Leyden AOT caches are a separate JVM mechanism and
+do not enable Spring AOT helper consolidation.
+
+See [current release boundaries](releases/current-state.md).
+
+Historical V2-A selected Spring AOT BeanDefinition helper classes for prototype
+analysis. Subsequent discovery admitted no production family mutation.
 
 This is a cautious selection:
 

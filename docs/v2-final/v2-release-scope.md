@@ -1,5 +1,9 @@
 # JMOA V2 Release Scope
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: scope frozen for final audit.
 
 V2 is the productized release of the JMOA evidence, attribution, runtime-policy,
@@ -40,4 +44,3 @@ the lettered research sequence.
 No new V2 optimizer or research phase should be opened before `v2.0.0-rc1`.
 Only P0/P1 release blockers, reproducibility defects, documentation contradictions,
 schema compatibility problems, and packaging issues should be fixed.
-

@@ -1,5 +1,15 @@
 # 01 Choose Service And Policy
 
+**Release context (2026-10-13):** stable 2.1.0 ships the Maven tooling and
+accepted packaging-inclusive PetClinic result. Provisional 2.15 adds Patient
+Java 26/Leyden benchmark evidence, with failed original calibration admitted by
+exception and unqualified or failed performance bounds; no new Maven binaries.
+See [current release boundaries](../releases/current-state.md).
+
+The numbered B0/V1/V2 procedures below describe the historical three-artifact
+evaluation workflow. Their example outcomes and session counts are not the
+2.1 or 2.15 release protocol.
+
 Choose a service with a reproducible build, a deterministic semantic workload,
 and a runtime topology you can rebuild without private guesswork.
 
@@ -43,10 +53,11 @@ Changing any runtime or CDS identity creates a new protocol. Changing only the
 offline analysis JDK does not change captured runtime evidence, but it must
 still be recorded so parser behavior is reproducible.
 
-Use the deployment mode the service actually ships. Doctor used a Spring Boot
-fat JAR with artifact-specific AppCDS. Patient used a fat JAR with the same
-stock JDK base archive for every arm. PetClinic used exploded Boot with CDS
-off, SerialGC, and `MALLOC_ARENA_MAX=1`.
+Freeze the actual deployment and any intentional packaging contrast. Historical
+Doctor used artifact-specific AppCDS and earlier Patient used stock base CDS.
+Stable 2.1 PetClinic compares R41F fat JAR with strict B0 exploded Boot, CDS off.
+Provisional 2.15 Patient uses a separate Leyden cache per application artifact.
+Both Patient arms use the same native trimming and allocator policy.
 
 Do not copy Doctor's policy into another service because Doctor won. Packaging,
 CDS, and page-touch behavior are service-specific.

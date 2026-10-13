@@ -1,5 +1,11 @@
 # Reducer Configuration
 
+**Release context (2026-10-13):** stable 2.1.0 ships the Maven tooling and
+accepted packaging-inclusive PetClinic result. Provisional 2.15 adds Patient
+Java 26/Leyden benchmark evidence, with failed original calibration admitted by
+exception and unqualified or failed performance bounds; no new Maven binaries.
+See [current release boundaries](../releases/current-state.md).
+
 `reduce-bytecode` is disabled and report-only by default.
 
 ## Safe Raw Mutation Profile

@@ -1,5 +1,10 @@
 # Patient CDS Transfer Decision
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 Decision: `V1_CDS_NOT_REPRODUCIBLE` under the current fixed-artifact protocol.
 
 The historical optimized Patient candidate did win while using a matching CDS archive, but that experiment did not isolate CDS. The new fixed-artifact screen does: current V1 regressed by `+20,797 KB PSS` and `+120,639,488 bytes memory.current` under CDS. Current V2 also regressed, more strongly.

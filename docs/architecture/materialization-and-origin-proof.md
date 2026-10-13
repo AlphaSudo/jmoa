@@ -1,5 +1,11 @@
 # Materialization And Origin Proof
 
+**Release context (2026-10-13):** stable 2.1.0 ships the Maven tooling and
+accepted packaging-inclusive PetClinic result. Provisional 2.15 adds Patient
+Java 26/Leyden benchmark evidence, with failed original calibration admitted by
+exception and unqualified or failed performance bounds; no new Maven binaries.
+See [current release boundaries](../releases/current-state.md).
+
 An optimized class is irrelevant unless the deployed JVM actually loads it.
 JMOA therefore treats packaging and runtime origin as acceptance gates.
 

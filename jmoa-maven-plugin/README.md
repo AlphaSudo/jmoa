@@ -334,7 +334,7 @@ mvn -N jmoa:recommend-reducer `
   '-Djmoa.recommendation.enabled=true' `
   '-Djmoa.recommendation.mode=replay' `
   '-Djmoa.recommendation.inputDir=../docs/v2-m' `
-  '-Djmoa.recommendation.replaySuite=../docs/v2-m/historical-recommendation-suite.json'
+  '-Djmoa.recommendation.replaySuite=../docs/reference/examples/historical-reducer-replay.json'
 ```
 
 V2-M/V2-R/V2-S/V2-T/V2-U recommendation and generated-family discovery remain
@@ -345,10 +345,10 @@ V2-D gates before mutation or runtime promotion.
 
 See:
 
-- [V2-M Admission States](../docs/v2-m/v2m-admission-states.md)
-- [V2-M Recommendation Rules](../docs/v2-m/v2m-recommendation-rules.md)
-- [V2-M Historical Replay](../docs/v2-m/v2m-historical-recommendation-replay.md)
-- [V2-M Closure Report](../docs/v2-m/v2m-closure-report.md)
+- [V2-M Admission States (capability documentation)](../docs/reference/maven-plugin-goals.md)
+- [V2-M Recommendation Rules (capability documentation)](../docs/reference/maven-plugin-goals.md)
+- [V2-M Historical Replay (capability documentation)](../docs/reference/maven-plugin-goals.md)
+- [V2-M Closure Report (capability documentation)](../docs/reference/maven-plugin-goals.md)
 
 ## V2-N Runtime Policy Recommendation Flags
 
@@ -380,7 +380,7 @@ mvn -N jmoa:recommend-runtime `
   '-Djmoa.runtimeRecommendation.enabled=true' `
   '-Djmoa.runtimeRecommendation.mode=analyze' `
   '-Djmoa.runtimeRecommendation.inputDir=<reports-dir>' `
-  '-Djmoa.runtimeRecommendation.registry=../docs/v2-n/v2n-runtime-protocol-registry.json' `
+  '-Djmoa.runtimeRecommendation.registry=../docs/reference/runtime-protocol-registry.json' `
   '-Djmoa.runtimeRecommendation.service=<service>' `
   '-Djmoa.runtimeRecommendation.launchMode=EXPLODED_BOOT_APP' `
   '-Djmoa.runtimeRecommendation.runtimePolicy=NO_CDS_LOW_DIRTY' `
@@ -394,7 +394,7 @@ mvn -N jmoa:recommend-runtime `
   '-Djmoa.runtimeRecommendation.enabled=true' `
   '-Djmoa.runtimeRecommendation.mode=preflight' `
   '-Djmoa.runtimeRecommendation.inputDir=<reports-dir>' `
-  '-Djmoa.runtimeRecommendation.registry=../docs/v2-n/v2n-runtime-protocol-registry.json'
+  '-Djmoa.runtimeRecommendation.registry=../docs/reference/runtime-protocol-registry.json'
 ```
 
 Replay mode validates the policy history and fails on mismatches by default:
@@ -404,8 +404,8 @@ mvn -N jmoa:recommend-runtime `
   '-Djmoa.runtimeRecommendation.enabled=true' `
   '-Djmoa.runtimeRecommendation.mode=replay' `
   '-Djmoa.runtimeRecommendation.inputDir=../docs/v2-n' `
-  '-Djmoa.runtimeRecommendation.registry=../docs/v2-n/v2n-runtime-protocol-registry.json' `
-  '-Djmoa.runtimeRecommendation.replaySuite=../docs/v2-n/historical-runtime-policy-suite.json'
+  '-Djmoa.runtimeRecommendation.registry=../docs/reference/runtime-protocol-registry.json' `
+  '-Djmoa.runtimeRecommendation.replaySuite=../docs/reference/examples/historical-runtime-replay.json'
 ```
 
 Outputs:
@@ -418,11 +418,11 @@ jmoa-runtime-recommendation.md
 
 See:
 
-- [V2-N Runtime Protocol Registry](../docs/v2-n/v2n-runtime-protocol-registry.md)
-- [V2-N Policy Rules](../docs/v2-n/v2n-runtime-policy-rules.md)
-- [V2-N Runtime Preflight](../docs/v2-n/v2n-runtime-preflight.md)
-- [V2-N Historical Replay](../docs/v2-n/v2n-runtime-replay.md)
-- [V2-N Closure Report](../docs/v2-n/v2n-closure-report.md)
+- [V2-N Runtime Protocol Registry (capability documentation)](../docs/architecture/runtime-policy-model.md)
+- [V2-N Policy Rules (capability documentation)](../docs/architecture/runtime-policy-model.md)
+- [V2-N Runtime Preflight (capability documentation)](../docs/architecture/runtime-policy-model.md)
+- [V2-N Historical Replay (capability documentation)](../docs/architecture/runtime-policy-model.md)
+- [V2-N Closure Report (capability documentation)](../docs/architecture/runtime-policy-model.md)
 
 ## V2-O Runtime Policy Automation
 
@@ -435,7 +435,7 @@ mvn -N jmoa:runtime-preflight `
   '-Djmoa.runtimePreflight.enabled=true' `
   '-Djmoa.runtimePreflight.inputDir=<reports-dir>' `
   '-Djmoa.runtimePreflight.outputDir=<output-dir>' `
-  '-Djmoa.runtimePreflight.registry=../docs/v2-n/v2n-runtime-protocol-registry.json' `
+  '-Djmoa.runtimePreflight.registry=../docs/reference/runtime-protocol-registry.json' `
   '-Djmoa.runtimePreflight.artifact=<artifact-path>' `
   '-Djmoa.runtimePreflight.service=<service>' `
   '-Djmoa.runtimePreflight.launchMode=EXPLODED_BOOT_APP' `
@@ -451,7 +451,7 @@ The companion PowerShell helpers under `../scripts` standardize explicit CDS
 training records, materialization proof, semantic smoke, V2-C-native paired
 capture, and V2-C/V2-D confirmation orchestration.
 
-See [V2-O Runtime Automation Guide](../docs/v2-o/v2o-runtime-automation-guide.md).
+See [V2-O Runtime Automation Guide (capability documentation)](../docs/architecture/materialization-and-origin-proof.md).
 
 ## V2-P Runtime Workflow Coordinator
 
@@ -466,7 +466,7 @@ Run the state-machine replay with:
 ```powershell
 ../scripts/run-jmoa-runtime-workflow.ps1 `
   -Mode replay `
-  -ReplaySuite ../docs/v2-p/v2p-workflow-replay-suite.json `
+  -ReplaySuite ../docs/reference/examples/historical-workflow-replay.json `
   -OutputDir target/v2p-workflow-replay
 ```
 

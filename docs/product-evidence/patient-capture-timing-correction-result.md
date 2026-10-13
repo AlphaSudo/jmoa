@@ -1,5 +1,10 @@
 # Patient Capture-Timing Correction Result
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 The one campaign authorized by `PROVEN_CAPTURE_TIMING_DEFECT` completed with
 the frozen artifacts, runtime policy, workload, six permutations, and product
 thresholds unchanged.

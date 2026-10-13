@@ -1,5 +1,9 @@
 # Patient Final Default-Base-CDS Verdict
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: `PATIENT_BASE_CDS_V2_CONFIRMED`
 
 This final experiment compared the accepted Patient V1 and corrected V2

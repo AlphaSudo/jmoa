@@ -1,5 +1,9 @@
 # V2 Public Quickstart Qualification
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: `LOCAL_AND_CLEAN_CLONE_GOLDEN_PATH_PASSED`
 
 The public PetClinic customers path completed against pinned revision

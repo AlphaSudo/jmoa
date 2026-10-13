@@ -1,5 +1,9 @@
 # V2 Claim Matrix
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 | Claim | Status |
 | --- | --- |
 | final V2 substantially reduces customers memory versus B0 under the frozen protocol | `HISTORICAL_ONLY_NOT_REPRODUCED` |

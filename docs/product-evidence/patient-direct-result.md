@@ -1,5 +1,10 @@
 # Patient Direct Product Result
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 Comparison attempted: clean no-JMOA `B0` to candidate SHA `FB4E6295...`.
 
 | Screen order | PSS | Private_Dirty | memory.current | Workload errors |

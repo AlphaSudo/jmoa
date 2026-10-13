@@ -1,5 +1,10 @@
 # spring-petclinic-customers-service: Historical/Current Runtime Diff
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 | Dimension | Historical | Current | Classification | Reason |
 |---|---|---|---|---|
 | B0 artifact SHA | 4952EF9306C732846BFAE0FAE6A67BE2F9B8509644B3396B8247215A03E5589D | 2F4A63A803B2A05050ACF020AD382ABE589C52EE50253A1F5DC85F6D62584ACF | `DISQUALIFYING` | Normalized JAR content differs. |

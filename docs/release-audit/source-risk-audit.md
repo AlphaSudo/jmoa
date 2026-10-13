@@ -1,23 +1,15 @@
-# Source Risk Audit
+# Source publication audit boundary
 
-## Findings
+The stable public modules are the plugin and runtime support library. Current
+2.15 publication adds evidence and documentation, with no new executable Maven
+artifacts. See [inventory](publishable-source-inventory.md).
 
-1. Candidate public modules are real source modules, not generated evidence.
-2. The original workspace is dirty and contains many private/generated phase
-   artifacts.
-3. The public copy removes known private patient-service-specific debug code.
-4. The older agent/profiler root source is held back for manual review.
-5. The repository is now licensed under Apache License 2.0.
+Publication checks reject private machine paths, credential material and raw
+binary/campaign artifacts. Documentation checks validate local links, JSON,
+current claim qualifiers and the stable accepted evidence hash. Default CI
+tests source modules; it does not run private Patient or PetClinic measurements.
 
-## Verification
-
-- Publication safety scan: PASS
-- Default Maven build for `jmoa-runtime-lib` and `jmoa-maven-plugin`: PASS
-- Launcher module: kept outside the default reactor until process-exit tests are
-  split into a dedicated harness
-
-## Current Risk Level
-
-Low-to-moderate until:
-
-- user reviews source inventory.
+Internal implementation plans and personal drafts are excluded from the current
+tree. Historic public commits/tags remain immutable in this documentation update.
+The public benchmark's calibration, cost, warmth and binary-lineage limitations
+remain disclosed; publication safety is not scientific acceptance.

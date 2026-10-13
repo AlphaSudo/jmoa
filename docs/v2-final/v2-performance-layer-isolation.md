@@ -1,5 +1,9 @@
 # V2 Performance Layer Isolation
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Fresh one-pair screens reproduced both favorable and unfavorable outcomes. The
 uncontrolled V1-to-V2 screen was the clearest diagnostic: PSS improved by
 11,567 KB while `memory.current` regressed by 49,217,536 bytes because only V2

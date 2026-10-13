@@ -1,5 +1,0 @@
-{
-  "metadataVersion": "v2p-workflow-report-format",
-  "requiredFields": ["service", "artifact", "scope", "reducerEngine", "launchMode", "runtimePolicy", "workflowState", "claimAllowed", "claimDeclared", "gates", "claimBoundary"],
-  "claimDeclared": false
-}

@@ -96,7 +96,7 @@ $petPath = Get-FirstExisting @(
 )
 $doctorPath = Get-FirstExisting @(
     (Join-Path $RepoRoot 'docs/v2-final/v2-three-service-doctor-verdict.json'),
-    (Join-Path $RepoRoot 'docs/v2-k/v2k-doctor-final-verdict.json')
+    (Join-Path $RepoRoot 'docs/reference/examples/historical-doctor-verdict.json')
 )
 $patientPath = Get-FirstExisting @(
     (Join-Path $RepoRoot 'docs/v2-final/patient-final-policy-verdict.json'),

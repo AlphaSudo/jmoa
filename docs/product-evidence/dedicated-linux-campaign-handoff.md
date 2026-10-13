@@ -1,5 +1,10 @@
 # Dedicated Linux Campaign Handoff
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 The PetClinic direct-product campaign must move to a dedicated Linux host. The
 Windows-to-WSL-to-Podman environment passed semantic and pressure validation
 but failed the frozen same-artifact B0 noise gate twice.

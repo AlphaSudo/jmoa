@@ -1,5 +1,9 @@
 # V2 Final Performance Verdict
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: `INCREMENTAL_V1_TO_V2_GATE_PASSED_B0_TO_V2_REPRODUCTION_MIXED`
 
 The reproducible final public customers claim is intentionally narrow:

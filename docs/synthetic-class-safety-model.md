@@ -1,5 +1,12 @@
 # Synthetic Class Safety Model
 
+Stable 2.1 preserves the default-deny generated-family policy. Its admitted
+lambda call sites are governed by their separate scanner and weaving safety
+contract. Provisional 2.15 adds evidence and admits no general proxy, bridge
+or AOT class mutation.
+
+See [current release boundaries](releases/current-state.md).
+
 V2-A treats generated classes as runtime contracts until proven otherwise.
 
 Default rule:
@@ -34,4 +41,3 @@ scan -> classify -> report
 ```
 
 No class files are modified by generated-class inventory mode.
-

@@ -1,5 +1,10 @@
 # Three-Artifact Defect Decisions
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 | Service | Decision | Correction applied | Further correction authorized | Public verdict |
 |---|---|---|---|---|
 | doctor-service | NO_CORRECTABLE_DEFECT_FOUND | False | False | COMPLETE_PRODUCT_WIN |

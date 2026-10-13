@@ -1,5 +1,9 @@
 # Patient Final V1 -> V2 Verdict
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Historical status: **FAIL_PATIENT_APPLICATION_CDS_NOT_CONFIRMED**
 Historical recommendation: **BLOCK_APPLICATION_CDS_RUNTIME_PROMOTION**
 

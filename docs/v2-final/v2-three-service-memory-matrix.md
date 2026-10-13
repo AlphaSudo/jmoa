@@ -1,5 +1,9 @@
 # V2 Three-Service Memory Matrix
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Overall status: **READY_FOR_V2_FINAL**
 
 Comparison: `final V1 -> final V2`

@@ -1,5 +1,10 @@
 # V1 Runtime-Cost Census
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 All values are direct within-block `V1 - B0` medians from the sealed six-order campaigns.
 
 | Service | PSS KB | Heap PSS KB | Anonymous RW PSS KB | Loaded classes | Class loaders | NMT Class KB | NMT metadata KB | NMT Code KB | JMOA objects / bytes | MethodHandle bytes | LambdaForm bytes |

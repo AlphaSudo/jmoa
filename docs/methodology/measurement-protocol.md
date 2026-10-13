@@ -1,5 +1,11 @@
 # Measurement Protocol
 
+**Release context (2026-10-13):** stable 2.1.0 ships the Maven tooling and
+accepted packaging-inclusive PetClinic result. Provisional 2.15 adds Patient
+Java 26/Leyden benchmark evidence, with failed original calibration admitted by
+exception and unqualified or failed performance bounds; no new Maven binaries.
+See [current release boundaries](../releases/current-state.md).
+
 JMOA measures the deployed service after a semantic workload. It does not infer
 runtime memory from artifact size or class count.
 
@@ -31,7 +37,8 @@ occupancy, class histogram bytes, loaded classes, metaspace, and startup time.
 7. Capture smaps, cgroup, NMT, heap, histogram, and runtime proof.
 8. Stop the variant before launching its pair.
 
-Official confirmation uses balanced order: `B -> C`, `C -> B`, `B -> C`.
+The legacy generic three-pair runner uses balanced order:
+`B -> C`, `C -> B`, `B -> C`. This is not the current release sample size.
 Single runs are screens only. A valid losing pair remains in the data and the
 median; it is never removed because its direction is inconvenient.
 
@@ -40,8 +47,9 @@ median; it is never removed because its direction is inconvenient.
 A run is invalid when required evidence is missing or truncated, workload
 errors are nonzero, health is not UP, artifact or policy proof disagrees with
 the contract, PSS arithmetic is impossible, the wrong archive is mapped, or a
-forbidden javaagent is present. Invalid runs are rerun; they are not converted
-into losses or silently omitted.
+forbidden javaagent is present. Invalid runs retain their evidence and disposition. Any replacement follows
+the frozen retry rules and consumes its recorded budget; it is not silently
+omitted or converted into a loss.
 
 Diagnostic instrumentation such as class-load logging, JFR, NMT detail, forced
 GC, or large in-container output is captured separately unless the protocol
@@ -49,3 +57,17 @@ explicitly measures its overhead.
 
 See [Statistics and Acceptance](statistics-and-acceptance.md) and
 [Interpreting Results](../reproduction/interpreting-results.md).
+
+
+## Release-specific endpoints
+
+PetClinic 2.1 used 81 sessions including 12 held-out four-arm blocks. Patient
+2.15 used 12 fresh two-arm blocks after eight fresh controls, with all 96
+attempts accounted for. Both use stopped-process claim frames: the JVM is
+paused for a coherent snapshot and subsequently managed by the lifecycle,
+not exited before PSS is read. Capture time and any post-cost settling belong
+to the endpoint. Patient startup/primary warmth remains unqualified.
+
+Never add file-cache charge or an unrelated historical median to process PSS.
+Required CPU, startup, latency and diagnostic evidence are interpreted under
+the exact protocol, including the Patient calibration exception.

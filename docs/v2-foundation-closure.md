@@ -1,80 +1,43 @@
-# V2 Foundation Closure
+# V2 foundation closure and current publication state
 
-Status: V2-A through V2-F are closed as the current public V2 foundation.
+## Current releases
 
-This closure exists so future work starts from a clean claim boundary. V2-F is
-now complete as reducer productization and second-service artifact smoke; it is
-not still the next phase.
+Stable **2.1.0** ships the plugin/runtime distribution and the accepted
+packaging-inclusive PetClinic result: 14.88 MiB lower process PSS and 16.24 MiB
+lower target-cgroup memory. Frozen RAM and product-cost gates passed, including
+CPU +14.71% and startup +1.652 s tradeoffs.
 
-## Closed Milestones
+Provisional **2.15** publishes Patient Java 26/Leyden benchmark evidence only:
+8.38 MiB lower median stopped-process PSS, conditional lower bound 8.19 MiB.
+Original calibration failed and used an approved post-observation exception;
+performance bounds remain unqualified or failed. Startup/cache warmth and
+production/uploaded-binary parity are unqualified. No new Maven binaries ship.
 
-| Milestone | Closed As | Mutation / Claim Boundary |
+## Historical foundation milestones
+
+| Track | Delivered foundation | Boundary |
 | --- | --- | --- |
-| V2-A | Generated/synthetic/proxy/AOT visibility, runtime attribution, safety taxonomy, ROI infrastructure | Generated-class mutation remains disabled |
-| V2-B | Bytecode/classfile footprint profiling, near-64KB risk, runtime correlation | Broad bytecode mutation remains disabled |
-| V2-C | Evidence validation, paired confirmation, variance classification, perturbation detection, historical replay | Validation layer only |
-| V2-D | Memory attribution, smaps/NMT reconciliation, heap/object/class/metaspace attribution | Explanation layer only |
-| V2-E | Opt-in LVT/LVTT reducer, PetClinic artifact smoke, semantic smoke, V2-C confirmation, V2-D attribution | Confirmed only for PetClinic exploded Boot no-CDS protocol |
-| V2-F | Signed/MR/sealed JAR safety, reducer manifest, PetClinic hardened artifact smoke, Doctor artifact smoke, admission policy | Productization only; no new runtime claim |
+| Generated inventory | Family census, attribution, safety taxonomy and ROI reports | No general generated/proxy mutation |
+| Classfile footprint | Size, near-64KiB, attributes and runtime correlation | Report-only; no method splitting |
+| Evidence validation | Identity, arithmetic, pairing, variance and replay | Validation capability is not a runtime win |
+| Memory attribution | smaps/NMT/heap/class reconciliation | Hypotheses are not isolated causal effects |
+| Dependency reducer | Opt-in LVT/LVTT mutation and preservation audits | No broad debug stripping; signed/MR/sealed exclusions |
+| Runtime workflow | Materialization, origins, recommendation and preflight | Exact artifact and service-policy scope required |
 
-## Current Confirmed Runtime Scope
+The companion JSON retains original foundation milestone records under their
+legacy schema fields and explicit historical context. Its `publicationContext`
+holds the current release claims. Old artifact-only closures are not upgraded
+because a different later artifact won.
 
-The only confirmed V2-E reducer runtime claim is:
+## What closure means
 
-```text
-service: Spring PetClinic customers-service
-comparison: full P2 vs full P2 + V2-E LVT/LVTT reducer
-launch mode: EXPLODED_BOOT_APP / JarLauncher
-runtime policy: NO_CDS_LOW_DIRTY
-MALLOC_ARENA_MAX: 1
-CDS/AppCDS/Leyden: disabled
-runtime javaagent: absent
-paired wins: 2/3
-median PSS delta: -1,624 KB
-median Private_Dirty delta: -1,636 KB
-median memory.current delta: -12,255,232 bytes
-```
+Delivered tooling, completed execution and accepted performance are separate
+states. Patient 2.15's completed measurement record does not erase its failed
+original calibration or failed/unqualified costs. Neither release establishes
+universal savings, arbitrary proxy rewriting, production parity for the private
+Patient workload or zero-input independent reproduction.
 
-## Artifact-Only Scope
-
-V2-F adds artifact-level evidence only:
-
-```text
-PetClinic hardened reducer smoke: 3,870,720 bytes removed
-Doctor corrected D2 dependency smoke: 4,156,014 bytes removed
-```
-
-Doctor remains artifact-smoke only. There is no Doctor semantic smoke, V2-C
-runtime confirmation, V2-D runtime attribution, or Doctor runtime memory claim in
-V2-F.
-
-## Still Not Claimed
-
-```text
-startup win
-fat-JAR runtime win
-CDS/AppCDS runtime win
-Doctor runtime win
-cross-service runtime generalization
-all debug metadata stripping safety
-LineNumberTable stripping
-StackMapTable stripping
-annotation stripping
-Signature stripping
-BootstrapMethods rewriting or stripping
-CGLIB/JDK proxy rewriting
-Spring AOT generated-class mutation
-```
-
-## Next Phase
-
-Next phase:
-
-```text
-V2-G - reducer generalization and runtime portability
-```
-
-V2-G should test whether the confirmed V2-E LVT/LVTT reducer generalizes to a
-second runtime target. It should not implement a new reducer type and should not
-broaden metadata stripping.
-
+- [Current release boundaries](releases/current-state.md)
+- [Claim register](v2-claim-register.md)
+- [Closure taxonomy](v2-phase-closure-taxonomy.md)
+- [Known limitations](known-limitations.md)

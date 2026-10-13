@@ -1,5 +1,8 @@
 # Week 2 Publication Checklist
 
+Historical source-readiness audit. Retained test counts and checkmarks
+describe that audit only; see [current release audit](README.md).
+
 ## Completed By Agent
 
 - [x] Created clean public source repo tree.

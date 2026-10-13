@@ -1,5 +1,10 @@
 # PetClinic 2 GiB Support-Stability Reclassification
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 ## Superseding Interpretation
 
 The historical scenario ledger remains immutable and records:
@@ -48,4 +53,3 @@ charging or post-health JVM convergence.
 only the final 60 seconds using private-memory and pressure gates. Three of
 three independent support stacks must pass before the non-evidence B0 capacity
 arm is allowed.
-

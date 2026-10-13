@@ -1,5 +1,10 @@
 # Method 64KB Risk
 
+The size-risk reporter remains report-only in stable 2.1; no method splitting
+is shipped. Provisional 2.15 changes no classfile-size limit or Maven binary.
+
+See [current release boundaries](releases/current-state.md).
+
 The JVM classfile format stores each method body in a `Code` attribute. The
 `code_length` value must stay below `65,536`, so `65,535` bytes is the practical
 upper bound.

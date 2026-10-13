@@ -1,5 +1,10 @@
 # Doctor B0/V1/V2 Freeze
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 - Protocol: `DOCTOR_B0_V1_V2_BALANCED_V1`
 - Source revision: `c33d6e9312739ab15fd705a28e60e9f50c6e7b8b`
 - Deployment: `SPRING_BOOT_FAT_JAR`

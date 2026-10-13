@@ -1,5 +1,9 @@
 # Patient Base-CDS Final Acceptance Contract
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: `FROZEN`
 
 This is the final Patient V2 performance experiment. It compares the accepted

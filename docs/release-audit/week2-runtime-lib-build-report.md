@@ -1,5 +1,8 @@
 # Week 2 Runtime Library Build Report
 
+Historical source-readiness audit. Retained test counts and checkmarks
+describe that audit only; see [current release audit](README.md).
+
 Status: PASS as part of the default public build target.
 
 `jmoa-runtime-lib` is built and tested with the default Week 2 command:

@@ -1,5 +1,9 @@
 # Patient Pair Attribution
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: **COMPLETE**
 
 The original confirmation was pair-variant. Full `smaps`, heap information,

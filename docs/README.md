@@ -1,53 +1,38 @@
-# JMOA Documentation
+# JMOA documentation
 
-Use capability documents for the current product. Use phase records only for
-historical provenance.
+## Current publications
 
-## Product Architecture
+**Stable 2.1.0** ships Maven plugin/runtime artifacts and the accepted PetClinic
+result: 14.88 MiB lower process PSS and 16.24 MiB lower target-cgroup RAM, including
+packaging and measured CPU/startup costs. **Provisional 2.15** adds Patient
+Java 26/Leyden evidence: 8.38 MiB lower median stopped-process PSS, conditional
+lower bound 8.19 MiB. Original calibration failed with an approved exception;
+performance bounds remain unqualified or failed. Startup/cache warmth and
+production/uploaded-binary parity are unqualified; no new Maven binaries ship.
 
-- [System Overview](architecture/system-overview.md)
-- [Bytecode Transformation](architecture/bytecode-transformation.md)
-- [Materialization and Origin Proof](architecture/materialization-and-origin-proof.md)
-- [Runtime Policy Model](architecture/runtime-policy-model.md)
+- [Current release boundaries](releases/current-state.md)
+- [Stable 2.1 release](https://github.com/AlphaSudo/jmoa/releases/tag/v2.1.0)
+- [Provisional 2.15 release](https://github.com/AlphaSudo/jmoa/releases/tag/v2.15)
+- [2.1 PetClinic paper](paper/jmoa-v2.1-petclinic-memory-engineering.md)
+- [2.15 Patient companion paper](paper/jmoa-v2.15-patient-leyden-memory-evidence.md)
 
-## Evidence Methodology
+## Engineering documentation
 
-- [Measurement Protocol](methodology/measurement-protocol.md)
-- [Statistics and Acceptance](methodology/statistics-and-acceptance.md)
-- [Memory Attribution](methodology/memory-attribution.md)
-- [CDS and Runtime Policy](methodology/cds-and-runtime-policy.md)
+| Area | Start here |
+| --- | --- |
+| Adoption | [Evaluation guide](adoption/README.md) |
+| Architecture | [System overview](architecture/system-overview.md), [bytecode](architecture/bytecode-transformation.md), [materialization](architecture/materialization-and-origin-proof.md), [runtime policy](architecture/runtime-policy-model.md) |
+| Methodology | [Measurement](methodology/measurement-protocol.md), [statistics](methodology/statistics-and-acceptance.md), [attribution](methodology/memory-attribution.md), [CDS](methodology/cds-and-runtime-policy.md) |
+| Decisions | [Generated families](decisions/generated-family-disposition.md), [application reducer](decisions/application-reducer-rejection.md), [historical AppCDS](decisions/patient-appcds-rejection.md) |
+| Product engineering | [Lambda/adapter costs](product-engineering/v1-overhead-roadmap.md) |
+| Evidence | [Current and historical records](product-evidence/README.md) |
+| Reference | [Goals](reference/maven-plugin-goals.md), [reducer configuration](reference/reducer-configuration.md), [compatibility](reference/compatibility-matrix.md), [schemas/examples](reference/schema-index.md) |
+| Reproduction | [PetClinic quickstart](reproduction/petclinic-quickstart.md), [generic confirmation](reproduction/extended-confirmation.md), [interpretation](reproduction/interpreting-results.md) |
+| Release audit | [Audit boundaries](release-audit/README.md) |
+| Results | [Results by scope](results/README.md), [negative results](results/negative-results.md) |
+| Runtime studies | [Historical CDS/AppCDS studies](runtime-policy-studies/README.md) |
+| History | [Development index](history/v2-phase-index.md), [historical final audit](v2-final/README.md), [claim register](v2-claim-register.md) |
 
-## Results
-
-- [JMOA 2.1 PetClinic Direct RAM Win](product-evidence/petclinic-r41f-b0-t7r23-result.md)
-- [JMOA 2.1 Technical Paper](paper/jmoa-v2.1-petclinic-memory-engineering.md)
-- [PetClinic Direct R41F-to-B0 T7R2 Target-Cgroup RAM Win](product-evidence/petclinic-r41f-b0-t7r2-cgroup-result.md)
-- [Prior PetClinic Direct R41F-to-B0 T7R PSS Result](product-evidence/petclinic-r41f-b0-t7r-result.md)
-- [PetClinic R41F-to-V2E R4.87 RAM Confirmation](product-evidence/petclinic-r41f-v2e-r487-result.md)
-- [V2 Three-Service Matrix](results/v2-three-service-matrix.md)
-- [Negative Results](results/negative-results.md)
-- [Frozen Final Audit](v2-final/README.md)
-
-## Reproduction And Reference
-
-- [PetClinic Quickstart](reproduction/petclinic-quickstart.md)
-- [Extended Confirmation](reproduction/extended-confirmation.md)
-- [Interpreting Results](reproduction/interpreting-results.md)
-- [Maven Goals](reference/maven-plugin-goals.md)
-- [Reducer Configuration](reference/reducer-configuration.md)
-- [Compatibility Matrix](reference/compatibility-matrix.md)
-- [Schema Index](reference/schema-index.md)
-
-## Releases
-
-- [JMOA v2.1.0](releases/v2.1.0.md)
-- [JMOA v2.0.0](releases/v2.0.0.md)
-
-## Decisions And History
-
-- [Generated-Family Disposition](decisions/generated-family-disposition.md)
-- [Application Reducer Rejection](decisions/application-reducer-rejection.md)
-- [Patient AppCDS Rejection](decisions/patient-appcds-rejection.md)
-- [Deferred Work](decisions/deferred-to-v3.md)
-- [V2 Historical Phase Index](history/v2-phase-index.md)
-- [Claim Register](v2-claim-register.md)
+Private implementation ledgers and personal drafts are outside this public
+documentation tree. Historical measurements retain their original comparator
+and verdict; internal next-step plans are not publication material.

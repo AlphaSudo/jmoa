@@ -1,5 +1,10 @@
 # PetClinic Fresh Baseline-To-V2 Scenario
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 Classification: **VALID_SINGLE_SCREEN_NOT_CONFIRMATION**
 
 On 2026-07-19, the audited scenario runner executed one complete PetClinic

@@ -1,5 +1,9 @@
 # V2 Clean-Clone Qualification
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: `PASSED`
 
 The full isolated quickstart was run from remote commit `973257e`, cloned into

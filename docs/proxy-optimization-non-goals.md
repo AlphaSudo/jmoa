@@ -1,5 +1,11 @@
 # Proxy Optimization Non-Goals
 
+These exclusions remain in force for stable 2.1 and provisional 2.15.
+Lambda call-site rewriting does not imply arbitrary runtime proxy mutation;
+Leyden cache use does not imply Spring AOT BeanDefinition mutation.
+
+See [current release boundaries](releases/current-state.md).
+
 JMOA V2-A does not rewrite runtime proxy classes.
 
 The following families are inventory and attribution targets only:

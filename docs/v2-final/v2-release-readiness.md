@@ -1,5 +1,9 @@
 # V2 Release Readiness
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: `READY_FOR_V2_FINAL`
 
 The reproducible incremental performance gate is green. V2-C and V2-D accepted

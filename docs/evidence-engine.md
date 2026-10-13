@@ -1,5 +1,13 @@
 # JMOA Evidence Engine
 
+The stable 2.1 parser and legacy three-pair verdicts do not encode every newer
+release acceptance rule. PetClinic 2.1 uses 12 held-out four-arm blocks;
+Patient 2.15 uses 12 direct pairs with a failed calibration admitted by
+exception and unqualified or failed performance bounds. A parser verdict
+alone cannot upgrade either publication scope.
+
+See [current release boundaries](releases/current-state.md).
+
 JMOA V2-C makes measurement validation a first-class product layer.
 
 The evidence engine is report-only. It does not change optimizer behavior and it
@@ -35,7 +43,7 @@ mvn jmoa:evidence `
   -Djmoa.evidence.enabled=true `
   -Djmoa.evidence.mode=replay `
   -Djmoa.evidence.inputDir=<historical-evidence-root> `
-  -Djmoa.evidence.replaySuite=docs/v2-c/historical-replay-suite.example.json
+  -Djmoa.evidence.replaySuite=docs/reference/examples/historical-evidence-replay.json
 ```
 
 ## Expected Run Layout

@@ -1,5 +1,10 @@
 # V2 Three-Service Matrix
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 This is the accepted V1-to-final-V2 engineering-evolution matrix. For the
 clean no-JMOA buyer comparison, use the
 [direct product matrix](../product-evidence/jmoa-vs-no-jmoa-matrix.md).

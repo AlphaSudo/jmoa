@@ -1,5 +1,11 @@
 # Bytecode Size Profiler
 
+The size profiler remains report-only in stable 2.1. The separate raw reducer
+ships opt-in LVT/LVTT mutation; size flags do not enable it. Provisional 2.15
+adds benchmark evidence, not a new profiler binary.
+
+See [current release boundaries](releases/current-state.md).
+
 JMOA V2-B adds report-only classfile and method-size profiling.
 
 It is disabled by default:
@@ -86,8 +92,8 @@ Per method:
 
 ## Safety Boundary
 
-V2-B does not mutate bytecode. Any optimization or stripping flag fails fast in
-this release. The profiler is intended to answer which classes and methods are
-large before JMOA admits any reducer. Runtime correlation reports are evidence
+The size profiler does not mutate bytecode. Its optimization or stripping
+flags fail fast; use the separate, explicitly enabled raw reducer for LVT/LVTT. The profiler is intended to answer which classes and methods are
+large for the separate, explicitly admitted raw reducer. Runtime correlation reports are evidence
 for prioritization only; they do not prove PSS, Private_Dirty, or startup
 causality without paired runtime experiments.

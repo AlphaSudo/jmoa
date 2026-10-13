@@ -1,5 +1,15 @@
 # JMOA Adoption And Evaluation Guide
 
+**Release context (2026-10-13):** stable 2.1.0 ships the Maven tooling and
+accepted packaging-inclusive PetClinic result. Provisional 2.15 adds Patient
+Java 26/Leyden benchmark evidence, with failed original calibration admitted by
+exception and unqualified or failed performance bounds; no new Maven binaries.
+See [current release boundaries](../releases/current-state.md).
+
+The numbered B0/V1/V2 procedures below describe the historical three-artifact
+evaluation workflow. Their example outcomes and session counts are not the
+2.1 or 2.15 release protocol.
+
 This guide evaluates three artifacts built from one source universe:
 
 ```text
@@ -29,7 +39,7 @@ Follow the modules in order:
 14. [Choose full optimization or reducer-only mode](14-choose-jmoa-mode.md)
 15. [Migrate a historical campaign](15-migrate-historical-campaign.md)
 
-The current reference outcomes are deliberately mixed: Doctor is a complete
-product win. Corrected Patient and PetClinic both observe direct reductions,
-but neither meets magnitude or uncertainty gates. The negative paths are part
-of the product contract.
+The historical three-artifact reference outcomes were mixed. The current stable
+PetClinic claim uses a later 12-block four-arm protocol; the Patient publication
+uses a separate 12-pair Leyden protocol with the explicit qualifications above.
+Choose the exact experiment contract before adopting a runner or gate.

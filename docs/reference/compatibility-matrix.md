@@ -1,5 +1,11 @@
 # Compatibility Matrix
 
+**Release context (2026-10-13):** stable 2.1.0 ships the Maven tooling and
+accepted packaging-inclusive PetClinic result. Provisional 2.15 adds Patient
+Java 26/Leyden benchmark evidence, with failed original calibration admitted by
+exception and unqualified or failed performance bounds; no new Maven binaries.
+See [current release boundaries](../releases/current-state.md).
+
 This matrix records tested boundaries, not every theoretically compatible
 combination.
 
@@ -10,7 +16,8 @@ combination.
 | Plugin classfile target | Java 22 (`maven.compiler.release=22`) | `jmoa-maven-plugin/pom.xml` |
 | Runtime-library target | Java 17 (`maven.compiler.release=17`) | `jmoa-runtime-lib/pom.xml` |
 | Public semantic runtime | Java 17 | Clean-clone PetClinic semantic smoke |
-| Final private measurement runtime | Java 26 containers | Frozen Doctor and Patient protocols |
+| Patient 2.15 measurement runtime | Temurin 26.0.2.1+1 / Leyden | Exact provisional Patient application/cache/JRE identities |
+| Stable 2.1 PetClinic measurement runtime | Java 17 / SerialGC / no CDS | Accepted whole-deployment record |
 | Public Spring stack | Spring Boot 4.0.1 | Pinned PetClinic revision |
 | Deployment shapes | Exploded Boot and Spring Boot fat JAR | PetClinic, Doctor, Patient |
 | Runtime policies | no-CDS, stock JDK base CDS, application CDS | Service-specific final matrix |
@@ -33,3 +40,8 @@ hashes.
 macOS, Docker Engine, Gradle, native-image, Windows containers, other Spring
 Boot major versions, and JDKs below the declared targets are not qualified by
 the current evidence.
+
+
+The Patient 2.15 deployment uses a constrained Windows/WSL host and frozen
+Docker support configuration. This records one provisional benchmark tuple,
+not general Docker qualification or released-plugin binary parity.

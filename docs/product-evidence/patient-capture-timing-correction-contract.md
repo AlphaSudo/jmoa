@@ -1,5 +1,10 @@
 # Patient Capture-Timing Correction Contract
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 The original Patient campaign contains one concrete validity defect:
 `block-1-position-1-b0` completed its workload at
 `2026-07-27T10:02:48.7365524Z`, but its first claim snapshot was not captured

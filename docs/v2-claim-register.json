@@ -1,9 +1,9 @@
 {
   "metadataVersion": "v2-claim-register",
-  "status": "CURRENT_AFTER_UNIFIED_THREE_ARTIFACT_FORENSICS",
+  "status": "CURRENT_RELEASES_STABLE_2_1_PROVISIONAL_2_15",
   "closureTaxonomy": "docs/v2-phase-closure-taxonomy.md",
   "currentUnifiedEvidence": {
-    "evidenceClass": "CURRENT_COMPLETE_PRODUCT_EVIDENCE",
+    "evidenceClass": "HISTORICAL_COMPLETE_PRODUCT_EVIDENCE",
     "protocol": "six-order balanced B0/V1/V2 within one service runtime",
     "launchCriterion": {
       "completeProductWins": 1,
@@ -17,7 +17,10 @@
         "v1ToV2MedianPssDeltaKb": -6261.5,
         "b0ToV2MedianPssDeltaKb": -4715.5,
         "b0ToV2PairedWins": 5,
-        "b0ToV2Bootstrap95Kb": [-7107, -268.5],
+        "b0ToV2Bootstrap95Kb": [
+          -7107,
+          -268.5
+        ],
         "decision": "COMPLETE_PRODUCT_WIN"
       },
       {
@@ -26,7 +29,10 @@
         "v1ToV2MedianPssDeltaKb": -6135.5,
         "b0ToV2MedianPssDeltaKb": -1266.5,
         "b0ToV2PairedWins": 4,
-        "b0ToV2Bootstrap95Kb": [-12330.5, 3488.5],
+        "b0ToV2Bootstrap95Kb": [
+          -12330.5,
+          3488.5
+        ],
         "decision": "OBSERVED_REDUCTION_NOT_CONFIRMED_SUBSTANTIAL"
       },
       {
@@ -35,7 +41,10 @@
         "v1ToV2MedianPssDeltaKb": -3736,
         "b0ToV2MedianPssDeltaKb": -2947,
         "b0ToV2PairedWins": 4,
-        "b0ToV2Bootstrap95Kb": [-6516.5, 4215],
+        "b0ToV2Bootstrap95Kb": [
+          -6516.5,
+          4215
+        ],
         "decision": "OBSERVED_REDUCTION_NOT_CONFIRMED_SUBSTANTIAL"
       }
     ],
@@ -462,5 +471,44 @@
     "V2-W generated-family prototype admission",
     "startup improvement from the final V2 customers acceptance",
     "transfer of final customers acceptance to other services or runtime policies"
-  ]
+  ],
+  "publicationContext": {
+    "asOf": "2026-10-13",
+    "legacyFieldsScope": "HISTORICAL_SCHEMA_AND_EXPERIMENT_RECORDS",
+    "currentReleaseClaims": {
+      "stable": {
+        "version": "2.1.0",
+        "tag": "v2.1.0",
+        "distribution": "MAVEN_BINARIES",
+        "service": "PetClinic customers",
+        "status": "ACCEPTED_WHOLE_DEPLOYMENT",
+        "processPssSavingKiB": 15241.5,
+        "memoryCurrentSavingBytes": 17033216,
+        "pairedBlocks": 12,
+        "packagingInclusive": true,
+        "frozenCostGatesPassed": true,
+        "evidence": "docs/product-evidence/petclinic-r41f-b0-t7r23-result.json"
+      },
+      "provisional": {
+        "version": "2.15",
+        "tag": "v2.15",
+        "distribution": "BENCHMARK_EVIDENCE_ONLY",
+        "newMavenBinaries": false,
+        "service": "Patient Java 26/Leyden",
+        "status": "PROVISIONAL_SCOPED_RAM_WITH_LIMITATIONS",
+        "medianStoppedPssSavingKiB": 8586,
+        "conditionalLowerSavingBoundKiB": 8384,
+        "pairedBlocks": 12,
+        "originalCalibrationPassed": false,
+        "postObservationExceptionApproved": true,
+        "performanceBoundsQualified": false,
+        "startupCacheWarmthQualified": false,
+        "productionParityQualified": false,
+        "uploadedBinaryParityQualified": false,
+        "evidence": "docs/product-evidence/patient-scoped-ram-benchmark.json"
+      }
+    },
+    "historicalValuesUnchanged": true
+  },
+  "historicalStatus": "CURRENT_AFTER_UNIFIED_THREE_ARTIFACT_FORENSICS"
 }

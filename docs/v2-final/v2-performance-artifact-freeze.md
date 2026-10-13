@@ -1,5 +1,9 @@
 # V2 Performance Artifact Freeze
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 The final customers-service acceptance uses source revision
 `305a1f13e4f961001d4e6cb50a9db51dc3fc5967` and three byte-frozen products:
 

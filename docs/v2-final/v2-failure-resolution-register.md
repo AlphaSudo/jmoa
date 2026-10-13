@@ -1,5 +1,9 @@
 # V2 Failure Resolution Register
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 | Failure / Blocker | Original Result | Current Authoritative Result | Blocks v2.0.0? |
 | --- | --- | --- | --- |
 | V2-H hardened ASM reducer | Runtime screen regressed PSS/Private_Dirty. | Raw engine replaced this path; V2-H remains failed, V2-I confirms raw. | no |

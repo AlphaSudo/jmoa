@@ -82,9 +82,34 @@ function Assert-ClaimConsistency {
     }
 }
 
+function Assert-CurrentReleaseBoundaries {
+    $patient = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'docs/product-evidence/patient-scoped-ram-benchmark.json') | ConvertFrom-Json
+    if ($patient.medianSavingKiB -ne 8586 -or $patient.lowerSavingBoundKiB -ne 8384 -or $patient.pairs.Count -ne 12 -or @($patient.costs.PSObject.Properties).Count -ne 82) { throw 'Provisional Patient result drifted.' }
+    if ($patient.originalNull.memoryPassed -or $patient.performanceBoundsQualified -or $patient.fullProductAcceptance -or -not $patient.calibrationException.postObservation) { throw 'Patient limitations drifted.' }
+    foreach ($name in @('v2-claim-register','v2-foundation-closure','v2-phase-closure-taxonomy')) {
+        $register = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot "docs/$name.json") | ConvertFrom-Json
+        $claims = $register.publicationContext.currentReleaseClaims
+        if ($claims.stable.version -ne '2.1.0' -or $claims.stable.processPssSavingKiB -ne 15241.5 -or $claims.provisional.medianStoppedPssSavingKiB -ne $patient.medianSavingKiB -or $claims.provisional.conditionalLowerSavingBoundKiB -ne $patient.lowerSavingBoundKiB -or $claims.provisional.originalCalibrationPassed -or $claims.provisional.performanceBoundsQualified -or $claims.provisional.newMavenBinaries) { throw "Current release registry drifted: $name" }
+    }
+    $readme = Get-Content -Raw -LiteralPath (Join-Path $RepoRoot 'README.md')
+    $section = ($readme -split '## Patient benchmark:',2)[1] -split '\n## ',2 | Select-Object -First 1
+    $links = [regex]::Matches($section, '\[[^\]]+\]\(([^)]+)\)')
+    if ($links.Count -ne 1 -or $links[0].Groups[1].Value -ne 'https://github.com/AlphaSudo/jmoa/releases/tag/v2.15') { throw 'Patient README section must link only to the 2.15 release.' }
+    foreach ($relative in @('README.md','docs/paper/jmoa-v2.15-patient-leyden-memory-evidence.md','docs/releases/current-state.md')) {
+        $text = (Get-Content -Raw -LiteralPath (Join-Path $RepoRoot $relative)) -replace '\s+', ' '
+        foreach ($required in @('8.38 MiB','8.19 MiB','calibration failed','unqualified or failed','no new Maven binaries')) {
+            if ($text -notmatch [regex]::Escape($required)) { throw "Patient qualification missing in ${relative}: $required" }
+        }
+    }
+    foreach ($relative in Get-TrackedFiles '*') {
+        if ($relative -match '^(DRAFTS/|docs/services/patient-service/|docs/v2-[a-w]/)' -or $relative -eq 'docs/assets/jmoa-social-preview.png') { throw "Removed publication material returned: $relative" }
+    }
+}
+
 Assert-LocalMarkdownLinks
 Assert-JsonParses
 Assert-ClaimConsistency
+Assert-CurrentReleaseBoundaries
 if (-not $SkipPublicationSafety) { & (Join-Path $PSScriptRoot 'check-publication-safety.ps1') }
 & git -C $RepoRoot diff --check
 if ($LASTEXITCODE -ne 0) { throw 'git diff --check failed.' }

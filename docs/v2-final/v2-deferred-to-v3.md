@@ -1,5 +1,9 @@
 # Deferred To V3
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 The following items are intentionally outside the V2 release scope:
 
 - Generated-family mutation after V2-W discovery-only closure.
@@ -17,4 +21,3 @@ The following items are intentionally outside the V2 release scope:
 
 V3 work should start only after V2 is released or after a concrete P0 blocker
 proves that a V3-scoped item is required for release.
-

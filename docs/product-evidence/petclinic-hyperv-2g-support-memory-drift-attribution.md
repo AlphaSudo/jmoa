@@ -1,5 +1,10 @@
 # Historical Support Memory-Drift Attribution
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 ## Verdict
 
 ```text
@@ -42,4 +47,3 @@ Therefore it cannot distinguish `ANON_PRIVATE_GROWTH`, `FILE_CACHE_CHARGE`,
 `JVM_WARMUP_CONVERGENCE`, or a mixed explanation. The preserved old data is
 not discarded; it is classified `INSUFFICIENT_CAPTURE` and superseded for host
 admission by the pre-registered `SUPPORT_CALIBRATION_V2` protocol.
-

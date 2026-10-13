@@ -1,5 +1,10 @@
 # patient-service: Historical/Current Runtime Diff
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 | Dimension | Historical | Current | Classification | Reason |
 |---|---|---|---|---|
 | B0 artifact SHA | NOT_RECOVERED | 2BE7E1D761ECE8BDC74CE44E7B82FB0B79D7508E45B22E9864577F4D643E0352 | `UNKNOWN` | Raw runs exist but the historical B0 JAR was not recovered. |

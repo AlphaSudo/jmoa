@@ -1,5 +1,10 @@
 # PetClinic B0/V1/V2 Artifact Freeze
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 This freeze defines the three immutable PetClinic customers-service variants used by the balanced direct campaign.
 
 | Variant | Input | Dependency JARs | Dependency bytes | Runtime image |

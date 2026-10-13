@@ -1,5 +1,10 @@
 # B0 To V1 Memory Attribution
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 | Service | Classification | PSS KB | Heap PSS KB | Heap used KB | Histogram bytes | Classes | Metaspace committed KB | Code committed KB |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
 | doctor-service | B0_V1_NO_MEASURABLE_EFFECT | 654 | 0 | -60 | -40784 | -130 | -92 | -88 |

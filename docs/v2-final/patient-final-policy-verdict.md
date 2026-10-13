@@ -1,5 +1,9 @@
 # Patient Final V2 Policy Verdict
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: `BASE_CDS_AND_NO_CDS_CONFIRMED_APP_CDS_BLOCKED`
 
 Patient now has two confirmed service-specific runtime policies. The corrected

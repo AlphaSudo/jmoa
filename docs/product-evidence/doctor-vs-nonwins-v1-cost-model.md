@@ -1,5 +1,10 @@
 # Doctor Versus Non-Wins: V1 Cost Model
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 Doctor is the complete-product positive control, not a standalone V1 positive control.
 
 | Service | V1 PSS KB | Heap PSS KB | Anonymous RW KB | Loaded classes | JMOA object bytes | Admitted logical sites | Exact activation | Direct verdict |

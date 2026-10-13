@@ -1,5 +1,10 @@
 # Final B0/V1/V2 Forensic Matrix
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 | Service | B0 -> V1 PSS | V1 -> V2 PSS | B0 -> V2 PSS | Wins | 95% CI | Verdict |
 |---|---:|---:|---:|---:|---|---|
 | doctor-service | 654 KB | -6261.5 KB | -4715.5 KB | 5/6 | [-7107, -268.5] | COMPLETE_PRODUCT_WIN |

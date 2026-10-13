@@ -1,5 +1,10 @@
 # PetClinic Audited Performance Campaign Result
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 Terminal verdict: **`ENVIRONMENT_VARIANCE_TOO_HIGH`**
 
 The frozen PetClinic campaign executed the baseline runtime before any JMOA

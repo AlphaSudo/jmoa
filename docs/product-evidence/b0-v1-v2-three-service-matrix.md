@@ -1,5 +1,10 @@
 # JMOA Direct B0 To V2 Three-Service Matrix
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 | Service | Runtime | Valid | Wins | Median PSS | 95% CI | Private Dirty | memory.current | Outcome |
 |---|---|---:|---:|---:|---:|---:|---:|---|
 | doctor-service | SPRING_BOOT_FAT_JAR / APPLICATION_CDS | 18/18 | 5/6 | -4715.5 KB | [-7107, -268.5] KB | -4904 KB | -10874880 B | COMPLETE_PRODUCT_WIN |

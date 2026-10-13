@@ -1,5 +1,9 @@
 # V2 Final Memory-Win Matrix
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 ## Reproducible Public Acceptance
 
 | Comparison | Valid runs | Paired wins | Median PSS | Median Private_Dirty | Median memory.current | Verdict |

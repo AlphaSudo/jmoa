@@ -1,5 +1,9 @@
 # V2 Schema Freeze
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: `COMPLETE`
 
 The shipped V2 report families are registered in

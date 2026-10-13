@@ -1,5 +1,10 @@
 # doctor-service: Historical/Current Runtime Diff
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 | Dimension | Historical | Current | Classification | Reason |
 |---|---|---|---|---|
 | B0 artifact SHA | 0B44E107A4699D090D22CF3C6FAFF52630AA803345DF7775510F22FA3FD10F7B | 5B0AF47F86D174E885F7B17CDC329E1AB3119C12D4BE96D2A908758CFD8DEE16 | `DISQUALIFYING` | Normalized application/generated content differs. |

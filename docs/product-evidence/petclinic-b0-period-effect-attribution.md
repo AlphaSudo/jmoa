@@ -1,5 +1,10 @@
 # PetClinic B0 Period-Effect Attribution
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 This is a read-only analysis of the completed `PETCLINIC_TARGET_ONLY_V1`
 same-artifact controls. No service was rerun for this report.
 

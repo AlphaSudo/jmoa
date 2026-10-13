@@ -1,5 +1,9 @@
 # Patient Root-Cause Investigation
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: **COMPLETE_STOPPED_AT_BOUNDARY**
 
 Scope: this closure is for the corrected **CDS** investigation. Its

@@ -1,5 +1,9 @@
 # JMOA V2 Three-Service Acceptance Contract
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: `FROZEN`
 
 This contract defines the final V2 acceptance gate. It compares the final V1 artifact with the final V2 artifact for each service under the service's confirmed runtime policy. Historical baseline-to-candidate results are context only and cannot satisfy this gate.

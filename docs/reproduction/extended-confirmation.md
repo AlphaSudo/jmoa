@@ -1,7 +1,14 @@
 # Extended Confirmation
 
-The public memory claim requires three valid balanced pairs after both artifacts
-have passed materialization and semantic smoke.
+**Release context (2026-10-13):** stable 2.1.0 ships the Maven tooling and
+accepted packaging-inclusive PetClinic result. Provisional 2.15 adds Patient
+Java 26/Leyden benchmark evidence, with failed original calibration admitted by
+exception and unqualified or failed performance bounds; no new Maven binaries.
+See [current release boundaries](../releases/current-state.md).
+
+The legacy generic coordinator below runs three balanced pairs after both
+artifacts pass materialization and semantic smoke. This demonstrates its
+evidence workflow; it does not reproduce the 2.1 or 2.15 release campaign.
 
 ## Required Inputs
 
@@ -24,7 +31,7 @@ all generic inputs explicitly.
 
 ## Claim Gate
 
-The final matrix requires `6/6` valid runs, at least `2/3` paired wins, median
+The historical three-service matrix required `6/6` valid runs, at least `2/3` paired wins, median
 PSS at or below `-4,096 KB`, median Private_Dirty at or below `-1,024 KB`,
 median `memory.current` at or below `-1,048,576 B`, zero errors, V2-C
 `CONFIRMED_WIN`, and V2-D attribution.

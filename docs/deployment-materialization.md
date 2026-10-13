@@ -1,5 +1,12 @@
 # Deployment Materialization
 
+Stable 2.1 accepted a packaging-inclusive PetClinic contrast: R41F fat JAR
+versus strict B0 exploded Boot. Earlier launch-shape lessons below are
+historical. Provisional 2.15 Patient binds each application to its own Leyden
+cache; artifact or cache-file shrinkage is not resident RAM savings.
+
+See [current release boundaries](releases/current-state.md).
+
 JMOA output must be placed into the deployment shape the service actually runs.
 
 The portfolio work showed that this is not cosmetic. The same optimizer output
@@ -28,7 +35,7 @@ jars must be placed into the dependency layer used by `JarLauncher`.
 ## Product Lesson
 
 Doctor-service required corrected fat-JAR substitution before its CDS result was
-valid. PetClinic only confirmed the no-CDS win after the optimizer was
+valid. An earlier PetClinic study confirmed its no-CDS win after the optimizer was
 materialized into the project's real exploded Boot deployment shape.
 
 That is why JMOA's product boundary is not "rewrite classes." It is:

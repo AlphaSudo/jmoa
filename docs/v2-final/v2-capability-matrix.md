@@ -1,5 +1,9 @@
 # V2 Capability Matrix
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 | Capability | Final disposition | Evidence |
 | --- | --- | --- |
 | final customers B0 -> V2 product | `INVESTIGATED_AND_NOT_CLAIMED` | Fresh five-pair replication was mixed |

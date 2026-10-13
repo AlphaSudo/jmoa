@@ -1,5 +1,9 @@
 # V2 Distribution
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 V2 includes tooling to build a local release bundle. Maven Central and GitHub
 Packages publication are not part of `2.0.0-rc2`, and the current `v2.0.0`
 GitHub release has no uploaded binary assets.

@@ -1,5 +1,10 @@
 # Direct Result Reconciliation
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 JMOA publishes distinct evidence tracks because they answer different
 questions. Their deltas must never be added or substituted for one another.
 

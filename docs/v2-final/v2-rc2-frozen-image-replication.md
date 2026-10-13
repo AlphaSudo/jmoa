@@ -1,5 +1,9 @@
 # V2 RC2 Frozen-Image Replication
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 ## Purpose
 
 This report records fresh runtime measurements against the immutable images and

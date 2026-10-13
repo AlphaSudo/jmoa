@@ -1,5 +1,10 @@
 # doctor Artifact Lineage
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 | Variant | Classification | Source revision | Artifact SHA-256 | JMOA entries |
 |---|---|---|---|---:|
 | B0 | STRICT_NO_JMOA_REBUILD | c33d6e9312739ab15fd705a28e60e9f50c6e7b8b | 5B0AF47F86D174E885F7B17CDC329E1AB3119C12D4BE96D2A908758CFD8DEE16 | 0 |

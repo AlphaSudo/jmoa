@@ -61,7 +61,7 @@
     "doctor": {
       "status": "PASS",
       "runtimePolicy": "APPLICATION_CDS",
-      "source": "docs/v2-k/v2k-doctor-final-verdict.json",
+      "source": "docs/reference/examples/historical-doctor-verdict.json",
       "validRuns": 6,
       "pairedWins": 3,
       "pairs": 3,

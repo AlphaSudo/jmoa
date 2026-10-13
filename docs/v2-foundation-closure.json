@@ -1,6 +1,6 @@
 {
   "metadataVersion": "v2-foundation-closure",
-  "status": "CLOSED_THROUGH_V2F",
+  "status": "CURRENT_RELEASES_STABLE_2_1_PROVISIONAL_2_15",
   "closureTag": "v0.7.2-v2-foundation-closure",
   "latestProductizationTag": "v0.7.1-v2f-reducer-productization",
   "milestones": [
@@ -73,10 +73,48 @@
       "runtimeClaimAdded": false
     }
   ],
-  "nextPhase": {
+  "publicationContext": {
+    "asOf": "2026-10-13",
+    "legacyFieldsScope": "HISTORICAL_SCHEMA_AND_EXPERIMENT_RECORDS",
+    "currentReleaseClaims": {
+      "stable": {
+        "version": "2.1.0",
+        "tag": "v2.1.0",
+        "distribution": "MAVEN_BINARIES",
+        "service": "PetClinic customers",
+        "status": "ACCEPTED_WHOLE_DEPLOYMENT",
+        "processPssSavingKiB": 15241.5,
+        "memoryCurrentSavingBytes": 17033216,
+        "pairedBlocks": 12,
+        "packagingInclusive": true,
+        "frozenCostGatesPassed": true,
+        "evidence": "docs/product-evidence/petclinic-r41f-b0-t7r23-result.json"
+      },
+      "provisional": {
+        "version": "2.15",
+        "tag": "v2.15",
+        "distribution": "BENCHMARK_EVIDENCE_ONLY",
+        "newMavenBinaries": false,
+        "service": "Patient Java 26/Leyden",
+        "status": "PROVISIONAL_SCOPED_RAM_WITH_LIMITATIONS",
+        "medianStoppedPssSavingKiB": 8586,
+        "conditionalLowerSavingBoundKiB": 8384,
+        "pairedBlocks": 12,
+        "originalCalibrationPassed": false,
+        "postObservationExceptionApproved": true,
+        "performanceBoundsQualified": false,
+        "startupCacheWarmthQualified": false,
+        "productionParityQualified": false,
+        "uploadedBinaryParityQualified": false,
+        "evidence": "docs/product-evidence/patient-scoped-ram-benchmark.json"
+      }
+    },
+    "historicalValuesUnchanged": true
+  },
+  "historicalStatus": "CLOSED_THROUGH_V2F",
+  "historicalNextPhase": {
     "id": "V2-G",
     "name": "Reducer generalization and runtime portability",
     "rule": "No new reducer type and no broadened metadata stripping until V2-E LVT/LVTT reducer generalization is tested."
   }
 }
-

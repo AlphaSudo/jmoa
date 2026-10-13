@@ -1,5 +1,10 @@
 # Historical Versus Current B0: Absolute Audit
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 Read-only identity and absolute-footprint audit. It does not replace the sealed current matrix.
 
 | Service | Historical PSS KB | Current PSS KB | Current - historical KB | Artifact exact | Decision |

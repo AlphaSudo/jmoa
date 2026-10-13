@@ -24,7 +24,7 @@ if (-not [string]::IsNullOrWhiteSpace($CdsArchivePath) -and -not (Test-Path -Lit
 }
 New-JmoaDirectory -Path $OutputDir
 if ([string]::IsNullOrWhiteSpace($RegistryPath)) {
-    $RegistryPath = Join-Path (Split-Path $PSScriptRoot -Parent) 'docs/v2-n/v2n-runtime-protocol-registry.json'
+    $RegistryPath = Join-Path (Split-Path $PSScriptRoot -Parent) 'docs/reference/runtime-protocol-registry.json'
 }
 if (-not (Test-Path -LiteralPath $RegistryPath -PathType Leaf)) { throw "Runtime protocol registry does not exist: $RegistryPath" }
 

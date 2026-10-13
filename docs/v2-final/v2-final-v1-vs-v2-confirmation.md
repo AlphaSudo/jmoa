@@ -1,5 +1,9 @@
 # Final V1 vs V2 Confirmation
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 The final V2 product is a substantial incremental memory win over finalized V1
 under the same public customers-service protocol.
 

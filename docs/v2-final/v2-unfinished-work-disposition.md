@@ -1,5 +1,9 @@
 # V2 Unfinished-Work Disposition
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Nothing in the V2 plan remains ambiguously `PARTIAL`, `OPEN`, or `BLOCKED`.
 Every capability has one terminal release disposition.
 

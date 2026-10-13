@@ -1,20 +1,23 @@
-# Schema Index
+# Schema and example index
 
-JMOA reports use versioned JSON documents. The Java records in the plugin are
-the implementation source; this index points to the authoritative public
-descriptions and representative frozen records.
+Stable Maven coordinates remain `com.yourorg.jmoa:jmoa-maven-plugin:2.1.0`.
+Provisional 2.15 publishes evidence without adding a new Maven report engine.
+Inspect metadata/schema versions; unsupported or missing fields must not be
+silently treated as passing evidence.
 
-| Domain | Implementation / description | Representative record |
+| Domain | Implementation / description | Reviewed example |
 | --- | --- | --- |
-| Evidence run, capture, pair, confirmation | `EvidenceModels`, [Evidence Engine](../evidence-engine.md) | [Patient base-CDS verdict](../v2-final/patient-base-cds-final-verdict.json) |
-| Memory attribution | `AttributionModels`, [Memory Attribution](../methodology/memory-attribution.md) | [Doctor verdict](../v2-k/v2k-doctor-final-verdict.json) |
-| Generated inventory and safety | `generated/*`, [Generated Class Optimizer](../generated-class-optimizer.md) | [Generated-family admission](../v2-w/v2w-prototype-admission.json) |
-| Bytecode size | `size/*`, [Bytecode Size Profiler](../bytecode-size-profiler.md) | [Profiler closure](../v2-b/v2b-report-only-closure.json) |
-| Reducer report and preservation audit | `reducer/*`, [Reducer Configuration](reducer-configuration.md) | [Application preservation report](../v2-q/v2q-application-byte-preservation-report.json) |
-| Reducer recommendation | `recommendation/*` | [Reducer admission input](../v2-m/reducer-admission-input.json) |
-| Runtime-policy recommendation/preflight | `runtimepolicy/*`, [Runtime Policy Model](../architecture/runtime-policy-model.md) | [Runtime admission input](../v2-n/runtime-policy-admission-input.json) |
-| Final claims | Frozen release docs | [Three-service matrix](../v2-final/v2-three-service-memory-matrix.json) |
+| Evidence validation and replay | `EvidenceModels`, [evidence engine](../evidence-engine.md) | [Historical replay contract](examples/historical-evidence-replay.json) |
+| Attribution | `AttributionModels`, [methodology](../methodology/memory-attribution.md) | [Historical Doctor verdict](examples/historical-doctor-verdict.json) |
+| Generated-family safety | `generated/*`, [safety](../synthetic-class-safety-model.md) | [Admission example](examples/generated-family-admission.json) |
+| Size reporting | `size/*`, [size profiler](../bytecode-size-profiler.md) | [Report-only example](examples/size-profiler-closure.json) |
+| Reducer preservation | `reducer/*`, [configuration](reducer-configuration.md) | [Preservation example](examples/application-preservation-report.json) |
+| Reducer recommendation | `recommendation/*` | [Input](examples/reducer-admission-input.json), [historical replay](examples/historical-reducer-replay.json) |
+| Runtime recommendation/preflight | `runtimepolicy/*`, [policy model](../architecture/runtime-policy-model.md) | [Registry](runtime-protocol-registry.json), [input](examples/runtime-policy-admission-input.json), [replay](examples/historical-runtime-replay.json) |
+| Workflow state machine | `scripts/run-v2-workflow.ps1` | [Historical replay](examples/historical-workflow-replay.json) |
+| Current release claims | [Release boundaries](../releases/current-state.md) | [PetClinic JSON](../product-evidence/petclinic-r41f-b0-t7r23-result.json), [Patient JSON](../product-evidence/patient-scoped-ram-benchmark.json) |
 
-Consumers should inspect `metadataVersion` and fail on unsupported shapes rather
-than silently accepting missing fields. Paths and raw private captures are not
-part of the public schema contract.
+The relocated examples preserve their historical schema/data. They are tooling
+fixtures, not new benchmark measurements or automatic 2.15 policy admissions.
+Raw private captures are not included. Phase-ledger folders are not required
+for the retained default registry and example replay paths.

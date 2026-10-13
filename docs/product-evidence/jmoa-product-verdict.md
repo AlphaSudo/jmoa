@@ -1,5 +1,10 @@
 # JMOA Direct Product Verdict
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 Aggregate state: `DIRECT_PRODUCT_MATRIX_INCOMPLETE_ENVIRONMENT_BLOCKED`.
 
 JMOA V2 has one substantial clean no-JMOA-to-final-V2 confirmation on Doctor:

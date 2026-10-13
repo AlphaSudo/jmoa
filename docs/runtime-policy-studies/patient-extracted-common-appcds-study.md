@@ -1,5 +1,10 @@
 # Patient Extracted-Layout Common-Class AppCDS Study
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 Status: `PATIENT_SINGLE_REPLICA_APP_CDS_REJECTED`
 
 This was the one authorized post-V2 attempt materially different from the

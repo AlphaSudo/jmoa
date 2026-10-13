@@ -1,5 +1,9 @@
 # V2 Final Performance Acceptance
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Decision: `INCREMENTAL_GATE_PASSED_DIRECT_BASELINE_NOT_REPRODUCED`
 
 ## Frozen Protocol

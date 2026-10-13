@@ -1,5 +1,11 @@
 # Large Generated Methods
 
+Stable 2.1 reports large methods; it does not split them. Its separate raw
+metadata reducer is shipped for LVT/LVTT only. Provisional 2.15 adds Patient
+evidence, not generated-method surgery.
+
+See [current release boundaries](releases/current-state.md).
+
 V2-B highlights large methods and connects them to V2-A generated-family labels.
 
 This helps answer:

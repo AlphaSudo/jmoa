@@ -1,5 +1,9 @@
 # V2 Phase Closure Audit
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 This audit summarizes closure state from V2-A through V2-W. Historical phase
 documents remain historical; release-facing claims follow this table.
 
@@ -31,4 +35,3 @@ documents remain historical; release-facing claims follow this table.
 
 Stale release-facing docs that still describe V2-U/V as current must be updated
 before RC.
-

@@ -1,5 +1,8 @@
 # Week 2 Plugin Build Report
 
+Historical source-readiness audit. Retained test counts and checkmarks
+describe that audit only; see [current release audit](README.md).
+
 Status: PASS for the default public build target.
 
 The release repo default build includes:

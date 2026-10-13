@@ -1,5 +1,9 @@
 # Patient No-CDS V2-C Validation
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 Status: `CONFIRMED_WIN`
 
 V2-C analyzed the six raw Patient no-CDS runs after the pair folders were

@@ -1,11 +1,17 @@
 # Generated Class Optimizer
 
+Stable 2.1 inventories generated/proxy/AOT families and reports matched
+diagnostic relevance. The completed historical discovery track admitted no
+new generated-family mutation. Provisional 2.15 does not change that boundary.
+
+See [current release boundaries](releases/current-state.md).
+
 JMOA V2-A starts by making generated JVM class shapes visible. It does not
 rewrite generated/proxy/AOT classes by default.
 
 The implementation is still bytecode-mutation-safe by default. It inventories
 generated classes, can attribute runtime generated-class cost from logs, writes
-a safety taxonomy, selects the first prototype family, and emits a generated
+a safety taxonomy, records historical prototype-selection analysis, and emits a generated
 class ROI feature report. It does not rewrite generated/proxy/AOT classes.
 
 The feature boundary is controlled by:
@@ -93,7 +99,6 @@ unsafe to transform until the safety taxonomy admits a specific operation.
 ## Safety Boundary
 
 Every generated class starts with `riskLevel=UNKNOWN`. A family label is not a
-license to optimize it. Runtime proxy families are report-only. Spring AOT
-BeanDefinition helpers are the selected first prototype family, but only for
-repack/origin verification and duplicate-shape analysis until semantic gates
-are automated.
+license to optimize it. Runtime proxy families are report-only. Historical Spring AOT BeanDefinition helper selection supported repack/origin
+verification and duplicate-shape analysis. The completed discovery track
+admitted no new generated-family mutation.

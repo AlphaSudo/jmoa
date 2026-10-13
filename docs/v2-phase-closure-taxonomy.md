@@ -1,5 +1,15 @@
 # V2 Phase Closure Taxonomy
 
+**Release context (2026-10-13):** stable 2.1.0 ships the Maven tooling and
+accepted packaging-inclusive PetClinic result. Provisional 2.15 adds Patient
+Java 26/Leyden benchmark evidence, with failed original calibration admitted by
+exception and unqualified or failed performance bounds; no new Maven binaries.
+See [current release boundaries](releases/current-state.md).
+
+The older milestone/matrix material below is historical. Current release
+entries are separate in the companion JSON `publicationContext`; legacy
+fields retain their original meanings and measured values.
+
 This taxonomy prevents report-only, artifact-only, failed-screen, and
 runtime-confirmed milestones from being described as the same kind of closure.
 
@@ -63,3 +73,12 @@ blocked does not become skipped-success
 
 Any new runtime performance claim requires fresh V2-C validation and V2-D
 attribution within the exact runtime policy and launch mode being claimed.
+
+
+## Provisional evidence publication
+
+`PROVISIONAL_EVIDENCE_WITH_LIMITATIONS` describes the 2.15 Patient publication:
+the scoped RAM observation is published with an approved exception after failed
+original calibration and unqualified or failed performance bounds. It is not
+`CLOSED_CONFIRMED` full product acceptance. Stable 2.1 PetClinic remains an
+accepted exact deployment result with passing frozen cost gates.

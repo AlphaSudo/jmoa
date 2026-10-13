@@ -1,5 +1,10 @@
 # patient current Protocol Inventory
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 This is an inventory of recovered scripts and artifacts. It is not an executed command ledger and does not contain command responses.
 
 Classification: **CURRENT_COMMANDS_COMPLETE, CURRENT_ARTIFACT_COMPLETE**

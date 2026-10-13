@@ -1,5 +1,9 @@
 # V2 Five Questions Final Answer
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 ## 1. Can JMOA extend beyond lambdas to generated/synthetic classes?
 
 Answer: yes for visibility and safety analysis; no V2 mutation was admitted.

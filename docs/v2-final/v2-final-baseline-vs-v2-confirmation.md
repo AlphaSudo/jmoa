@@ -1,5 +1,9 @@
 # Historical B0 vs V2 Confirmation
 
+**Historical final-V2 audit record.** Original measurements, statuses and
+release-readiness notes below belong to that publication. For current stable
+2.1 and provisional 2.15, see [release boundaries](../releases/current-state.md).
+
 This document preserves the original three-pair B0-to-V2 result as historical
 provenance. Its raw run-level capture directory was not retained after the
 earlier release process, so it is **not** an RC2 reproducible or release-driving

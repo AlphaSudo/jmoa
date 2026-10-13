@@ -1,36 +1,37 @@
-# V1 Overhead Product-Engineering Roadmap
+# Lambda and adapter cost engineering
 
-The unified three-artifact campaign moved the primary engineering question to
-the `B0 -> V1` leg. No new benchmark is authorized by this roadmap.
+This document retains the engineering lessons behind the historical overhead
+investigations. It is not a delivery schedule or an authorization to benchmark.
+See [current releases](../releases/current-state.md).
 
-## Easy
+## What the shipped system does
 
-- Keep current and historical claims separated in the claim register.
-- Emit accepted logical-site and rewritten-event manifests with artifact hashes.
-- Add diagnostic per-site activation counters behind an explicit non-claim mode.
-- Show runtime-library, adapter, metadata, and class-loading estimates in the
-  optimizer report before admission.
+Stable 2.1 profiles lambda sites, applies safety/profile admission, generates
+required shared/package adapters, validates references after weaving and
+materializes the deployed artifact. The final service needs no JMOA javaagent.
+The separate raw reducer removes opt-in LVT/LVTT dependency metadata.
 
-## Medium
+## Cost dimensions an adopter must inspect
 
-- Lazy-initialize V1 runtime support.
-- Generate only adapter package/SAM families required by admitted sites.
-- Add profile-based admission that rejects sites without representative
-  mechanism activation.
-- Productize clean-B0 reducer-only mode independently from full optimization.
-- Add dynamic origin and activation verification to the public workflow.
+- Static rewritten sites versus sites actually activated by a representative workload.
+- Helper class count, physical duplication across roots and runtime-library identity.
+- Lookup/support initialization, class loading, metaspace, code and allocation costs.
+- Deployment packaging, archive/cache use, resident pages and native allocator state.
+- Direct clean-B0 result alongside any incremental reducer comparison.
 
-## Hard
+Fewer classfiles or a favorable incremental reducer delta cannot hide a direct
+product regression. Preserve valid losing observations and measure costs under
+the same frozen workload as memory.
 
-- Replace shared runtime lookup for statically resolvable sites.
-- Fold safe adapters into existing classes without breaking access boundaries.
-- Redesign package adapter generation around whole-artifact cost.
-- Specialize admission using representative workload activation while keeping
-  the measurement campaign independent.
+## Current result boundaries
 
-## Promotion Gate
+Stable 2.1's accepted PetClinic deployment saves 14.88 MiB PSS with CPU +14.71%
+and startup +1.652 s inside frozen limits. Packaging is the dominant factorial
+main effect; this is not proof of a standalone lambda-only win.
 
-A V1 engineering change is promotable only after semantic safety, direct
-`B0 -> V1` cost screening, direct `B0 -> V2` confirmation, V2-C validation, and
-V2-D attribution. Incremental reducer savings cannot hide an unexplained V1
-regression.
+Provisional 2.15's Patient artifact has 788 rewritten static sites, 455 Tier 1
+and 333 Tier 2, with 192 logical/195 physical helpers. The direct Leyden result
+observes 8.38 MiB lower median stopped PSS and conditional lower bound 8.19 MiB.
+Original calibration failed and used an approved exception; performance bounds
+are unqualified or failed. Coverage and execution closeout do not establish
+acceptable adapter economics or uploaded-binary parity.

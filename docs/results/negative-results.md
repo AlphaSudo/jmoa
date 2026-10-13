@@ -1,5 +1,10 @@
 # Negative Results Register
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 JMOA preserves valid failures because they define the product boundary.
 
 ## Clean No-JMOA Product Screens
@@ -19,7 +24,7 @@ historical evidence, but it is not the latest campaign authority. A later
 signed campaign ran eight valid B0 same-artifact control arms and stopped
 before V2 because environment noise exceeded the frozen threshold twice.
 Patient's attempted candidate still differs from the accepted V2 SHA. Doctor
-is the only service that cleared the direct substantial product gate.
+was the only service that cleared that historical direct substantial product gate.
 
 ## Hardened ASM Metadata Reducer
 
@@ -86,5 +91,6 @@ exact release images.
 **Runtime result:** the fresh five-pair replication was valid but mixed: `2/5`
 PSS wins and median PSS `+585 KB`.
 
-**Disposition:** retained as provenance, not a current release claim. The
-reproducible public claim is finalized V1 to V2.
+**Disposition:** retained as provenance, not a current release claim. That
+historical incremental claim remains distinct from the later accepted 2.1
+R41F-to-B0 whole-deployment result.

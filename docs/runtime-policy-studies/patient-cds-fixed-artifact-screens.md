@@ -1,5 +1,10 @@
 # Patient CDS Fixed-Artifact Screens
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 Both screens hold the artifact fixed and change only runtime policy from `NO_CDS_LOW_DIRTY` to `CDS`. All four runs completed 600 requests with zero workload errors and passed live runtime-policy proof.
 
 | Artifact | PSS KB | Private_Dirty KB | memory.current bytes | Heap PSS KB | Archive mapped PSS KB | Verdict |
@@ -10,4 +15,3 @@ Both screens hold the artifact fixed and change only runtime policy from `NO_CDS
 NMT explains the main trade: CDS reduces ordinary Class and Metaspace commitment, but adds `126–129 MB` of Shared class space. The mapped archive PSS and remaining runtime costs exceed the heap/private-metadata reductions.
 
 These are diagnostic single pairs, not confirmed policy claims. The V1 regression activates the predeclared stop condition: do not tune V2 CDS toward the historical number.
-

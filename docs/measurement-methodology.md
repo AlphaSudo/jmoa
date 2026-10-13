@@ -1,5 +1,13 @@
 # Measurement Methodology
 
+Use the release-specific estimator and sample size. Stable 2.1 PetClinic has
+12 held-out four-arm blocks with passing frozen gates; provisional 2.15
+Patient has 12 direct pairs with a failed original calibration admitted by
+exception and unqualified or failed costs. The short sequence below is a
+generic example, not either release protocol.
+
+See [current release boundaries](releases/current-state.md).
+
 JMOA memory claims use paired measurements and median deltas.
 
 ## Primary Metrics

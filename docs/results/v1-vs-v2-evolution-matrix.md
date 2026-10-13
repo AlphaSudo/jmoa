@@ -1,5 +1,10 @@
 # Final V1 To Final V2 Engineering-Evolution Matrix
 
+**Historical experiment record.** Measurements and dispositions below belong
+to their original artifact/runtime protocol. Current publication boundaries are
+[stable 2.1 and provisional 2.15](../releases/current-state.md); older medians are not added to those
+results and older verdicts do not replace them.
+
 This matrix answers how V2 improved the accepted V1 optimizer. It does not
 answer the primary adoption question of final JMOA versus no JMOA.
 

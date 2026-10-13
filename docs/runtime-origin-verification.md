@@ -1,5 +1,13 @@
 # Runtime Origin Verification
 
+Stable 2.1 and provisional 2.15 require exact artifact identity. The Patient
+study also records each application/cache pair and the exact Java 26 runtime.
+Byte identity with uploaded stable 2.1 binaries remains unqualified. Capture
+class-load tracing in a separate diagnostic session when it perturbs the claim
+endpoint; a static rewrite count is not per-site execution proof.
+
+See [current release boundaries](releases/current-state.md).
+
 Static jar inspection is useful, but it is not enough.
 
 A jar can exist on disk while the JVM loads the original class from a different

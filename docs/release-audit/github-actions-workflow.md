@@ -1,39 +1,19 @@
-# GitHub Actions Workflow
+# GitHub Actions validation
 
-The public source repository now includes `.github/workflows/build.yml`.
+The authoritative workflow is [build.yml](../../.github/workflows/build.yml).
+It runs on main pushes and pull requests using Temurin Java 26 on Ubuntu.
 
-The CI gate is intentionally narrow:
+The gates run publication safety, documentation quality (local links, JSON and
+claim consistency), then Maven tests for `jmoa-runtime-lib` and
+`jmoa-maven-plugin`. CI does not start private service stacks or reproduce RAM
+campaigns. A passing build cannot qualify the provisional 2.15 cost or lineage gaps.
 
-- run the publication safety scanner,
-- build and test the public Maven modules,
-- avoid Podman/container memory measurements in default CI.
-
-```yaml
-name: build
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '26'
-          cache: maven
-      - name: Build public modules
-        run: mvn -q -pl jmoa-runtime-lib,jmoa-maven-plugin clean test
-```
-
-The equivalent local validation remains:
+Equivalent documentation checks:
 
 ```powershell
-./scripts/build-all.ps1
-./scripts/check-publication-safety.ps1
+pwsh ./scripts/check-publication-safety.ps1
+pwsh ./scripts/check-documentation-quality.ps1 -SkipPublicationSafety
 ```
+
+Stable binaries remain version 2.1.0. Provisional 2.15 publishes evidence only.
+See [current release audit](README.md).

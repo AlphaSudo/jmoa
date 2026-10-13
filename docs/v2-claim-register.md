@@ -1,6 +1,26 @@
 # V2 Claim Register
 
-This is the source of truth after the unified six-order B0/V1/V2 forensic
+**Release context (2026-10-13):** stable 2.1.0 ships the Maven tooling and
+accepted packaging-inclusive PetClinic result. Provisional 2.15 adds Patient
+Java 26/Leyden benchmark evidence, with failed original calibration admitted by
+exception and unqualified or failed performance bounds; no new Maven binaries.
+See [current release boundaries](releases/current-state.md).
+
+## Current published results
+
+| Publication | RAM evidence | Acceptance and distribution |
+| --- | --- | --- |
+| Stable 2.1 PetClinic | 14.88 MiB process PSS, 16.24 MiB target cgroup, 12 held-out blocks | Accepted packaging-inclusive exact deployment; CPU +14.71%, startup +1.652 s within frozen gates; stable Maven artifacts 2.1.0 |
+| Provisional 2.15 Patient | 8.38 MiB median stopped PSS; conditional lower bound 8.19 MiB; 12 direct pairs | Original calibration failed with approved post-observation exception; performance bounds unqualified or failed; startup/cache warmth and production/uploaded-binary parity unqualified; no new Maven binaries |
+
+The companion JSON keeps current release claims in `publicationContext`.
+Older matrix/milestone fields below are historical schema-compatible records.
+
+The older milestone/matrix material below is historical. Current release
+entries are separate in the companion JSON `publicationContext`; legacy
+fields retain their original meanings and measured values.
+
+This historical register records the unified six-order B0/V1/V2 forensic
 campaign. Claims are separated by evidence class; an incremental `V1 -> V2`
 result is not a substitute for a direct complete-product `B0 -> V2` result.
 
@@ -8,7 +28,7 @@ Closure terms follow:
 
 - [V2 Phase Closure Taxonomy](v2-phase-closure-taxonomy.md)
 
-## Current Complete-Product Evidence
+## Historical Complete-Product Evidence
 
 The authoritative product gate is the direct within-block `B0 -> V2` result
 from the unified runtime. Every service ran all six artifact permutations.
@@ -19,7 +39,7 @@ from the unified runtime. Every service ran all six artifact permutations.
 | Patient | +910 KB | -6,135.5 KB | -1,266.5 KB | 4/6 | observed reduction, not confirmed substantial |
 | PetClinic customers | +2,516 KB | -3,736 KB | -2,947 KB | 4/6 | observed reduction, not confirmed substantial |
 
-The current three-service complete-product launch criterion is `1/3`; it is
+That historical three-service complete-product launch criterion is `1/3`; it is
 **not passed**. Doctor is the complete-product positive control. It is not a
 standalone V1 positive control.
 
@@ -27,7 +47,7 @@ See the [final forensic matrix](product-evidence/b0-v1-v2-final-forensic-matrix.
 [V1 runtime-cost census](product-evidence/v1-runtime-cost-census.md), and
 [memory budget](product-evidence/v1-v2-memory-budget.md).
 
-## Current Incremental Evidence
+## Historical Incremental Evidence
 
 The same unified campaigns show substantial `V1 -> V2` median reductions:
 
@@ -41,7 +61,7 @@ These values quantify the reducer contribution on top of the accepted V1
 artifact. They do not answer whether an adopter should choose the complete
 product over clean B0.
 
-## Current V1 Contribution
+## Historical V1 Contribution
 
 No service produced a median `B0 -> V1` PSS win:
 
